@@ -41,13 +41,13 @@ int axpby(double alpha, vec_iface<T> const &x, double beta, vec_iface<U> &y) {
 
 template<typename T, typename U>
 bool equal(vec_iface<T> const &u, vec_iface<U> const &v) {
-  return gsl_vector_equal(u.p(), v.p());
+  return gsl_vector_equal(&u.vec(), &v.vec());
 }
 
 
 template<typename D, typename S>
 int memcpy(vec_iface<D> &dst, vec_iface<S> const &src) {
-  return gsl_vector_memcpy(dst.p(), src.p());
+  return gsl_vector_memcpy(&dst.vec(), &src.vec());
 }
 
 

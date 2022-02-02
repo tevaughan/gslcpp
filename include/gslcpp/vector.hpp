@@ -6,19 +6,20 @@
 // to include at bottom implementation-headers, each of which includes this
 // file so that editor is happy.
 #ifndef GSL_VECTOR_HPP
-#define GSL_VECTOR_HPP
+#  define GSL_VECTOR_HPP
 
-#include "vec-iface.hpp" // vec_iface
-#include <algorithm> // swap
-#include <type_traits> // is_same_v, enable_if_t
-
-using std::enable_if_t;
-using std::is_const_v;
-using std::is_same_v;
+#  include "vec-iface.hpp" // vec_iface
+#  include <algorithm> // swap
+#  include <type_traits> // is_same_v, enable_if_t
 
 /// Namespace for C++-interface to small subset of GSL's functionality,
 /// initially just minimization, which requires using gsl_vector.
 namespace gsl {
+
+
+using std::enable_if_t;
+using std::is_const_v;
+using std::is_same_v;
 
 
 /// Generic template for CRTP-descendant from vec_iface.
@@ -37,11 +38,11 @@ class vector: public vec_iface<vector<S, V>> {
 public:
   /// Function needed by vec_iface.
   /// @return  Pointer to GSL's interface to vector.
-  gsl_vector *pv() { return &view_.vector; }
+  gsl_vector &v() { return view_.vector; }
 
   /// Function needed by vec_iface.
   /// @return  Pointer to GSL's interface to immutable vector.
-  gsl_vector const *pv() const { return &view_.vector; }
+  gsl_vector const &v() const { return view_.vector; }
 
   /// Initialize GSL's view of static storage, but do not initialize data.
   vector(): view_(gsl_vector_view_array(d_, S)) {}
@@ -77,12 +78,12 @@ private:
   /// - By default, allocate without initialization.
   alloc_type alloc_type_= alloc_type::ALLOC;
 
-  gsl_vector *pv_= nullptr; ///< Pointer to allocated descriptor for vector.
+  gsl_vector *v_= nullptr; ///< Pointer to allocated descriptor for vector.
 
   /// Deallocate vector and its descriptor.
   void free() {
-    if(pv_) gsl_vector_free(pv_);
-    pv_= nullptr;
+    if(v_) gsl_vector_free(v_);
+    v_= nullptr;
   }
 
   /// Allocate vector and its descriptor.
@@ -97,17 +98,17 @@ private:
 public:
   /// Function needed by vec_iface.
   /// @return  Pointer to GSL's interface to vector.
-  gsl_vector *pv() { return pv_; }
+  gsl_vector &v() { return *v_; }
 
   /// Function needed by vec_iface.
   /// @return  Pointer to GSL's interface to immutable vector.
-  gsl_vector const *pv() const { return pv_; }
+  gsl_vector const &v() const { return *v_; }
 
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
   /// @param a  Method to use for allocation.
   vector(size_t n, alloc_type a= alloc_type::ALLOC): alloc_type_(a) {
-    pv_= allocate(n);
+    v_= allocate(n);
   }
 
   /// Allocate vector and its descriptor, and perform deep copy on
@@ -117,7 +118,7 @@ public:
   /// @param src  Vector to copy.
   template<int S, typename V>
   vector(vector<S, V> const &src): alloc_type_(alloc_type::ALLOC) {
-    pv_= allocate(src.pv()->size);
+    v_= allocate(src.pv()->size);
     memcpy(*this, src);
   }
 
@@ -125,9 +126,9 @@ public:
   /// - Note that this is not a templated constructor because moving works only
   ///   from other vector<DCON>.
   /// @param src  Vector to move.
-  vector(vector &&src): alloc_type_(src.alloc_type_), pv_(src.pv_) {
+  vector(vector &&src): alloc_type_(src.alloc_type_), v_(src.v_) {
     src.alloc_type_= alloc_type::ALLOC;
-    src.pv_= nullptr;
+    src.v_= nullptr;
   }
 
   /// Deallocate existing vector and its descriptor; allocate new vector and
@@ -138,7 +139,7 @@ public:
   /// @return  Reference to instance after modification.
   template<int S, typename V> vector &operator=(vector<S, V> const &src) {
     alloc_type_= alloc_type::ALLOC;
-    pv_= allocate(src.pv()->size);
+    v_= allocate(src.pv()->size);
     memcpy(*this, src);
     return *this;
   }
@@ -152,7 +153,7 @@ public:
   /// @return  Reference to instance after modification.
   vector &operator=(vector &&src) {
     std::swap(alloc_type_, src.alloc_type_);
-    std::swap(pv_, src.pv_);
+    std::swap(v_, src.v_);
     return *this;
   }
 
@@ -170,11 +171,11 @@ template<typename V> class vector<VIEW, V>: public vec_iface<vector<VIEW, V>> {
 public:
   /// Function needed by vec_iface.
   /// @return  Pointer to GSL's interface to vector.
-  gsl_vector *pv() { return &view_.vector; }
+  gsl_vector &v() { return view_.vector; }
 
   /// Function needed by vec_iface.
   /// @return  Pointer to GSL's interface to immutable vector.
-  gsl_vector const *pv() const { return &view_.vector; }
+  gsl_vector const &v() const { return view_.vector; }
 
   /// Constructor called by subvector() and view_array().
   /// @param v  View to copy.
@@ -236,9 +237,10 @@ public:
   /// @param n  Number of elements in view.
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
-  template<int S,
-      typename T,
-      typename= enable_if_t<!is_const_v<decltype(T::vector)> && IS_CONST_VEC>>
+  template<
+    int S,
+    typename T,
+    typename= enable_if_t<!is_const_v<decltype(T::vector)> && IS_CONST_VEC>>
   vector(vector<S, T> const &v, size_t n= 0, size_t i= 0, size_t s= 1):
       view_(v.subvector(n ? n : v.size(), i, s).view_) {}
 };
