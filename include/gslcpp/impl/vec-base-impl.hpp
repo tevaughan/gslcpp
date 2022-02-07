@@ -5,6 +5,7 @@
 #pragma once
 
 #include "../vec-base.hpp"
+#include <iostream> // ostream
 #include <type_traits> // is_const_v
 
 namespace gsl {
@@ -58,9 +59,14 @@ template<typename V, typename W> int swap(vec_iface<V> &v, vec_iface<W> &w) {
 }
 
 
-template<typename U, typename V>
-bool operator==(vec_iface<U> const &u, vec_iface<V> const &v) {
-  return equal(u, v);
+template<typename U>
+std::ostream &operator<<(std::ostream &os, vec_iface<U> const &u) {
+  os << "[";
+  int const last= int(u.size()) - 1;
+  for(int i= 0; i < last; ++i) os << u[i] << ",";
+  if(last >= 0) os << u[last];
+  os << "]";
+  return os;
 }
 
 

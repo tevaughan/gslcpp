@@ -4,6 +4,7 @@
 
 #include "gslcpp/vector.hpp"
 #include <catch.hpp>
+#include <sstream> // ostringstream
 
 #if defined(GSL_VER) && GSL_VER > 26
 using gsl::axpby;
@@ -12,6 +13,7 @@ using gsl::axpby;
 using gsl::vec_base;
 using gsl::vec_iface;
 using gsl::vector;
+using std::ostringstream;
 
 
 /// See that C-array matches gsl::vec_iface with stride.
@@ -92,12 +94,44 @@ TEST_CASE("axpby() accumulates correctly into y.", "[vec_base]") {
 #endif
 
 
-TEST_CASE("equal() compares correctly", "[vec_base]") {
+TEST_CASE("equal() compares correctly.", "[vec_base]") {
   vector<3> const x({1.0, 2.0, 3.0});
   vector<3> const y({2.0, 3.0, 1.0});
   vector<3> const z({2.0, 3.0, 1.0});
   REQUIRE(!equal(x, y));
+  REQUIRE(x != y);
   REQUIRE(equal(y, z));
+  REQUIRE(y == z);
+}
+
+
+TEST_CASE("memcpy() works.", "[vec_base]") {
+  vector<3> y({2.0, 3.0, 1.0});
+  vector<3> const z({1.0, 2.0, 3.0});
+  REQUIRE(!equal(y, z));
+  memcpy(y, z);
+  REQUIRE(equal(y, z));
+}
+
+
+TEST_CASE("swap() works.", "[vec_base]") {
+  vector<3> const a({2.0, 3.0, 1.0});
+  vector<3> const b({1.0, 2.0, 3.0});
+  vector<3> c= a;
+  vector<3> d= b;
+  REQUIRE(a == c);
+  REQUIRE(b == d);
+  swap(c, d);
+  REQUIRE(a == d);
+  REQUIRE(b == c);
+}
+
+
+TEST_CASE("Stream-operator works.", "[vec_base]") {
+  vector<3> const a({2.0, 3.0, 1.0});
+  ostringstream oss;
+  oss << a;
+  REQUIRE(oss.str() == "[2,3,1]");
 }
 
 

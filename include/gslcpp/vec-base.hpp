@@ -5,6 +5,7 @@
 #pragma once
 
 #include "view.hpp" // view
+#include <iosfwd> // ostream
 
 namespace gsl {
 
@@ -107,7 +108,30 @@ template<typename V, typename W> int swap(vec_iface<V> &v, vec_iface<W> &w);
 /// @param v  Reference to other vector.
 /// @return  True only if vectors be equal.
 template<typename U, typename V>
-bool operator==(vec_iface<U> const &u, vec_iface<V> const &v);
+bool operator==(vec_iface<U> const &u, vec_iface<V> const &v) {
+  return equal(u,v);
+}
+
+
+/// Test inequality of two vectors.
+/// @tparam U  Type of one descendant of vec_iface.
+/// @tparam V  Type of other descendant of vec_iface.
+/// @param u  Reference to one vector.
+/// @param v  Reference to other vector.
+/// @return  True only if vectors be unequal.
+template<typename U, typename V>
+bool operator!=(vec_iface<U> const &u, vec_iface<V> const &v) {
+  return !equal(u, v);
+}
+
+
+/// Print vector to output-stream.
+/// @tparam U  Type of descendant of vec_iface.
+/// @param os  Reference to output-stream.
+/// @param u  Reference to vector.
+/// @return  Reference to modified output-stream.
+template<typename U>
+std::ostream &operator<<(std::ostream &os, vec_iface<U> const &u);
 
 
 } // namespace gsl
