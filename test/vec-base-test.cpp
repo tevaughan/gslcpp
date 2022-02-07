@@ -25,47 +25,43 @@ void check(double const *a, vec_iface<T> const &b, size_t s= 1) {
 
 
 TEST_CASE("vec_base::view_array() provides right view.", "[vec_base]") {
-  double a[]= {1, 1, 2, 3, 5, 8};
-  double const *b= a;
-  auto mv= vec_base::view_array(a, 3, 2); // Mutable view.
+  double a[]= {1.0, 1.0, 2.0, 3.0, 5.0, 8.0}; // Mutable, non-decayed C-array.
+  double const *b= a; // Decayed, immutable C-array.
+
+  auto mv= vec_base::view_array(a, 3, 2); // Mutable view of a.
+  REQUIRE(mv.size() == 3);
   check(a, mv, 2);
-  auto iv= vec_base::view_array(b, 4); // Immutable view.
+
+  auto iv= vec_base::view_array(b, 4); // Immutable view, ultimately of a.
+  REQUIRE(iv.size() == 4);
   check(a, iv);
+
+  // Modify mutable view.
+  mv[0] = -1.0;
+  mv[1] = -2.0;
+  mv[2] = -3.0;
+
+  // Verify that immutable view, utlimately of a, shows appropriate change.
+  // - THE POINT is that an immutable view does NOT guarantee that what it
+  //   points to will not change.
+  // - Rather, an immutable view is just like a const-pointer in C: What's
+  //   pointed to might change, but it won't be the const-pointer's fault!
+  double const c[]= {-1.0, 1.0, -2.0, 3.0, -3.0, 8.0};
+  check(c, iv);
 }
 
 
-TEST_CASE("vec_base works properly.", "[vec_base]") {
-  double a[]= {1, 1, 2, 3, 5, 8};
-  double const *b= a;
-
-  auto pv= vec_base::view_array(b, 3, 2);
-  REQUIRE(pv.size() == 3);
-  check(a, pv, 2);
+TEST_CASE("vec_base::subarray provides right view.", "[vec_base]") {
+  double a[]= {1.0, 1.0, 2.0, 3.0, 5.0, 8.0}; // Mutable, non-decayed C-array.
+  double const b[]= {2.0, 4.0, 6.0}; // Immutable, non-decayed C-array.
 
   auto av= vec_base::subarray(a, 3, 0, 2);
   REQUIRE(av.size() == 3);
   check(a, av, 2);
 
-  REQUIRE(pv == av);
-
-  auto av2= vec_base::subarray(a);
-  REQUIRE(av2.size() == 6);
-  check(a, av2);
-
-  auto mv1= av2.subvector(3, 0, 2);
-  REQUIRE(mv1.size() == 3);
-  check(a, mv1, 2);
-
-  REQUIRE(pv == mv1);
-
-  auto const &av3= av2;
-  auto mv2= av3.subvector(av3.size());
-  REQUIRE(mv2.size() == av3.size());
-  REQUIRE(mv2 == av3);
-
-  double c[]= {9, 8, 7, 6, 5, 4};
-  memcpy(av2, vec_base::subarray(c));
-  REQUIRE(vec_base::subarray(a) == vec_base::subarray(c));
+  auto av2= vec_base::subarray(b);
+  REQUIRE(av2.size() == 3);
+  check(b, av2);
 }
 
 
