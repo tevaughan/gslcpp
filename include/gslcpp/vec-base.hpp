@@ -57,6 +57,7 @@ struct vec_base {
 };
 
 
+#if defined(GSL_VER) && GSL_VER > 26
 /// Linearly combine vector `x` into vector `y` in place.
 /// @tparam X  Type of first source-vector.
 /// @tparam Y  Type of second source-vector and destination-vector.
@@ -67,6 +68,7 @@ struct vec_base {
 /// @return  TBD.
 template<typename X, typename Y>
 int axpby(double a, vec_iface<X> const &x, double b, vec_iface<Y> &y);
+#endif
 
 
 /// Test equality of two vectors.

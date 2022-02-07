@@ -33,10 +33,12 @@ vec_base::view<T> vec_base::subarray(T (&b)[N], size_t n, size_t i, size_t s) {
 }
 
 
+#if defined(GSL_VER) && GSL_VER > 26
 template<typename T, typename U>
 int axpby(double alpha, vec_iface<T> const &x, double beta, vec_iface<U> &y) {
-  return gsl_vector_axpby(alpha, x.p(), beta, y.p());
+  return gsl_vector_axpby(alpha, &x.vec(), beta, &y.vec());
 }
+#endif
 
 
 template<typename T, typename U>
@@ -52,7 +54,7 @@ int memcpy(vec_iface<D> &dst, vec_iface<S> const &src) {
 
 
 template<typename V, typename W> int swap(vec_iface<V> &v, vec_iface<W> &w) {
-  return gsl_vector_swap(v.p(), w.p());
+  return gsl_vector_swap(&v.vec(), &w.vec());
 }
 
 

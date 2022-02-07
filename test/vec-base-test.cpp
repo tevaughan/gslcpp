@@ -5,9 +5,13 @@
 #include "gslcpp/vector.hpp"
 #include <catch.hpp>
 
-using gsl::memcpy;
+#if defined(GSL_VER) && GSL_VER > 26
+using gsl::axpby;
+#endif
+
 using gsl::vec_base;
 using gsl::vec_iface;
+using gsl::vector;
 
 
 /// See that C-array matches gsl::vec_iface with stride.
@@ -28,11 +32,11 @@ TEST_CASE("vec_base::view_array() provides right view.", "[vec_base]") {
   double a[]= {1.0, 1.0, 2.0, 3.0, 5.0, 8.0}; // Mutable, non-decayed C-array.
   double const *b= a; // Decayed, immutable C-array.
 
-  auto mv= vec_base::view_array(a, 3, 2); // Mutable view of a.
+  auto mv= vec_base::view_array(a, 3, 2); // Mutable view of a[].
   REQUIRE(mv.size() == 3);
   check(a, mv, 2);
 
-  auto iv= vec_base::view_array(b, 4); // Immutable view, ultimately of a.
+  auto iv= vec_base::view_array(b, 4); // Immutable view, ultimately of a[].
   REQUIRE(iv.size() == 4);
   check(a, iv);
 
@@ -50,7 +54,7 @@ TEST_CASE("vec_base::view_array() provides right view.", "[vec_base]") {
 }
 
 
-TEST_CASE("vec_base::subarray provides right view.", "[vec_base]") {
+TEST_CASE("vec_base::subarray() provides right view.", "[vec_base]") {
   double a[]= {1.0, 1.0, 2.0, 3.0, 5.0, 8.0}; // Mutable, non-decayed C-array.
   double const(&b)[6]= a; // Immutable, non-decayed C-array.
 
@@ -72,6 +76,28 @@ TEST_CASE("vec_base::subarray provides right view.", "[vec_base]") {
   // Verify that immutable view, ultimately of a[], shows appropriate change.
   double const c[]= {1.0, -1.0, 2.0, -2.0, 5.0, -3.0};
   check(c, iv);
+}
+
+
+#if defined(GSL_VER) && GSL_VER > 26
+TEST_CASE("axpby() accumulates correctly into y.", "[vec_base]") {
+  vector<3> const x({1.0, 2.0, 3.0});
+  vector<3> y({2.0, 3.0, 1.0});
+  double const a= 0.5;
+  double const b= 1.5;
+  axpby(a, x, b, y);
+  double const r[]= {3.5, 5.5, 3.0};
+  check(r, y);
+}
+#endif
+
+
+TEST_CASE("equal() compares correctly", "[vec_base]") {
+  vector<3> const x({1.0, 2.0, 3.0});
+  vector<3> const y({2.0, 3.0, 1.0});
+  vector<3> const z({2.0, 3.0, 1.0});
+  REQUIRE(!equal(x, y));
+  REQUIRE(equal(y, z));
 }
 
 
