@@ -37,15 +37,14 @@ TEST_CASE("vec_base::view_array() provides right view.", "[vec_base]") {
   check(a, iv);
 
   // Modify mutable view.
-  mv[0] = -1.0;
-  mv[1] = -2.0;
-  mv[2] = -3.0;
+  mv[0]= -1.0;
+  mv[1]= -2.0;
+  mv[2]= -3.0;
 
-  // Verify that immutable view, utlimately of a, shows appropriate change.
-  // - THE POINT is that an immutable view does NOT guarantee that what it
-  //   points to will not change.
-  // - Rather, an immutable view is just like a const-pointer in C: What's
-  //   pointed to might change, but it won't be the const-pointer's fault!
+  // Verify that immutable view, ultimately of a[], shows appropriate change.
+  // - Immutable view does NOT guarantee immutability of what is viewed.
+  // - Rather, immutable view is just like const-pointer in C: What's pointed
+  //   to might change, but const-pointer cannot be used to make change.
   double const c[]= {-1.0, 1.0, -2.0, 3.0, -3.0, 8.0};
   check(c, iv);
 }
@@ -53,15 +52,26 @@ TEST_CASE("vec_base::view_array() provides right view.", "[vec_base]") {
 
 TEST_CASE("vec_base::subarray provides right view.", "[vec_base]") {
   double a[]= {1.0, 1.0, 2.0, 3.0, 5.0, 8.0}; // Mutable, non-decayed C-array.
-  double const b[]= {2.0, 4.0, 6.0}; // Immutable, non-decayed C-array.
+  double const(&b)[6]= a; // Immutable, non-decayed C-array.
 
-  auto av= vec_base::subarray(a, 3, 0, 2);
-  REQUIRE(av.size() == 3);
-  check(a, av, 2);
+  // Mutable view of a[], starting at Offset 1 and with Stride 2.
+  auto mv= vec_base::subarray(a, 3, 1, 2);
+  REQUIRE(mv.size() == 3);
+  check(a + 1, mv, 2);
 
-  auto av2= vec_base::subarray(b);
-  REQUIRE(av2.size() == 3);
-  check(b, av2);
+  // Immutable view of a[], starting at Offset 0 and with Stride 1.
+  auto iv= vec_base::subarray(b);
+  REQUIRE(iv.size() == 6);
+  check(b, iv);
+
+  // Modify mutable view.
+  mv[0]= -1.0;
+  mv[1]= -2.0;
+  mv[2]= -3.0;
+
+  // Verify that immutable view, ultimately of a[], shows appropriate change.
+  double const c[]= {1.0, -1.0, 2.0, -2.0, 5.0, -3.0};
+  check(c, iv);
 }
 
 
