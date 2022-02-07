@@ -24,6 +24,16 @@ void check(double const *a, vec_iface<T> const &b, size_t s= 1) {
 }
 
 
+TEST_CASE("vec_base::view_array() provides right view.", "[vec_base]") {
+  double a[]= {1, 1, 2, 3, 5, 8};
+  double const *b= a;
+  auto mv= vec_base::view_array(a, 3, 2); // Mutable view.
+  check(a, mv, 2);
+  auto iv= vec_base::view_array(b, 4); // Immutable view.
+  check(a, iv);
+}
+
+
 TEST_CASE("vec_base works properly.", "[vec_base]") {
   double a[]= {1, 1, 2, 3, 5, 8};
   double const *b= a;

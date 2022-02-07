@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "view-aux.hpp" // view_aux
+#include "view.hpp" // view
 
 namespace gsl {
 
@@ -26,7 +26,7 @@ template<typename D> struct vec_iface; // Forward-declaration.
 struct vec_base {
   /// Specification of view in terms of element-type.
   /// @tparam T  Each element's type, either `double` or `double const`.
-  template<typename T> using view= typename view_aux<T>::vector_type;
+  template<typename T> using view= typename view<T>::vector;
 
   /// View of standard (decayed) C-array.
   /// - Arguments are reordered relative to those given to

@@ -1,6 +1,6 @@
-/// @file       gsl/view-aux.hpp
+/// @file       gsl/view.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition for gsl::view_aux.
+/// @brief      Definition for gsl::view.
 
 #pragma once
 
@@ -20,31 +20,32 @@ template<int S, typename V> class vector; // Forward declaration.
 
 
 /// Generic structure used to translate type of element into type of view.
+/// `view` uses constness of element-type `T` in order to provide
+/// appropriate type for view.
 /// - Template-type parameter `T` must be either `double` or `double const`.
-/// - No other choice is presently supported.
-/// - At present `view_aux` is supports `gsl_vector` but could in principle be
-///   expanded to support `gsl_matrix` too.
+/// - At present `view` is supports only `gsl_vector`.
+/// - `view` could be expanded to support `gsl_matrix` too.
 /// @tparam T  Type of each element in view.
-template<typename T> struct view_aux;
+template<typename T> struct view;
 
 
 /// Specialization corresponding to element-type `double`.
-template<> struct view_aux<double> {
+template<> struct view<double> {
   /// Raw-GSL vector-view associated with element-type `double`.
-  using raw_vector_type= gsl_vector_view;
+  using raw_vector= gsl_vector_view;
 
   /// Vector-view associated with element-type `double`.
-  using vector_type= vector<VIEW, raw_vector_type>;
+  using vector= gsl::vector<VIEW, raw_vector>;
 };
 
 
 /// Specialization corresponding to element-type `double const`.
-template<> struct view_aux<double const> {
+template<> struct view<double const> {
   /// Raw-GSL vector-view associated with element-type `double const`.
-  using raw_vector_type= gsl_vector_const_view;
+  using raw_vector= gsl_vector_const_view;
 
   /// Vector-view associated with element-type `double const`.
-  using vector_type= vector<VIEW, raw_vector_type> const;
+  using vector= gsl::vector<VIEW, raw_vector> const;
 };
 
 
