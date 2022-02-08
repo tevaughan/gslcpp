@@ -162,7 +162,7 @@ public:
   template<typename I>
   difference_type operator-(vec_iterator<I> const &i) const {
     check_same_vector(i);
-    return (off_ - i.off_);
+    return off_ - i.off_;
   }
 
   /// Compare two iterators for equality.
