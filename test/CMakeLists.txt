@@ -1,5 +1,11 @@
 
-add_executable(tests test-main.cpp vec-base-test.cpp vector-test.cpp)
+add_executable(tests
+  test-main.cpp
+  vec-base-test.cpp
+  vec-iface-test.cpp
+  vector-test.cpp
+  )
+
 target_include_directories(tests PRIVATE ../include)
 target_link_libraries(tests gsl)
 

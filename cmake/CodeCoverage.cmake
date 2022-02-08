@@ -3,10 +3,12 @@
 
 # USAGE:
 #
-# 1. Copy this file into your cmake modules path.
+# 1. Copy this file into your cmake-modules path.
 #
 # 2. Add the following line to your CMakeLists.txt:
-#    - include(CodeCoverage)
+#    ```
+#    include(CodeCoverage)
+#    ```
 #
 # 3. Edit code below (if necessary) to make custom target which runs executable
 #    and produces coverage-report.
@@ -89,16 +91,28 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
     ${Coverage_NAME}
     # Run tests
     COMMAND ${Coverage_EXECUTABLE} ${Coverage_EXECUTABLE_ARGS}
-    COMMENT "Tests run."
-    COMMAND ${LLVM_PROFDATA_PATH} merge -sparse -o ${Coverage_NAME}.profdata
-    default.profraw
-    COMMAND ${LLVM_COV_PATH} show -instr-profile=${Coverage_NAME}.profdata
-    ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-    > ${Coverage_NAME}.txt
-    COMMAND ${LLVM_COV_PATH} show --format=html
-    -instr-profile=${Coverage_NAME}.profdata
-    ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-    > ${Coverage_NAME}.html
+    COMMENT "Tests run for coverage."
+    COMMAND ${LLVM_PROFDATA_PATH}
+            merge
+            -sparse
+            -o ${Coverage_NAME}.profdata
+            default.profraw
+    COMMAND ${LLVM_COV_PATH}
+            report
+            -instr-profile=${Coverage_NAME}.profdata
+            ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
+            > ${Coverage_NAME}-summary.txt
+    COMMAND ${LLVM_COV_PATH}
+            show
+            -instr-profile=${Coverage_NAME}.profdata
+            ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
+            > ${Coverage_NAME}.txt
+    COMMAND ${LLVM_COV_PATH}
+            show
+            --format=html
+            -instr-profile=${Coverage_NAME}.profdata
+            ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
+            > ${Coverage_NAME}.html
     # Clean up
     COMMAND ${CMAKE_COMMAND} -E remove
     ${Coverage_NAME}.profdata default.profraw

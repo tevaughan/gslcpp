@@ -1,4 +1,4 @@
-/// @file       gsl/view.hpp
+/// @file       include/gslcpp/view.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Definition for gsl::view.
 

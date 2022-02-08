@@ -1,4 +1,4 @@
-/// @file       gsl/vec-base.hpp
+/// @file       include/gslcpp/vec-base.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Declaration for gsl::vec_base and for functions for vectors.
 

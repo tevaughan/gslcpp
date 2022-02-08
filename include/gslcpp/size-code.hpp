@@ -1,4 +1,4 @@
-/// @file       gsl/size-code.hpp
+/// @file       include/gslcpp/size-code.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Definition for gsl::size_code.
 

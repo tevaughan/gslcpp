@@ -1,4 +1,4 @@
-/// @file       gsl/impl/vec-iface-impl.hpp
+/// @file       include/gslcpp/impl/vec-iface-impl.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Definition of gsl::vec_iface.
 

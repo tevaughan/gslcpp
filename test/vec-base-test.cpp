@@ -1,4 +1,4 @@
-/// @file       gsl/vec-base-test.cpp
+/// @file       test/vec-base-test.cpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Tests for gsl::vec_base.
 

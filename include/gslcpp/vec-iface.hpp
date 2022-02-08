@@ -1,4 +1,4 @@
-/// @file       gsl/vec-iface.hpp
+/// @file       include/gslcpp/vec-iface.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Definition for gsl::vec_iface.
 
@@ -19,12 +19,26 @@ using std::is_same_v;
 /// Interface for every kind of vector.
 /// @tparam D  Type of descendant of `vec_iface<D>`.
 template<typename D> struct vec_iface: public vec_base {
-  using iterator= vec_iterator<vec_iface, double>;
-  using const_iterator= vec_iterator<vec_iface const, double const>;
+  /// Type of iterator that points to mutable element.
+  using iterator= vec_iterator<vec_iface>;
 
+  /// Type of iterator that points to immutable element.
+  using const_iterator= vec_iterator<vec_iface const>;
+
+  /// Iterator that points to first element.
+  /// @return  Iterator that points to first element.
   iterator begin() { return iterator(*this, 0); }
+
+  /// Iterator that points to element just past last element.
+  /// @return  Iterator that points to element just past last element.
   iterator end() { return iterator(*this, size()); }
+
+  /// Iterator that points to first element.
+  /// @return  Iterator that points to first element.
   const_iterator begin() const { return const_iterator(*this, 0); }
+
+  /// Iterator that points to element just past last element.
+  /// @return  Iterator that points to element just past last element.
   const_iterator end() const { return const_iterator(*this, size()); }
 
   /// Pointer to descendant's C-interface gsl_vector.
