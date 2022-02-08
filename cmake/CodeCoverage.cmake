@@ -100,17 +100,20 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
     COMMAND ${LLVM_COV_PATH}
             report
             -instr-profile=${Coverage_NAME}.profdata
+            -ignore-filename-regex='*-test.cpp'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
             > ${Coverage_NAME}-summary.txt
     COMMAND ${LLVM_COV_PATH}
             show
             -instr-profile=${Coverage_NAME}.profdata
+            -ignore-filename-regex='*-test.cpp'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
             > ${Coverage_NAME}.txt
     COMMAND ${LLVM_COV_PATH}
             show
             --format=html
             -instr-profile=${Coverage_NAME}.profdata
+            -ignore-filename-regex='*-test.cpp'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
             > ${Coverage_NAME}.html
     # Clean up

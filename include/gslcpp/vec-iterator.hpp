@@ -109,6 +109,7 @@ public:
   }
 
   /// For positive `n`, increase, by `n`, offset of element pointed to.
+  /// - This is like fast forward in place for an iterator.
   /// - Do nothing when `n == 0`.
   /// - Actually decrease offset when `n < 0`.
   /// @param n  Number by which to increase offset.
@@ -119,6 +120,7 @@ public:
   }
 
   /// For positive `n`, decrease, by `n`, offset of element pointed to.
+  /// - This is like fast reverse in place for an iterator.
   /// - Do nothing when `n == 0`.
   /// - Actually increase offset when `n < 0`.
   /// @param n  Number by which to decrease offset.
@@ -129,6 +131,7 @@ public:
   }
 
   /// Produce new iterator at offset greater than that of existing iterator.
+  /// - This is like fast forward for an iterator.
   /// @param i  Iterator.
   /// @param n  Offset.
   /// @return  Iterator whose internal offset is `n` more than that of `i`.
@@ -138,6 +141,7 @@ public:
   }
 
   /// Produce new iterator at offset greater than that of existing iterator.
+  /// - This is like fast forward for an iterator.
   /// @param n  Offset.
   /// @param i  Iterator.
   /// @return  Iterator whose internal offset is `n` more than that of `i`.
@@ -146,6 +150,7 @@ public:
   }
 
   /// Produce new iterator at offset less than that of existing iterator.
+  /// - This is like fast reverse for an iterator.
   /// @param i  Iterator.
   /// @param n  Offset.
   /// @return  Iterator whose internal offset is `n` less than that of `i`.
