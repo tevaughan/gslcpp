@@ -57,9 +57,11 @@ public:
 
   /// Initialize GSL's view, and initialize vector by deep copy.
   /// @param v  Data to copy for initialization.
+  /// @return  Reference to modified vector.
   vector &operator=(vector const &v) {
     view_= gsl_vector_view_array(d_, S);
     memcpy(*this, v);
+    return *this;
   }
 };
 
