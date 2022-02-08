@@ -17,10 +17,10 @@ TEST_CASE("Construction and dereference work.", "[vec-iterator]") {
   v3 const a({1.0, 2.0, 3.0});
   v3 b({-1.0, -2.0, -3.0});
 
-  vec_iterator<v3 const, double const> ia(a, 0);
+  vec_iterator<v3 const> ia(a, 0);
   REQUIRE(*ia == 1.0);
 
-  vec_iterator<v3, double> ib(b, 2);
+  vec_iterator<v3> ib(b, 2);
   REQUIRE(*ib == -3.0);
 }
 

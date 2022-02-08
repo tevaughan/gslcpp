@@ -1,8 +1,8 @@
 
-add_executable(tests
-  test-main.cpp
+add_executable(tests test-main.cpp
   vec-base-test.cpp
   vec-iface-test.cpp
+  vec-iterator-test.cpp
   vector-test.cpp
   )
 
