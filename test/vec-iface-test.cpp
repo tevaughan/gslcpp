@@ -69,4 +69,20 @@ TEST_CASE("vec_iface::data() works.", "[vec-iface]") {
   REQUIRE(c.data() == b + 1);
 }
 
+
+TEST_CASE("vec_iface's getters work.", "[vec-iface]") {
+  REQUIRE(a.get(1) == 2.0);
+  REQUIRE(a[0] == 1.0);
+}
+
+
+TEST_CASE("vec_iface's setters work.", "[vec-iface]") {
+  v3 b= a;
+  b[0]= -1.0;
+  b.set(1, -2.0);
+  REQUIRE(b[0] == -1.0);
+  REQUIRE(b[1] == -2.0);
+}
+
+
 // EOF

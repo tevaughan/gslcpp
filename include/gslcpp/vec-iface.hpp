@@ -63,14 +63,6 @@ template<typename D> struct vec_iface: public vec_base {
   /// @return  Pointer to first immutable element.
   double const *data() const { return vec().data; }
 
-  /// Pointer to first element of block containing vector's data.
-  /// @return  Pointer to first element of block containing vector's data.
-  gsl_block const *block() const { return vec().block; }
-
-  /// Nonzero only if instance own its data.
-  /// @return  Nonzero only if instance own its data.
-  int owner() const { return vec().owner; }
-
   /// Read element with bounds-checking.
   /// @parameter i  Offset of element.
   /// @return  Value of element.
@@ -91,7 +83,7 @@ template<typename D> struct vec_iface: public vec_base {
   /// @return  Reference to mutable element.
   double &operator[](size_t i) { return data()[i * stride()]; }
 
-  /// Retrieve pointer with bounds-checking.
+  /// Retrieve pointer to `i`th element with bounds-checking.
   /// - This could be useful if stride unknown.
   /// @parameter i  Offset of element.
   /// @return  Pointer to mutable element.
