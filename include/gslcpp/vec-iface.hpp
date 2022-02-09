@@ -167,7 +167,7 @@ template<typename D> struct vec_iface: public vec_base {
   /// @param b  Vector whose contents should be added into this.
   /// @return  TBD.
   template<typename T> int add(vec_iface<T> const &b) {
-    return gsl_vector_add(&vec(), b.p());
+    return gsl_vector_add(&vec(), &b.vec());
   }
 
   /// Subtract contents of `b` from this vector in place.
@@ -175,7 +175,7 @@ template<typename D> struct vec_iface: public vec_base {
   /// @param b  Vector whose contents should be subtracted from this.
   /// @return  TBD.
   template<typename T> int sub(vec_iface<T> const &b) {
-    return gsl_vector_sub(&vec(), b.p());
+    return gsl_vector_sub(&vec(), &b.vec());
   }
 
   /// Multiply contents of `b` into this vector in place.
@@ -183,7 +183,7 @@ template<typename D> struct vec_iface: public vec_base {
   /// @param b  Vector whose contents should be multiplied into this.
   /// @return  TBD.
   template<typename T> int mul(vec_iface<T> const &b) {
-    return gsl_vector_mul(&vec(), b.p());
+    return gsl_vector_mul(&vec(), &b.vec());
   }
 
   /// Divide contents of `b` into this vector in place.
@@ -191,7 +191,7 @@ template<typename D> struct vec_iface: public vec_base {
   /// @param b  Vector whose contents should be divided into this.
   /// @return  TBD.
   template<typename T> int div(vec_iface<T> const &b) {
-    return gsl_vector_div(&vec(), b.p());
+    return gsl_vector_div(&vec(), &b.vec());
   }
 
   /// Add contents of `b` into this vector in place.
@@ -256,9 +256,11 @@ template<typename D> struct vec_iface: public vec_base {
     return *this;
   }
 
+#if defined(GSL_VER) && GSL_VER > 26
   /// Sum of elements.
   /// @return  Sum of elements.
   double sum() const { return gsl_vector_sum(&vec()); }
+#endif
 
   /// Greatest value of any element.
   /// @return  Greatest value of any element.
@@ -286,7 +288,7 @@ template<typename D> struct vec_iface: public vec_base {
   /// Offset of least value and offset of greatest value.
   /// @param imin  On return, offset of least value.
   /// @param imax  On return, offset of greatest value.
-  void minmax_index(size_t &imin, size_t &imax) {
+  void minmax_index(size_t &imin, size_t &imax) const {
     gsl_vector_minmax_index(&vec(), &imin, &imax);
   }
 

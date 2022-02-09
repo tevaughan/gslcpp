@@ -175,9 +175,9 @@ TEST_CASE("vec_iface::subvector() works.", "[vec-iface]") {
   REQUIRE(vc[1] == -2.0);
   REQUIRE(vb[2] == -3.0);
   REQUIRE(vc[2] == -3.0);
-  vc[0] = -7.0;
-  vc[1] = -8.0;
-  vc[2] = -9.0;
+  vc[0]= -7.0;
+  vc[1]= -8.0;
+  vc[2]= -9.0;
   REQUIRE(c[1] == -7.0);
   REQUIRE(c[3] == -8.0);
   REQUIRE(c[5] == -9.0);
@@ -187,6 +187,173 @@ TEST_CASE("vec_iface::subvector() works.", "[vec-iface]") {
   REQUIRE(vvc[0] == c[1]);
   REQUIRE(vvc[1] == c[5]);
 }
+
+
+TEST_CASE("vec_iface::swap_elements() works.", "[vec-iface]") {
+  v3 b= a;
+  b.swap_elements(0, 1);
+  REQUIRE(a[0] == b[1]);
+  REQUIRE(a[1] == b[0]);
+  REQUIRE(a[2] == b[2]);
+}
+
+
+TEST_CASE("vec_iface::reverse() works.", "[vec-iface]") {
+  v3 b= a;
+  b.reverse();
+  REQUIRE(b[0] == a[2]);
+  REQUIRE(b[1] == a[1]);
+  REQUIRE(b[2] == a[0]);
+}
+
+
+TEST_CASE("vec_iface's addition in place works.", "[vec-iface]") {
+  v3 b;
+
+  b.set_all(1.0);
+  b.add(a);
+  REQUIRE(b[0] == 2.0);
+  REQUIRE(b[1] == 3.0);
+  REQUIRE(b[2] == 4.0);
+
+  b.set_all(1.0);
+  b+= a;
+  REQUIRE(b[0] == 2.0);
+  REQUIRE(b[1] == 3.0);
+  REQUIRE(b[2] == 4.0);
+}
+
+
+TEST_CASE("vec_iface's subtraction in place works.", "[vec-iface]") {
+  v3 b;
+
+  b.set_all(1.0);
+  b.sub(a);
+  REQUIRE(b[0] == +0.0);
+  REQUIRE(b[1] == -1.0);
+  REQUIRE(b[2] == -2.0);
+
+  b.set_all(1.0);
+  b-= a;
+  REQUIRE(b[0] == +0.0);
+  REQUIRE(b[1] == -1.0);
+  REQUIRE(b[2] == -2.0);
+}
+
+
+TEST_CASE("vec_iface's multiplication in place works.", "[vec-iface]") {
+  v3 b;
+
+  b.set_all(1.0);
+  b.mul(a);
+  REQUIRE(b[0] == 1.0);
+  REQUIRE(b[1] == 2.0);
+  REQUIRE(b[2] == 3.0);
+
+  b.set_all(1.0);
+  b*= a;
+  REQUIRE(b[0] == 1.0);
+  REQUIRE(b[1] == 2.0);
+  REQUIRE(b[2] == 3.0);
+}
+
+
+TEST_CASE("vec_iface's division in place works.", "[vec-iface]") {
+  v3 b;
+
+  b.set_all(1.0);
+  b.div(a);
+  REQUIRE(b[0] == 1.0 / 1.0);
+  REQUIRE(b[1] == 1.0 / 2.0);
+  REQUIRE(b[2] == 1.0 / 3.0);
+
+  b.set_all(1.0);
+  b/= a;
+  REQUIRE(b[0] == 1.0 / 1.0);
+  REQUIRE(b[1] == 1.0 / 2.0);
+  REQUIRE(b[2] == 1.0 / 3.0);
+}
+
+
+TEST_CASE("vec_iface's scaling works.", "[vec-iface]") {
+  v3 b= a;
+  b.scale(2.0);
+  REQUIRE(b[0] == 2.0);
+  REQUIRE(b[1] == 4.0);
+  REQUIRE(b[2] == 6.0);
+  b*= 2.0;
+  REQUIRE(b[0] == 4.0);
+  REQUIRE(b[1] == 8.0);
+  REQUIRE(b[2] == 12.0);
+}
+
+
+TEST_CASE("vec_iface's adding constant works.", "[vec-iface]") {
+  v3 b= a;
+  b.add_constant(1.0);
+  REQUIRE(b[0] == 2.0);
+  REQUIRE(b[1] == 3.0);
+  REQUIRE(b[2] == 4.0);
+  b+= 1.0;
+  REQUIRE(b[0] == 3.0);
+  REQUIRE(b[1] == 4.0);
+  REQUIRE(b[2] == 5.0);
+}
+
+
+TEST_CASE("vec_iface's statistical functions work.", "[vec-iface]") {
+#if defined(GSL_VER) && GSL_VER > 26
+  REQUIRE(a.sum() == 6.0);
+#endif
+  REQUIRE(a.max() == 3.0);
+  REQUIRE(a.min() == 1.0);
+
+  double min, max;
+  a.minmax(min, max);
+  REQUIRE(min == 1.0);
+  REQUIRE(max == 3.0);
+
+  v3 b= a;
+  b.reverse();
+  REQUIRE(a.max_index() == 0);
+  REQUIRE(a.min_index() == 2);
+
+  size_t imin, imax;
+  b.minmax_index(imin, imax);
+  REQUIRE(imax == 0);
+  REQUIRE(imin == 2);
+}
+
+
+TEST_CASE("vec_iface::isnull() works.", "[vec-iface]") {
+  v3 b= a;
+  REQUIRE(b.isnull() == false);
+
+  b.set_zero();
+  REQUIRE(b.isnull() == true);
+}
+
+
+TEST_CASE("vec_iface::ispos() works.", "[vec-iface]") {
+  v3 b= a;
+  REQUIRE(b.ispos() == true);
+
+  b.add_constant(-1.0);
+  REQUIRE(b.ispos() == false);
+}
+
+
+TEST_CASE("vec_iface::isnonneg() works.", "[vec-iface]") {
+  v3 b= a;
+  REQUIRE(b.isnonneg() == true);
+
+  b.add_constant(-1.0);
+  REQUIRE(b.isnonneg() == true);
+
+  b.add_constant(-0.001);
+  REQUIRE(b.isnonneg() == false);
+}
+
 
 
 // EOF
