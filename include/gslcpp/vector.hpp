@@ -25,10 +25,9 @@ using std::is_same_v;
 /// Generic template for CRTP-descendant from vec_iface.
 /// - `S` indicates number of elements in instance of generic template.
 /// - However, each specialization has non-positive `S`; see gsl::size_code.
-/// @tparam S  Positive number of elements or code for allocation and
-///            ownership.
-/// @tparam V  Must be `gsl_vector_view` except when `S == VIEW`; in that case,
-///            either `gsl_vector_view` or `gsl_vector_const_view`.
+/// @tparam S  Positive size or code for allocation and ownership.
+/// @tparam V  Must be `gsl_vector_view` or (only when `S == VIEW`) possibly
+///           `gsl_vector_const_view`.
 template<int S, typename V= gsl_vector_view>
 class vector: public vec_iface<vector<S, V>> {
   static_assert(S > 0);

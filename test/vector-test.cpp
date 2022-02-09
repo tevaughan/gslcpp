@@ -11,48 +11,35 @@ using gsl::vectord;
 using gsl::vectorv;
 
 
-template<int S> void set_get(vector<S> &v) {
-  v.set_all(0.0);
-  for(size_t i= 0; i < v.size(); ++i) { REQUIRE(v.get(i) == 0.0); }
-
-  for(size_t i= 0; i < v.size(); ++i) { v.set(i, 1.23 + i); }
-  for(size_t i= 0; i < v.size(); ++i) { REQUIRE(v.get(i) == 1.23 + i); }
-
-  for(size_t i= 0; i < v.size(); ++i) { v[i]= 2.46 + i; }
-  for(size_t i= 0; i < v.size(); ++i) { REQUIRE(v[i] == 2.46 + i); }
+TEST_CASE("Stack-vector's default constructor works.", "[vector]") {
+  vector<3> v;
+  REQUIRE(v.size() == 3);
 }
 
 
-TEST_CASE("gsl::vector works properly.", "[vector]") {
-  double a[]= {1.1, 1.2, 1.4, 1.8};
-
-  vector v0(a); // Template-value parameter (number of elements) deduced!
-  REQUIRE(v0.size() == 4);
-  REQUIRE(v0[0] == 1.1);
-  REQUIRE(v0[1] == 1.2);
-  REQUIRE(v0[2] == 1.4);
-  REQUIRE(v0[3] == 1.8);
-
-  vector<3> v1;
-  set_get(v1);
-
-  vectord v2(10);
-  set_get(v2);
-
-  vectorv v3= v2.subvector(4, 1, 2);
-  REQUIRE(v3.size() == 4);
-  REQUIRE(v3[0] == 2.46 + 1);
-  REQUIRE(v3[1] == 2.46 + 3);
-  REQUIRE(v3[2] == 2.46 + 5);
-  REQUIRE(v3[3] == 2.46 + 7);
-  set_get(v3);
-
-  vectorcv v4= v3.subvector(v3.size());
-  REQUIRE(v4.size() == v3.size());
-  REQUIRE(v4[0] == 2.46 + 0);
-  REQUIRE(v4[1] == 2.46 + 1);
-  REQUIRE(v4[2] == 2.46 + 2);
-  REQUIRE(v4[3] == 2.46 + 3);
+TEST_CASE("Stack-vector's constructor from array works.", "[vector]") {
+  double d[]= {2.0, 4.0, 6.0, 8.0};
+  vector v(d); // No template-parameter required!
+  REQUIRE(v.size() == 4);
+  REQUIRE(v[0]==2.0);
+  REQUIRE(v[1]==4.0);
+  REQUIRE(v[2]==6.0);
+  REQUIRE(v[3]==8.0);
 }
+
+
+TEST_CASE("Stack-vector's copy-constructor works.", "[vector]") {
+  vector v({1.0, 2.0, 3.0});
+  vector w= v;
+  REQUIRE(v == w);
+}
+
+
+TEST_CASE("Stack-vector's copy-assignment operator works.", "[vector]") {
+  vector v({1.0, 2.0, 3.0});
+  vector<3> w;
+  w= v;
+}
+
 
 // EOF
