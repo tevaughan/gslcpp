@@ -315,8 +315,8 @@ TEST_CASE("vec_iface's statistical functions work.", "[vec-iface]") {
 
   v3 b= a;
   b.reverse();
-  REQUIRE(a.max_index() == 0);
-  REQUIRE(a.min_index() == 2);
+  REQUIRE(b.max_index() == 0);
+  REQUIRE(b.min_index() == 2);
 
   size_t imin, imax;
   b.minmax_index(imin, imax);

@@ -4,7 +4,7 @@
 
 // Use old-style include-guards instead of '#pragma once' here because we have
 // to include at bottom implementation-headers, each of which includes this
-// file so that editor is happy.
+// file; old-style guards here make neovim happy.
 #ifndef GSL_VECTOR_HPP
 #  define GSL_VECTOR_HPP
 
@@ -25,11 +25,15 @@ using std::is_same_v;
 /// Generic template for CRTP-descendant from vec_iface.
 /// - `S` indicates number of elements in instance of generic template.
 /// - However, each specialization has non-positive `S`; see gsl::size_code.
-/// @tparam S  Number of elements or code for allocation and ownership.
-/// @tparam V  Type of view; ignored when `S == DCON`.
+/// @tparam S  Positive number of elements or code for allocation and
+///            ownership.
+/// @tparam V  Must be `gsl_vector_view` except when `S == VIEW`; in that case,
+///            either `gsl_vector_view` or `gsl_vector_const_view`.
 template<int S, typename V= gsl_vector_view>
 class vector: public vec_iface<vector<S, V>> {
   static_assert(S > 0);
+  static_assert(is_same_v<V, gsl_vector_view>);
+
   using vec_base::subarray;
 
   double d_[S]; ///< Storage for data.
@@ -166,9 +170,15 @@ public:
 
 /// Specialization for vector that refers to mutable, external data.
 template<typename V> class vector<VIEW, V>: public vec_iface<vector<VIEW, V>> {
+  static_assert(
+    is_same_v<V, gsl_vector_view> || is_same_v<V, gsl_vector_const_view>);
+
   V view_; ///< GSL's view of data outside instance.
 
-  enum { IS_CONST_VEC= is_same_v<V, gsl_vector_const_view> };
+  enum {
+    /// Symbol used to select appropriate constructor from other vector.
+    IS_CONST_VEC= is_same_v<V, gsl_vector_const_view>
+  };
 
 public:
   /// Function needed by vec_iface.
