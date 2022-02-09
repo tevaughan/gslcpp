@@ -211,7 +211,7 @@ public:
   /// @param s  Stride of view relative to array.
   template<typename T, int N>
   vector(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      view_(subarray(b, n, i, s).view_) {}
+      view_(vec_base::subarray(b, n, i, s).view_) {}
 
   /// View of subvector of vector.
   /// - Arguments are reordered from those given to
