@@ -42,10 +42,10 @@ template<typename D> struct vec_iface: public vec_base {
   const_iterator end() const { return const_iterator(*this, size()); }
 
   /// Pointer to descendant's C-interface gsl_vector.
-  gsl_vector &vec() { return static_cast<D *>(this)->v(); }
+  auto &vec() { return static_cast<D *>(this)->v(); }
 
   /// Pointer to descendant's immutable C-interface gsl_vector.
-  gsl_vector const &vec() const { return static_cast<D const *>(this)->v(); }
+  auto const &vec() const { return static_cast<D const *>(this)->v(); }
 
   /// Size of vector.
   /// @return  Size of vector.

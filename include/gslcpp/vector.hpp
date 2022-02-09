@@ -173,11 +173,11 @@ template<typename V> class vector<VIEW, V>: public vec_iface<vector<VIEW, V>> {
 public:
   /// Function needed by vec_iface.
   /// @return  Pointer to GSL's interface to vector.
-  gsl_vector &v() { return view_.vector; }
+  auto &v() { return view_.vector; }
 
   /// Function needed by vec_iface.
   /// @return  Pointer to GSL's interface to immutable vector.
-  gsl_vector const &v() const { return view_.vector; }
+  auto const &v() const { return view_.vector; }
 
   /// Constructor called by subvector() and view_array().
   /// @param v  View to copy.
