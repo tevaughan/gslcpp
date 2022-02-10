@@ -1,6 +1,6 @@
 /// @file       test/vec-base-test.cpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Tests for gsl::vec_base.
+/// @brief      Tests for gsl::vec.
 
 #include "gslcpp/vector.hpp"
 #include <catch.hpp>
@@ -10,7 +10,7 @@
 using gsl::axpby;
 #endif
 
-using gsl::vec_base;
+using gsl::vec;
 using gsl::vec_iface;
 using gsl::vector;
 using std::ostringstream;
@@ -30,15 +30,15 @@ void check(double const *a, vec_iface<T> const &b, size_t s= 1) {
 }
 
 
-TEST_CASE("vec_base::view_array() provides right view.", "[vec_base]") {
+TEST_CASE("vec::view_array() provides right view.", "[vec]") {
   double a[]= {1.0, 1.0, 2.0, 3.0, 5.0, 8.0}; // Mutable, non-decayed C-array.
   double const *b= a; // Decayed, immutable C-array.
 
-  auto mv= vec_base::view(a, 3, 0, 2); // Mutable view of a[].
+  auto mv= vec::view(a, 3, 0, 2); // Mutable view of a[].
   REQUIRE(mv.size() == 3);
   check(a, mv, 2);
 
-  auto iv= vec_base::view(4, b); // Immutable view, ultimately of a[].
+  auto iv= vec::view(4, b); // Immutable view, ultimately of a[].
   REQUIRE(iv.size() == 4);
   check(a, iv);
 
@@ -56,17 +56,17 @@ TEST_CASE("vec_base::view_array() provides right view.", "[vec_base]") {
 }
 
 
-TEST_CASE("vec_base::subarray() provides right view.", "[vec_base]") {
+TEST_CASE("vec::subarray() provides right view.", "[vec]") {
   double a[]= {1.0, 1.0, 2.0, 3.0, 5.0, 8.0}; // Mutable, non-decayed C-array.
   double const(&b)[6]= a; // Immutable, non-decayed C-array.
 
   // Mutable view of a[], starting at Offset 1 and with Stride 2.
-  auto mv= vec_base::view(a, 3, 1, 2);
+  auto mv= vec::view(a, 3, 1, 2);
   REQUIRE(mv.size() == 3);
   check(a + 1, mv, 2);
 
   // Immutable view of a[], starting at Offset 0 and with Stride 1.
-  auto iv= vec_base::view(b);
+  auto iv= vec::view(b);
   REQUIRE(iv.size() == 6);
   check(b, iv);
 
@@ -82,7 +82,7 @@ TEST_CASE("vec_base::subarray() provides right view.", "[vec_base]") {
 
 
 #if defined(GSL_VER) && GSL_VER > 26
-TEST_CASE("axpby() accumulates correctly into y.", "[vec_base]") {
+TEST_CASE("axpby() accumulates correctly into y.", "[vec]") {
   vector<3> const x({1.0, 2.0, 3.0});
   vector<3> y({2.0, 3.0, 1.0});
   double const a= 0.5;
@@ -94,7 +94,7 @@ TEST_CASE("axpby() accumulates correctly into y.", "[vec_base]") {
 #endif
 
 
-TEST_CASE("equal() compares correctly.", "[vec_base]") {
+TEST_CASE("equal() compares correctly.", "[vec]") {
   vector<3> const x({1.0, 2.0, 3.0});
   vector<3> const y({2.0, 3.0, 1.0});
   vector<3> const z({2.0, 3.0, 1.0});
@@ -105,7 +105,7 @@ TEST_CASE("equal() compares correctly.", "[vec_base]") {
 }
 
 
-TEST_CASE("memcpy() works.", "[vec_base]") {
+TEST_CASE("memcpy() works.", "[vec]") {
   vector<3> y({2.0, 3.0, 1.0});
   vector<3> const z({1.0, 2.0, 3.0});
   REQUIRE(!equal(y, z));
@@ -114,7 +114,7 @@ TEST_CASE("memcpy() works.", "[vec_base]") {
 }
 
 
-TEST_CASE("swap() works.", "[vec_base]") {
+TEST_CASE("swap() works.", "[vec]") {
   vector<3> const a({2.0, 3.0, 1.0});
   vector<3> const b({1.0, 2.0, 3.0});
   vector<3> c= a;
@@ -127,7 +127,7 @@ TEST_CASE("swap() works.", "[vec_base]") {
 }
 
 
-TEST_CASE("Stream-operator works.", "[vec_base]") {
+TEST_CASE("Stream-operator works.", "[vec]") {
   vector<3> const a({2.0, 3.0, 1.0});
   ostringstream oss;
   oss << a;

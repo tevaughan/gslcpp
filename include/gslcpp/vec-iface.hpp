@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "vec-base.hpp"
 #include "vec-iterator.hpp"
+#include "vec.hpp"
 #include <type_traits> // enable_if_t, is_const_v
 
 namespace gsl {
@@ -18,7 +18,7 @@ using std::is_same_v;
 
 /// Interface for every kind of vector.
 /// @tparam D  Type of descendant of `vec_iface<D>`.
-template<typename D> struct vec_iface: public vec_base {
+template<typename D> struct vec_iface: public vec {
   /// Type of iterator that points to mutable element.
   using iterator= vec_iterator<vec_iface>;
 

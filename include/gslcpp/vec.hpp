@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/vec-base.hpp
+/// @file       include/gslcpp/vec.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Declaration for gsl::vec_base and for functions for vectors.
+/// @brief      Declaration for gsl::vec and for functions for vectors.
 
 #pragma once
 
@@ -13,18 +13,18 @@ namespace gsl {
 template<typename D> struct vec_iface; // Forward-declaration.
 
 
-/// Base-class name-space for static functions.
-/// - An instance of vec_base does not have any fields.
-/// - Also, vec_base has no function to access field of descendant.
+/// Base-class for vector and name-space for static functions.
+/// - An instance of vec does not have any fields.
+/// - Also, vec has no function to access field of descendant.
 /// - Yet some static functions can be collected here.
-/// - Static function belongs in `vec_base` if function's arguments do not
+/// - Static function belongs in `vec` if function's arguments do not
 ///   distinguish it from similar function for matrix.
 /// - This allows GSL's matrix-capability cleanly to be added to library if
 ///   desired.
 /// - Static function whose name is generic but whose arguments involve
 ///   vector-types can reside at root of namespace gsl and need not reside in
-///   vec_base.
-struct vec_base {
+///   vec.
+struct vec {
   /// View of standard (decayed) C-array.
   /// - Arguments are reordered relative to those of
   ///   gsl_vector_view_array_with_stride().

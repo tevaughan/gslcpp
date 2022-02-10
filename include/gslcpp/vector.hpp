@@ -37,7 +37,7 @@ class vector: public vec_iface<vector<S, V>> {
   double d_[S]; ///< Storage for data.
   V view_; ///< GSL's view of data within instance of vector.
 
-  using vec_base::view; ///< Explicitly inherit static function.
+  using vec::view; ///< Explicitly inherit static function.
 
 public:
   /// Function needed by vec_iface.
@@ -265,7 +265,7 @@ public:
   /// @param s  Stride of view relative to array.
   template<typename T, int N>
   vector(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      view_(vec_base::view(b, n, i, s).view_) {}
+      view_(vec::view(b, n, i, s).view_) {}
 
   /// View of subvector of vector.
   /// - Arguments are reordered from those given to
