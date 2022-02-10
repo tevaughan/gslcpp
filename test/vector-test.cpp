@@ -30,20 +30,27 @@ TEST_CASE("Stack-vector's constructor from array works.", "[vector]") {
   vector<2> w(d, 1, 2);
   REQUIRE(w[0] == 4.0);
   REQUIRE(w[1] == 8.0);
+
+  REQUIRE_THROWS(vector<3>(d, 0, 2));
+  REQUIRE_THROWS(vector<2>(d, 2, 2));
 }
 
 
 TEST_CASE("Stack-vector's copy-constructor works.", "[vector]") {
   vector v({1.0, 2.0, 3.0});
-  vector w= v;
+  vector w= v; // Copy.
   REQUIRE(v == w);
+
+  vectorv view= v;
+  vector<3> x= view; // Copy from other kind of vector.
+  REQUIRE(x == v);
 }
 
 
 TEST_CASE("Stack-vector's copy-assignment operator works.", "[vector]") {
   vector v({1.0, 2.0, 3.0});
   vector<3> w;
-  w= v;
+  w= v; // Assign.
 }
 
 

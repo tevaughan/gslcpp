@@ -25,9 +25,10 @@ using std::is_same_v;
 /// Generic template for CRTP-descendant from vec_iface.
 /// - `S` indicates number of elements in instance of generic template.
 /// - However, each specialization has non-positive `S`; see gsl::size_code.
+/// - `V` must be `gsl_vector_view` or (if `S == VIEW`) possibly
+///   `gsl_vector_const_view`.
 /// @tparam S  Positive size or code for allocation and ownership.
-/// @tparam V  Must be `gsl_vector_view` or (only when `S == VIEW`) possibly
-///           `gsl_vector_const_view`.
+/// @tparam V  Type of view used internally to point at internal C-array.
 template<int S, typename V= gsl_vector_view>
 class vector: public vec_iface<vector<S, V>> {
   static_assert(S > 0);
@@ -36,7 +37,7 @@ class vector: public vec_iface<vector<S, V>> {
   double d_[S]; ///< Storage for data.
   V view_; ///< GSL's view of data within instance of vector.
 
-  using vec_base::subarray;
+  using vec_base::subarray; ///< Explicitly inherit static function.
 
 public:
   /// Function needed by vec_iface.
@@ -49,6 +50,19 @@ public:
 
   /// Initialize GSL's view of static storage, but do not initialize data.
   vector(): view_(gsl_vector_view_array(d_, S)) {}
+
+  /// Construct by copying from any kind of vector of same size.
+  /// - Constraint on size is enforced at compile-time if `OS > 0`.
+  /// - Otherwise, mismatch in size produces a run-time abort.
+  /// - `OV` must be `gsl_vector_view` or (if `OS == VIEW`) possibly
+  ///   `gsl_vector_const_view`.
+  /// @tparam OS  Size or size-code of source-vector.
+  /// @tparam OV  Type of view used internally by source-vector.
+  /// @param ov  Reference to source-vector.
+  template<int OS, typename OV, typename= enable_if_t<S == OS || (OS < 1)>>
+  vector(vector<OS, OV> const &ov): vector() {
+    memcpy(*this, ov);
+  }
 
   /// Initialize GSL's view, and initialize vector by deep copy.
   /// - Size-parameter `S` can be *deduced* from the argument!
@@ -72,8 +86,15 @@ public:
   ///   ```
   /// - This constructor completely initializes new vector with data from
   ///   C-style array (that has *not* decayed).
+  /// @tparam N  Number of elements in non-decayed C-style array.
+  /// @param d  Non-decayed C-style array.
+  /// @param i  Offset of initial element to be copied.
+  /// @param s  Stride of elements to be copied.
   template<unsigned N>
   vector(double const (&d)[N], size_t i= 0, size_t s= 1): vector() {
+    if(i + s * (S - 1) >= N) {
+      throw std::runtime_error("source-array not big enough");
+    }
     memcpy(*this, subarray(d, S, i, s));
   }
 
