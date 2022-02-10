@@ -11,4 +11,7 @@ build:
 
 clean :
 	@rm -frv build
+	@rm -fv default.profraw
+	@rm -fv io-test.dat
+	@rm -fv output-test.txt
 
