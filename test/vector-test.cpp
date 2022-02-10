@@ -19,12 +19,17 @@ TEST_CASE("Stack-vector's default constructor works.", "[vector]") {
 
 TEST_CASE("Stack-vector's constructor from array works.", "[vector]") {
   double d[]= {2.0, 4.0, 6.0, 8.0};
+
   vector v(d); // No template-parameter required!
   REQUIRE(v.size() == 4);
   REQUIRE(v[0]==2.0);
   REQUIRE(v[1]==4.0);
   REQUIRE(v[2]==6.0);
   REQUIRE(v[3]==8.0);
+
+  vector<2> w(d, 1, 2);
+  REQUIRE(w[0] == 4.0);
+  REQUIRE(w[1] == 8.0);
 }
 
 

@@ -33,10 +33,10 @@ class vector: public vec_iface<vector<S, V>> {
   static_assert(S > 0);
   static_assert(is_same_v<V, gsl_vector_view>);
 
-  using vec_base::subarray;
-
   double d_[S]; ///< Storage for data.
   V view_; ///< GSL's view of data within instance of vector.
+
+  using vec_base::subarray;
 
 public:
   /// Function needed by vec_iface.
@@ -51,8 +51,31 @@ public:
   vector(): view_(gsl_vector_view_array(d_, S)) {}
 
   /// Initialize GSL's view, and initialize vector by deep copy.
+  /// - Size-parameter `S` can be *deduced* from the argument!
+  /// - So, for example, one can do this:
+  ///   ```c++
+  ///   double d[]= {2.0, 3.0, 4.0};
+  ///   vector v(d); // No template-parameter required!
+  ///   ```
+  /// - This constructor completely initializes new vector with data from
+  ///   C-style array (that has *not* decayed).
   /// @param d  Data to copy for initialization.
   vector(double const (&d)[S]): vector() { memcpy(*this, subarray(d)); }
+
+  /// Initialize GSL's view, and initialize vector by deep copy.
+  /// - Size-parameter `S` can *not* be deduced from the argument.
+  /// - For example:
+  ///   ```c++
+  ///   double d[]= {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+  ///   vector<3> v(d, 1, 2); // Start at offset 1 (not 0) and use stride 2.
+  ///   // So v == [2.0, 4.0, 6.0].
+  ///   ```
+  /// - This constructor completely initializes new vector with data from
+  ///   C-style array (that has *not* decayed).
+  template<unsigned N>
+  vector(double const (&d)[N], size_t i= 0, size_t s= 1): vector() {
+    memcpy(*this, subarray(d, S, i, s));
+  }
 
   /// Initialize GSL's view, and initialize vector by deep copy.
   /// @param v  Data to copy for initialization.
@@ -65,7 +88,7 @@ public:
     view_= gsl_vector_view_array(d_, S);
     memcpy(*this, v);
     return *this;
-  }
+}
 };
 
 
