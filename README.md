@@ -18,18 +18,20 @@ The unit-tests are built, run, and reported on for coverage by way of `cmake`.
 The top-level [Makefile](Makefile) is not a product of `cmake`. The default
 target
   - generates a directory, `build`,
-  - properly invokes `cmake` therein so that the test-code can be built, run,
-    and reported on for covereage.
+  - properly invokes `cmake` therein, and
+  - invokes the generated file, `build/Makefile`
+    - to build the tests for coverage-analysis,
+    - to run them, and
+    - to build the reports of coverage.
 
-To get started:
-
+So, to get started, just run
 ```
-$ make build
-$ cd build
-$ make tests_cov
+make
 ```
+at the top of the tree.
 
 After that, products of the coverage-analysis end up in
-  - `build/tests_cov.txt` and
+  - `build/tests_cov-summary.txt`,
+  - `build/tests_cov.txt`, and
   - `build/tests_cov.html`.
 

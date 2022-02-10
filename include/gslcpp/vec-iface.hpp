@@ -138,7 +138,7 @@ template<typename D> struct vec_iface: public vec_base {
   /// @param n  Number of elements in view.
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
-  view<double> subvector(size_t n, size_t i= 0, size_t s= 1);
+  vectorv subvector(size_t n, size_t i= 0, size_t s= 1);
 
   /// View of immutable subvector of vector.
   /// - Arguments are reordered from those given to
@@ -148,7 +148,7 @@ template<typename D> struct vec_iface: public vec_base {
   /// @param n  Number of elements in view.
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to current vector.
-  view<double const> subvector(size_t n, size_t i= 0, size_t s= 1) const;
+  vectorcv subvector(size_t n, size_t i= 0, size_t s= 1) const;
 
   /// Swap elements within this vector.
   /// @param i  Offset of one element.

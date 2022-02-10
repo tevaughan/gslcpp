@@ -34,11 +34,11 @@ TEST_CASE("vec_base::view_array() provides right view.", "[vec_base]") {
   double a[]= {1.0, 1.0, 2.0, 3.0, 5.0, 8.0}; // Mutable, non-decayed C-array.
   double const *b= a; // Decayed, immutable C-array.
 
-  auto mv= vec_base::view_array(a, 3, 2); // Mutable view of a[].
+  auto mv= vec_base::view(a, 3, 0, 2); // Mutable view of a[].
   REQUIRE(mv.size() == 3);
   check(a, mv, 2);
 
-  auto iv= vec_base::view_array(b, 4); // Immutable view, ultimately of a[].
+  auto iv= vec_base::view(4, b); // Immutable view, ultimately of a[].
   REQUIRE(iv.size() == 4);
   check(a, iv);
 
@@ -61,12 +61,12 @@ TEST_CASE("vec_base::subarray() provides right view.", "[vec_base]") {
   double const(&b)[6]= a; // Immutable, non-decayed C-array.
 
   // Mutable view of a[], starting at Offset 1 and with Stride 2.
-  auto mv= vec_base::subarray(a, 3, 1, 2);
+  auto mv= vec_base::view(a, 3, 1, 2);
   REQUIRE(mv.size() == 3);
   check(a + 1, mv, 2);
 
   // Immutable view of a[], starting at Offset 0 and with Stride 1.
-  auto iv= vec_base::subarray(b);
+  auto iv= vec_base::view(b);
   REQUIRE(iv.size() == 6);
   check(b, iv);
 

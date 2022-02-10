@@ -25,22 +25,20 @@ template<typename D> struct vec_iface; // Forward-declaration.
 ///   vector-types can reside at root of namespace gsl and need not reside in
 ///   vec_base.
 struct vec_base {
-  /// Specification of view in terms of element-type.
-  /// @tparam T  Each element's type, either `double` or `double const`.
-  template<typename T> using view= typename view<T>::vector;
-
   /// View of standard (decayed) C-array.
-  /// - Arguments are reordered relative to those given to
+  /// - Arguments are reordered relative to those of
   ///   gsl_vector_view_array_with_stride().
+  /// - Putting number of elements at *beginning* distinguishes view of decayed
+  ///   C-array from view of non-decayed C-array.
   /// - Putting stride at *end* allows it to have default value of 1.
   /// @tparam T  Type of each element.
-  /// @param b  Pointer to first element of array and of view.
   /// @param n  Number of elements in view.
+  /// @param b  Pointer to first element of array and of view.
   /// @param s  Stride of view relative to array.
   /// @return  View of array.
-  template<typename T> static view<T> view_array(T *b, size_t n, size_t s= 1);
+  template<typename T> static vector_view<T> view(size_t n, T *b, size_t s= 1);
 
-  /// View of subarray of non-decayed C-array.
+  /// View of non-decayed C-array.
   /// - Arguments are reordered from those given to
   ///   gsl_vector_subvector_with_stride().
   /// - Putting initial offset and stride at end allows every argument to have
@@ -54,7 +52,7 @@ struct vec_base {
   /// @param s  Stride of view relative to array.
   /// @return  View of array.
   template<typename T, int N>
-  static view<T> subarray(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1);
+  static vector_view<T> view(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1);
 };
 
 
@@ -109,7 +107,7 @@ template<typename V, typename W> int swap(vec_iface<V> &v, vec_iface<W> &w);
 /// @return  True only if vectors be equal.
 template<typename U, typename V>
 bool operator==(vec_iface<U> const &u, vec_iface<V> const &v) {
-  return equal(u,v);
+  return equal(u, v);
 }
 
 

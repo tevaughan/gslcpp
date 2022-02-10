@@ -4,9 +4,10 @@
 all : build
 
 build:
-	@rm -fr build
-	@mkdir build
-	@(cd build; CC=clang CXX=clang++ cmake ..)
+	@if ! test -d build; then\
+	  mkdir build && cd build && CC=clang CXX=clang++ cmake ..;\
+	 fi
+	@cd build && make tests_cov
 
 clean :
 	@rm -frv build

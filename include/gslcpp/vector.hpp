@@ -37,7 +37,7 @@ class vector: public vec_iface<vector<S, V>> {
   double d_[S]; ///< Storage for data.
   V view_; ///< GSL's view of data within instance of vector.
 
-  using vec_base::subarray; ///< Explicitly inherit static function.
+  using vec_base::view; ///< Explicitly inherit static function.
 
 public:
   /// Function needed by vec_iface.
@@ -74,7 +74,7 @@ public:
   /// - This constructor completely initializes new vector with data from
   ///   C-style array (that has *not* decayed).
   /// @param d  Data to copy for initialization.
-  vector(double const (&d)[S]): vector() { memcpy(*this, subarray(d)); }
+  vector(double const (&d)[S]): vector() { memcpy(*this, view(d)); }
 
   /// Initialize GSL's view, and initialize vector by deep copy.
   /// - Size-parameter `S` can *not* be deduced from the argument.
@@ -95,7 +95,7 @@ public:
     if(i + s * (S - 1) >= N) {
       throw std::runtime_error("source-array not big enough");
     }
-    memcpy(*this, subarray(d, S, i, s));
+    memcpy(*this, view(d, S, i, s));
   }
 
   /// Initialize GSL's view, and initialize vector by deep copy.
@@ -109,7 +109,7 @@ public:
     view_= gsl_vector_view_array(d_, S);
     memcpy(*this, v);
     return *this;
-}
+  }
 };
 
 
@@ -232,11 +232,12 @@ public:
   /// @return  Pointer to GSL's interface to immutable vector.
   auto const &v() const { return view_.vector; }
 
-  /// Constructor called by subvector() and view_array().
+  /// Constructor called by view().
   /// @param v  View to copy.
   vector(gsl_vector_view v): view_(v) {}
 
-  /// Constructor called by subvector() and view_array().
+  /// Constructor called by view().
+  /// @param v  View to copy.
   vector(gsl_vector_const_view v): view_(v) {}
 
   /// Initialize view of standard (decayed) C-array.
@@ -264,7 +265,7 @@ public:
   /// @param s  Stride of view relative to array.
   template<typename T, int N>
   vector(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      view_(vec_base::subarray(b, n, i, s).view_) {}
+      view_(vec_base::view(b, n, i, s).view_) {}
 
   /// View of subvector of vector.
   /// - Arguments are reordered from those given to
@@ -303,12 +304,6 @@ public:
 
 /// Short-hand for vector with ownership of dynamically allocated storage.
 using vectord= vector<DCON>;
-
-/// Short-hand for vector without ownership of mutable storage.
-using vectorv= vec_base::view<double>;
-
-/// Short-hand for vector without ownership of immutable storage.
-using vectorcv= vec_base::view<double const>;
 
 
 } // namespace gsl

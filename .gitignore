@@ -1,2 +1,5 @@
 access
 build
+default.profraw
+io-test.dat
+output-test.txt

@@ -355,5 +355,4 @@ TEST_CASE("vec_iface::isnonneg() works.", "[vec-iface]") {
 }
 
 
-
 // EOF
