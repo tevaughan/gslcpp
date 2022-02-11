@@ -421,7 +421,6 @@ std::ostream &operator<<(std::ostream &os, vec_iface<U> const &u) {
 }
 
 
-
 } // namespace gsl
 
 // EOF

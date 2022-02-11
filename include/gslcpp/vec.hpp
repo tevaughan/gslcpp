@@ -4,16 +4,12 @@
 
 #pragma once
 
-#include "view.hpp" // view
-#include <iosfwd> // ostream
+#include "view.hpp" // vector_view
 
 namespace gsl {
 
 
 using std::enable_if_t;
-
-
-template<typename D> struct vec_iface; // Forward-declaration.
 
 
 /// Base-class for vector and name-space for static functions.
@@ -41,8 +37,7 @@ struct vec {
   /// @param b  Pointer to first element of array and of view.
   /// @param s  Stride of view relative to array.
   /// @return  View of array.
-  template<typename T>
-  static vector_view<T> view(size_t n, T *b, size_t s= 1);
+  template<typename T> static vector_view<T> view(size_t n, T *b, size_t s= 1);
 
   /// View of non-decayed C-array.
   /// - Arguments are reordered from those given to

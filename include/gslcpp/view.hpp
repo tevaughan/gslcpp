@@ -7,7 +7,7 @@
 // Use inline-definition of each accessor-function.
 // - Define this before including `gsl_vector.h`.
 #ifndef HAVE_INLINE
-#define HAVE_INLINE
+#  define HAVE_INLINE
 #endif
 
 #include "size-code.hpp" // VIEW
