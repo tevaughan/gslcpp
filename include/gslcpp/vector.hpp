@@ -25,7 +25,7 @@ using std::is_same_v;
 /// Generic template for CRTP-descendant from vec_iface.
 /// - `S` indicates number of elements in instance of generic template.
 /// - However, each specialization has non-positive `S`; see gsl::size_code.
-/// - `V` must be `gsl_vector_view` or (if `S == VIEW`) possibly
+/// - `V` must be `gsl_vector_view` or (but only if `S == VIEW`) possibly
 ///   `gsl_vector_const_view`.
 /// @tparam S  Positive size or code for allocation and ownership.
 /// @tparam V  Type of view used internally to point at internal C-array.
@@ -311,7 +311,7 @@ using vectord= vector<DCON>;
 #endif // ndef GSL_VECTOR_HPP
 
 // Implementations, each relying on definition of vector defined above.
-#include "impl/vec-base-impl.hpp"
 #include "impl/vec-iface-impl.hpp"
+#include "impl/vec-impl.hpp"
 
 // EOF

@@ -10,6 +10,9 @@
 namespace gsl {
 
 
+using std::enable_if_t;
+
+
 template<typename D> struct vec_iface; // Forward-declaration.
 
 
@@ -31,12 +34,15 @@ struct vec {
   /// - Putting number of elements at *beginning* distinguishes view of decayed
   ///   C-array from view of non-decayed C-array.
   /// - Putting stride at *end* allows it to have default value of 1.
-  /// @tparam T  Type of each element.
+  /// - SFINAE is not used to restrict type of `T` to `double` or `double
+  ///   const`, but static assertion is included in implementation.
+  /// @tparam T  Type (`double` or `double const`) of each element.
   /// @param n  Number of elements in view.
   /// @param b  Pointer to first element of array and of view.
   /// @param s  Stride of view relative to array.
   /// @return  View of array.
-  template<typename T> static vector_view<T> view(size_t n, T *b, size_t s= 1);
+  template<typename T>
+  static vector_view<T> view(size_t n, T *b, size_t s= 1);
 
   /// View of non-decayed C-array.
   /// - Arguments are reordered from those given to
@@ -44,7 +50,9 @@ struct vec {
   /// - Putting initial offset and stride at end allows every argument to have
   ///   good default (N for number of elements in view, 0 for initial offset,
   ///   and 1 for stride).
-  /// @tparam T  Type of each element.
+  /// - SFINAE is not used to restrict type of `T` to `double` or `double
+  ///   const`, but static assertion is included in implementation.
+  /// @tparam T  Type (`double` or `double const`) of each element.
   /// @tparam N  Number of elements in array.
   /// @param b  Reference to non-decayed C-array.
   /// @param n  Number of elements in view.
