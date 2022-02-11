@@ -40,13 +40,13 @@ class vector: public vec_iface<vector<S, V>> {
   using vec::view; ///< Explicitly inherit static function.
 
 public:
-  /// Function needed by vec_iface.
-  /// @return  Pointer to GSL's interface to vector.
-  gsl_vector &v() { return view_.vector; }
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to vector.
+  auto &v() { return view_.vector; }
 
-  /// Function needed by vec_iface.
-  /// @return  Pointer to GSL's interface to immutable vector.
-  gsl_vector const &v() const { return view_.vector; }
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to immutable vector.
+  auto const &v() const { return view_.vector; }
 
   /// Initialize GSL's view of static storage, but do not initialize data.
   vector(): view_(gsl_vector_view_array(d_, S)) {}
@@ -145,13 +145,13 @@ private:
   }
 
 public:
-  /// Function needed by vec_iface.
-  /// @return  Pointer to GSL's interface to vector.
-  gsl_vector &v() { return *v_; }
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to vector.
+  auto &v() { return *v_; }
 
-  /// Function needed by vec_iface.
-  /// @return  Pointer to GSL's interface to immutable vector.
-  gsl_vector const &v() const { return *v_; }
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to immutable vector.
+  auto const &v() const { return *v_; }
 
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
@@ -224,12 +224,12 @@ template<typename V> class vector<VIEW, V>: public vec_iface<vector<VIEW, V>> {
   };
 
 public:
-  /// Function needed by vec_iface.
-  /// @return  Pointer to GSL's interface to vector.
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to vector.
   auto &v() { return view_.vector; }
 
-  /// Function needed by vec_iface.
-  /// @return  Pointer to GSL's interface to immutable vector.
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to immutable vector.
   auto const &v() const { return view_.vector; }
 
   /// Constructor called by view().
