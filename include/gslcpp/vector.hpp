@@ -48,23 +48,22 @@ public:
   /// @return  Reference to GSL's interface to immutable vector.
   auto const &v() const { return view_.vector; }
 
-  /// Initialize GSL's view of static storage, but do not initialize data.
+  /// Initialize GSL's view of static storage, but do not initialize elements.
   vector(): view_(gsl_vector_view_array(d_, S)) {}
 
-  /// Construct by copying from any kind of vector of same size.
-  /// - Constraint on size is enforced at compile-time if `OS > 0`.
-  /// - Otherwise, mismatch in size produces a run-time abort.
-  /// - `OV` must be `gsl_vector_view` or (if `OS == VIEW`) possibly
+  /// Construct by copying from dynamic vector or view of same size.
+  /// - Mismatch in size produces run-time abort.
+  /// - `OV` must be `gsl_vector_view` or (only if `OS == VIEW`) possibly
   ///   `gsl_vector_const_view`.
-  /// @tparam OS  Size or size-code of source-vector.
+  /// @tparam OS  Size-code (DCON=0 or VIEW=-1) of source-vector.
   /// @tparam OV  Type of view used internally by source-vector.
   /// @param ov  Reference to source-vector.
-  template<int OS, typename OV, typename= enable_if_t<S == OS || (OS < 1)>>
+  template<int OS, typename OV, typename= enable_if_t<(OS < 1)>>
   vector(vector<OS, OV> const &ov): vector() {
     memcpy(*this, ov);
   }
 
-  /// Initialize GSL's view, and initialize vector by deep copy.
+  /// Initialize GSL's view, and initialize elements by copying from array.
   /// - Size-parameter `S` can be *deduced* from the argument!
   /// - So, for example, one can do this:
   ///   ```c++
@@ -76,7 +75,8 @@ public:
   /// @param d  Data to copy for initialization.
   vector(double const (&d)[S]): vector() { memcpy(*this, view(d)); }
 
-  /// Initialize GSL's view, and initialize vector by deep copy.
+  /// Initialize GSL's view, and initialize vector by copying from array.
+  /// - Mismatch in size produces run-time abort.
   /// - Size-parameter `S` can *not* be deduced from the argument.
   /// - For example:
   ///   ```c++
@@ -91,7 +91,7 @@ public:
   /// @param i  Offset of initial element to be copied.
   /// @param s  Stride of elements to be copied.
   template<unsigned N>
-  vector(double const (&d)[N], size_t i= 0, size_t s= 1): vector() {
+  vector(double const (&d)[N], size_t i, size_t s= 1): vector() {
     if(i + s * (S - 1) >= N) {
       throw std::runtime_error("source-array not big enough");
     }
@@ -102,12 +102,19 @@ public:
   /// @param v  Data to copy for initialization.
   vector(vector const &v): vector() { memcpy(*this, v); }
 
-  /// Initialize GSL's view, and initialize vector by deep copy.
+  /// Assign vector by deep copy.
   /// @param v  Data to copy for initialization.
   /// @return  Reference to modified vector.
   vector &operator=(vector const &v) {
-    view_= gsl_vector_view_array(d_, S);
     memcpy(*this, v);
+    return *this;
+  }
+
+  /// Assign vector by copying from array.
+  /// @param v  Data to copy for initialization.
+  /// @return  Reference to modified vector.
+  vector &operator=(double const (&d)[S]) {
+    memcpy(*this, view(d));
     return *this;
   }
 };
