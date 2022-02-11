@@ -43,14 +43,6 @@ TEST_CASE("vec_iface::end() works.", "[vec-iface]") {
 }
 
 
-TEST_CASE("vec_iface::vec() works.", "[vec-iface]") {
-  REQUIRE(gsl_vector_get(&a.vec(), 0) == 1.0);
-  v3 b= a;
-  gsl_vector_set(&b.vec(), 0, -1.0);
-  REQUIRE(gsl_vector_get(&b.vec(), 0) == -1.0);
-}
-
-
 TEST_CASE("vec_iface::size() works.", "[vec-iface]") {
   REQUIRE(a.size() == 3);
 }
@@ -94,8 +86,8 @@ TEST_CASE("vec_iface::ptr() retrieves pointer of element.", "[vec-iface]") {
   vectorv e(c, 3, 1, 2);
   REQUIRE(d.ptr(1) == b.ptr(3));
   REQUIRE(e.ptr(1) == c.ptr(3));
-  REQUIRE(d.ptr(1) == b.vec().data + 3);
-  REQUIRE(e.ptr(1) == c.vec().data + 3);
+  REQUIRE(d.ptr(1) == b.v().data + 3);
+  REQUIRE(e.ptr(1) == c.v().data + 3);
   *e.ptr(1)= 9.0;
   REQUIRE(c[3] == 9.0);
 }

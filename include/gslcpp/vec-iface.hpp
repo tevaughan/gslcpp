@@ -6,6 +6,7 @@
 
 #include "vec-iterator.hpp"
 #include "vec.hpp"
+#include <iostream> // ostream
 #include <type_traits> // enable_if_t, is_const_v
 
 namespace gsl {
@@ -14,6 +15,60 @@ namespace gsl {
 using std::enable_if_t;
 using std::is_const_v;
 using std::is_same_v;
+
+
+#if defined(GSL_VER) && GSL_VER > 26
+/// Linearly combine vector `x` into vector `y` in place.
+/// @tparam T  Type of descendant of vec_iface for first vector.
+/// @tparam U  Type of descendant of vec_iface for second vector.
+/// @param a  Coeffient of `x`.
+/// @param x  First vector (source).
+/// @param b  Coefficient of `y`.
+/// @param y  Second vector and (source and destination).
+/// @return  TBD.
+template<typename T, typename U>
+int axpby(double alpha, vec_iface<T> const &x, double beta, vec_iface<U> &y) {
+  return gsl_vector_axpby(alpha, &x.v_(), beta, &y.v_());
+}
+#endif
+
+
+/// Test equality of two vectors.
+/// @tparam T  Type of one descendant of vec_iface.
+/// @tparam U  Type of other descendant of vec_iface.
+/// @param u  Reference to one vector.
+/// @param v  Reference to other vector.
+/// @return  True only if vectors be equal.
+template<typename T, typename U>
+bool equal(vec_iface<T> const &t, vec_iface<U> const &u) {
+  return gsl_vector_equal(&t.v_(), &u.v_());
+}
+
+
+/// Copy data from source, whose length must be same as that of destination.
+/// @tparam T  Type of descendant of vec_iface for destination.
+/// @tparam U  Type of descendant of vec_iface for source.
+/// @param dst  Destination.
+/// @param src  Source.
+/// @return  TBD.
+template<typename T, typename U>
+int memcpy(vec_iface<T> &dst, vec_iface<U> const &src) {
+  return gsl_vector_memcpy(&dst.v_(), &src.v_());
+}
+
+
+/// Swap contents of one and other vector, each with same length.
+/// @tparam T  Type of one descendant of vec_iface.
+/// @tparam U  Type of other descendant of vec_iface.
+/// @param t  One vector.
+/// @param u  Other vector.
+/// @return  TBD.
+template<typename T, typename U> int swap(vec_iface<T> &t, vec_iface<U> &u) {
+  return gsl_vector_swap(&t.v_(), &u.v_());
+}
+
+
+template<typename T, typename U> constexpr bool different= !is_same_v<T, U>;
 
 
 /// Interface for every kind of vector.
@@ -41,37 +96,31 @@ template<typename D> struct vec_iface: public vec {
   /// @return  Iterator that points to element just past last element.
   const_iterator end() const { return const_iterator(*this, size()); }
 
-  /// Pointer to descendant's C-interface gsl_vector.
-  auto &vec() { return static_cast<D *>(this)->v(); }
-
-  /// Pointer to descendant's immutable C-interface gsl_vector.
-  auto const &vec() const { return static_cast<D const *>(this)->v(); }
-
   /// Size of vector.
   /// @return  Size of vector.
-  size_t size() const { return vec().size; }
+  size_t size() const { return v_().size; }
 
   /// Stride of vector in memory.
   /// @return  Stride of vector.
-  size_t stride() const { return vec().stride; }
+  size_t stride() const { return v_().stride; }
 
   /// Pointer to first element in vector.
   /// @return  Pointer to first element.
-  double *data() { return vec().data; }
+  double *data() { return v_().data; }
 
   /// Pointer to first element in immutable vector.
   /// @return  Pointer to first immutable element.
-  double const *data() const { return vec().data; }
+  double const *data() const { return v_().data; }
 
   /// Read element with bounds-checking.
   /// @parameter i  Offset of element.
   /// @return  Value of element.
-  double get(size_t i) const { return gsl_vector_get(&vec(), i); }
+  double get(size_t i) const { return gsl_vector_get(&v_(), i); }
 
   /// Write element with bounds-checking.
   /// @parameter i  Offset of element.
   /// @parameter x  New value for element.
-  void set(size_t i, double x) { gsl_vector_set(&vec(), i, x); }
+  void set(size_t i, double x) { gsl_vector_set(&v_(), i, x); }
 
   /// Read element without bounds-checking.
   /// @parameter i  Offset of element.
@@ -87,48 +136,48 @@ template<typename D> struct vec_iface: public vec {
   /// - This could be useful if stride unknown.
   /// @parameter i  Offset of element.
   /// @return  Pointer to mutable element.
-  double *ptr(size_t i) { return gsl_vector_ptr(&vec(), i); }
+  double *ptr(size_t i) { return gsl_vector_ptr(&v_(), i); }
 
   /// Retrieve pointer with bounds-checking.
   /// - This could be useful if stride unknown.
   /// @parameter i  Offset of element.
   /// @return  Pointer to immutable element.
-  double const *ptr(size_t i) const { return gsl_vector_const_ptr(&vec(), i); }
+  double const *ptr(size_t i) const { return gsl_vector_const_ptr(&v_(), i); }
 
   /// Set every element.
   /// @param x  Value to which each element should be set.
-  void set_all(double x) { gsl_vector_set_all(&vec(), x); }
+  void set_all(double x) { gsl_vector_set_all(&v_(), x); }
 
   /// Set every element to zero.
-  void set_zero() { gsl_vector_set_zero(&vec()); }
+  void set_zero() { gsl_vector_set_zero(&v_()); }
 
   /// Set element at offset `i` to unity and every other element to zero.
   /// @param i  Offset of element set to unity.
   /// @return  TBD.
-  int set_basis(size_t i) { return gsl_vector_set_basis(&vec(), i); }
+  int set_basis(size_t i) { return gsl_vector_set_basis(&v_(), i); }
 
   /// Write non-portable binary image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fwrite(FILE *f) const { return gsl_vector_fwrite(f, &vec()); }
+  int fwrite(FILE *f) const { return gsl_vector_fwrite(f, &v_()); }
 
   /// Read non-portable binary image of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fread(FILE *f) { return gsl_vector_fread(f, &vec()); };
+  int fread(FILE *f) { return gsl_vector_fread(f, &v_()); };
 
   /// Write ASCII-formatted representation of vector to file.
   /// @param flp  Pointer to structure for buffered interface.
   /// @param fmt  printf()-style format-string.
   /// @return  Zero only on success.
   int fprintf(FILE *flp, char const *fmt) const {
-    return gsl_vector_fprintf(flp, &vec(), fmt);
+    return gsl_vector_fprintf(flp, &v_(), fmt);
   }
 
   /// Read ASCII-formatted representation of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fscanf(FILE *f) { return gsl_vector_fscanf(f, &vec()); }
+  int fscanf(FILE *f) { return gsl_vector_fscanf(f, &v_()); }
 
   /// View of subvector of vector.
   /// - Arguments are reordered from those given to
@@ -155,19 +204,19 @@ template<typename D> struct vec_iface: public vec {
   /// @param j  Offset of other element.
   /// @return  TBD.
   int swap_elements(size_t i, size_t j) {
-    return gsl_vector_swap_elements(&vec(), i, j);
+    return gsl_vector_swap_elements(&v_(), i, j);
   }
 
   /// Reverse order of elements.
   /// @return  TBD.
-  int reverse() { return gsl_vector_reverse(&vec()); }
+  int reverse() { return gsl_vector_reverse(&v_()); }
 
   /// Add contents of `b` into this vector in place.
   /// @tparam T  Type of vector to be added into this.
   /// @param b  Vector whose contents should be added into this.
   /// @return  TBD.
   template<typename T> int add(vec_iface<T> const &b) {
-    return gsl_vector_add(&vec(), &b.vec());
+    return gsl_vector_add(&v_(), &b.v_());
   }
 
   /// Subtract contents of `b` from this vector in place.
@@ -175,7 +224,7 @@ template<typename D> struct vec_iface: public vec {
   /// @param b  Vector whose contents should be subtracted from this.
   /// @return  TBD.
   template<typename T> int sub(vec_iface<T> const &b) {
-    return gsl_vector_sub(&vec(), &b.vec());
+    return gsl_vector_sub(&v_(), &b.v_());
   }
 
   /// Multiply contents of `b` into this vector in place.
@@ -183,7 +232,7 @@ template<typename D> struct vec_iface: public vec {
   /// @param b  Vector whose contents should be multiplied into this.
   /// @return  TBD.
   template<typename T> int mul(vec_iface<T> const &b) {
-    return gsl_vector_mul(&vec(), &b.vec());
+    return gsl_vector_mul(&v_(), &b.v_());
   }
 
   /// Divide contents of `b` into this vector in place.
@@ -191,7 +240,7 @@ template<typename D> struct vec_iface: public vec {
   /// @param b  Vector whose contents should be divided into this.
   /// @return  TBD.
   template<typename T> int div(vec_iface<T> const &b) {
-    return gsl_vector_div(&vec(), &b.vec());
+    return gsl_vector_div(&v_(), &b.v_());
   }
 
   /// Add contents of `b` into this vector in place.
@@ -233,7 +282,7 @@ template<typename D> struct vec_iface: public vec {
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
   /// @return  TBD.
-  int scale(double x) { return gsl_vector_scale(&vec(), x); }
+  int scale(double x) { return gsl_vector_scale(&v_(), x); }
 
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
@@ -246,7 +295,7 @@ template<typename D> struct vec_iface: public vec {
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
   /// @return  TBD.
-  int add_constant(double x) { return gsl_vector_add_constant(&vec(), x); }
+  int add_constant(double x) { return gsl_vector_add_constant(&v_(), x); }
 
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
@@ -259,55 +308,118 @@ template<typename D> struct vec_iface: public vec {
 #if defined(GSL_VER) && GSL_VER > 26
   /// Sum of elements.
   /// @return  Sum of elements.
-  double sum() const { return gsl_vector_sum(&vec()); }
+  double sum() const { return gsl_vector_sum(&v_()); }
 #endif
 
   /// Greatest value of any element.
   /// @return  Greatest value of any element.
-  double max() const { return gsl_vector_max(&vec()); }
+  double max() const { return gsl_vector_max(&v_()); }
 
   /// Least value of any element.
   /// @return  Least value of any element.
-  double min() const { return gsl_vector_min(&vec()); }
+  double min() const { return gsl_vector_min(&v_()); }
 
   /// Greatest value and least value of any element.
   /// @param min_out  On return, least value.
   /// @param max_out  On return, greatest value.
   void minmax(double &min_out, double &max_out) const {
-    gsl_vector_minmax(&vec(), &min_out, &max_out);
+    gsl_vector_minmax(&v_(), &min_out, &max_out);
   }
 
   /// Offset of greatest value.
   /// @return  Offset of greatest value.
-  size_t max_index() const { return gsl_vector_max_index(&vec()); }
+  size_t max_index() const { return gsl_vector_max_index(&v_()); }
 
   /// Offset of least value.
   /// @return  Offset of least value.
-  size_t min_index() const { return gsl_vector_min_index(&vec()); }
+  size_t min_index() const { return gsl_vector_min_index(&v_()); }
 
   /// Offset of least value and offset of greatest value.
   /// @param imin  On return, offset of least value.
   /// @param imax  On return, offset of greatest value.
   void minmax_index(size_t &imin, size_t &imax) const {
-    gsl_vector_minmax_index(&vec(), &imin, &imax);
+    gsl_vector_minmax_index(&v_(), &imin, &imax);
   }
 
   /// True only if every element have zero value.
   /// @return  True only if every element be zero.
-  bool isnull() const { return gsl_vector_isnull(&vec()); }
+  bool isnull() const { return gsl_vector_isnull(&v_()); }
 
   /// True only if every element be positive.
   /// @return  True only if every element be positive.
-  bool ispos() const { return gsl_vector_ispos(&vec()); }
+  bool ispos() const { return gsl_vector_ispos(&v_()); }
 
   /// True only if every element be negative.
   /// @return  True only if every element be negative.
-  bool isneg() const { return gsl_vector_isneg(&vec()); }
+  bool isneg() const { return gsl_vector_isneg(&v_()); }
 
   /// True only if every element be non-negative.
   /// @return  True only if every element be non-negative.
-  bool isnonneg() const { return gsl_vector_isnonneg(&vec()); }
+  bool isnonneg() const { return gsl_vector_isnonneg(&v_()); }
+
+#if defined(GSL_VER) && GSL_VER > 26
+  template<typename T, typename U>
+  friend int
+  axpby(double alpha, vec_iface<T> const &x, double beta, vec_iface<U> &y);
+#endif
+
+  template<typename T, typename U>
+  friend bool equal(vec_iface<T> const &u, vec_iface<U> const &v);
+
+  template<typename T, typename U>
+  friend int memcpy(vec_iface<T> &dst, vec_iface<U> const &src);
+
+  template<typename T, typename U>
+  friend int swap(vec_iface<T> &v, vec_iface<U> &w);
+
+private:
+  /// Pointer to descendant's C-interface gsl_vector.
+  auto &v_() { return static_cast<D *>(this)->v(); }
+
+  /// Pointer to descendant's immutable C-interface gsl_vector.
+  auto const &v_() const { return static_cast<D const *>(this)->v(); }
 };
+
+
+/// Test equality of two vectors.
+/// @tparam U  Type of one descendant of vec_iface.
+/// @tparam V  Type of other descendant of vec_iface.
+/// @param u  Reference to one vector.
+/// @param v  Reference to other vector.
+/// @return  True only if vectors be equal.
+template<typename U, typename V>
+bool operator==(vec_iface<U> const &u, vec_iface<V> const &v) {
+  return equal(u, v);
+}
+
+
+/// Test inequality of two vectors.
+/// @tparam U  Type of one descendant of vec_iface.
+/// @tparam V  Type of other descendant of vec_iface.
+/// @param u  Reference to one vector.
+/// @param v  Reference to other vector.
+/// @return  True only if vectors be unequal.
+template<typename U, typename V>
+bool operator!=(vec_iface<U> const &u, vec_iface<V> const &v) {
+  return !equal(u, v);
+}
+
+
+/// Print vector to output-stream.
+/// @tparam U  Type of descendant of vec_iface.
+/// @param os  Reference to output-stream.
+/// @param u  Reference to vector.
+/// @return  Reference to modified output-stream.
+template<typename U>
+std::ostream &operator<<(std::ostream &os, vec_iface<U> const &u) {
+  os << "[";
+  int const last= int(u.size()) - 1;
+  for(int i= 0; i < last; ++i) os << u[i] << ",";
+  if(last >= 0) os << u[last];
+  os << "]";
+  return os;
+}
+
 
 
 } // namespace gsl

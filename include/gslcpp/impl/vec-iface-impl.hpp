@@ -11,13 +11,13 @@ namespace gsl {
 
 template<typename D>
 vectorv vec_iface<D>::subvector(size_t n, size_t i, size_t s) {
-  return gsl_vector_subvector_with_stride(&vec(), i, s, n);
+  return gsl_vector_subvector_with_stride(&v_(), i, s, n);
 }
 
 
 template<typename D>
 vectorcv vec_iface<D>::subvector(size_t n, size_t i, size_t s) const {
-  return gsl_vector_const_subvector_with_stride(&vec(), i, s, n);
+  return gsl_vector_const_subvector_with_stride(&v_(), i, s, n);
 }
 
 
