@@ -70,33 +70,35 @@ public:
   ///   double d[]= {2.0, 3.0, 4.0};
   ///   vector v(d); // No template-parameter required!
   ///   ```
-  /// - This constructor completely initializes new vector with data from
-  ///   C-style array (that has *not* decayed).
   /// @param d  Data to copy for initialization.
   vector(double const (&d)[S]): vector() { memcpy(*this, view(d)); }
 
   /// Initialize GSL's view, and initialize vector by copying from array.
   /// - Mismatch in size produces run-time abort.
-  /// - Size-parameter `S` can *not* be deduced from the argument.
   /// - For example:
   ///   ```c++
   ///   double d[]= {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
   ///   vector<3> v(d, 1, 2); // Start at offset 1 (not 0) and use stride 2.
   ///   // So v == [2.0, 4.0, 6.0].
   ///   ```
-  /// - This constructor completely initializes new vector with data from
-  ///   C-style array (that has *not* decayed).
   /// @tparam N  Number of elements in non-decayed C-style array.
   /// @param d  Non-decayed C-style array.
   /// @param i  Offset of initial element to be copied.
   /// @param s  Stride of elements to be copied.
-  template<unsigned N>
-  vector(double const (&d)[N], size_t i, size_t s= 1): vector() {
+  template<unsigned N, typename= enable_if_t<N != S>>
+  vector(double const (&d)[N], size_t i= 0, size_t s= 1): vector() {
     if(i + s * (S - 1) >= N) {
       throw std::runtime_error("source-array not big enough");
     }
     memcpy(*this, view(d, S, i, s));
   }
+
+  /// Initialize GSL's view, and initialize elements by copying from array.
+  /// - Stride is required as first argument in order to disambiguate this
+  ///   constructor from the one that takes a non-decayed array.
+  /// @param s  Stride.
+  /// @param d  Decayed C-style array.
+  vector(size_t s, double const *d): vector() { memcpy(*this, view(S, d, s)); }
 
   /// Initialize GSL's view, and initialize vector by deep copy.
   /// @param v  Data to copy for initialization.
