@@ -10,6 +10,7 @@ C++-library wrapping portions of GSL and providing interoperability with Eigen.
 
 - The C++-interface to `gsl_vector` is implemented but not fully unit-tested.
 - The C++-interface to the minimizers is not implemented yet.
+- Interfaces with Eigen are not yet implemented.
 
 ## How to Build
 
