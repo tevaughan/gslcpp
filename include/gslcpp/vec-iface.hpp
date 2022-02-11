@@ -17,57 +17,6 @@ using std::is_const_v;
 using std::is_same_v;
 
 
-#if defined(GSL_VER) && GSL_VER > 26
-/// Linearly combine vector `x` into vector `y` in place.
-/// @tparam T  Type of descendant of vec_iface for first vector.
-/// @tparam U  Type of descendant of vec_iface for second vector.
-/// @param a  Coeffient of `x`.
-/// @param x  First vector (source).
-/// @param b  Coefficient of `y`.
-/// @param y  Second vector and (source and destination).
-/// @return  TBD.
-template<typename T, typename U>
-int axpby(double alpha, vec_iface<T> const &x, double beta, vec_iface<U> &y) {
-  return gsl_vector_axpby(alpha, &x.v_(), beta, &y.v_());
-}
-#endif
-
-
-/// Test equality of two vectors.
-/// @tparam T  Type of one descendant of vec_iface.
-/// @tparam U  Type of other descendant of vec_iface.
-/// @param u  Reference to one vector.
-/// @param v  Reference to other vector.
-/// @return  True only if vectors be equal.
-template<typename T, typename U>
-bool equal(vec_iface<T> const &t, vec_iface<U> const &u) {
-  return gsl_vector_equal(&t.v_(), &u.v_());
-}
-
-
-/// Copy data from source, whose length must be same as that of destination.
-/// @tparam T  Type of descendant of vec_iface for destination.
-/// @tparam U  Type of descendant of vec_iface for source.
-/// @param dst  Destination.
-/// @param src  Source.
-/// @return  TBD.
-template<typename T, typename U>
-int memcpy(vec_iface<T> &dst, vec_iface<U> const &src) {
-  return gsl_vector_memcpy(&dst.v_(), &src.v_());
-}
-
-
-/// Swap contents of one and other vector, each with same length.
-/// @tparam T  Type of one descendant of vec_iface.
-/// @tparam U  Type of other descendant of vec_iface.
-/// @param t  One vector.
-/// @param u  Other vector.
-/// @return  TBD.
-template<typename T, typename U> int swap(vec_iface<T> &t, vec_iface<U> &u) {
-  return gsl_vector_swap(&t.v_(), &u.v_());
-}
-
-
 template<typename T, typename U> constexpr bool different= !is_same_v<T, U>;
 
 
@@ -418,6 +367,57 @@ std::ostream &operator<<(std::ostream &os, vec_iface<U> const &u) {
   if(last >= 0) os << u[last];
   os << "]";
   return os;
+}
+
+
+#if defined(GSL_VER) && GSL_VER > 26
+/// Linearly combine vector `x` into vector `y` in place.
+/// @tparam T  Type of descendant of vec_iface for first vector.
+/// @tparam U  Type of descendant of vec_iface for second vector.
+/// @param a  Coeffient of `x`.
+/// @param x  First vector (source).
+/// @param b  Coefficient of `y`.
+/// @param y  Second vector and (source and destination).
+/// @return  TBD.
+template<typename T, typename U>
+int axpby(double alpha, vec_iface<T> const &x, double beta, vec_iface<U> &y) {
+  return gsl_vector_axpby(alpha, &x.v_(), beta, &y.v_());
+}
+#endif
+
+
+/// Test equality of two vectors.
+/// @tparam T  Type of one descendant of vec_iface.
+/// @tparam U  Type of other descendant of vec_iface.
+/// @param u  Reference to one vector.
+/// @param v  Reference to other vector.
+/// @return  True only if vectors be equal.
+template<typename T, typename U>
+bool equal(vec_iface<T> const &t, vec_iface<U> const &u) {
+  return gsl_vector_equal(&t.v_(), &u.v_());
+}
+
+
+/// Copy data from source, whose length must be same as that of destination.
+/// @tparam T  Type of descendant of vec_iface for destination.
+/// @tparam U  Type of descendant of vec_iface for source.
+/// @param dst  Destination.
+/// @param src  Source.
+/// @return  TBD.
+template<typename T, typename U>
+int memcpy(vec_iface<T> &dst, vec_iface<U> const &src) {
+  return gsl_vector_memcpy(&dst.v_(), &src.v_());
+}
+
+
+/// Swap contents of one and other vector, each with same length.
+/// @tparam T  Type of one descendant of vec_iface.
+/// @tparam U  Type of other descendant of vec_iface.
+/// @param t  One vector.
+/// @param u  Other vector.
+/// @return  TBD.
+template<typename T, typename U> int swap(vec_iface<T> &t, vec_iface<U> &u) {
+  return gsl_vector_swap(&t.v_(), &u.v_());
 }
 
 
