@@ -17,7 +17,8 @@ using std::enable_if_t;
 /// - Also, vec has no function to access field of descendant.
 /// - Yet some static functions can be collected here.
 /// - Static function belongs in `vec` if function's arguments do not
-///   distinguish it from similar function for matrix.
+///   distinguish it from similar function for matrix in global context of
+///   namespace gsl.
 /// - This allows GSL's matrix-capability cleanly to be added to library if
 ///   desired.
 /// - Static function whose name is generic but whose arguments involve

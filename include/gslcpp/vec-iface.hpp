@@ -7,21 +7,12 @@
 #include "vec-iterator.hpp"
 #include "vec.hpp"
 #include <iostream> // ostream
-#include <type_traits> // enable_if_t, is_const_v
 
 namespace gsl {
 
 
-using std::enable_if_t;
-using std::is_const_v;
-using std::is_same_v;
-
-
-template<typename T, typename U> constexpr bool different= !is_same_v<T, U>;
-
-
 /// Interface for every kind of vector.
-/// @tparam D  Type of descendant of `vec_iface<D>`.
+/// @tparam D  Type of descendant of `vec_iface<D>` (according to CRTP).
 template<typename D> struct vec_iface: public vec {
   /// Type of iterator that points to mutable element.
   using iterator= vec_iterator<vec_iface>;
