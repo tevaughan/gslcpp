@@ -22,87 +22,14 @@ using std::is_const_v;
 using std::is_same_v;
 
 
-/// Generic template for struct that provides, on the basis of the constness of
-/// the element-type, some types and functions for a vector-view.
-/// @tparam T  Type of each element in array.
-template<typename T> struct view_helper;
-
-
-/// Specialization for non-const double.
-template<> struct view_helper<double> {
-  /// GSL's C-library type for non-const elements.
-  using vect= gsl_vector;
-
-  /// GSL's C-library type for view of non-const elements.
-  using view= gsl_vector_view;
-
-  /// C-library view of decayed C-style array.
-  /// @param n  Number of elements in view.
-  /// @param b  Pointer to first element.
-  /// @param s  Stride of successive elements in array.
-  /// @return  C-library view of array.
-  static view make_view(size_t n, double *b, size_t s) {
-    return gsl_vector_view_array_with_stride(b, s, n);
-  }
-
-  /// C-library view of elements in non-decayed C-style array.
-  /// @tparam N  Number of elements in array.
-  /// @param b  Non-decayed C-style array.
-  /// @param n  Number of elements in view.
-  /// @param i  Offset of first element in view.
-  /// @param s  Stride of successive elements in array.
-  template<int N>
-  static view
-  make_view(double (&b)[N], size_t n= N, size_t i= 0, size_t s= 1) {
-    if(i + s * (n - 1) > N - 1) {
-      throw std::runtime_error("source-array not big enough");
-    }
-    return gsl_vector_view_array_with_stride(b + i, s, n);
-  }
-};
-
-
-/// Specialization for const double.
-template<> struct view_helper<double const> {
-  /// GSL's C-library type for const elements.
-  using vect= gsl_vector const;
-
-  /// GSL's C-library type for view of const elements.
-  using view= gsl_vector_const_view;
-
-  /// C-library view of decayed C-style array.
-  /// @param n  Number of elements in view.
-  /// @param b  Pointer to first element.
-  /// @param s  Stride of successive elements in array.
-  /// @return  C-library view of array.
-  static view make_view(size_t n, double const *b, size_t s) {
-    return gsl_vector_const_view_array_with_stride(b, s, n);
-  }
-
-  /// C-library view of elements in non-decayed C-style array.
-  /// @tparam N  Number of elements in array.
-  /// @param b  Non-decayed C-style array.
-  /// @param n  Number of elements in view.
-  /// @param i  Offset of first element in view.
-  /// @param s  Stride of successive elements in array.
-  template<int N>
-  static view
-  make_view(double const (&b)[N], size_t n= N, size_t i= 0, size_t s= 1) {
-    return gsl_vector_const_view_array_with_stride(b + i, s, n);
-  }
-};
-
-
 /// Generic template for CRTP-descendant from vec_iface.
 /// - `S` indicates number of elements in instance of generic template.
 /// - Each specialization has non-positive `S`; see gsl::size_code.
 /// - `T` must be `double` or (only if `S == VIEW`) possibly `double const`.
 /// @tparam S  Positive size or code for allocation and ownership.
 /// @tparam T  For internal use, type of each element.
-template<int S, typename T= double>
-class vector: public vec_iface<vector<S, T>> {
+template<int S, typename T= double> class vector {
   static_assert(S > 0);
-  static_assert(is_same_v<T, double>);
 
   using view= typename view_helper<T>::view;
 
@@ -110,6 +37,11 @@ class vector: public vec_iface<vector<S, T>> {
   view view_; ///< GSL's view of data within instance of vector.
 
 public:
+  /// Initialize GSL's view of static storage, but do not initialize elements.
+  vector(): view_(gsl_vector_view_array(d_, S)) {}
+
+  using element_t= T;
+
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.
   auto &v() { return view_.vector; }
@@ -117,84 +49,19 @@ public:
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to immutable vector.
   auto const &v() const { return view_.vector; }
-
-  /// Initialize GSL's view of static storage, but do not initialize elements.
-  vector(): view_(gsl_vector_view_array(d_, S)) {}
-
-  /// Construct by copying from dynamic vector or view of same size.
-  /// - Mismatch in size produces run-time abort.
-  /// - `OV` must be `gsl_vector_view` or (only if `OS == VIEW`) possibly
-  ///   `gsl_vector_const_view`.
-  /// @tparam OS  Size-code (DCON=0 or VIEW=-1) of source-vector.
-  /// @tparam OV  Type of view used internally by source-vector.
-  /// @param ov  Reference to source-vector.
-  template<int OS, typename OV, typename= enable_if_t<(OS < 1)>>
-  vector(vector<OS, OV> const &ov): vector() {
-    memcpy(*this, ov);
-  }
-
-  /// Initialize GSL's view, and initialize elements by copying from array.
-  /// - Size-parameter `S` can be *deduced* from the argument!
-  /// - So, for example, one can do this:
-  ///   ```c++
-  ///   double d[]= {2.0, 3.0, 4.0};
-  ///   vector v(d); // No template-parameter required!
-  ///   ```
-  /// @param d  Data to copy for initialization.
-  vector(T const (&d)[S]);
-
-  /// Initialize GSL's view, and initialize vector by copying from array.
-  /// - Mismatch in size produces run-time abort.
-  /// - For example:
-  ///   ```c++
-  ///   double d[]= {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
-  ///   vector<3> v(d, 1, 2); // Start at offset 1 (not 0) and use stride 2.
-  ///   // So v == [2.0, 4.0, 6.0].
-  ///   ```
-  /// @tparam N  Number of elements in non-decayed C-style array.
-  /// @param d  Non-decayed C-style array.
-  /// @param i  Offset of initial element to be copied.
-  /// @param s  Stride of elements to be copied.
-  template<unsigned N, typename= enable_if_t<N != S>>
-  vector(T const (&d)[N], size_t i= 0, size_t s= 1);
-
-  /// Initialize GSL's view, and initialize elements by copying from array.
-  /// - Stride is required as first argument in order to disambiguate this
-  ///   constructor from the one that takes a non-decayed array.
-  /// @param s  Stride.
-  /// @param d  Decayed C-style array.
-  vector(size_t s, T const *d): vector() { memcpy(*this, view(S, d, s)); }
-
-  /// Initialize GSL's view, and initialize vector by deep copy.
-  /// @param v  Data to copy for initialization.
-  vector(vector const &v): vector() { memcpy(*this, v); }
-
-  /// Assign vector by deep copy.
-  /// @param v  Data to copy for initialization.
-  /// @return  Reference to modified vector.
-  vector &operator=(vector const &v) {
-    memcpy(*this, v);
-    return *this;
-  }
-
-  /// Assign vector by copying from array.
-  /// @param v  Data to copy for initialization.
-  /// @return  Reference to modified vector.
-  vector &operator=(T const (&d)[S]) {
-    memcpy(*this, view(d));
-    return *this;
-  }
 };
 
 
 /// Specialization for vector as dynamic container on construction.
-template<typename T> class vector<DCON, T>: public vec_iface<vector<DCON>> {
+template<typename T> class vector<DCON, T> {
 public:
   /// Identifier for each of two possible allocation-methods.
   enum class alloc_type {
     ALLOC, ///< Just allocate without initialization.
     CALLOC ///< Initialize each element to zero after allocation.
   };
+
+  using element_t= T;
 
 private:
   /// Identifier for one of two possible allocation-methods.
@@ -287,11 +154,13 @@ public:
 
 
 /// Specialization for vector that refers to mutable, external data.
-template<> class vector<VIEW, double>: public vec_iface<vector<VIEW, double>> {
-  using view= typename view_helper<double>::view;
+template<typename T> class vector<VIEW, T> {
+  using view= typename view_helper<T>::view;
   view view_; ///< GSL's view of data outside instance.
 
 public:
+  using element_t= T;
+
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.
   auto &v() { return view_.vector; }
@@ -300,140 +169,173 @@ public:
   /// @return  Reference to GSL's interface to immutable vector.
   auto const &v() const { return view_.vector; }
 
-  /// Constructor called by view().
+  /// Constructor called by TBS.
   /// @param v  View to copy.
   vector(view const &v): view_(v) {}
-
-  /// Initialize view of standard (decayed) C-array.
-  /// - Arguments are reordered relative to those given to
-  ///   gsl_vector_view_array_with_stride().
-  /// - Putting number of element at *beginning* disambiguates from constructor
-  ///   from non-decayed array.
-  /// - Putting stride at *end* allows it to have default value of 1.
-  /// @param b  Pointer to first element of array and of view.
-  /// @param n  Number of elements in view.
-  /// @param s  Stride of view relative to array.
-  vector(size_t n, double *b, size_t s= 1):
-      view_(view_helper<double>::make_view(n, b, s)) {}
-
-  /// Initialize view of non-decayed C-array.
-  /// - Arguments are reordered from those given to
-  ///   gsl_vector_subvector_with_stride().
-  /// - Putting initial offset and stride at end allows every argument to have
-  ///   good default (N for number of elements in view, 0 for initial offset,
-  ///   and 1 for stride).
-  /// @tparam N  Number of elements in array.
-  /// @param b  Reference to non-decayed C-array.
-  /// @param n  Number of elements in view.
-  /// @param i  Offset in array of first element in view.
-  /// @param s  Stride of view relative to array.
-  template<int N>
-  vector(double (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      view_(view_helper<double>::make_view(b, n, i, s)) {}
-
-  /// View of subvector of vector.
-  /// - Arguments are reordered from those given to
-  ///   gsl_vector_subvector_with_stride().
-  /// - Putting initial offset and stride at end allows each to have good
-  ///   default:
-  ///   - 0 for number of elements in view as code for v.size(),
-  ///   - 0 for initial offset, and
-  ///   - 1 for stride).
-  /// @param n  Number of elements in view.
-  /// @param i  Offset in vector of first element in view.
-  /// @param s  Stride of view relative to vector.
-  template<int S>
-  vector(vector<S, double> &v, size_t n= 0, size_t i= 0, size_t s= 1):
-      view_(v.subvector(n ? n : v.size(), i, s).view_) {}
-};
-
-/// Specialization for vector that refers to mutable, external data.
-///
-template<>
-class vector<VIEW, double const>:
-    public vec_iface<vector<VIEW, double const>> {
-  using view= typename view_helper<double const>::view;
-  view view_; ///< GSL's view of data outside instance.
-
-public:
-  /// Reference to GSL's interface to vector.
-  /// @return  Reference to GSL's interface to vector.
-  auto &v() { return view_.vector; }
-
-  /// Reference to GSL's interface to vector.
-  /// @return  Reference to GSL's interface to immutable vector.
-  auto const &v() const { return view_.vector; }
-
-  /// Constructor called by view().
-  /// @param v  View to copy.
-  vector(view const &v): view_(v) {}
-
-  /// Initialize view of standard (decayed) C-array.
-  /// - Arguments are reordered relative to those given to
-  ///   gsl_vector_view_array_with_stride().
-  /// - Putting number of element at *beginning* disambiguates from constructor
-  ///   from non-decayed array.
-  /// - Putting stride at *end* allows it to have default value of 1.
-  /// @param b  Pointer to first element of array and of view.
-  /// @param n  Number of elements in view.
-  /// @param s  Stride of view relative to array.
-  vector(size_t n, double const *b, size_t s= 1):
-      view_(view_helper<double const>::make_view(n, b, s)) {}
-
-  /// Initialize view of non-decayed C-array.
-  /// - Arguments are reordered from those given to
-  ///   gsl_vector_subvector_with_stride().
-  /// - Putting initial offset and stride at end allows every argument to have
-  ///   good default (N for number of elements in view, 0 for initial offset,
-  ///   and 1 for stride).
-  /// @tparam N  Number of elements in array.
-  /// @param b  Reference to non-decayed C-array.
-  /// @param n  Number of elements in view.
-  /// @param i  Offset in array of first element in view.
-  /// @param s  Stride of view relative to array.
-  template<int N>
-  vector(double const (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      view_(view_helper<double const>::make_view(b, n, i, s)) {}
-
-  /// View of subvector of vector.
-  /// - Arguments are reordered from those given to
-  ///   gsl_vector_subvector_with_stride().
-  /// - Putting initial offset and stride at end allows each to have good
-  ///   default:
-  ///   - 0 for number of elements in view as code for v.size(),
-  ///   - 0 for initial offset, and
-  ///   - 1 for stride).
-  /// @param n  Number of elements in view.
-  /// @param i  Offset in vector of first element in view.
-  /// @param s  Stride of view relative to vector.
-  template<int S, typename U>
-  vector(vector<S, U> const &v, size_t n= 0, size_t i= 0, size_t s= 1):
-      view_(v.subvector(n ? n : v.size(), i, s).view_) {}
 };
 
 
 /// Short-hand for vector with ownership of dynamically allocated storage.
-using vectord= vector<DCON>;
 
 
-using vectorv= vector<VIEW, double>;
+template<unsigned S, typename T= double>
+struct vector_s: public vec_iface<vector<S, T>> {
+  using P= vec_iface<vector<S, T>>;
+  using P::P;
+
+  /// Construct by copying from dynamic vector or view of same size.
+  /// - Mismatch in size produces run-time abort.
+  /// - `OV` must be `gsl_vector_view` or (only if `OS == VIEW`) possibly
+  ///   `gsl_vector_const_view`.
+  /// @tparam OS  Size-code (DCON=0 or VIEW=-1) of source-vector.
+  /// @tparam OV  Type of view used internally by source-vector.
+  /// @param ov  Reference to source-vector.
+  template<int OS, typename OV, typename= enable_if_t<(OS < 1)>>
+  vector_s(vec_iface<vector<OS, OV>> const &ov) {
+    memcpy(*this, ov);
+  }
+
+  /// Initialize GSL's view, and initialize elements by copying from array.
+  /// - Size-parameter `S` can be *deduced* from the argument!
+  /// - So, for example, one can do this:
+  ///   ```c++
+  ///   double d[]= {2.0, 3.0, 4.0};
+  ///   vector v(d); // No template-parameter required!
+  ///   ```
+  /// @param d  Data to copy for initialization.
+  vector_s(T const (&d)[S]);
+
+  /// Initialize GSL's view, and initialize vector by copying from array.
+  /// - Mismatch in size produces run-time abort.
+  /// - For example:
+  ///   ```c++
+  ///   double d[]= {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+  ///   vector<3> v(d, 1, 2); // Start at offset 1 (not 0) and use stride 2.
+  ///   // So v == [2.0, 4.0, 6.0].
+  ///   ```
+  /// @tparam N  Number of elements in non-decayed C-style array.
+  /// @param d  Non-decayed C-style array.
+  /// @param i  Offset of initial element to be copied.
+  /// @param s  Stride of elements to be copied.
+  template<unsigned N, typename= enable_if_t<N != S>>
+  vector_s(T const (&d)[N], size_t i= 0, size_t s= 1);
+
+  /// Initialize GSL's view, and initialize elements by copying from array.
+  /// - Stride is required as first argument in order to disambiguate this
+  ///   constructor from the one that takes a non-decayed array.
+  /// @param s  Stride.
+  /// @param d  Decayed C-style array.
+  vector_s(size_t s, T const *d): vector_s() { memcpy(*this, view(S, d, s)); }
+
+  /// Initialize GSL's view, and initialize vector by deep copy.
+  /// @param v  Data to copy for initialization.
+  vector_s(vector_s const &v) { memcpy(*this, v); }
+
+  /// Assign vector by deep copy.
+  /// @param v  Data to copy for initialization.
+  /// @return  Reference to modified vector.
+  vector_s &operator=(vector_s const &v) {
+    memcpy(*this, v);
+    return *this;
+  }
+
+  /// Assign vector by copying from array.
+  /// @param v  Data to copy for initialization.
+  /// @return  Reference to modified vector.
+  vector_s &operator=(T const (&d)[S]) {
+    memcpy(*this, view(d));
+    return *this;
+  }
+};
 
 
-using vectorcv= vector<VIEW, double const> const;
+template<typename T= double>
+struct vector_d: public vec_iface<vector<DCON, T>> {
+  using P= vec_iface<vector<DCON, T>>;
+  using P::P;
+};
 
 
-template<int S, typename T> vector<S, T>::vector(T const (&d)[S]): vector() {
-  memcpy(*this, vector<VIEW, T const>(d));
+template<typename T= double>
+struct vector_v: public vec_iface<vector<VIEW, T>> {
+  using P= vec_iface<vector<VIEW, T>>;
+  using P::P;
+
+  /// Initialize view of standard (decayed) C-array.
+  /// - Arguments are reordered relative to those given to
+  ///   gsl_vector_view_array_with_stride().
+  /// - Putting number of element at *beginning* disambiguates from constructor
+  ///   from non-decayed array.
+  /// - Putting stride at *end* allows it to have default value of 1.
+  /// @param b  Pointer to first element of array and of view.
+  /// @param n  Number of elements in view.
+  /// @param s  Stride of view relative to array.
+  vector_v(size_t n, T *b, size_t s= 1):
+      P(view_helper<T>::make_view(n, b, s)) {}
+
+  /// Initialize view of non-decayed C-array.
+  /// - Arguments are reordered from those given to
+  ///   gsl_vector_subvector_with_stride().
+  /// - Putting initial offset and stride at end allows every argument to have
+  ///   good default (N for number of elements in view, 0 for initial offset,
+  ///   and 1 for stride).
+  /// @tparam N  Number of elements in array.
+  /// @param b  Reference to non-decayed C-array.
+  /// @param n  Number of elements in view.
+  /// @param i  Offset in array of first element in view.
+  /// @param s  Stride of view relative to array.
+  template<int N>
+  vector_v(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
+      P(view_helper<T>::make_view(b, n, i, s)) {}
+};
+
+
+template<typename T= double>
+struct vector_cv: public vec_iface<vector<VIEW, T const>> {
+  using P= vec_iface<vector<VIEW, T const>>;
+  using P::P;
+
+  /// Initialize view of standard (decayed) C-array.
+  /// - Arguments are reordered relative to those given to
+  ///   gsl_vector_view_array_with_stride().
+  /// - Putting number of element at *beginning* disambiguates from constructor
+  ///   from non-decayed array.
+  /// - Putting stride at *end* allows it to have default value of 1.
+  /// @param b  Pointer to first element of array and of view.
+  /// @param n  Number of elements in view.
+  /// @param s  Stride of view relative to array.
+  vector_cv(size_t n, T const *b, size_t s= 1):
+      P(view_helper<T const>::make_view(n, b, s)) {}
+
+  /// Initialize view of non-decayed C-array.
+  /// - Arguments are reordered from those given to
+  ///   gsl_vector_subvector_with_stride().
+  /// - Putting initial offset and stride at end allows every argument to have
+  ///   good default (N for number of elements in view, 0 for initial offset,
+  ///   and 1 for stride).
+  /// @tparam N  Number of elements in array.
+  /// @param b  Reference to non-decayed C-array.
+  /// @param n  Number of elements in view.
+  /// @param i  Offset in array of first element in view.
+  /// @param s  Stride of view relative to array.
+  template<int N>
+  vector_cv(T const (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
+      P(view_helper<T const>::make_view(b, n, i, s)) {}
+};
+
+
+template<unsigned S, typename T> vector_s<S, T>::vector_s(T const (&d)[S]) {
+  memcpy(*this, vector_cv(d));
 }
 
 
-template<int S, typename T>
+template<unsigned S, typename T>
 template<unsigned N, typename>
-vector<S, T>::vector(T const (&d)[N], size_t i, size_t s): vector() {
+vector_s<S, T>::vector_s(T const (&d)[N], size_t i, size_t s) {
   if(i + s * (S - 1) > N - 1) {
     throw std::runtime_error("source-array not big enough");
   }
-  memcpy(*this, vectorcv(d, S, i, s));
+  memcpy(*this, vector_cv(d, S, i, s));
 }
 
 

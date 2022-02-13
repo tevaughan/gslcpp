@@ -7,10 +7,10 @@
 
 
 using gsl::vec_iterator;
-using gsl::vector;
+using gsl::vector_s;
 
 
-using v3= vector<3>;
+using v3= vector_s<3>;
 
 
 v3 const a({1.0, 2.0, 3.0});

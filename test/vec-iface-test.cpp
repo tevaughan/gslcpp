@@ -13,13 +13,13 @@ using gsl::axpby;
 
 
 using gsl::vec_iface;
-using gsl::vector;
-using gsl::vectorcv;
-using gsl::vectorv;
+using gsl::vector_cv;
+using gsl::vector_s;
+using gsl::vector_v;
 using std::ostringstream;
 
 
-using v3= vector<3>;
+using v3= vector_s<3>;
 
 
 v3 const a({1.0, 2.0, 3.0});
@@ -57,7 +57,7 @@ TEST_CASE("vec_iface::size() works.", "[vec-iface]") {
 
 TEST_CASE("vec_iface::stride() works.", "[vec-iface]") {
   REQUIRE(a.v().stride == 1);
-  vector<6> b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
+  vector_s<6> b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
   auto c= b.subvector(3, 1, 2);
   REQUIRE(c.v().stride == 2);
 }
@@ -66,7 +66,7 @@ TEST_CASE("vec_iface::stride() works.", "[vec-iface]") {
 TEST_CASE("vec_iface::data() works.", "[vec-iface]") {
   REQUIRE(a.data() == &a[0]);
   double b[]= {1.0, -1.0, 2.0, -2.0, 3.0, -3.0};
-  vectorv c(b, 3, 1, 2);
+  vector_v c(b, 3, 1, 2);
   REQUIRE(c.data() == b + 1);
 }
 
@@ -87,10 +87,10 @@ TEST_CASE("vec_iface's setters work.", "[vec-iface]") {
 
 
 TEST_CASE("vec_iface::ptr() retrieves pointer of element.", "[vec-iface]") {
-  vector<6> const b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
-  vector<6> c= b;
-  vectorcv d(b, 3, 1, 2);
-  vectorv e(c, 3, 1, 2);
+  vector_s<6> const b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
+  vector_s<6> c= b;
+  vector_cv d= b.subvector(3, 1, 2);
+  vector_v e= c.subvector(3, 1, 2);
   REQUIRE(d.ptr(1) == b.ptr(3));
   REQUIRE(e.ptr(1) == c.ptr(3));
   REQUIRE(d.ptr(1) == b.v().data + 3);
@@ -164,8 +164,8 @@ TEST_CASE(
 
 
 TEST_CASE("vec_iface::subvector() works.", "[vec-iface]") {
-  vector<6> const b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
-  vector<6> c= b;
+  vector_s<6> const b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
+  vector_s<6> c= b;
   auto vb= b.subvector(3, 1, 2);
   auto vc= c.subvector(3, 1, 2);
   REQUIRE(vb[0] == -1.0);
@@ -356,8 +356,8 @@ TEST_CASE("vec_iface::isnonneg() works.", "[vec-iface]") {
 
 #if defined(GSL_VER) && GSL_VER > 26
 TEST_CASE("axpby() accumulates correctly into y.", "[vec]") {
-  vector<3> const x({1.0, 2.0, 3.0});
-  vector<3> y({2.0, 3.0, 1.0});
+  vector_s<3> const x({1.0, 2.0, 3.0});
+  vector_s<3> y({2.0, 3.0, 1.0});
   double const a= 0.5;
   double const b= 1.5;
   axpby(a, x, b, y);
@@ -368,9 +368,9 @@ TEST_CASE("axpby() accumulates correctly into y.", "[vec]") {
 
 
 TEST_CASE("equal() compares correctly.", "[vec]") {
-  vector<3> const x({1.0, 2.0, 3.0});
-  vector<3> const y({2.0, 3.0, 1.0});
-  vector<3> const z({2.0, 3.0, 1.0});
+  vector_s<3> const x({1.0, 2.0, 3.0});
+  vector_s<3> const y({2.0, 3.0, 1.0});
+  vector_s<3> const z({2.0, 3.0, 1.0});
   REQUIRE(!equal(x, y));
   REQUIRE(x != y);
   REQUIRE(equal(y, z));
@@ -379,8 +379,8 @@ TEST_CASE("equal() compares correctly.", "[vec]") {
 
 
 TEST_CASE("memcpy() works.", "[vec]") {
-  vector<3> y({2.0, 3.0, 1.0});
-  vector<3> const z({1.0, 2.0, 3.0});
+  vector_s<3> y({2.0, 3.0, 1.0});
+  vector_s<3> const z({1.0, 2.0, 3.0});
   REQUIRE(!equal(y, z));
   memcpy(y, z);
   REQUIRE(equal(y, z));
@@ -388,10 +388,10 @@ TEST_CASE("memcpy() works.", "[vec]") {
 
 
 TEST_CASE("swap() works.", "[vec]") {
-  vector<3> const a({2.0, 3.0, 1.0});
-  vector<3> const b({1.0, 2.0, 3.0});
-  vector<3> c= a;
-  vector<3> d= b;
+  vector_s<3> const a({2.0, 3.0, 1.0});
+  vector_s<3> const b({1.0, 2.0, 3.0});
+  vector_s<3> c= a;
+  vector_s<3> d= b;
   REQUIRE(a == c);
   REQUIRE(b == d);
   swap(c, d);
@@ -401,7 +401,7 @@ TEST_CASE("swap() works.", "[vec]") {
 
 
 TEST_CASE("Stream-operator works.", "[vec]") {
-  vector<3> const a({2.0, 3.0, 1.0});
+  vector_s<3> const a({2.0, 3.0, 1.0});
   ostringstream oss;
   oss << a;
   REQUIRE(oss.str() == "[2,3,1]");
