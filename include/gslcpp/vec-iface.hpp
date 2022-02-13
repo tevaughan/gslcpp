@@ -4,16 +4,26 @@
 
 #pragma once
 
-#include "vec-iterator.hpp"
-#include "vec.hpp"
+// Use inline-definition of each accessor-function.
+// - Define this before including `gsl_vector.h`.
+#ifndef HAVE_INLINE
+#  define HAVE_INLINE
+#endif
+
+#include "size-code.hpp" // VIEW
+#include "vec-iterator.hpp" // vec_iterator
+#include <gsl/gsl_vector.h> // gsl_vector_view, gsl_vector_const_view
 #include <iostream> // ostream
 
 namespace gsl {
 
 
+template<int S, typename T> class vector; // Forward declaration.
+
+
 /// Interface for every kind of vector.
 /// @tparam D  Type of descendant of `vec_iface<D>` (according to CRTP).
-template<typename D> struct vec_iface: public vec {
+template<typename D> struct vec_iface {
   /// Type of iterator that points to mutable element.
   using iterator= vec_iterator<vec_iface>;
 
@@ -40,15 +50,13 @@ template<typename D> struct vec_iface: public vec {
   /// @return  Size of vector.
   size_t size() const { return v_().size; }
 
-  /// Stride of vector in memory.
-  /// @return  Stride of vector.
-  size_t stride() const { return v_().stride; }
-
   /// Pointer to first element in vector.
+  /// - Be careful to check `v().stride` in case data be not contiguous.
   /// @return  Pointer to first element.
   double *data() { return v_().data; }
 
   /// Pointer to first element in immutable vector.
+  /// - Be careful to check `v().stride` in case data be not contiguous.
   /// @return  Pointer to first immutable element.
   double const *data() const { return v_().data; }
 
@@ -65,12 +73,12 @@ template<typename D> struct vec_iface: public vec {
   /// Read element without bounds-checking.
   /// @parameter i  Offset of element.
   /// @return  Reference to immutable element.
-  double const &operator[](size_t i) const { return data()[i * stride()]; }
+  double const &operator[](size_t i) const { return data()[i * v_().stride]; }
 
   /// Write element without bounds-checking.
   /// @parameter i  Offset of element.
   /// @return  Reference to mutable element.
-  double &operator[](size_t i) { return data()[i * stride()]; }
+  double &operator[](size_t i) { return data()[i * v_().stride]; }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// - This could be useful if stride unknown.
@@ -78,7 +86,7 @@ template<typename D> struct vec_iface: public vec {
   /// @return  Pointer to mutable element.
   double *ptr(size_t i) { return gsl_vector_ptr(&v_(), i); }
 
-  /// Retrieve pointer with bounds-checking.
+  /// Retrieve pointer to `i`th element with bounds-checking.
   /// - This could be useful if stride unknown.
   /// @parameter i  Offset of element.
   /// @return  Pointer to immutable element.
@@ -127,7 +135,7 @@ template<typename D> struct vec_iface: public vec {
   /// @param n  Number of elements in view.
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
-  vectorv subvector(size_t n, size_t i= 0, size_t s= 1);
+  vector<VIEW, double> subvector(size_t n, size_t i= 0, size_t s= 1);
 
   /// View of immutable subvector of vector.
   /// - Arguments are reordered from those given to
@@ -137,7 +145,8 @@ template<typename D> struct vec_iface: public vec {
   /// @param n  Number of elements in view.
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to current vector.
-  vectorcv subvector(size_t n, size_t i= 0, size_t s= 1) const;
+  vector<VIEW, double const>
+  subvector(size_t n, size_t i= 0, size_t s= 1) const;
 
   /// Swap elements within this vector.
   /// @param i  Offset of one element.

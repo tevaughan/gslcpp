@@ -4,12 +4,19 @@
 
 #include "gslcpp/vector.hpp"
 #include <catch.hpp>
+#include <sstream> // ostringstream
+
+
+#if defined(GSL_VER) && GSL_VER > 26
+using gsl::axpby;
+#endif
 
 
 using gsl::vec_iface;
 using gsl::vector;
 using gsl::vectorcv;
 using gsl::vectorv;
+using std::ostringstream;
 
 
 using v3= vector<3>;
@@ -49,10 +56,10 @@ TEST_CASE("vec_iface::size() works.", "[vec-iface]") {
 
 
 TEST_CASE("vec_iface::stride() works.", "[vec-iface]") {
-  REQUIRE(a.stride() == 1);
+  REQUIRE(a.v().stride == 1);
   vector<6> b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
   auto c= b.subvector(3, 1, 2);
-  REQUIRE(c.stride() == 2);
+  REQUIRE(c.v().stride == 2);
 }
 
 
@@ -344,6 +351,60 @@ TEST_CASE("vec_iface::isnonneg() works.", "[vec-iface]") {
 
   b.add_constant(-0.001);
   REQUIRE(b.isnonneg() == false);
+}
+
+
+#if defined(GSL_VER) && GSL_VER > 26
+TEST_CASE("axpby() accumulates correctly into y.", "[vec]") {
+  vector<3> const x({1.0, 2.0, 3.0});
+  vector<3> y({2.0, 3.0, 1.0});
+  double const a= 0.5;
+  double const b= 1.5;
+  axpby(a, x, b, y);
+  double const r[]= {3.5, 5.5, 3.0};
+  check(r, y);
+}
+#endif
+
+
+TEST_CASE("equal() compares correctly.", "[vec]") {
+  vector<3> const x({1.0, 2.0, 3.0});
+  vector<3> const y({2.0, 3.0, 1.0});
+  vector<3> const z({2.0, 3.0, 1.0});
+  REQUIRE(!equal(x, y));
+  REQUIRE(x != y);
+  REQUIRE(equal(y, z));
+  REQUIRE(y == z);
+}
+
+
+TEST_CASE("memcpy() works.", "[vec]") {
+  vector<3> y({2.0, 3.0, 1.0});
+  vector<3> const z({1.0, 2.0, 3.0});
+  REQUIRE(!equal(y, z));
+  memcpy(y, z);
+  REQUIRE(equal(y, z));
+}
+
+
+TEST_CASE("swap() works.", "[vec]") {
+  vector<3> const a({2.0, 3.0, 1.0});
+  vector<3> const b({1.0, 2.0, 3.0});
+  vector<3> c= a;
+  vector<3> d= b;
+  REQUIRE(a == c);
+  REQUIRE(b == d);
+  swap(c, d);
+  REQUIRE(a == d);
+  REQUIRE(b == c);
+}
+
+
+TEST_CASE("Stream-operator works.", "[vec]") {
+  vector<3> const a({2.0, 3.0, 1.0});
+  ostringstream oss;
+  oss << a;
+  REQUIRE(oss.str() == "[2,3,1]");
 }
 
 
