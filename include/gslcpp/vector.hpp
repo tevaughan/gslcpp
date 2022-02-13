@@ -22,34 +22,72 @@ using std::is_const_v;
 using std::is_same_v;
 
 
-/// Rename this to view_helper, move any needed functionality here from the old
-/// view_helper, and delete the old view_helper after transition done.
-template<typename T> struct vh;
+/// Generic template for struct that provides, on the basis of the constness of
+/// the element-type, some types and functions for a vector-view.
+/// @tparam T  Type of each element in array.
+template<typename T> struct view_helper;
 
-template<> struct vh<double> {
-  using gv= gsl_vector;
-  using gvv= gsl_vector_view;
 
-  static gvv make_gvv(size_t n, double *b, size_t s) {
+/// Specialization for non-const double.
+template<> struct view_helper<double> {
+  /// GSL's C-library type for non-const elements.
+  using vect= gsl_vector;
+
+  /// GSL's C-library type for view of non-const elements.
+  using view= gsl_vector_view;
+
+  /// C-library view of decayed C-style array.
+  /// @param n  Number of elements in view.
+  /// @param b  Pointer to first element.
+  /// @param s  Stride of successive elements in array.
+  /// @return  C-library view of array.
+  static view make_view(size_t n, double *b, size_t s) {
     return gsl_vector_view_array_with_stride(b, s, n);
   }
 
+  /// C-library view of elements in non-decayed C-style array.
+  /// @tparam N  Number of elements in array.
+  /// @param b  Non-decayed C-style array.
+  /// @param n  Number of elements in view.
+  /// @param i  Offset of first element in view.
+  /// @param s  Stride of successive elements in array.
   template<int N>
-  static gvv make_gvv(double (&b)[N], size_t n, size_t i, size_t s) {
+  static view
+  make_view(double (&b)[N], size_t n= N, size_t i= 0, size_t s= 1) {
+    if(i + s * (n - 1) > N - 1) {
+      throw std::runtime_error("source-array not big enough");
+    }
     return gsl_vector_view_array_with_stride(b + i, s, n);
   }
 };
 
-template<> struct vh<double const> {
-  using gv= gsl_vector const;
-  using gvv= gsl_vector_const_view;
 
-  static gvv make_gvv(size_t n, double const *b, size_t s) {
+/// Specialization for const double.
+template<> struct view_helper<double const> {
+  /// GSL's C-library type for const elements.
+  using vect= gsl_vector const;
+
+  /// GSL's C-library type for view of const elements.
+  using view= gsl_vector_const_view;
+
+  /// C-library view of decayed C-style array.
+  /// @param n  Number of elements in view.
+  /// @param b  Pointer to first element.
+  /// @param s  Stride of successive elements in array.
+  /// @return  C-library view of array.
+  static view make_view(size_t n, double const *b, size_t s) {
     return gsl_vector_const_view_array_with_stride(b, s, n);
   }
 
+  /// C-library view of elements in non-decayed C-style array.
+  /// @tparam N  Number of elements in array.
+  /// @param b  Non-decayed C-style array.
+  /// @param n  Number of elements in view.
+  /// @param i  Offset of first element in view.
+  /// @param s  Stride of successive elements in array.
   template<int N>
-  static gvv make_gvv(double const (&b)[N], size_t n, size_t i, size_t s) {
+  static view
+  make_view(double const (&b)[N], size_t n= N, size_t i= 0, size_t s= 1) {
     return gsl_vector_const_view_array_with_stride(b + i, s, n);
   }
 };
@@ -66,8 +104,10 @@ class vector: public vec_iface<vector<S, T>> {
   static_assert(S > 0);
   static_assert(is_same_v<T, double>);
 
+  using view= typename view_helper<T>::view;
+
   T d_[S]; ///< Storage for data.
-  typename vh<T>::gvv view_; ///< GSL's view of data within instance of vector.
+  view view_; ///< GSL's view of data within instance of vector.
 
 public:
   /// Reference to GSL's interface to vector.
@@ -162,7 +202,7 @@ private:
   alloc_type alloc_type_= alloc_type::ALLOC;
 
   /// Pointer to allocated descriptor for vector.
-  typename vh<T>::gv *v_= nullptr;
+  typename view_helper<T>::vect *v_= nullptr;
 
   /// Deallocate vector and its descriptor.
   void free() {
@@ -248,8 +288,8 @@ public:
 
 /// Specialization for vector that refers to mutable, external data.
 template<> class vector<VIEW, double>: public vec_iface<vector<VIEW, double>> {
-  using gvv= typename vh<double>::gvv;
-  gvv view_; ///< GSL's view of data outside instance.
+  using view= typename view_helper<double>::view;
+  view view_; ///< GSL's view of data outside instance.
 
 public:
   /// Reference to GSL's interface to vector.
@@ -262,7 +302,7 @@ public:
 
   /// Constructor called by view().
   /// @param v  View to copy.
-  vector(gvv const& v): view_(v) {}
+  vector(view const &v): view_(v) {}
 
   /// Initialize view of standard (decayed) C-array.
   /// - Arguments are reordered relative to those given to
@@ -274,7 +314,7 @@ public:
   /// @param n  Number of elements in view.
   /// @param s  Stride of view relative to array.
   vector(size_t n, double *b, size_t s= 1):
-      view_(vh<double>::make_gvv(n, b, s)) {}
+      view_(view_helper<double>::make_view(n, b, s)) {}
 
   /// Initialize view of non-decayed C-array.
   /// - Arguments are reordered from those given to
@@ -289,7 +329,7 @@ public:
   /// @param s  Stride of view relative to array.
   template<int N>
   vector(double (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      view_(vh<double>::make_gvv(b, n, i, s)) {}
+      view_(view_helper<double>::make_view(b, n, i, s)) {}
 
   /// View of subvector of vector.
   /// - Arguments are reordered from those given to
@@ -312,8 +352,8 @@ public:
 template<>
 class vector<VIEW, double const>:
     public vec_iface<vector<VIEW, double const>> {
-  using gvv= typename vh<double const>::gvv;
-  gvv view_; ///< GSL's view of data outside instance.
+  using view= typename view_helper<double const>::view;
+  view view_; ///< GSL's view of data outside instance.
 
 public:
   /// Reference to GSL's interface to vector.
@@ -326,7 +366,7 @@ public:
 
   /// Constructor called by view().
   /// @param v  View to copy.
-  vector(gvv const& v): view_(v) {}
+  vector(view const &v): view_(v) {}
 
   /// Initialize view of standard (decayed) C-array.
   /// - Arguments are reordered relative to those given to
@@ -338,7 +378,7 @@ public:
   /// @param n  Number of elements in view.
   /// @param s  Stride of view relative to array.
   vector(size_t n, double const *b, size_t s= 1):
-      view_(vh<double const>::make_gvv(n, b, s)) {}
+      view_(view_helper<double const>::make_view(n, b, s)) {}
 
   /// Initialize view of non-decayed C-array.
   /// - Arguments are reordered from those given to
@@ -353,7 +393,7 @@ public:
   /// @param s  Stride of view relative to array.
   template<int N>
   vector(double const (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      view_(vh<double const>::make_gvv(b, n, i, s)) {}
+      view_(view_helper<double const>::make_view(b, n, i, s)) {}
 
   /// View of subvector of vector.
   /// - Arguments are reordered from those given to
@@ -390,7 +430,7 @@ template<int S, typename T> vector<S, T>::vector(T const (&d)[S]): vector() {
 template<int S, typename T>
 template<unsigned N, typename>
 vector<S, T>::vector(T const (&d)[N], size_t i, size_t s): vector() {
-  if(i + s * (S - 1) >= N) {
+  if(i + s * (S - 1) > N - 1) {
     throw std::runtime_error("source-array not big enough");
   }
   memcpy(*this, vectorcv(d, S, i, s));
