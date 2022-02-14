@@ -1,7 +1,7 @@
 # gslcpp
 
 C++-library wrapping portions of GSL and providing interoperability with Eigen.
-  - The portions of GSL are
+  - The initial portions of GSL wrapped by this library will be
     - GSL's vector and
     - GSL's minimization-routines (which depend on GSL's vector).
   - Interoperability with Eigen is provided for GSL's vector.
@@ -10,7 +10,7 @@ C++-library wrapping portions of GSL and providing interoperability with Eigen.
 ## Status
 
 - The C++-interface to `gsl_vector` is implemented.
-  - The design allows adding types easily.
+  - The design allows adding element-types easily.
   - Initially, the only type supported is `double`.
   - The unit-tests are almost done.
     - Class `vector_s` for stack-allocation is fully tested.
@@ -18,6 +18,9 @@ C++-library wrapping portions of GSL and providing interoperability with Eigen.
     - Class `vector_d` for dynamic allocation is not yet tested.
 - The C++-interface to the minimizers is not implemented yet.
 - Interfaces with Eigen are not yet implemented.
+- The design allows adding support for matrices easily.
+  - Adding support for GSL-matrices will likely be the next feature after the
+    initial goal is met.
 
 ## How to Build
 
