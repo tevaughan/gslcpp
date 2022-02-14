@@ -52,7 +52,10 @@ struct vector_s: public vec_iface<vec_stor<S, T>> {
   ///   vector v(d); // No template-parameter required!
   ///   ```
   /// @param d  Data to copy for initialization.
-  vector_s(T const (&d)[S]);
+  vector_s(T const (&d)[S]) {
+    auto const cview= c_iface<T const>::vec_view_array(d, 1, S);
+    memcpy(*this, vec_iface<vec_view<T const>>(cview));
+  }
 
   /// Initialize GSL's view, and initialize vector by copying from array.
   /// - Mismatch in size produces run-time abort.
@@ -67,7 +70,13 @@ struct vector_s: public vec_iface<vec_stor<S, T>> {
   /// @param i  Offset of initial element to be copied.
   /// @param s  Stride of elements to be copied.
   template<unsigned N, typename= enable_if_t<N != S>>
-  vector_s(T const (&d)[N], size_t i= 0, size_t s= 1);
+  vector_s(T const (&d)[N], size_t i= 0, size_t s= 1) {
+    if(i + s * (S - 1) > N - 1) {
+      throw std::runtime_error("source-array not big enough");
+    }
+    auto const cview= c_iface<T const>::vec_view_array(d + i, s, S);
+    memcpy(*this, vec_iface<vec_view<T const>>(cview));
+  }
 
   /// Initialize GSL's view, and initialize elements by copying from array.
   /// - Stride is required as first argument in order to disambiguate this
@@ -138,21 +147,6 @@ template<typename T> struct vector_v: public vec_iface<vec_view<T>> {
 
   vector_v(vec_iface<vec_view<T>> v): P(v.cview()) {}
 };
-
-
-template<unsigned S, typename T> vector_s<S, T>::vector_s(T const (&d)[S]) {
-  memcpy(*this, vector_v(d));
-}
-
-
-template<unsigned S, typename T>
-template<unsigned N, typename>
-vector_s<S, T>::vector_s(T const (&d)[N], size_t i, size_t s) {
-  if(i + s * (S - 1) > N - 1) {
-    throw std::runtime_error("source-array not big enough");
-  }
-  memcpy(*this, vector_v(d, S, i, s));
-}
 
 
 } // namespace gsl
