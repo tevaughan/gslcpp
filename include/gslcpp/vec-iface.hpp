@@ -4,12 +4,7 @@
 
 #pragma once
 
-// Use inline-definition of each accessor-function.
-// - Define this before including `gsl_vector.h`.
-#ifndef HAVE_INLINE
-#  define HAVE_INLINE
-#endif
-
+#include "e-props.hpp" // e_props
 #include "size-code.hpp" // VIEW
 #include "vec-iterator.hpp" // vec_iterator
 #include <gsl/gsl_vector.h> // gsl_vector_view, gsl_vector_const_view
@@ -18,88 +13,18 @@
 namespace gsl {
 
 
+using std::same_as;
+
+
 // Forward declarations.
 template<typename T> class vector_v;
 template<typename T> class vector_cv;
 
 
-/// Generic template for struct that provides, on the basis of the constness of
-/// the element-type, some types and functions for a vector-view.
-/// @tparam T  Type of each element in array.
-template<typename T> struct view_helper;
-
-
-/// Specialization for non-const double.
-template<> struct view_helper<double> {
-  /// GSL's C-library type for non-const elements.
-  using vect= gsl_vector;
-
-  /// GSL's C-library type for view of non-const elements.
-  using view= gsl_vector_view;
-
-  /// C-library view of decayed C-style array.
-  /// @param n  Number of elements in view.
-  /// @param b  Pointer to first element.
-  /// @param s  Stride of successive elements in array.
-  /// @return  C-library view of array.
-  static view make_view(size_t n, double *b, size_t s) {
-    return gsl_vector_view_array_with_stride(b, s, n);
-  }
-
-  /// C-library view of elements in non-decayed C-style array.
-  /// @tparam N  Number of elements in array.
-  /// @param b  Non-decayed C-style array.
-  /// @param n  Number of elements in view.
-  /// @param i  Offset of first element in view.
-  /// @param s  Stride of successive elements in array.
-  template<int N>
-  static view
-  make_view(double (&b)[N], size_t n= N, size_t i= 0, size_t s= 1) {
-    if(i + s * (n - 1) > N - 1) {
-      throw std::runtime_error("source-array not big enough");
-    }
-    return gsl_vector_view_array_with_stride(b + i, s, n);
-  }
-};
-
-
-/// Specialization for const double.
-template<> struct view_helper<double const> {
-  /// GSL's C-library type for const elements.
-  using vect= gsl_vector const;
-
-  /// GSL's C-library type for view of const elements.
-  using view= gsl_vector_const_view;
-
-  /// C-library view of decayed C-style array.
-  /// @param n  Number of elements in view.
-  /// @param b  Pointer to first element.
-  /// @param s  Stride of successive elements in array.
-  /// @return  C-library view of array.
-  static view make_view(size_t n, double const *b, size_t s) {
-    return gsl_vector_const_view_array_with_stride(b, s, n);
-  }
-
-  /// C-library view of elements in non-decayed C-style array.
-  /// @tparam N  Number of elements in array.
-  /// @param b  Non-decayed C-style array.
-  /// @param n  Number of elements in view.
-  /// @param i  Offset of first element in view.
-  /// @param s  Stride of successive elements in array.
-  template<int N>
-  static view
-  make_view(double const (&b)[N], size_t n= N, size_t i= 0, size_t s= 1) {
-    return gsl_vector_const_view_array_with_stride(b + i, s, n);
-  }
-};
-
-
 template<typename T> concept vec= requires(T &x, T const &y) {
   typename T::element_t;
-  {
-    x.v()
-    } -> std::same_as<typename view_helper<typename T::element_t>::vect &>;
-  { y.v() } -> std::same_as<gsl_vector const &>;
+  { x.v() } -> same_as<typename e_props<typename T::element_t>::vec &>;
+  { y.v() } -> same_as<typename e_props<typename T::element_t>::vec const &>;
 };
 
 

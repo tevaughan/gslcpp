@@ -31,7 +31,7 @@ using std::is_same_v;
 template<int S, typename T= double> class vector {
   static_assert(S > 0);
 
-  using view= typename view_helper<T>::view;
+  using view= typename e_props<T>::vec_view;
 
   T d_[S]; ///< Storage for data.
   view view_; ///< GSL's view of data within instance of vector.
@@ -69,7 +69,7 @@ private:
   alloc_type alloc_type_= alloc_type::ALLOC;
 
   /// Pointer to allocated descriptor for vector.
-  typename view_helper<T>::vect *v_= nullptr;
+  typename e_props<T>::vec *v_= nullptr;
 
   /// Deallocate vector and its descriptor.
   void free() {
@@ -155,7 +155,7 @@ public:
 
 /// Specialization for vector that refers to mutable, external data.
 template<typename T> class vector<VIEW, T> {
-  using view= typename view_helper<T>::view;
+  using view= typename e_props<T>::vec_view;
   view view_; ///< GSL's view of data outside instance.
 
 public:
@@ -270,8 +270,7 @@ struct vector_v: public vec_iface<vector<VIEW, T>> {
   /// @param b  Pointer to first element of array and of view.
   /// @param n  Number of elements in view.
   /// @param s  Stride of view relative to array.
-  vector_v(size_t n, T *b, size_t s= 1):
-      P(view_helper<T>::make_view(n, b, s)) {}
+  vector_v(size_t n, T *b, size_t s= 1): P(e_props<T>::make_view(n, b, s)) {}
 
   /// Initialize view of non-decayed C-array.
   /// - Arguments are reordered from those given to
@@ -286,7 +285,7 @@ struct vector_v: public vec_iface<vector<VIEW, T>> {
   /// @param s  Stride of view relative to array.
   template<int N>
   vector_v(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      P(view_helper<T>::make_view(b, n, i, s)) {}
+      P(e_props<T>::make_vec_view(b, n, i, s)) {}
 };
 
 
@@ -305,7 +304,7 @@ struct vector_cv: public vec_iface<vector<VIEW, T const>> {
   /// @param n  Number of elements in view.
   /// @param s  Stride of view relative to array.
   vector_cv(size_t n, T const *b, size_t s= 1):
-      P(view_helper<T const>::make_view(n, b, s)) {}
+      P(e_props<T const>::make_vec_view(n, b, s)) {}
 
   /// Initialize view of non-decayed C-array.
   /// - Arguments are reordered from those given to
@@ -320,7 +319,7 @@ struct vector_cv: public vec_iface<vector<VIEW, T const>> {
   /// @param s  Stride of view relative to array.
   template<int N>
   vector_cv(T const (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      P(view_helper<T const>::make_view(b, n, i, s)) {}
+      P(e_props<T const>::make_vec_view(b, n, i, s)) {}
 };
 
 
