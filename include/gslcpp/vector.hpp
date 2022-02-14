@@ -11,7 +11,7 @@
 #  include "vec-iface.hpp" // vec_iface
 #  include "vec-stor.hpp" // vec_stor
 #  include <algorithm> // swap
-#  include <type_traits> // is_same_v, enable_if_t
+#  include <type_traits> // enable_if_t
 
 /// Namespace for C++-interface to small subset of GSL's functionality,
 /// initially just minimization, which requires using gsl_vector.
@@ -19,8 +19,6 @@ namespace gsl {
 
 
 using std::enable_if_t;
-using std::is_const_v;
-using std::is_same_v;
 
 
 template<unsigned S, typename T= double>
@@ -107,8 +105,7 @@ struct vector_s: public vec_iface<vec_stor<S, T>> {
 };
 
 
-template<typename T>
-struct vector_d: public vec_iface<vec_stor<0, T>> {
+template<typename T> struct vector_d: public vec_iface<vec_stor<0, T>> {
   using P= vec_iface<vec_stor<0, T>>;
   using P::P;
 };
