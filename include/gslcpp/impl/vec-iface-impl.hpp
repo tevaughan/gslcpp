@@ -10,28 +10,27 @@ namespace gsl {
 
 
 template<vec D>
-vector_v<typename vec_iface<D>::element_t>
+vector_v<typename vec_iface<D>::elem>
 vec_iface<D>::subvector(size_t n, size_t i, size_t s) {
-  return c_iface<element_t>::subvector(&v(), i, s, n);
+  return c_iface<elem>::subvector(&v(), i, s, n);
 }
 
 
 template<vec D>
-vector_v<typename vec_iface<D>::element_t const>
+vector_v<typename vec_iface<D>::elem const>
 vec_iface<D>::subvector(size_t n, size_t i, size_t s) const {
-  return c_iface<element_t const>::subvector(&v(), i, s, n);
+  return c_iface<elem const>::subvector(&v(), i, s, n);
+}
+
+
+template<vec D> vector_v<typename vec_iface<D>::elem> vec_iface<D>::view() {
+  return c_iface<elem>::subvector(&v(), 0, 1, size());
 }
 
 
 template<vec D>
-vector_v<typename vec_iface<D>::element_t> vec_iface<D>::view() {
-  return c_iface<element_t>::subvector(&v(), 0, 1, size());
-}
-
-
-template<vec D>
-vector_v<typename vec_iface<D>::element_t const> vec_iface<D>::view() const {
-  return c_iface<element_t const>::subvector(&v(), 0, 1, size());
+vector_v<typename vec_iface<D>::elem const> vec_iface<D>::view() const {
+  return c_iface<elem const>::subvector(&v(), 0, 1, size());
 }
 
 
