@@ -29,9 +29,11 @@ public:
   /// Constructor called by TBS.
   /// @param v  View to copy.
   vec_view(view const &v): view_(v) {}
+
+  view const &cview() const { return view_; }
 };
 
 
-}
+} // namespace gsl
 
 // EOF

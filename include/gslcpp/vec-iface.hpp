@@ -160,7 +160,9 @@ template<vec D> struct vec_iface: public D {
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
-  vector_v<elem> subvector(size_t n, size_t i= 0, size_t s= 1);
+  vec_iface<vec_view<elem>> subvector(size_t n, size_t i= 0, size_t s= 1) {
+    return c_iface<elem>::subvector(&v(), i, s, n);
+  }
 
   /// View of subvector of vector.
   /// - Arguments are reordered from those given to
@@ -171,15 +173,22 @@ template<vec D> struct vec_iface: public D {
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
-  vector_v<elem const> subvector(size_t n, size_t i= 0, size_t s= 1) const;
+  vec_iface<vec_view<elem const>>
+  subvector(size_t n, size_t i= 0, size_t s= 1) const {
+    return c_iface<elem const>::subvector(&v(), i, s, n);
+  }
 
   /// View of vector.
   /// @return  View of vector.
-  vector_v<elem> view();
+  vec_iface<vec_view<elem>> view() {
+    return c_iface<elem>::subvector(&v(), 0, 1, size());
+  }
 
   /// View of vector.
   /// @return  View of vector.
-  vector_v<elem const> view() const;
+  vec_iface<vec_view<elem const>> view() const {
+    return c_iface<elem const>::subvector(&v(), 0, 1, size());
+  }
 
   /// Swap elements within this vector.
   /// @param i  Offset of one element.

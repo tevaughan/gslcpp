@@ -98,14 +98,14 @@ struct vector_s: public vec_iface<vec_stor<S, T>> {
 };
 
 
-template<typename T= double>
+template<typename T>
 struct vector_d: public vec_iface<vec_stor<0, T>> {
   using P= vec_iface<vec_stor<0, T>>;
   using P::P;
 };
 
 
-template<typename T= double> struct vector_v: public vec_iface<vec_view<T>> {
+template<typename T> struct vector_v: public vec_iface<vec_view<T>> {
   using P= vec_iface<vec_view<T>>;
   using P::P;
 
@@ -135,6 +135,8 @@ template<typename T= double> struct vector_v: public vec_iface<vec_view<T>> {
   template<int N>
   vector_v(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
       P(c_iface<T>::make_vec_view(b, n, i, s)) {}
+
+  vector_v(vec_iface<vec_view<T>> v): P(v.cview()) {}
 };
 
 
@@ -156,8 +158,5 @@ vector_s<S, T>::vector_s(T const (&d)[N], size_t i, size_t s) {
 } // namespace gsl
 
 #endif // ndef GSL_VECTOR_HPP
-
-// Implementation relying on definition of vector defined above.
-#include "impl/vec-iface-impl.hpp"
 
 // EOF
