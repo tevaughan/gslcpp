@@ -24,19 +24,23 @@ using std::is_same_v;
 
 
 template<unsigned S, typename T= double>
-struct vector_s: public vec_iface<vector<S, T>> {
-  using P= vec_iface<vector<S, T>>;
+struct vector_s: public vec_iface<vec_stor<S, T>> {
+  using P= vec_iface<vec_stor<S, T>>;
   using P::P;
 
-  /// Construct by copying from dynamic vector or view of same size.
+  /// Construct by copying from dynamic vector of same size.
   /// - Mismatch in size produces run-time abort.
-  /// - `OV` must be `gsl_vector_view` or (only if `OS == VIEW`) possibly
-  ///   `gsl_vector_const_view`.
-  /// @tparam OS  Size-code (DCON=0 or VIEW=-1) of source-vector.
-  /// @tparam OV  Type of view used internally by source-vector.
+  /// @tparam OT  Type of other elements.
   /// @param ov  Reference to source-vector.
-  template<int OS, typename OV, typename= enable_if_t<(OS < 1)>>
-  vector_s(vec_iface<vector<OS, OV>> const &ov) {
+  template<typename OT> vector_s(vec_iface<vec_stor<0, OT>> const &ov) {
+    memcpy(*this, ov);
+  }
+
+  /// Construct by copying from view of same size.
+  /// - Mismatch in size produces run-time abort.
+  /// @tparam OT  Type of other elements.
+  /// @param ov  Reference to source-vector.
+  template<typename OT> vector_s(vec_iface<vec_view<OT>> const &ov) {
     memcpy(*this, ov);
   }
 
@@ -95,15 +99,14 @@ struct vector_s: public vec_iface<vector<S, T>> {
 
 
 template<typename T= double>
-struct vector_d: public vec_iface<vector<DCON, T>> {
-  using P= vec_iface<vector<DCON, T>>;
+struct vector_d: public vec_iface<vec_stor<0, T>> {
+  using P= vec_iface<vec_stor<0, T>>;
   using P::P;
 };
 
 
-template<typename T= double>
-struct vector_v: public vec_iface<vector<VIEW, T>> {
-  using P= vec_iface<vector<VIEW, T>>;
+template<typename T= double> struct vector_v: public vec_iface<vec_view<T>> {
+  using P= vec_iface<vec_view<T>>;
   using P::P;
 
   /// Initialize view of standard (decayed) C-array.

@@ -5,8 +5,8 @@
 #pragma once
 
 #include "c-iface.hpp" // c_iface
-#include "size-code.hpp" // VIEW
 #include "vec-iterator.hpp" // vec_iterator
+#include "vec-view.hpp" // vec_view
 #include <gsl/gsl_vector.h> // gsl_vector_view, gsl_vector_const_view
 #include <iostream> // ostream
 
