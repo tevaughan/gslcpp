@@ -6,7 +6,8 @@ C++-library wrapping portions of GSL and providing interoperability with Eigen.
     - GSL's minimization-routines (which depend on GSL's vector).
   - Interoperability with Eigen will provided for GSL's vector (and, eventually
     for GSL's matrix).
-  - A compiler for C++-20 is required.
+  - A version of `clang++` capable of compiling C++-20 is required.
+    - `clang++-10` is known to work.
 
 ## Status
 
@@ -28,14 +29,11 @@ C++-library wrapping portions of GSL and providing interoperability with Eigen.
 The unit-tests are built, run, and reported on for coverage by way of `cmake`.
 
 `clang++-10` or later will work.
-- [Makefile](Makefile) calls out the default `clang` and `clang++`.
+- [Makefile](Makefile) calls out near the top the default `clang` and `clang++`.
 - Edit [Makefile](Makefile), if necessary, to specify a version.
-- For example, change
-  - `CC=clang` to `CC=clang-11` and
-  - `CXX=clang++` to `CXX=clang++-11`.
 - Note that, for coverage-analysis, my cmake-script requires that, if
-  specified, the version of `clang` must be provided by a numeric suffix as in
-  the example above.
+  specified, the version of `clang` must be provided by a numeric suffix on the
+  executable.
 
 [Makefile](Makefile) at the top is not a product of `cmake`. The default target
   - generates a directory, `build`,
