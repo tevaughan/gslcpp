@@ -10,7 +10,7 @@ C++-library wrapping portions of GSL and providing interoperability with Eigen.
 ## Status
 
 - The C++-interface to `gsl_vector` is implemented.
-  - The designed allows adding types easily.
+  - The design allows adding types easily.
   - Initially, the only type supported is `double`.
   - The unit-tests are almost done.
     - Class `vector_s` for stack-allocation is fully tested.
