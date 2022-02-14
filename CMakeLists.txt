@@ -25,6 +25,8 @@ set(CMAKE_CXX_EXTENSIONS_COVERAGE OFF)
 
 set(CMAKE_BUILD_TYPE Coverage)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 # clang-tidy
 find_program (CLANG_TIDY_EXE NAMES "clang-tidy")
 if(CLANG_TIDY_EXE)

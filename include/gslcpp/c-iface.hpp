@@ -21,13 +21,14 @@ using std::runtime_error;
 using std::same_as;
 
 
-// Make use of this after finishing it.
-template<typename E, template<typename> class I>
-concept c_interface= requires(E *e, size_t s) {
-  typename I<E>::vec;
-  typename I<E>::vec_view;
-  { vec_view_array(e, s, s) } -> same_as<typename I<E>::vec_view>;
-  // Finish this.
+template<typename I>
+concept
+  c_interface= requires(typename I::elem *e, size_t s, typename I::vec *v) {
+  typename I::elem;
+  typename I::vec;
+  typename I::vec_view;
+  { I::vec_view_array(e, s, s) } -> same_as<typename I::vec_view>;
+  { I::subvector(v, s, s, s) } -> same_as<typename I::vec_view>;
 };
 
 
@@ -39,6 +40,9 @@ template<typename E> struct c_iface_;
 
 /// Specialization for non-const double.
 template<> struct c_iface_<double> {
+  /// Type of each element in vector or matrix.
+  using elem= double;
+
   /// GSL's C-library type for non-const elements.
   using vec= gsl_vector;
 
@@ -46,7 +50,7 @@ template<> struct c_iface_<double> {
   using vec_view= gsl_vector_view;
 
   /// Function that converts array to GSL's native view.
-  static vec_view vec_view_array(double *b, size_t s, size_t n) {
+  static vec_view vec_view_array(elem *b, size_t s, size_t n) {
     return gsl_vector_view_array_with_stride(b, s, n);
   }
 
@@ -59,6 +63,9 @@ template<> struct c_iface_<double> {
 
 /// Specialization for const double.
 template<> struct c_iface_<double const> {
+  /// Type of each element in vector or matrix.
+  using elem= double const;
+
   /// GSL's C-library type for non-const elements.
   using vec= gsl_vector const;
 
@@ -66,7 +73,7 @@ template<> struct c_iface_<double const> {
   using vec_view= gsl_vector_const_view;
 
   /// Function that converts array to GSL's native view.
-  static vec_view vec_view_array(double const *b, size_t s, size_t n) {
+  static vec_view vec_view_array(elem *b, size_t s, size_t n) {
     return gsl_vector_const_view_array_with_stride(b, s, n);
   }
 
@@ -79,10 +86,13 @@ template<> struct c_iface_<double const> {
 
 /// Properties associated with element-type `E`.
 /// @param E  Type of each element in vector or matrix.
-template<typename E> struct c_iface: public c_iface_<E> {
+template<typename E>
+requires c_interface<c_iface_<E>> struct c_iface: public c_iface_<E> {
   using P= c_iface_<E>;
+
   using P::subvector;
   using P::vec_view_array;
+  using typename P::elem;
   using typename P::vec;
   using typename P::vec_view;
 

@@ -16,8 +16,11 @@
 include(CMakeParseArguments)
 
 # Check prereqs
-find_program(LLVM_COV_PATH NAMES llvm-cov PATHS ENV PATH)
-find_program(LLVM_PROFDATA_PATH NAMES llvm-profdata PATHS ENV PATH)
+string(REPLACE "clang++" "llvm-cov" desired_llvm_cov ${CMAKE_CXX_COMPILER})
+find_program(LLVM_COV_PATH NAMES ${desired_llvm_cov} PATHS ENV PATH)
+string(REPLACE "clang++" "llvm-profdata" desired_llvm_profdata
+  ${CMAKE_CXX_COMPILER})
+find_program(LLVM_PROFDATA_PATH NAMES ${desired_llvm_profdata} PATHS ENV PATH)
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang")
   if("${CMAKE_CXX_COMPILER_VERSION}" VERSION_LESS 3)
