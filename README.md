@@ -4,7 +4,8 @@ C++-library wrapping portions of GSL and providing interoperability with Eigen.
   - The initial portions of GSL wrapped by this library will be
     - GSL's vector and
     - GSL's minimization-routines (which depend on GSL's vector).
-  - Interoperability with Eigen is provided for GSL's vector.
+  - Interoperability with Eigen will provided for GSL's vector (and, eventually
+    for GSL's matrix).
   - A compiler for C++-20 is required.
 
 ## Status
