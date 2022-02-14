@@ -12,26 +12,26 @@ namespace gsl {
 template<vec D>
 vector_v<typename vec_iface<D>::element_t>
 vec_iface<D>::subvector(size_t n, size_t i, size_t s) {
-  return e_props<element_t>::vec_view_subvec(&v(), i, s, n);
+  return c_iface<element_t>::subvector(&v(), i, s, n);
 }
 
 
 template<vec D>
 vector_v<typename vec_iface<D>::element_t const>
 vec_iface<D>::subvector(size_t n, size_t i, size_t s) const {
-  return e_props<element_t const>::vec_view_subvec(&v(), i, s, n);
+  return c_iface<element_t const>::subvector(&v(), i, s, n);
 }
 
 
 template<vec D>
 vector_v<typename vec_iface<D>::element_t> vec_iface<D>::view() {
-  return e_props<element_t>::vec_view_subvec(&v(), 0, 1, size());
+  return c_iface<element_t>::subvector(&v(), 0, 1, size());
 }
 
 
 template<vec D>
 vector_v<typename vec_iface<D>::element_t const> vec_iface<D>::view() const {
-  return e_props<element_t const>::vec_view_subvec(&v(), 0, 1, size());
+  return c_iface<element_t const>::subvector(&v(), 0, 1, size());
 }
 
 

@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/e-props.hpp
+/// @file       include/gslcpp/c-iface.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition for gsl::c_iface, gsl::e_props.
+/// @brief      Definition for gsl::c_iface_, gsl::c_iface.
 
 #pragma once
 
@@ -18,16 +18,27 @@ namespace gsl {
 
 
 using std::runtime_error;
+using std::same_as;
+
+
+// Make use of this after finishing it.
+template<typename E, template<typename> class I>
+concept c_interface= requires(E *e, size_t s) {
+  typename I<E>::vec;
+  typename I<E>::vec_view;
+  { vec_view_array(e, s, s) } -> same_as<typename I<E>::vec_view>;
+  // Finish this.
+};
 
 
 /// Generic template for struct that provides, on basis of element-type `E`,
 /// appropriate GSL C-types functions, each for constructing appropriate view.
 /// @tparam E  Type of each element in vector.
-template<typename E> struct c_iface;
+template<typename E> struct c_iface_;
 
 
 /// Specialization for non-const double.
-template<> struct c_iface<double> {
+template<> struct c_iface_<double> {
   /// GSL's C-library type for non-const elements.
   using vec= gsl_vector;
 
@@ -40,14 +51,14 @@ template<> struct c_iface<double> {
   }
 
   /// Function that converts subvector to GSL's native view.
-  static vec_view vec_view_subvec(vec *v, size_t i, size_t s, size_t n) {
+  static vec_view subvector(vec *v, size_t i, size_t s, size_t n) {
     return gsl_vector_subvector_with_stride(v, i, s, n);
   }
 };
 
 
 /// Specialization for const double.
-template<> struct c_iface<double const> {
+template<> struct c_iface_<double const> {
   /// GSL's C-library type for non-const elements.
   using vec= gsl_vector const;
 
@@ -60,7 +71,7 @@ template<> struct c_iface<double const> {
   }
 
   /// Function that converts subvector to GSL's native view.
-  static vec_view vec_view_subvec(vec *v, size_t i, size_t s, size_t n) {
+  static vec_view subvector(vec *v, size_t i, size_t s, size_t n) {
     return gsl_vector_const_subvector_with_stride(v, i, s, n);
   }
 };
@@ -68,9 +79,11 @@ template<> struct c_iface<double const> {
 
 /// Properties associated with element-type `E`.
 /// @param E  Type of each element in vector or matrix.
-template<typename E> struct e_props: public c_iface<E> {
-  using P= c_iface<E>;
+template<typename E> struct c_iface: public c_iface_<E> {
+  using P= c_iface_<E>;
+  using P::subvector;
   using P::vec_view_array;
+  using typename P::vec;
   using typename P::vec_view;
 
   /// C-library view of decayed C-style array.
@@ -79,7 +92,7 @@ template<typename E> struct e_props: public c_iface<E> {
   /// @param s  Stride of successive elements in array.
   /// @return  C-library view of array.
   static vec_view make_vec_view(size_t n, E *b, size_t s= 1) {
-    return c_iface<E>::vec_view_array(b, s, n);
+    return c_iface_<E>::vec_view_array(b, s, n);
   }
 
   /// C-library view of elements in non-decayed C-style array.
@@ -94,7 +107,7 @@ template<typename E> struct e_props: public c_iface<E> {
     if(i + s * (n - 1) > N - 1) {
       throw runtime_error("source-array not big enough");
     }
-    return c_iface<E>::vec_view_array(b + i, s, n);
+    return c_iface_<E>::vec_view_array(b + i, s, n);
   }
 };
 

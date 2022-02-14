@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "e-props.hpp" // e_props
+#include "c-iface.hpp" // c_iface
 #include "size-code.hpp" // VIEW
 #include "vec-iterator.hpp" // vec_iterator
 #include <gsl/gsl_vector.h> // gsl_vector_view, gsl_vector_const_view
@@ -22,8 +22,8 @@ template<typename T> class vector_v;
 
 template<typename T> concept vec= requires(T &x, T const &y) {
   typename T::element_t;
-  { x.v() } -> same_as<typename e_props<typename T::element_t>::vec &>;
-  { y.v() } -> same_as<typename e_props<typename T::element_t>::vec const &>;
+  { x.v() } -> same_as<typename c_iface<typename T::element_t>::vec &>;
+  { y.v() } -> same_as<typename c_iface<typename T::element_t>::vec const &>;
 };
 
 
