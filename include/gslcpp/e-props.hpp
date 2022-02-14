@@ -38,6 +38,11 @@ template<> struct c_iface<double> {
   static vec_view vec_view_array(double *b, size_t s, size_t n) {
     return gsl_vector_view_array_with_stride(b, s, n);
   }
+
+  /// Function that converts subvector to GSL's native view.
+  static vec_view vec_view_subvec(vec *v, size_t i, size_t s, size_t n) {
+    return gsl_vector_subvector_with_stride(v, i, s, n);
+  }
 };
 
 
@@ -52,6 +57,11 @@ template<> struct c_iface<double const> {
   /// Function that converts array to GSL's native view.
   static vec_view vec_view_array(double const *b, size_t s, size_t n) {
     return gsl_vector_const_view_array_with_stride(b, s, n);
+  }
+
+  /// Function that converts subvector to GSL's native view.
+  static vec_view vec_view_subvec(vec *v, size_t i, size_t s, size_t n) {
+    return gsl_vector_const_subvector_with_stride(v, i, s, n);
   }
 };
 
@@ -68,7 +78,7 @@ template<typename E> struct e_props: public c_iface<E> {
   /// @param b  Pointer to first element.
   /// @param s  Stride of successive elements in array.
   /// @return  C-library view of array.
-  static vec_view make_vec_view(size_t n, E *b, size_t s) {
+  static vec_view make_vec_view(size_t n, E *b, size_t s= 1) {
     return c_iface<E>::vec_view_array(b, s, n);
   }
 

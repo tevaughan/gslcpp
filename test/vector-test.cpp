@@ -7,7 +7,6 @@
 
 using gsl::vec_iface;
 using gsl::vector_s;
-using gsl::vector_cv;
 using gsl::vector_d;
 using gsl::vector_v;
 
@@ -77,7 +76,7 @@ TEST_CASE("vector<VIEW> provides right view.", "[vector]") {
   REQUIRE(mv.size() == 3);
   check(a, mv, 2);
 
-  auto iv= vector_cv(4, b); // Immutable view, ultimately of a[].
+  auto iv= vector_v(4, b); // Immutable view, ultimately of a[].
   REQUIRE(iv.size() == 4);
   check(a, iv);
 
@@ -105,7 +104,7 @@ TEST_CASE("vec::subarray() provides right view.", "[vec]") {
   check(a + 1, mv, 2);
 
   // Immutable view of a[], starting at Offset 0 and with Stride 1.
-  auto iv= vector_cv(b);
+  auto iv= vector_v(b);
   REQUIRE(iv.size() == 6);
   check(b, iv);
 

@@ -13,7 +13,6 @@ using gsl::axpby;
 
 
 using gsl::vec_iface;
-using gsl::vector_cv;
 using gsl::vector_s;
 using gsl::vector_v;
 using std::ostringstream;
@@ -89,7 +88,7 @@ TEST_CASE("vec_iface's setters work.", "[vec-iface]") {
 TEST_CASE("vec_iface::ptr() retrieves pointer of element.", "[vec-iface]") {
   vector_s<6> const b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
   vector_s<6> c= b;
-  vector_cv d= b.subvector(3, 1, 2);
+  vector_v d= b.subvector(3, 1, 2);
   vector_v e= c.subvector(3, 1, 2);
   REQUIRE(d.ptr(1) == b.ptr(3));
   REQUIRE(e.ptr(1) == c.ptr(3));

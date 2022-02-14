@@ -12,26 +12,26 @@ namespace gsl {
 template<vec D>
 vector_v<typename vec_iface<D>::element_t>
 vec_iface<D>::subvector(size_t n, size_t i, size_t s) {
-  return gsl_vector_subvector_with_stride(&v(), i, s, n);
+  return e_props<element_t>::vec_view_subvec(&v(), i, s, n);
 }
 
 
 template<vec D>
-vector_cv<typename vec_iface<D>::element_t>
+vector_v<typename vec_iface<D>::element_t const>
 vec_iface<D>::subvector(size_t n, size_t i, size_t s) const {
-  return gsl_vector_const_subvector_with_stride(&v(), i, s, n);
+  return e_props<element_t const>::vec_view_subvec(&v(), i, s, n);
 }
 
 
 template<vec D>
 vector_v<typename vec_iface<D>::element_t> vec_iface<D>::view() {
-  return gsl_vector_subvector_with_stride(&v(), 0, 1, size());
+  return e_props<element_t>::vec_view_subvec(&v(), 0, 1, size());
 }
 
 
 template<vec D>
-vector_cv<typename vec_iface<D>::element_t> vec_iface<D>::view() const {
-  return gsl_vector_const_subvector_with_stride(&v(), 0, 1, size());
+vector_v<typename vec_iface<D>::element_t const> vec_iface<D>::view() const {
+  return e_props<element_t const>::vec_view_subvec(&v(), 0, 1, size());
 }
 
 

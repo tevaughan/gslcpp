@@ -16,9 +16,8 @@ namespace gsl {
 using std::same_as;
 
 
-// Forward declarations.
+// Forward declaration.
 template<typename T> class vector_v;
-template<typename T> class vector_cv;
 
 
 template<typename T> concept vec= requires(T &x, T const &y) {
@@ -167,24 +166,25 @@ template<vec D> struct vec_iface: public D {
   /// @return  View of subvector.
   vector_v<element_t> subvector(size_t n, size_t i= 0, size_t s= 1);
 
-  /// View of immutable subvector of vector.
+  /// View of subvector of vector.
   /// - Arguments are reordered from those given to
-  ///   gsl_vector_const_subvector_with_stride().
+  ///   gsl_vector_subvector_with_stride().
   /// - Putting initial offset and stride at end allows each to have good
   ///   default (0 for initial offset and 1 for stride).
   /// @param n  Number of elements in view.
   /// @param i  Offset in vector of first element in view.
-  /// @param s  Stride of view relative to current vector.
-  /// @return  View of subvector as immutable.
-  vector_cv<element_t> subvector(size_t n, size_t i= 0, size_t s= 1) const;
+  /// @param s  Stride of view relative to vector.
+  /// @return  View of subvector.
+  vector_v<element_t const>
+  subvector(size_t n, size_t i= 0, size_t s= 1) const;
 
   /// View of vector.
   /// @return  View of vector.
   vector_v<element_t> view();
 
-  /// View of vector as immutable.
-  /// @return  View of vector as immutable.
-  vector_cv<element_t> view() const;
+  /// View of vector.
+  /// @return  View of vector.
+  vector_v<element_t const> view() const;
 
   /// Swap elements within this vector.
   /// @param i  Offset of one element.

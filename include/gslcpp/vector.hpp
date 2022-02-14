@@ -270,7 +270,8 @@ struct vector_v: public vec_iface<vector<VIEW, T>> {
   /// @param b  Pointer to first element of array and of view.
   /// @param n  Number of elements in view.
   /// @param s  Stride of view relative to array.
-  vector_v(size_t n, T *b, size_t s= 1): P(e_props<T>::make_view(n, b, s)) {}
+  vector_v(size_t n, T *b, size_t s= 1):
+      P(e_props<T>::make_vec_view(n, b, s)) {}
 
   /// Initialize view of non-decayed C-array.
   /// - Arguments are reordered from those given to
@@ -289,42 +290,8 @@ struct vector_v: public vec_iface<vector<VIEW, T>> {
 };
 
 
-template<typename T= double>
-struct vector_cv: public vec_iface<vector<VIEW, T const>> {
-  using P= vec_iface<vector<VIEW, T const>>;
-  using P::P;
-
-  /// Initialize view of standard (decayed) C-array.
-  /// - Arguments are reordered relative to those given to
-  ///   gsl_vector_view_array_with_stride().
-  /// - Putting number of element at *beginning* disambiguates from constructor
-  ///   from non-decayed array.
-  /// - Putting stride at *end* allows it to have default value of 1.
-  /// @param b  Pointer to first element of array and of view.
-  /// @param n  Number of elements in view.
-  /// @param s  Stride of view relative to array.
-  vector_cv(size_t n, T const *b, size_t s= 1):
-      P(e_props<T const>::make_vec_view(n, b, s)) {}
-
-  /// Initialize view of non-decayed C-array.
-  /// - Arguments are reordered from those given to
-  ///   gsl_vector_subvector_with_stride().
-  /// - Putting initial offset and stride at end allows every argument to have
-  ///   good default (N for number of elements in view, 0 for initial offset,
-  ///   and 1 for stride).
-  /// @tparam N  Number of elements in array.
-  /// @param b  Reference to non-decayed C-array.
-  /// @param n  Number of elements in view.
-  /// @param i  Offset in array of first element in view.
-  /// @param s  Stride of view relative to array.
-  template<int N>
-  vector_cv(T const (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      P(e_props<T const>::make_vec_view(b, n, i, s)) {}
-};
-
-
 template<unsigned S, typename T> vector_s<S, T>::vector_s(T const (&d)[S]) {
-  memcpy(*this, vector_cv(d));
+  memcpy(*this, vector_v(d));
 }
 
 
@@ -334,7 +301,7 @@ vector_s<S, T>::vector_s(T const (&d)[N], size_t i, size_t s) {
   if(i + s * (S - 1) > N - 1) {
     throw std::runtime_error("source-array not big enough");
   }
-  memcpy(*this, vector_cv(d, S, i, s));
+  memcpy(*this, vector_v(d, S, i, s));
 }
 
 
