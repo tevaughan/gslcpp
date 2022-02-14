@@ -33,7 +33,7 @@ concept
 
 
 /// Generic template for struct that provides, on basis of element-type `E`,
-/// appropriate GSL C-types functions, each for constructing appropriate view.
+/// appropriate GSL C-types and functions.
 /// @tparam E  Type of each element in vector.
 template<typename E> struct c_iface_;
 
@@ -84,7 +84,7 @@ template<> struct c_iface_<double const> {
 };
 
 
-/// Properties associated with element-type `E`.
+/// GSL's native C-style interfaces associated with element-type `E`.
 /// @param E  Type of each element in vector or matrix.
 template<typename E>
 requires c_interface<c_iface_<E>> struct c_iface: public c_iface_<E> {
