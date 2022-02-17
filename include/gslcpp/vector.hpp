@@ -2,16 +2,12 @@
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Definition for gsl::vector.
 
-// Use old-style include-guards instead of '#pragma once' here because we have
-// to include at bottom implementation-headers, each of which includes this
-// file; old-style guards here make neovim happy.
-#ifndef GSL_VECTOR_HPP
-#  define GSL_VECTOR_HPP
+#pragma once
 
-#  include "vec-iface.hpp" // vec_iface
-#  include "vec-stor.hpp" // vec_stor
-#  include <algorithm> // swap
-#  include <type_traits> // enable_if_t
+#include "vec-iface.hpp" // vec_iface
+#include "vec-stor.hpp" // vec_stor
+#include <algorithm> // swap
+#include <type_traits> // enable_if_t
 
 /// Namespace for C++-interface to small subset of GSL's functionality,
 /// initially just minimization, which requires using gsl_vector.
@@ -157,7 +153,5 @@ template<typename T> struct vector_v: public vec_iface<vec_view<T>> {
 
 
 } // namespace gsl
-
-#endif // ndef GSL_VECTOR_HPP
 
 // EOF
