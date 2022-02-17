@@ -26,9 +26,11 @@ C++-library wrapping portions of GSL and providing interoperability with Eigen.
 
 ## How to Build
 
+### Unit-Tests
+
 The unit-tests are built, run, and reported on for coverage by way of `cmake`.
 
-`clang++-10` or later will work.
+`clang++-10` or later will work, but `clang++-12` is recommended.
 - [Makefile](Makefile) calls out near the top the default `clang` and `clang++`.
 - Edit [Makefile](Makefile), if necessary, to specify a version.
 - Note that, for coverage-analysis, my cmake-script requires that, if
@@ -53,4 +55,22 @@ After that, products of the coverage-analysis end up in
   - `build/tests_cov-summary.txt`,
   - `build/tests_cov.txt`, and
   - `build/tests_cov.html`.
+
+### Documentation
+
+In order to build documentation, one needs `Doxygen` with version at least
+1.9.2 (to support concepts in C++20) and linked against `clang`. In order to
+build `Doxygen` from source against `clang-12`, one might first, for example,
+do
+```
+apt install flex bison graphviz libclang12-dev
+```
+on a machine like Debian or Ubuntu.
+
+After unpacking `Doxygen`'s source and changing into a build-directory just
+under the top-level of the source-tree, do
+```
+cmake -DClang_DIR:PATH=/usr/lib/cmake/clang-12 -Duse_libclang=YES -G "Unix Makefiles" ..
+```
+on a unix-like machine.
 

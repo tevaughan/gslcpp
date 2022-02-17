@@ -31,10 +31,29 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 find_program (CLANG_TIDY_EXE NAMES "clang-tidy")
 if(CLANG_TIDY_EXE)
   message(STATUS "clang-tidy found!")
-  set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-format-style=file;-header-filter='${CMAKE_SOURCE_DIR}/*'" CACHE STRING "" FORCE)
+  set(CMAKE_CXX_CLANG_TIDY
+    "${CLANG_TIDY_EXE};-format-style=file;-header-filter='${CMAKE_SOURCE_DIR}/*'"
+    CACHE STRING "" FORCE)
 else()
   message(STATUS "clang-tidy NOT found!")
   set(CMAKE_CXX_CLANG_TIDY "" CACHE STRING "" FORCE) # clear it
+endif()
+
+# doxygen
+find_package(Doxygen 1.9.2 REQUIRED dot dia OPTIONAL_COMPONENTS mscgen)
+#
+# The function that is supposed to add a target for generating docs via
+# `doxygen` has failed for me when I use Doxygen-1.9.3.  It stubbornly makes
+# `doxygen` look for `dot` under `/usr/sbin`!
+#doxygen_add_docs(doc)
+#
+# Instead, manually add the target.
+if(DOXYGEN_FOUND)
+  set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+  add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${doxyfile}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMENT "generating API-documentation with Doxygen"
+    VERBATIM)
 endif()
 
 add_subdirectory(test)
