@@ -6,7 +6,7 @@
 
 #include "c-iface.hpp" // c_iface
 #include "vec-iterator.hpp" // vec_iterator
-#include "vec-view.hpp" // vec_view
+#include "vec-stor.hpp" // vec_stor, vec_view, vec_static, vec_dyn
 #include <gsl/gsl_vector.h> // gsl_vector_view, gsl_vector_const_view
 #include <iostream> // ostream
 
@@ -20,16 +20,9 @@ using std::same_as;
 template<typename T> class vector_v;
 
 
-template<typename T> concept vec= requires(T &x, T const &y) {
-  typename T::elem;
-  { x.v() } -> same_as<typename c_iface<typename T::elem>::vec &>;
-  { y.v() } -> same_as<typename c_iface<typename T::elem>::vec const &>;
-};
-
-
 /// Interface for every kind of vector.
 /// @tparam D  Type referring to storage of elements.
-template<vec D> struct vec_iface: public D {
+template<vec_stor D> struct vec_iface: public D {
   /// Inherit constructors.
   using D::D;
 
@@ -79,28 +72,28 @@ template<vec D> struct vec_iface: public D {
   elem const *data() const { return v().data; }
 
   /// Read element with bounds-checking.
-  /// @parameter i  Offset of element.
+  /// @param i  Offset of element.
   /// @return  Value of element.
   elem get(size_t i) const { return gsl_vector_get(&v(), i); }
 
   /// Write element with bounds-checking.
-  /// @parameter i  Offset of element.
-  /// @parameter x  New value for element.
+  /// @param i  Offset of element.
+  /// @param x  New value for element.
   void set(size_t i, elem const &x) { gsl_vector_set(&v(), i, x); }
 
   /// Read element without bounds-checking.
-  /// @parameter i  Offset of element.
+  /// @param i  Offset of element.
   /// @return  Reference to immutable element.
   elem const &operator[](size_t i) const { return data()[i * v().stride]; }
 
   /// Write element without bounds-checking.
-  /// @parameter i  Offset of element.
+  /// @param i  Offset of element.
   /// @return  Reference to mutable element.
   elem &operator[](size_t i) { return data()[i * v().stride]; }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// - This could be useful if stride unknown.
-  /// @parameter i  Offset of element.
+  /// @param i  Offset of element.
   /// @return  Pointer to mutable element.
   elem *ptr(size_t i) {
     if constexpr(std::is_const_v<elem>) {
@@ -112,7 +105,7 @@ template<vec D> struct vec_iface: public D {
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// - This could be useful if stride unknown.
-  /// @parameter i  Offset of element.
+  /// @param i  Offset of element.
   /// @return  Pointer to immutable element.
   elem const *ptr(size_t i) const { return gsl_vector_const_ptr(&v(), i); }
 
@@ -356,15 +349,6 @@ template<vec D> struct vec_iface: public D {
     element_t const &beta,
     vec_iface<U> &y);
 #endif
-
-  template<typename T, typename U>
-  friend bool equal(vec_iface<T> const &u, vec_iface<U> const &v);
-
-  template<typename T, typename U>
-  friend int memcpy(vec_iface<T> &dst, vec_iface<U> const &src);
-
-  template<typename T, typename U>
-  friend int swap(vec_iface<T> &v, vec_iface<U> &w);
 };
 
 
@@ -429,14 +413,14 @@ int axpby(
 
 
 /// Test equality of two vectors.
-/// @tparam T  Type of one descendant of vec_iface.
-/// @tparam U  Type of other descendant of vec_iface.
-/// @param u  Reference to one vector.
-/// @param v  Reference to other vector.
+/// @tparam S1  Type of storage for one vector.
+/// @tparam S2  Type of storage for other vector.
+/// @param v1  Reference to one vector.
+/// @param v2  Reference to other vector.
 /// @return  True only if vectors be equal.
-template<typename T, typename U>
-bool equal(vec_iface<T> const &t, vec_iface<U> const &u) {
-  return gsl_vector_equal(&t.v(), &u.v());
+template<typename S1, typename S2>
+bool equal(vec_iface<S1> const &v1, vec_iface<S2> const &v2) {
+  return gsl_vector_equal(&v1.v(), &v2.v());
 }
 
 
@@ -453,13 +437,14 @@ int memcpy(vec_iface<T> &dst, vec_iface<U> const &src) {
 
 
 /// Swap contents of one and other vector, each with same length.
-/// @tparam T  Type of one descendant of vec_iface.
-/// @tparam U  Type of other descendant of vec_iface.
-/// @param t  One vector.
-/// @param u  Other vector.
+/// @tparam S1  Type of storage for one vector.
+/// @tparam S2  Type of storage for other vector.
+/// @param v1  One vector.
+/// @param v2  Other vector.
 /// @return  TBD.
-template<typename T, typename U> int swap(vec_iface<T> &t, vec_iface<U> &u) {
-  return gsl_vector_swap(&t.v(), &u.v());
+template<typename S1, typename S2>
+int swap(vec_iface<S1> &v1, vec_iface<S2> &v2) {
+  return gsl_vector_swap(&v1.v(), &v2.v());
 }
 
 

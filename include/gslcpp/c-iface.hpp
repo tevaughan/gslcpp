@@ -88,7 +88,7 @@ template<> struct c_iface_<double const> {
 /// @param E  Type of each element in vector or matrix.
 template<typename E>
 requires c_interface<c_iface_<E>> struct c_iface: public c_iface_<E> {
-  using P= c_iface_<E>;
+  using P= c_iface_<E>; ///< Type of ancestor.
 
   using P::subvector;
   using P::vec_view_array;

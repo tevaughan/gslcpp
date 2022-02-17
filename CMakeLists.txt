@@ -54,6 +54,7 @@ if(DOXYGEN_FOUND)
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "generating API-documentation with Doxygen"
     VERBATIM)
+  set_directory_properties(PROPERIES ADDITIONAL_MAKE_CLEAN_FILES html)
 endif()
 
 add_subdirectory(test)
