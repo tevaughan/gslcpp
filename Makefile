@@ -9,15 +9,20 @@
 CC:=clang
 CXX:=clang++
 
-.PHONY : all build clean
+.PHONY : all build_prep clean doc tests_cov
 
-all : build
+all : tests_cov
 
-build:
+tests_cov: build_prep
+	@cd build && make tests_cov
+
+doc: build_prep
+	@cd build && make doc
+
+build_prep:
 	@if ! test -d build; then\
 	  mkdir build && cd build && CC=$(CC) CXX=$(CXX) cmake ..;\
 	 fi
-	@cd build && make tests_cov
 
 clean :
 	@rm -frv build

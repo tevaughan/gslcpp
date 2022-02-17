@@ -74,3 +74,12 @@ cmake -DClang_DIR:PATH=/usr/lib/cmake/clang-12 -Duse_libclang=YES -G "Unix Makef
 ```
 on a unix-like machine.
 
+After `Doxygen` has been installed, one can then, from the top-level of
+`gslcpp`'s tree, do
+```
+make doc
+```
+
+After that, products of the `Doxygen`-build end up under
+  - `build/html`.
+
