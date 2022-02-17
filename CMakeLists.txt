@@ -63,8 +63,8 @@ if(DOXYGEN_FOUND)
     VERBATIM)
   # This deletes the directory 'build/html' in case the Doxygen-generated files
   # were to go there.  This will end up doing nothing at the moment, though,
-  # because the Doxygen-generated files go to 'docs/html' for github-pages
-  # according to 'Doxyfile'.
+  # because the Doxygen-generated files go to top-level 'html' (for
+  # github-pages) according to 'Doxyfile'.
   set_directory_properties(PROPERIES ADDITIONAL_MAKE_CLEAN_FILES html)
 endif()
 
