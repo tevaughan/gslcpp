@@ -81,5 +81,8 @@ make doc
 ```
 
 After that, products of the `Doxygen`-build end up under
-  - `build/html`.
+  - `docs/html`.
+
+Eventually, the documents will be visible at the [github-pages site for
+gslcpp](https://tevaughan.github.io/gslcpp/)
 
