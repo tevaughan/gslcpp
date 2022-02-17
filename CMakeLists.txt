@@ -52,7 +52,12 @@ if(DOXYGEN_FOUND)
   set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
   # This invokes 'doxygen', which runs at the top of the source-tree and puts
   # output under docs/html for github-pages.
-  add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${doxyfile}
+  add_custom_target(doc
+    bash -c "\
+      rm -fr docs/html;\
+      if ${DOXYGEN_EXECUTABLE} ${doxyfile}; then\
+        git add docs/html;\
+      fi"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "generating API-documentation with Doxygen"
     VERBATIM)
