@@ -9,12 +9,21 @@
 namespace gsl {
 
 
-/// Generic template for vec_stor.
+/// Interface required for template referring to storage for vector.
+/// @tparam T  Candidate type of storage for vector.
+template<typename T> concept vec_stor= requires(T &x, T const &y) {
+  typename T::elem;
+  { x.v() } -> same_as<typename c_iface<typename T::elem>::vec &>;
+  { y.v() } -> same_as<typename c_iface<typename T::elem>::vec const &>;
+};
+
+
+/// Interface to vector-storage allocated on stack, statically, at
+/// compile-time, and owned by instance of interface.
 /// - `S` indicates number of elements in instance of generic template.
-/// - One specialization has zero `S`, indicating dynamic allocation.
-/// @tparam S  Positive size or code for allocation and ownership.
-/// @tparam T  Type of each element.
-template<unsigned S, typename T= double> class vec_stor {
+/// @tparam S  Positive size.
+/// @tparam T  Type of each element in vector.
+template<unsigned S, typename T= double> class vec_static {
   static_assert(S > 0);
 
   using view= typename c_iface<T>::vec_view;
@@ -24,7 +33,7 @@ template<unsigned S, typename T= double> class vec_stor {
 
 public:
   /// Initialize GSL's view of static storage, but do not initialize elements.
-  vec_stor(): view_(gsl_vector_view_array(d_, S)) {}
+  vec_static(): view_(gsl_vector_view_array(d_, S)) {}
 
   /// Type of each element.
   using elem= T;
@@ -39,8 +48,10 @@ public:
 };
 
 
-/// Specialization for vector as dynamic container on construction.
-template<typename T> class vec_stor<0, T> {
+/// Interface to vector-storage allocated dynamically, at run-time, and owned
+/// by instance of interface.
+/// @tparam T  Type of each element in vector.
+template<typename T> class vec_dynamic {
 public:
   /// Identifier for each of two possible allocation-methods.
   enum class alloc_type {
@@ -86,7 +97,7 @@ public:
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
   /// @param a  Method to use for allocation.
-  vec_stor(size_t n, alloc_type a= alloc_type::ALLOC): alloc_type_(a) {
+  vec_dynamic(size_t n, alloc_type a= alloc_type::ALLOC): alloc_type_(a) {
     v_= allocate(n);
   }
 
@@ -98,7 +109,7 @@ public:
   /// @tparam V  Type of view.
   /// @param src  Vector to copy.
   template<int S, typename V>
-  vec_stor(vector<S, V> const &src): alloc_type_(alloc_type::ALLOC) {
+  vec_dynamic(vector<S, V> const &src): alloc_type_(alloc_type::ALLOC) {
     v_= allocate(src.pv()->size);
     memcpy(*this, src);
   }
@@ -108,7 +119,7 @@ public:
   /// - Note that this is not a templated constructor because moving works only
   ///   from other vector<DCON>.
   /// @param src  Vector to move.
-  vec_stor(vec_stor &&src): alloc_type_(src.alloc_type_), v_(src.v_) {
+  vec_dynamic(vec_dynamic &&src): alloc_type_(src.alloc_type_), v_(src.v_) {
     src.alloc_type_= alloc_type::ALLOC;
     src.v_= nullptr;
   }
@@ -121,7 +132,7 @@ public:
   /// @tparam V  Type of view.
   /// @param src  Vector to copy.
   /// @return  Reference to instance after modification.
-  template<int S, typename V> vec_stor &operator=(vector<S, V> const &src) {
+  template<int S, typename V> vec_dynamic &operator=(vector<S, V> const &src) {
     alloc_type_= alloc_type::ALLOC;
     v_= allocate(src.pv()->size);
     memcpy(*this, src);
@@ -136,14 +147,42 @@ public:
   ///   from other vector<DCON>.
   /// @param src  Vector to exchange state with.
   /// @return  Reference to instance after modification.
-  vec_stor &operator=(vec_stor &&src) {
+  vec_dynamic &operator=(vec_dynamic &&src) {
     std::swap(alloc_type_, src.alloc_type_);
     std::swap(v_, src.v_);
     return *this;
   }
 
   /// Deallocate vector and its descriptor.
-  virtual ~vec_stor() { free(); }
+  virtual ~vec_dynamic() { free(); }
+};
+
+
+/// Interface to vector-storage not owned by interface.
+/// @tparam T  Type of each element in vector.
+template<typename T> class vec_view {
+  using view= typename c_iface<T>::vec_view;
+  view view_; ///< GSL's view of data outside instance.
+
+public:
+  /// Type of each element.
+  using elem= T;
+
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to vector.
+  auto &v() { return view_.vector; }
+
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to immutable vector.
+  auto const &v() const { return view_.vector; }
+
+  /// Constructor called by TBS.
+  /// @param v  View to copy.
+  vec_view(view const &v): view_(v) {}
+
+  /// GSL's native, C-language interface to vector-view.
+  /// @return  GSL's native, C-language interface to vector-view.
+  view const &cview() const { return view_; }
 };
 
 

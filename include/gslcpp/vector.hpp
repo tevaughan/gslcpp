@@ -21,16 +21,20 @@ namespace gsl {
 using std::enable_if_t;
 
 
+/// Vector whose storage is static, on stack, defined at compile-time, and
+/// owned by instance of vector.
+/// @tparam S  Number of elements in vector.
+/// @tparam T  Type of each element in vector.
 template<unsigned S, typename T= double>
-struct vector_s: public vec_iface<vec_stor<S, T>> {
-  using P= vec_iface<vec_stor<S, T>>;
+struct vector_s: public vec_iface<vec_static<S, T>> {
+  using P= vec_iface<vec_static<S, T>>; ///< Type of ancestor.
   using P::P;
 
   /// Construct by copying from dynamic vector of same size.
   /// - Mismatch in size produces run-time abort.
   /// @tparam OT  Type of other elements.
   /// @param ov  Reference to source-vector.
-  template<typename OT> vector_s(vec_iface<vec_stor<0, OT>> const &ov) {
+  template<typename OT> vector_s(vec_iface<vec_static<0, OT>> const &ov) {
     memcpy(*this, ov);
   }
 
@@ -96,7 +100,7 @@ struct vector_s: public vec_iface<vec_stor<S, T>> {
   }
 
   /// Assign vector by copying from array.
-  /// @param v  Data to copy for initialization.
+  /// @param d  Data to copy.
   /// @return  Reference to modified vector.
   vector_s &operator=(T const (&d)[S]) {
     memcpy(*this, view(d));
@@ -105,14 +109,18 @@ struct vector_s: public vec_iface<vec_stor<S, T>> {
 };
 
 
-template<typename T> struct vector_d: public vec_iface<vec_stor<0, T>> {
-  using P= vec_iface<vec_stor<0, T>>;
+/// Vector with storage allocated dynamically, at run-time, and owned by
+/// instance of vector.
+/// @tparam T  Type of each element in vector.
+template<typename T> struct vector_d: public vec_iface<vec_dynamic<T>> {
+  using P= vec_iface<vec_dynamic<T>>; ///< Type of ancestor.
   using P::P;
 };
 
 
+/// Vector with storage not owned by instance of vector.
 template<typename T> struct vector_v: public vec_iface<vec_view<T>> {
-  using P= vec_iface<vec_view<T>>;
+  using P= vec_iface<vec_view<T>>; ///< Type of ancestor.
   using P::P;
 
   /// Initialize view of standard (decayed) C-array.
@@ -142,6 +150,8 @@ template<typename T> struct vector_v: public vec_iface<vec_view<T>> {
   vector_v(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
       P(c_iface<T>::make_vec_view(b, n, i, s)) {}
 
+  /// Initialize view of other view.
+  /// @param v  Other view.
   vector_v(vec_iface<vec_view<T>> v): P(v.cview()) {}
 };
 
