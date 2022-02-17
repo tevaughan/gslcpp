@@ -50,10 +50,16 @@ find_package(Doxygen 1.9.2 REQUIRED dot dia OPTIONAL_COMPONENTS mscgen)
 # Instead, manually add the target.
 if(DOXYGEN_FOUND)
   set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+  # This invokes 'doxygen', which runs at the top of the source-tree and puts
+  # output under docs/html for github-pages.
   add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${doxyfile}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "generating API-documentation with Doxygen"
     VERBATIM)
+  # This deletes the directory 'build/html' in case the Doxygen-generated files
+  # were to go there.  This will end up doing nothing at the moment, though,
+  # because the Doxygen-generated files go to 'docs/html' for github-pages
+  # according to 'Doxyfile'.
   set_directory_properties(PROPERIES ADDITIONAL_MAKE_CLEAN_FILES html)
 endif()
 
