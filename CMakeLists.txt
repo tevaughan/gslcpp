@@ -51,12 +51,12 @@ find_package(Doxygen 1.9.2 REQUIRED dot dia OPTIONAL_COMPONENTS mscgen)
 if(DOXYGEN_FOUND)
   set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
   # This invokes 'doxygen', which runs at the top of the source-tree and puts
-  # output under docs/html for github-pages.
+  # output under 'html' for github-pages.
   add_custom_target(doc
     bash -c "\
-      rm -fr docs/html;\
+      rm -fr html;\
       if ${DOXYGEN_EXECUTABLE} ${doxyfile}; then\
-        git add docs/html;\
+        echo disabled: git add html;\
       fi"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "generating API-documentation with Doxygen"
