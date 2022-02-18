@@ -12,6 +12,8 @@ C++-library wrapping portions of GSL and providing interoperability with Eigen.
     - `clang++` (as opposed to `g++`) is required because of the tooling used
       here for coverage-analysis.
 
+## Documentation
+
 The source for the page that you are viewing now is the [README.md][0]
 at the top of the source-tree.  It is rendered on-line
   - at the top-level directory of [the github-project][1] and
@@ -68,9 +70,9 @@ After that, products of the coverage-analysis end up in
   - `build/tests_cov.txt`, and
   - `build/tests_cov.html`.
 
-### Documentation
+### Generating Documentation
 
-In order to build documentation, one needs `Doxygen` with version at least
+In order to build the documentation, one needs `Doxygen` with version at least
 1.9.2 (to support concepts in C++20) and linked against `clang`. In order to
 build `Doxygen` from source against `clang-12`, one might first, for example,
 do
@@ -92,9 +94,12 @@ After `Doxygen` has been installed, one can then, from the top-level of
 make doc
 ```
 
-After that, products of the `Doxygen`-build end up under
-  - `html`.
+After that, products of the `Doxygen`-build end up in the local copy under
+  - `docs/html`.
 
-Eventually, the documents will be visible at the [github-pages site for
-gslcpp](https://tevaughan.github.io/gslcpp/)
+Every push to the repository causes a [github-action][3] to regenerate the
+[github-pages site][2].  The rule for this action is [here][4].
+
+[3]: https://github.com/features/actions
+[4]: https://github.com/tevaughan/gslcpp/blob/main/.github/workflows/doxygen-gh-pages.yml
 
