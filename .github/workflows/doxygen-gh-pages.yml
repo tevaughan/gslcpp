@@ -1,34 +1,15 @@
-name: Doxygen
+name: Doxygen GitHub Pages
 
-# Controls when the action will run. Triggers the workflow on push or pull
-# request events but only for the master branch.
 on:
   push:
-    branches: [ master ]
+    branches:
+      - main
 
-
-# Workflow run is made up of one or more jobs that can run sequentially or in
-# parallel.
 jobs:
-  # This workflow contains a single job called "build".
-  build:
-    # The type of runner that the job will run on.
+  deploy:
     runs-on: ubuntu-latest
 
-    # Steps represent sequence of tasks that will be executed as part of job.
     steps:
-    - uses: actions/checkout@v2 # Check out repository under $GITHUB_WORKSPACE.
-
-    - name: Doxygen Action
-      uses: mattnotmitt/doxygen-action@v1.1.0
-      with:
-        doxyfile-path: ./Doxyfile  # default is ./Doxyfile
-        working-directory: .       # default is .
-
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
+    - uses: DenverCoder1/doxygen-github-pages-action@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        # Default Doxyfile build documentation to html directory.
-        # Change the directory if changes in Doxyfile.
-        publish_dir: ./html
