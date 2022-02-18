@@ -6,8 +6,19 @@ C++-library wrapping portions of GSL and providing interoperability with Eigen.
     - GSL's minimization-routines (which depend on GSL's vector).
   - Interoperability with Eigen will provided for GSL's vector (and, eventually
     for GSL's matrix).
-  - A version of `clang++` capable of compiling C++-20 is required.
-    - `clang++-10` is known to work.
+  - A version of `clang++` capable of compiling C++-20 is required to build
+    unit-tests.
+    - `clang++-10` or later is known to work.
+    - `clang++` (as opposed to `g++`) is required because of the tooling used
+      here for coverage-analysis.
+
+The source for the page that you are viewing now is the [README.md](README.md)
+at the top of the source-tree.  It is rendered on-line
+  - at the top-level directory of [the github-project][1] and
+  - as the [main page of the Doxygen-generated documentation][2].
+
+[1]: https://github.com/tevaughan/gslcpp
+[2]: https://tevaughan.github.io/gslcpp/index.html
 
 ## Status
 
