@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include "vec-iface.hpp" // vec_iface
-#include "vec-stor.hpp" // vec_stor
+#include "vec-iface.hpp" // vec_iface, vec_stor, c_iface
 #include <algorithm> // swap
 #include <type_traits> // enable_if_t
 

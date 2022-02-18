@@ -4,10 +4,8 @@
 
 #pragma once
 
-#include "c-iface.hpp" // c_iface
 #include "vec-iterator.hpp" // vec_iterator
-#include "vec-stor.hpp" // vec_stor, vec_view, vec_static, vec_dyn
-#include <gsl/gsl_vector.h> // gsl_vector_view, gsl_vector_const_view
+#include "vec-stor.hpp" // c_iface, gsl_vector, vec_stor, vec_view, ...
 #include <iostream> // ostream
 
 namespace gsl {
