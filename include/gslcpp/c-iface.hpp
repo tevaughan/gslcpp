@@ -21,6 +21,9 @@ using std::runtime_error;
 using std::same_as;
 
 
+/// Interface required for template referring to GSL's native C-types and
+/// C-functions for a given element-type.
+/// @tparam I  Candidate type for interface.
 template<typename I>
 concept
   c_interface= requires(typename I::elem *e, size_t s, typename I::vec *v) {
