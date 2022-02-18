@@ -12,11 +12,12 @@ C++-library wrapping portions of GSL and providing interoperability with Eigen.
     - `clang++` (as opposed to `g++`) is required because of the tooling used
       here for coverage-analysis.
 
-The source for the page that you are viewing now is the [README.md](README.md)
+The source for the page that you are viewing now is the [README.md][0]
 at the top of the source-tree.  It is rendered on-line
   - at the top-level directory of [the github-project][1] and
   - as the [main page of the Doxygen-generated documentation][2].
 
+[0]: https://github.com/tevaughan/gslcpp/blob/main/README.md
 [1]: https://github.com/tevaughan/gslcpp
 [2]: https://tevaughan.github.io/gslcpp/index.html
 
