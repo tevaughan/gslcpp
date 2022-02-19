@@ -18,8 +18,7 @@ jobs:
         doxyfile-path: ./Doxyfile
         working-directory: .
 
-    - run: sudo apt-get install cmake make
-    - run: sudo apt-get install clang clang-tidy llvm
+    - run: sudo apt-get install catch cmake clang clang-tidy llvm make
     - run: sudo apt-get install dia doxygen graphviz
     - run: make
 
