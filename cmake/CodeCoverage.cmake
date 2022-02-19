@@ -71,8 +71,6 @@ mark_as_advanced(
 #   EXECUTABLE tests     # name of executable
 #   DEPENDENCIES tests   # dependencies to build
 #   )
-#
-# But is executable in PROJECT_BINARY_DIR or in CMAKE_CURRENT_BINARY_DIR?
 function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
 
   set(options NONE)
@@ -88,6 +86,12 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
   if(NOT LLVM_COV_PATH)
     message(FATAL_ERROR "llvm-cov not found.")
   endif() # NOT LLVM_COV_PATH
+
+  # BE AWARE that products of coverage-analysis must go directly in to the
+  # `docs`-directory, just under the top level of the source-tree.  The scheme
+  # used to deploy to gh-pages requires that the deployment be a *flat*
+  # directory with no subdirectories.
+  set(productsDir ${CMAKE_SOURCE_DIR}/docs)
 
   # Setup target
   add_custom_target(
@@ -106,20 +110,20 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-            > ${CMAKE_SOURCE_DIR}/docs/${Coverage_NAME}-summary.txt
+            > ${productsDir}/${Coverage_NAME}-summary.txt
     COMMAND ${LLVM_COV_PATH}
             show
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-            > ${CMAKE_SOURCE_DIR}/docs/${Coverage_NAME}.txt
+            > ${productsDir}/${Coverage_NAME}.txt
     COMMAND ${LLVM_COV_PATH}
             show
             --format=html
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-            > ${CMAKE_SOURCE_DIR}/docs/${Coverage_NAME}.html
+            > ${productsDir}/${Coverage_NAME}.html
     # Clean up
     COMMAND ${CMAKE_COMMAND} -E remove
     ${Coverage_NAME}.profdata default.profraw

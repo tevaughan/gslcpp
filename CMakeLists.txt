@@ -45,6 +45,10 @@ endif()
 # C++-20 concepts correctly.
 find_package(Doxygen REQUIRED dot dia OPTIONAL_COMPONENTS mscgen)
 #
+# BE AWARE that Doxygen must put its files *directly* into the `docs`-directory
+# at the top-level of the source-tree.  The scheme used to deploy to gh-pages
+# requires a *flat* directory with no subdirectories.
+#
 # The function that is supposed to add a target for generating docs via
 # `doxygen` has failed for me when I use Doxygen-1.9.3.  It stubbornly makes
 # `doxygen` look for `dot` under `/usr/sbin`!

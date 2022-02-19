@@ -8,8 +8,7 @@
 #include <algorithm> // swap
 #include <type_traits> // enable_if_t
 
-/// Namespace for C++-interface to small subset of GSL's functionality,
-/// initially just minimization, which requires using gsl_vector.
+/// Namespace for C++-interface to GSL.
 namespace gsl {
 
 
