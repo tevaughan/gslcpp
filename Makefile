@@ -25,7 +25,7 @@ build_prep:
 	 fi
 
 clean :
-	@rm -frv build
+	@rm -frv build docs
 	@rm -fv default.profraw
 	@rm -fv io-test.dat
 	@rm -fv output-test.txt
