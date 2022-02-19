@@ -25,28 +25,9 @@ jobs:
     - name: Top-Level GH Pages Deployment
       uses: peaceiris/actions-gh-pages@v3
       with:
-        enable_jekyll: false                      # Always same.
-        github_token: ${{ secrets.GITHUB_TOKEN }} # Always same.
-        publish_dir: ./docs                       # Always same.
-        force_orphan: true                        # True for first.
-        keep_files: false                         # False for first.
-
-    - name: Doxygen GH Pages Deployment
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        enable_jekyll: false                      # Always same.
-        github_token: ${{ secrets.GITHUB_TOKEN }} # Always same.
-        publish_dir: ./docs                       # Always same.
-        force_orphan: false                       # False for subsequent.
-        keep_files: true                          # True for subsequent.
-        destination_dir: ./html                   # Unique.
-
-    - name: Coverage GH Pages Deployment
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        enable_jekyll: false                      # Always same.
-        github_token: ${{ secrets.GITHUB_TOKEN }} # Always same.
-        publish_dir: ./docs                       # Always same.
-        force_orphan: false                       # False for subsequent.
-        keep_files: true                          # True for subsequent.
-        destination_dir: ./coverage               # Unique.
+        enable_jekyll: false
+        force_orphan: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        keep_files: true  # Seems necessary for subdirectories to deploy.
+        publish_branch: gh-pages
+        publish_dir: ./docs
