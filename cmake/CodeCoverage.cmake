@@ -105,7 +105,7 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
             -sparse
             -o ${Coverage_NAME}.profdata
             default.profraw
-    COMMAND mkdir -p ${productsDir} && ${LLVM_COV_PATH}
+    COMMAND ${LLVM_COV_PATH}
             report
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
