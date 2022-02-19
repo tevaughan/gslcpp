@@ -22,12 +22,11 @@ jobs:
     - run: sudo apt-get install dia doxygen graphviz
     - run: make
 
-    - name: Top-Level GH Pages Deployment
+    - name: Deployment of GH-Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         enable_jekyll: false
         force_orphan: true
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        keep_files: true  # Seems necessary for subdirectories to deploy.
         publish_branch: gh-pages
         publish_dir: ./docs
