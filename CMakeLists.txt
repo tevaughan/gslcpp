@@ -40,7 +40,10 @@ else()
 endif()
 
 # doxygen
-find_package(Doxygen 1.9.2 REQUIRED dot dia OPTIONAL_COMPONENTS mscgen)
+#
+# doxygen-1.9.2 is not require here, but version below 1.9.2 will not document
+# C++-20 concepts correctly.
+find_package(Doxygen REQUIRED dot dia OPTIONAL_COMPONENTS mscgen)
 #
 # The function that is supposed to add a target for generating docs via
 # `doxygen` has failed for me when I use Doxygen-1.9.3.  It stubbornly makes

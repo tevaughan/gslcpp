@@ -75,10 +75,14 @@ After that, products of the coverage-analysis end up in
 
 ### Generating Documentation
 
-In order to build the documentation, one needs `Doxygen` with version at least
-1.9.2 (to support concepts in C++20) and linked against `clang`. In order to
-build `Doxygen` from source against `clang-12`, one might first, for example,
-do
+In order to build the documentation, one needs `Doxygen`. Any version below
+1.9.2 will not document C++-20 concepts correctly, but one can still use an
+older version of Doxygen if that be all that one's operating system provides.
+
+#### Building Doxygen from Source
+
+In order to build `Doxygen` from source against `clang-12`, one might first,
+for example, do
 ```
 apt install flex bison graphviz libclang12-dev
 ```
@@ -91,6 +95,8 @@ cmake -DClang_DIR:PATH=/usr/lib/cmake/clang-12 -Duse_libclang=YES -G "Unix Makef
 ```
 on a unix-like machine.
 
+#### Using Doxygen
+
 After `Doxygen` has been installed, one can then, from the top-level of
 `gslcpp`'s tree, do
 ```
@@ -99,6 +105,8 @@ make doc
 
 After that, products of the `Doxygen`-build end up in the local copy under
   - `docs/html`.
+
+## Products of Github Action
 
 Every push to the repository causes a [github-action][3] to regenerate the
 [github-pages site][2].  The rule for this action is [here][4].
