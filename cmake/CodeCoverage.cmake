@@ -87,10 +87,11 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
     message(FATAL_ERROR "llvm-cov not found.")
   endif() # NOT LLVM_COV_PATH
 
-  # BE AWARE that products of coverage-analysis must go directly in to the
-  # `docs`-directory, just under the top level of the source-tree.  The scheme
-  # used to deploy to gh-pages requires that the deployment be a *flat*
-  # directory with no subdirectories.
+  # Products of coverage-analysis go directly into the `docs`-directory, just
+  # under the top level of the source-tree.  I have not managed to get the
+  # scheme that I use to deploy to gh-pages to work with one directory for
+  # Doxygen output and another for code-coverage output.  So for the moment
+  # everything is lumped directly into `docs`.
   set(productsDir ${CMAKE_SOURCE_DIR}/docs)
 
   # Setup target
