@@ -18,7 +18,7 @@ jobs:
         doxyfile-path: ./Doxyfile
         working-directory: .
 
-    - run: apt install make cmake clang llvm
+    - run: sudo apt-get install make cmake clang llvm
     - run: make
 
     - name: GH Pages Deployment
