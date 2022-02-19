@@ -70,7 +70,7 @@ PROJECT_LOGO           =
 #
 # - HTML_OUTPUT       is set to 'docs'.
 #
-OUTPUT_DIRECTORY       =
+OUTPUT_DIRECTORY       = docs
 
 
 # If the CREATE_SUBDIRS tag is set to YES then doxygen will create 4096 sub-
