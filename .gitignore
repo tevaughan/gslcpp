@@ -3,6 +3,5 @@ access
 access-workflow
 build
 default.profraw
-html
 io-test.dat
 output-test.txt

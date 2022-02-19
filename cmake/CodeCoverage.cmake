@@ -100,25 +100,26 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
             -sparse
             -o ${Coverage_NAME}.profdata
             default.profraw
+    COMMAND mkdir -p ${CMAKE_SOURCE_DIR}/docs/coverage
     COMMAND ${LLVM_COV_PATH}
             report
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-            > ${Coverage_NAME}-summary.txt
+            > ${CMAKE_SOURCE_DIR}/docs/coverage/${Coverage_NAME}-summary.txt
     COMMAND ${LLVM_COV_PATH}
             show
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-            > ${Coverage_NAME}.txt
+            > ${CMAKE_SOURCE_DIR}/docs/coverage/${Coverage_NAME}.txt
     COMMAND ${LLVM_COV_PATH}
             show
             --format=html
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-            > ${Coverage_NAME}.html
+            > ${CMAKE_SOURCE_DIR}/docs/coverage/${Coverage_NAME}.html
     # Clean up
     COMMAND ${CMAKE_COMMAND} -E remove
     ${Coverage_NAME}.profdata default.profraw
