@@ -18,11 +18,17 @@ with Eigen.
 The source for the page that you are viewing now is the [README.md][0]
 at the top of the source-tree.  It is rendered on-line
   - at the top-level directory of [the github-project][1] and
-  - as the [main page of the Doxygen-generated documentation][2].
+  - as the [main page of the Doxygen-generated documentation][2] on the
+    github-pages site.
+
+The current [summary][summary] and [details][details] of code-coverage via
+unit-tests are also available in the github-pages site.
 
 [0]: https://github.com/tevaughan/gslcpp/blob/main/README.md
 [1]: https://github.com/tevaughan/gslcpp
-[2]: https://tevaughan.github.io/gslcpp/html/index.html
+[2]: https://tevaughan.github.io/gslcpp/index.html
+[summary]: https://tevaughan.github.io/gslcpp/tests_cov-summary.txt
+[details]: https://tevaughan.github.io/gslcpp/tests_cov.html
 
 ## Status
 
