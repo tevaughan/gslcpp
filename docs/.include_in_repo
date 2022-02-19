@@ -1,0 +1,9 @@
+This file exists so that the docs-directory will be included in the repository.
+
+- If I do the trick of using '.gitignore' here and then ignoring all of the
+  products of the build, then nothing will be pushed by the gh-pages deploy
+  script.
+
+- If I have no file in this directory corresponding to the repository, then the
+  directory will be pruned and the gh-pages deployment will fail when the
+  build-system tries to write the products of code-coverage here.
