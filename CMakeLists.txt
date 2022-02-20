@@ -45,13 +45,6 @@ endif()
 # C++-20 concepts correctly.
 find_package(Doxygen REQUIRED dot dia OPTIONAL_COMPONENTS mscgen)
 #
-# Doxygen must put its files *directly* into the `docs`-directory at the
-# top-level of the source-tree.  I have not gotten my scheme used to deploy to
-# gh-pages to work with Doxygen's output in a subdirectory of `docs`,
-# along-side another subdirectory for the output of the analysis of
-# code-coverage.  So I lump everything directly into 'docs', at least for the
-# moment.
-#
 # The function that is supposed to add a target for generating docs via
 # `doxygen` has failed for me when I use Doxygen-1.9.3.  It stubbornly makes
 # `doxygen` look for `dot` under `/usr/sbin`!
@@ -73,8 +66,8 @@ if(DOXYGEN_FOUND)
     VERBATIM)
   # This deletes the directory 'build/html' in case the Doxygen-generated files
   # were to go there.  This will end up doing nothing at the moment, though,
-  # because the Doxygen-generated files go to top-level 'html' (for
-  # github-pages) according to 'Doxyfile'.
+  # because the Doxygen-generated files go to 'docs/html' relative to the
+  # top-level source-directory (for github-pages) according to 'Doxyfile'.
   set_directory_properties(PROPERIES ADDITIONAL_MAKE_CLEAN_FILES html)
 endif()
 

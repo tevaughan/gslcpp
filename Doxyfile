@@ -58,18 +58,6 @@ PROJECT_LOGO           =
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
-# TEV 2022 Feb
-#
-# HTML-output go into the top-level 'docs'-directory.  Output from Doxygen must
-# merge with other output (products of coverage-analysis, for example) into
-# that same flat directory, and I have had trouble getting the deployment to
-# work the html-output from Doxygen in a subdirectory of 'docs'.  So
-#
-# - OUTPUT_DIRECTORY  is left blank to indicate the top-level directory of the
-#                     source-tree, and
-#
-# - HTML_OUTPUT       is set to 'docs'.
-#
 OUTPUT_DIRECTORY       = docs
 
 
@@ -1248,19 +1236,7 @@ GENERATE_HTML          = YES
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
 
-# TEV 2022 Feb
-#
-# HTML-output go into the top-level 'docs'-directory.  Output from Doxygen must
-# merge with other output (products of coverage-analysis, for example) into
-# that same flat directory, and I have had trouble getting the deployment to
-# work the html-output from Doxygen in a subdirectory of 'docs'.  So
-#
-# - OUTPUT_DIRECTORY  is left blank to indicate the top-level directory of the
-#                     source-tree, and
-#
-# - HTML_OUTPUT       is set to 'docs'.
-#
-HTML_OUTPUT            = docs
+HTML_OUTPUT            = html
 
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for each
