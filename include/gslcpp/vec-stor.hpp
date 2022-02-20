@@ -24,8 +24,8 @@ template<typename T> concept vec_stor= requires(T &x, T const &y) {
 
 
 /// Interface to vector-storage allocated on stack, statically, at
-/// compile-time, and owned by instance of interface.
-/// - `S` indicates number of elements in instance of generic template.
+/// compile-time, and owned by instance of interface.  `S` indicates number of
+/// elements in instance of generic template.
 /// @tparam S  Positive size.
 /// @tparam T  Type of each element in vector.
 template<unsigned S, typename T= double> class vec_static {
@@ -145,11 +145,10 @@ public:
   }
 #endif
 
-  /// Move on assignment.
-  /// - This instance's original descriptor and data should be deallocated
-  ///   after move, when src's destructor is called.
-  /// - Note that this is not a templated function because moving works only
-  ///   from other vector<DCON>.
+  /// Move on assignment.  This instance's original descriptor and data should
+  /// be deallocated after move, when src's destructor is called.  Note that
+  /// this is not a templated function because moving works only from other
+  /// vector<DCON>.
   /// @param src  Vector to exchange state with.
   /// @return  Reference to instance after modification.
   vec_dynamic &operator=(vec_dynamic &&src) {

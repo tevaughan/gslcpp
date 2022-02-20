@@ -90,7 +90,7 @@ template<vec_stor S> struct vec_iface: public S {
   elem &operator[](size_t i) { return data()[i * v().stride]; }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
-  /// - This could be useful if stride unknown.
+  /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to mutable element.
   elem *ptr(size_t i) {
@@ -102,7 +102,7 @@ template<vec_stor S> struct vec_iface: public S {
   }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
-  /// - This could be useful if stride unknown.
+  /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to immutable element.
   elem const *ptr(size_t i) const { return gsl_vector_const_ptr(&v(), i); }
@@ -142,11 +142,10 @@ template<vec_stor S> struct vec_iface: public S {
   /// @return  Zero only on success.
   int fscanf(FILE *f) { return gsl_vector_fscanf(f, &v()); }
 
-  /// View of subvector of vector.
-  /// - Arguments are reordered from those given to
-  ///   gsl_vector_subvector_with_stride().
-  /// - Putting initial offset and stride at end allows each to have good
-  ///   default (0 for initial offset and 1 for stride).
+  /// View of subvector of vector.  Arguments are reordered from those given to
+  /// gsl_vector_subvector_with_stride().  Putting initial offset and stride at
+  /// end allows each to have good default (0 for initial offset and 1 for
+  /// stride).
   /// @param n  Number of elements in view.
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
@@ -155,11 +154,10 @@ template<vec_stor S> struct vec_iface: public S {
     return c_iface<elem>::subvector(&v(), i, s, n);
   }
 
-  /// View of subvector of vector.
-  /// - Arguments are reordered from those given to
-  ///   gsl_vector_subvector_with_stride().
-  /// - Putting initial offset and stride at end allows each to have good
-  ///   default (0 for initial offset and 1 for stride).
+  /// View of subvector of vector.  Arguments are reordered from those given to
+  /// gsl_vector_subvector_with_stride().  Putting initial offset and stride at
+  /// end allows each to have good default (0 for initial offset and 1 for
+  /// stride).
   /// @param n  Number of elements in view.
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.

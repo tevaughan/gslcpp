@@ -22,6 +22,12 @@ jobs:
     - run: sudo apt-get install dia doxygen graphviz
     - run: make
 
+      # WARNING: Avoid installing 'publish_dir/.gitignore' in main branch if
+      # purpose be to hide products of build in output of 'git status' and if
+      # products be intended for gh-pages.  peaceiris's action works well, but
+      # it will silently fail to deploy any files and/or directories mentioned
+      # in 'publish_dir/.gitignore'.  In order to hide products of build on
+      # main branch, put entry for 'publish_dir' into top-level '.gitignore'.
     - name: Deployment of GH-Pages
       uses: peaceiris/actions-gh-pages@v3
       with:

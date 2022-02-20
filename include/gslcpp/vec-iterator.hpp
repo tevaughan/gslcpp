@@ -9,10 +9,9 @@
 namespace gsl {
 
 
-/// Iterator for vec_iface.
-/// - There is no `operator->` because element is always of type double.
-/// - Even if vector actually have non-const elements, const vector is treated
-///   as having const elements.
+/// Iterator for vec_iface.  There is no `operator->` because element is always
+/// of type double.  Even if vector actually have non-const elements, const
+/// vector is treated as having const elements.
 /// @tparam V  Either `vec_iface` or `vec_iface const`.
 template<typename V> class vec_iterator {
 public:
@@ -35,25 +34,24 @@ private:
     }
   }
 
-  /// Generic declaration for struct that gives type of vector's element.
-  /// - Even if vector actually have non-const elements, const vector is
-  ///   treated as having const elements.
+  /// Generic declaration for struct that gives type of vector's element.  Even
+  /// if vector actually have non-const elements, const vector is treated as
+  /// having const elements.
   /// @tparam is_const  True for constant-type element.
   template<bool is_const> struct element;
 
-  /// Specialization for constant type of element of vector.
-  /// - Even if vector actually have non-const elements, const vector is
-  ///   treated as having const elements.
+  /// Specialization for constant type of element of vector.  Even if vector
+  /// actually have non-const elements, const vector is treated as having const
+  /// elements.
   template<> struct element<true> { using type= double const; };
 
-  /// Specialization for non-constant type of element for vector.
-  /// - Even if vector actually have non-const elements, const vector is
-  ///   treated as having const elements.
+  /// Specialization for non-constant type of element for vector.  Even if
+  /// vector actually have non-const elements, const vector is treated as
+  /// having const elements.
   template<> struct element<false> { using type= double; };
 
-  /// Type of element for vector.
-  /// - Even if vector actually have non-const elements, const vector is
-  ///   treated as having const elements.
+  /// Type of element for vector.  Even if vector actually have non-const
+  /// elements, const vector is treated as having const elements.
   using E= typename element<std::is_const_v<V>>::type;
 
 public:
@@ -108,10 +106,9 @@ public:
     return tmp;
   }
 
-  /// For positive `n`, increase, by `n`, offset of element pointed to.
-  /// - This is like fast forward in place for an iterator.
-  /// - Do nothing when `n == 0`.
-  /// - Actually decrease offset when `n < 0`.
+  /// For positive `n`, increase, by `n`, offset of element pointed to.  This
+  /// is like fast forward in place for an iterator.  Do nothing when `n == 0`.
+  /// Actually decrease offset when `n < 0`.
   /// @param n  Number by which to increase offset.
   /// @return  Reference to this instance after increase of offset.
   vec_iterator &operator+=(difference_type n) {
@@ -119,10 +116,9 @@ public:
     return *this;
   }
 
-  /// For positive `n`, decrease, by `n`, offset of element pointed to.
-  /// - This is like fast reverse in place for an iterator.
-  /// - Do nothing when `n == 0`.
-  /// - Actually increase offset when `n < 0`.
+  /// For positive `n`, decrease, by `n`, offset of element pointed to.  This
+  /// is like fast reverse in place for an iterator.  Do nothing when `n == 0`.
+  /// Actually increase offset when `n < 0`.
   /// @param n  Number by which to decrease offset.
   /// @return  Reference to this instance after decrease of offset.
   vec_iterator &operator-=(difference_type n) {
@@ -131,7 +127,7 @@ public:
   }
 
   /// Produce new iterator at offset greater than that of existing iterator.
-  /// - This is like fast forward for an iterator.
+  /// This is like fast forward for an iterator.
   /// @param i  Iterator.
   /// @param n  Offset.
   /// @return  Iterator whose internal offset is `n` more than that of `i`.
@@ -141,7 +137,7 @@ public:
   }
 
   /// Produce new iterator at offset greater than that of existing iterator.
-  /// - This is like fast forward for an iterator.
+  /// This is like fast forward for an iterator.
   /// @param n  Offset.
   /// @param i  Iterator.
   /// @return  Iterator whose internal offset is `n` more than that of `i`.
@@ -149,8 +145,8 @@ public:
     return i + n;
   }
 
-  /// Produce new iterator at offset less than that of existing iterator.
-  /// - This is like fast reverse for an iterator.
+  /// Produce new iterator at offset less than that of existing iterator.  This
+  /// is like fast reverse for an iterator.
   /// @param i  Iterator.
   /// @param n  Offset.
   /// @return  Iterator whose internal offset is `n` less than that of `i`.
@@ -159,8 +155,8 @@ public:
     return i;
   }
 
-  /// Difference in offset between two iterators.
-  /// - Throw runtime_error if iterators do not point into same vector.
+  /// Difference in offset between two iterators.  Throw runtime_error if
+  /// iterators do not point into same vector.
   /// @tparam I  Type of vector for iterator with offset to subtract.
   /// @param i  Iterator with offset to subtract.
   /// @return  Difference between offset of this iterator and offset of `i`.
@@ -170,8 +166,8 @@ public:
     return off_ - i.off_;
   }
 
-  /// Compare two iterators for equality.
-  /// - Throw runtime_error if iterators do not point into same vector.
+  /// Compare two iterators for equality.  Throw runtime_error if iterators do
+  /// not point into same vector.
   /// @tparam B  Type of vector for second iterator.
   /// @param b  Second iterator.
   /// @return  True only if this and second iterator point to same element.
@@ -180,8 +176,8 @@ public:
     return off_ == b.off_;
   }
 
-  /// Compare two iterators for inequality.
-  /// - Throw runtime_error if iterators do not point into same vector.
+  /// Compare two iterators for inequality.  Throw runtime_error if iterators do
+  /// not point into same vector.
   /// @tparam B  Type of vector for second iterator.
   /// @param b  Second iterator.
   /// @return  True only if this and second do not point to same element.
@@ -190,8 +186,8 @@ public:
     return off_ != b.off_;
   }
 
-  /// Compare two iterators for ordering.
-  /// - Throw runtime_error if iterators do not point into same vector.
+  /// Compare two iterators for ordering.  Throw runtime_error if iterators do
+  /// not point into same vector.
   /// @tparam B  Type of vector for second iterator.
   /// @param b  Second iterator.
   /// @return  True only if this iterator point to element earlier in vector
@@ -201,8 +197,8 @@ public:
     return off_ < b.off_;
   }
 
-  /// Compare two iterators for ordering.
-  /// - Throw runtime_error if iterators do not point into same vector.
+  /// Compare two iterators for ordering.  Throw runtime_error if iterators do
+  /// not point into same vector.
   /// @tparam B  Type of vector for second iterator.
   /// @param b  Second iterator.
   /// @return  True only if this iterator point to element later in vector
@@ -212,8 +208,8 @@ public:
     return off_ > b.off_;
   }
 
-  /// Compare two iterators for ordering.
-  /// - Throw runtime_error if iterators do not point into same vector.
+  /// Compare two iterators for ordering.  Throw runtime_error if iterators do
+  /// not point into same vector.
   /// @tparam B  Type of vector for second iterator.
   /// @param b  Second iterator.
   /// @return  True only if this iterator point to element either same as or
@@ -223,8 +219,8 @@ public:
     return off_ <= b.off_;
   }
 
-  /// Compare two iterators for ordering.
-  /// - Throw runtime_error if iterators do not point into same vector.
+  /// Compare two iterators for ordering.  Throw runtime_error if iterators do
+  /// not point into same vector.
   /// @tparam B  Type of vector for second iterator.
   /// @param b  Second iterator.
   /// @return  True only if this iterator point to element either same as or
