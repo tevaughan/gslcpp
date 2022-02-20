@@ -79,9 +79,9 @@ make
 at the top of the tree.
 
 After that, products of the coverage-analysis end up in
-  - `docs/coverage/tests_cov-summary.txt`,
-  - `docs/coverage/tests_cov.txt`, and
-  - `docs/coverage/tests_cov.html`.
+  - `docs/tests_cov-summary.txt`,
+  - `docs/tests_cov.txt`, and
+  - `docs/tests_cov.html`.
 
 ### Generating Documentation
 
