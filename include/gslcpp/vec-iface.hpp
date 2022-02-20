@@ -285,11 +285,19 @@ template<vec_stor S> struct vec_iface: public S {
     return *this;
   }
 
-#if defined(GSL_VER) && GSL_VER > 26
   /// Sum of elements.
   /// @return  Sum of elements.
-  elem sum() const { return gsl_vector_sum(&v()); }
-#endif
+  elem sum() const {
+    constexpr float GSL_VER= GSL_VERSION;
+    if constexpr(GSL_VER > 2.6f) {
+      return gsl_vector_sum(&v());
+    } else {
+      // TODO: Use interface for Eigen here.
+      elem s= 0;
+      for(auto const &e: *this) s+= e;
+      return s;
+    }
+  }
 
   /// Greatest value of any element.
   /// @return  Greatest value of any element.
@@ -336,15 +344,6 @@ template<vec_stor S> struct vec_iface: public S {
   /// True only if every element be non-negative.
   /// @return  True only if every element be non-negative.
   bool isnonneg() const { return gsl_vector_isnonneg(&v()); }
-
-#if defined(GSL_VER) && GSL_VER > 26
-  template<typename T, typename U>
-  friend int axpby(
-    element_t const &alpha,
-    vec_iface<T> const &x,
-    element_t const &beta,
-    vec_iface<U> &y);
-#endif
 };
 
 
@@ -388,7 +387,6 @@ std::ostream &operator<<(std::ostream &os, vec_iface<U> const &u) {
 }
 
 
-#if defined(GSL_VER) && GSL_VER > 26
 /// Linearly combine vector `x` into vector `y` in place.
 /// @tparam T  Type of descendant of vec_iface for first vector.
 /// @tparam U  Type of descendant of vec_iface for second vector.
@@ -403,9 +401,14 @@ int axpby(
   vec_iface<T> const &x,
   typename U::element_t const &beta,
   vec_iface<U> &y) {
-  return gsl_vector_axpby(alpha, &x.v(), beta, &y.v());
+  constexpr float GSL_VER= GSL_VERSION;
+  if constexpr(GSL_VER > 2.6f) {
+    return gsl_vector_axpby(alpha, &x.v(), beta, &y.v());
+  } else {
+    // TODO: Use Eigen.
+    throw "not implemented yet";
+  }
 }
-#endif
 
 
 /// Test equality of two vectors.

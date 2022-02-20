@@ -71,5 +71,10 @@ if(DOXYGEN_FOUND)
   set_directory_properties(PROPERIES ADDITIONAL_MAKE_CLEAN_FILES html)
 endif()
 
+# gsl
+#
+find_package(GSL REQUIRED)
+add_definitions(-DGSL_VERSION=${GSL_VERSION})
+
 add_subdirectory(test)
 

@@ -16,6 +16,9 @@
 include(CMakeParseArguments)
 
 # Check prereqs
+# Note that following replacements leave intact any numeric suffix.
+# For example, 'clang++-12' becomes 'llvm-cov-12'.
+# This ensures consistency between executable and analyzer.
 string(REPLACE "clang++" "llvm-cov" desired_llvm_cov ${CMAKE_CXX_COMPILER})
 find_program(LLVM_COV_PATH NAMES ${desired_llvm_cov} PATHS ENV PATH)
 string(REPLACE "clang++" "llvm-profdata" desired_llvm_profdata
