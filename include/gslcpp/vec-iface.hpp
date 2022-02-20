@@ -19,19 +19,19 @@ template<typename T> class vector_v;
 
 
 /// Interface for every kind of vector.
-/// @tparam D  Type referring to storage of elements.
-template<vec_stor D> struct vec_iface: public D {
+/// @tparam S  Type referring to storage of elements.
+template<vec_stor S> struct vec_iface: public S {
   /// Inherit constructors.
-  using D::D;
+  using S::S;
 
   /// Inherit assigment.
-  using D::operator=;
-
-  /// Type of each element.
-  using typename D::elem;
+  using S::operator=;
 
   /// Reference to gsl_vector.
-  using D::v;
+  using S::v;
+
+  /// Type of each element.
+  using elem= typename S::elem;
 
   /// Type of iterator that points to mutable element.
   using iterator= vec_iterator<vec_iface>;

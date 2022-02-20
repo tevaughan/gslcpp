@@ -127,7 +127,7 @@ template<typename T> struct vector_v: public vec_iface<vec_view<T>> {
   /// @param n  Number of elements in view.
   /// @param s  Stride of view relative to array.
   vector_v(size_t n, T *b, size_t s= 1):
-      P(c_iface<T>::make_vec_view(n, b, s)) {}
+      P(c_iface<T>::vec_view_array(b, s, n)) {}
 
   /// Initialize view of non-decayed C-array.
   /// - Arguments are reordered from those given to
@@ -142,7 +142,7 @@ template<typename T> struct vector_v: public vec_iface<vec_view<T>> {
   /// @param s  Stride of view relative to array.
   template<int N>
   vector_v(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      P(c_iface<T>::make_vec_view(b, n, i, s)) {}
+      P(c_iface<T>::vec_view_array(b + i, s, n)) {}
 
   /// Initialize view of other view.
   /// @param v  Other view.

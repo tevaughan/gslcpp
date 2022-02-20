@@ -25,7 +25,8 @@ build_prep:
 	 fi
 
 clean :
-	@rm -frv build docs
+	@rm -frv build
+	@rm -frv docs/html docs/tests_cov*
 	@rm -fv default.profraw
 	@rm -fv io-test.dat
 	@rm -fv output-test.txt
