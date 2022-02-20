@@ -1,6 +1,11 @@
 /// @file       include/gslcpp/vec-stor.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition for gsl::vec_stor.
+///
+/// @brief      Definition for
+///             gsl::vec_stor,
+///             gsl::vec_static,
+///             gsl::vec_dynamic, and
+///             gsl::vec_view.
 
 #pragma once
 
