@@ -19,18 +19,18 @@ jobs:
         working-directory: .
 
     - run: >
-      sudo apt-get install
-      catch
-      clang
-      clang-tidy
-      cmake
-      dia
-      doxygen
-      graphviz
-      libeigen3-dev
-      libgsl-dev
-      llvm
-      make
+        sudo apt-get install
+        catch
+        clang
+        clang-tidy
+        cmake
+        dia
+        doxygen
+        graphviz
+        libeigen3-dev
+        libgsl-dev
+        llvm
+        make
 
     - run: make
 
