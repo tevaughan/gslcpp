@@ -407,4 +407,27 @@ TEST_CASE("Stream-operator works.", "[vec]") {
 }
 
 
+TEST_CASE("vec_iface::view() works.", "[vec-iface]") {
+  vector_s<3> const a({2.0, 3.0, 1.0});
+  auto const b= a.view();
+  REQUIRE(a == b);
+  REQUIRE(&a[0] == &b[0]);
+  REQUIRE(&a[1] == &b[1]);
+  REQUIRE(&a[2] == &b[2]);
+}
+
+
+TEST_CASE("vec_iface::sum() works.", "[vec-iface]") {
+  vector_s<3> const a({2.0, 3.0, 1.0});
+  REQUIRE(a.sum() == 6.0);
+}
+
+
+TEST_CASE("vec_iface::isneg() works.", "[vec-iface]") {
+  vector_s<3> const a({-2.0, -3.0, 1.0});
+  vector_s<3> const b({-2.0, -3.0, -1.0});
+  REQUIRE(a.isneg() == false);
+  REQUIRE(b.isneg() == true);
+}
+
 // EOF
