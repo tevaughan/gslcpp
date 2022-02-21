@@ -18,8 +18,20 @@ jobs:
         doxyfile-path: ./Doxyfile
         working-directory: .
 
-    - run: sudo apt-get install catch cmake clang clang-tidy llvm make
-    - run: sudo apt-get install dia doxygen graphviz
+    - run: >
+      sudo apt-get install
+      catch
+      clang
+      clang-tidy
+      cmake
+      dia
+      doxygen
+      graphviz
+      libeigen3-dev
+      libgsl-dev
+      llvm
+      make
+
     - run: make
 
       # WARNING: Avoid installing 'publish_dir/.gitignore' in main branch if
