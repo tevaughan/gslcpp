@@ -117,7 +117,7 @@ template<vec_stor S> struct vec_iface: public S {
 
   /// Set element at offset `i` to unity and every other element to zero.
   /// @param i  Offset of element set to unity.
-  /// @return  TBD.
+  /// @return  TBD: GSL's documentation does not specify.
   int set_basis(size_t i) { return gsl_vector_set_basis(&v(), i); }
 
   /// Write non-portable binary image of vector to file.
@@ -183,19 +183,19 @@ template<vec_stor S> struct vec_iface: public S {
   /// Swap elements within this vector.
   /// @param i  Offset of one element.
   /// @param j  Offset of other element.
-  /// @return  TBD.
+  /// @return  TBD: GSL's documentation does not specify.
   int swap_elements(size_t i, size_t j) {
     return gsl_vector_swap_elements(&v(), i, j);
   }
 
   /// Reverse order of elements.
-  /// @return  TBD.
+  /// @return  TBD: GSL's documentation does not specify.
   int reverse() { return gsl_vector_reverse(&v()); }
 
   /// Add contents of `b` into this vector in place.
   /// @tparam T  Type of vector to be added into this.
   /// @param b  Vector whose contents should be added into this.
-  /// @return  TBD.
+  /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int add(vec_iface<T> const &b) {
     return gsl_vector_add(&v(), &b.v());
   }
@@ -203,7 +203,7 @@ template<vec_stor S> struct vec_iface: public S {
   /// Subtract contents of `b` from this vector in place.
   /// @tparam T  Type of vector to be subtracted from this.
   /// @param b  Vector whose contents should be subtracted from this.
-  /// @return  TBD.
+  /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int sub(vec_iface<T> const &b) {
     return gsl_vector_sub(&v(), &b.v());
   }
@@ -211,7 +211,7 @@ template<vec_stor S> struct vec_iface: public S {
   /// Multiply contents of `b` into this vector in place.
   /// @tparam T  Type of vector to be multiplied into this.
   /// @param b  Vector whose contents should be multiplied into this.
-  /// @return  TBD.
+  /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int mul(vec_iface<T> const &b) {
     return gsl_vector_mul(&v(), &b.v());
   }
@@ -219,7 +219,7 @@ template<vec_stor S> struct vec_iface: public S {
   /// Divide contents of `b` into this vector in place.
   /// @tparam T  Type of vector to be divided into this.
   /// @param b  Vector whose contents should be divided into this.
-  /// @return  TBD.
+  /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int div(vec_iface<T> const &b) {
     return gsl_vector_div(&v(), &b.v());
   }
@@ -262,7 +262,7 @@ template<vec_stor S> struct vec_iface: public S {
 
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
-  /// @return  TBD.
+  /// @return  TBD: GSL's documentation does not specify.
   int scale(elem const &x) { return gsl_vector_scale(&v(), x); }
 
   /// Multiply scalar into this vector in place.
@@ -275,7 +275,7 @@ template<vec_stor S> struct vec_iface: public S {
 
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
-  /// @return  TBD.
+  /// @return  TBD: GSL's documentation does not specify.
   int add_constant(elem const &x) { return gsl_vector_add_constant(&v(), x); }
 
   /// Add constant into each element of this vector in place.
@@ -390,11 +390,11 @@ std::ostream &operator<<(std::ostream &os, vec_iface<U> const &u) {
 /// Linearly combine vector `x` into vector `y` in place.
 /// @tparam T  Type of descendant of vec_iface for first vector.
 /// @tparam U  Type of descendant of vec_iface for second vector.
-/// @param a  Coeffient of `x`.
+/// @param alpha  Coeffient of `x`.
 /// @param x  First vector (source).
-/// @param b  Coefficient of `y`.
+/// @param beta  Coefficient of `y`.
 /// @param y  Second vector and (source and destination).
-/// @return  TBD.
+/// @return  TBD: GSL's documentation does not specify.
 template<typename T, typename U>
 int axpby(
   typename T::element_t const &alpha,
@@ -427,7 +427,7 @@ bool equal(vec_iface<S1> const &v1, vec_iface<S2> const &v2) {
 /// @tparam U  Type of descendant of vec_iface for source.
 /// @param dst  Destination.
 /// @param src  Source.
-/// @return  TBD.
+/// @return  TBD: GSL's documentation does not specify.
 template<typename T, typename U>
 int memcpy(vec_iface<T> &dst, vec_iface<U> const &src) {
   return gsl_vector_memcpy(&dst.v(), &src.v());
@@ -439,7 +439,7 @@ int memcpy(vec_iface<T> &dst, vec_iface<U> const &src) {
 /// @tparam S2  Type of storage for other vector.
 /// @param v1  One vector.
 /// @param v2  Other vector.
-/// @return  TBD.
+/// @return  TBD: GSL's documentation does not specify.
 template<typename S1, typename S2>
 int swap(vec_iface<S1> &v1, vec_iface<S2> &v2) {
   return gsl_vector_swap(&v1.v(), &v2.v());
