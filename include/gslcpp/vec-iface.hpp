@@ -6,6 +6,7 @@
 
 #include "vec-iterator.hpp" // vec_iterator
 #include "vec-stor.hpp" // c_iface, gsl_vector, vec_stor, vec_view, ...
+#include "version.hpp" // VERSION
 #include <iostream> // ostream
 
 namespace gsl {
@@ -288,8 +289,7 @@ template<vec_stor S> struct vec_iface: public S {
   /// Sum of elements.
   /// @return  Sum of elements.
   elem sum() const {
-    constexpr float GSL_VER= GSL_VERSION;
-    if constexpr(GSL_VER > 2.6f) {
+    if constexpr(gsl::VERSION.at_least(2, 7)) {
       return gsl_vector_sum(&v());
     } else {
       // TODO: Use interface for Eigen here.
@@ -401,8 +401,7 @@ int axpby(
   vec_iface<T> const &x,
   typename U::element_t const &beta,
   vec_iface<U> &y) {
-  constexpr float GSL_VER= GSL_VERSION;
-  if constexpr(GSL_VER > 2.6f) {
+  if constexpr(gsl::VERSION.at_least(2, 7)) {
     return gsl_vector_axpby(alpha, &x.v(), beta, &y.v());
   } else {
     // TODO: Use Eigen.

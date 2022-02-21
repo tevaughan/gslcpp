@@ -39,6 +39,18 @@ else()
   set(CMAKE_CXX_CLANG_TIDY "" CACHE STRING "" FORCE) # clear it
 endif()
 
+# eigen
+#
+find_package(Eigen3 REQUIRED)
+message("-- Found Eigen-${Eigen3_VERSION}")
+string(REGEX REPLACE "^([0-9]+)\..*" "\\1" EIGEN_MAJOR ${Eigen3_VERSION})
+string(REGEX REPLACE
+  "^[0-9]+\.([0-9]+)(\..*)?" "\\1" EIGEN_MINOR ${Eigen3_VERSION})
+message("--   Using ${EIGEN_MAJOR} as major version-number")
+message("--   Using ${EIGEN_MINOR} as minor version-number")
+add_definitions(-DEIGEN_MAJOR=${EIGEN_MAJOR})
+add_definitions(-DEIGEN_MINOR=${EIGEN_MINOR})
+
 # doxygen
 #
 # doxygen-1.9.2 is not require here, but version below 1.9.2 will not document
@@ -74,7 +86,12 @@ endif()
 # gsl
 #
 find_package(GSL REQUIRED)
-add_definitions(-DGSL_VERSION=${GSL_VERSION})
+string(REGEX REPLACE "^([0-9]+)\..*" "\\1" GSL_MAJOR ${GSL_VERSION})
+string(REGEX REPLACE "^[0-9]+\.([0-9]+)(\..*)?" "\\1" GSL_MINOR ${GSL_VERSION})
+message("--   Using ${GSL_MAJOR} as major version-number")
+message("--   Using ${GSL_MINOR} as minor version-number")
+add_definitions(-DGSL_MAJOR=${GSL_MAJOR})
+add_definitions(-DGSL_MINOR=${GSL_MINOR})
 
 add_subdirectory(test)
 
