@@ -4,20 +4,13 @@
 
 #pragma once
 
-// Use inline-definition of each accessor-function.
-// - Define this before including `gsl_vector.h`.
-#ifndef HAVE_INLINE
-#  define HAVE_INLINE
-#endif
+#include "impl/iface-double.hpp" // impl::iface<double>
+#include <concepts> // same_as
 
-#include <functional> // fucntion
-#include <gsl/gsl_vector.h> // gsl_vector_view, gsl_vector_const_view
-#include <stdexcept> // runtime_error
-
+/// Namespace for interface to GSL's native, C-language functions and types.
 namespace gsl::c {
 
 
-using std::runtime_error;
 using std::same_as;
 
 
@@ -25,8 +18,8 @@ using std::same_as;
 /// C-functions for a given element-type.
 /// @tparam I  Candidate type for interface.
 template<typename I>
-concept
-  interface= requires(typename I::elem_t *e, size_t s, typename I::vector *v) {
+concept interface=
+  requires(typename I::elem_t *e, std::size_t s, typename I::vector *v) {
   typename I::elem_t;
   typename I::vector;
   typename I::vector_view;
@@ -35,81 +28,11 @@ concept
 };
 
 
-/// Generic template for struct that provides, on basis of element-type `E`,
-/// appropriate GSL C-types and functions.
-/// @tparam E  Type of each element in vector.
-template<typename E> struct iface_;
-
-
-/// Specialization for non-const double.
-template<> struct iface_<double> {
-  /// Type of each element in vector or matrix.
-  using elem_t= double;
-
-  /// GSL's C-library type for non-const elements.
-  using vector= gsl_vector;
-
-  /// GSL's C-library type for view of non-const elements.
-  using vector_view= gsl_vector_view;
-
-  /// Function that converts array to GSL's native view.
-  /// @param b  Pointer to first element of view.
-  /// @param s  Stride of successive elements relative to pointer.
-  /// @param n  Number of elements in view.
-  /// @return  GSL's native, C-style view.
-  static vector_view vector_view_array(elem_t *b, size_t s, size_t n) {
-    return gsl_vector_view_array_with_stride(b, s, n);
-  }
-
-  /// Function that converts subvector to GSL's native view.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset in gsl_vector of first element in view.
-  /// @param s  Stride of elements in view relative to offsets in `v`.
-  /// @param n  Number of elements in view.
-  /// @return  GSL's native, C-style view.
-  static vector_view subvector(vector *v, size_t i, size_t s, size_t n) {
-    return gsl_vector_subvector_with_stride(v, i, s, n);
-  }
-};
-
-
-/// Specialization for const double.
-template<> struct iface_<double const> {
-  /// Type of each element in vector or matrix.
-  using elem_t= double const;
-
-  /// GSL's C-library type for non-const elements.
-  using vector= gsl_vector const;
-
-  /// GSL's C-library type for view of non-const elements.
-  using vector_view= gsl_vector_const_view;
-
-  /// Function that converts array to GSL's native view.
-  /// @param b  Pointer to first element of view.
-  /// @param s  Stride of successive elements relative to pointer.
-  /// @param n  Number of elements in view.
-  /// @return  GSL's native, C-style view.
-  static vector_view vector_view_array(elem_t *b, size_t s, size_t n) {
-    return gsl_vector_const_view_array_with_stride(b, s, n);
-  }
-
-  /// Function that converts subvector to GSL's native view.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset in gsl_vector of first element in view.
-  /// @param s  Stride of elements in view relative to offsets in `v`.
-  /// @param n  Number of elements in view.
-  /// @return  GSL's native, C-style view.
-  static vector_view subvector(vector *v, size_t i, size_t s, size_t n) {
-    return gsl_vector_const_subvector_with_stride(v, i, s, n);
-  }
-};
-
-
 /// GSL's native C-style interfaces associated with element-type `E`.
 /// @param E  Type of each element in vector or matrix.
 template<typename E>
-requires interface<iface_<E>> struct iface: public iface_<E> {
-  using P= iface_<E>; ///< Type of ancestor.
+requires interface<impl::iface<E>> struct iface: public impl::iface<E> {
+  using P= impl::iface<E>; ///< Type of ancestor.
 
   using P::subvector;
   using P::vector_view_array;
