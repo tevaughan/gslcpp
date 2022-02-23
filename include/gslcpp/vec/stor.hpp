@@ -1,17 +1,17 @@
-/// @file       include/gslcpp/vec-stor.hpp
+/// @file       include/gslcpp/vec/stor.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 ///
 /// @brief      Definition for
-///             gsl::vec_stor,
-///             gsl::vec_static,
-///             gsl::vec_dynamic, and
-///             gsl::vec_view.
+///             gsl::vec::stor,
+///             gsl::vec::stat,
+///             gsl::vec::dyna, and
+///             gsl::vec::view.
 
 #pragma once
 
-#include "c/iface.hpp" // c_iface
+#include "../c/iface.hpp" // c_iface
 
-namespace gsl {
+namespace gsl::vec {
 
 
 using std::same_as;
@@ -19,7 +19,7 @@ using std::same_as;
 
 /// Interface required for template referring to storage for vector.
 /// @tparam T  Candidate type of storage for vector.
-template<typename T> concept vec_stor= requires(T &x, T const &y) {
+template<typename T> concept stor= requires(T &x, T const &y) {
   typename T::elem;
   { x.v() } -> same_as<typename c::iface<typename T::elem>::vector &>;
   { y.v() } -> same_as<typename c::iface<typename T::elem>::vector const &>;
@@ -31,7 +31,7 @@ template<typename T> concept vec_stor= requires(T &x, T const &y) {
 /// elements in instance of generic template.
 /// @tparam S  Positive size.
 /// @tparam T  Type of each element in vector.
-template<unsigned S, typename T= double> class vec_static {
+template<unsigned S, typename T= double> class stat {
   static_assert(S > 0);
 
   using view= typename c::iface<T>::vector_view;
@@ -41,7 +41,7 @@ template<unsigned S, typename T= double> class vec_static {
 
 public:
   /// Initialize GSL's view of static storage, but do not initialize elements.
-  vec_static(): view_(gsl_vector_view_array(d_, S)) {}
+  stat(): view_(gsl_vector_view_array(d_, S)) {}
 
   /// Type of each element.
   using elem= T;
@@ -59,7 +59,7 @@ public:
 /// Interface to vector-storage allocated dynamically, at run-time, and owned
 /// by instance of interface.
 /// @tparam T  Type of each element in vector.
-template<typename T> class vec_dynamic {
+template<typename T> class dyna {
 public:
   /// Identifier for each of two possible allocation-methods.
   enum class alloc_type {
@@ -105,7 +105,7 @@ public:
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
   /// @param a  Method to use for allocation.
-  vec_dynamic(size_t n, alloc_type a= alloc_type::ALLOC): alloc_type_(a) {
+  dyna(size_t n, alloc_type a= alloc_type::ALLOC): alloc_type_(a) {
     v_= allocate(n);
   }
 
@@ -117,7 +117,7 @@ public:
   /// @tparam V  Type of view.
   /// @param src  Vector to copy.
   template<int S, typename V>
-  vec_dynamic(vector<S, V> const &src): alloc_type_(alloc_type::ALLOC) {
+  dyna(vector<S, V> const &src): alloc_type_(alloc_type::ALLOC) {
     v_= allocate(src.pv()->size);
     memcpy(*this, src);
   }
@@ -127,7 +127,7 @@ public:
   /// - Note that this is not a templated constructor because moving works only
   ///   from other vector<DCON>.
   /// @param src  Vector to move.
-  vec_dynamic(vec_dynamic &&src): alloc_type_(src.alloc_type_), v_(src.v_) {
+  dyna(dyna &&src): alloc_type_(src.alloc_type_), v_(src.v_) {
     src.alloc_type_= alloc_type::ALLOC;
     src.v_= nullptr;
   }
@@ -140,7 +140,7 @@ public:
   /// @tparam V  Type of view.
   /// @param src  Vector to copy.
   /// @return  Reference to instance after modification.
-  template<int S, typename V> vec_dynamic &operator=(vector<S, V> const &src) {
+  template<int S, typename V> dyna &operator=(vector<S, V> const &src) {
     alloc_type_= alloc_type::ALLOC;
     v_= allocate(src.pv()->size);
     memcpy(*this, src);
@@ -154,22 +154,22 @@ public:
   /// vector<DCON>.
   /// @param src  Vector to exchange state with.
   /// @return  Reference to instance after modification.
-  vec_dynamic &operator=(vec_dynamic &&src) {
+  dyna &operator=(dyna &&src) {
     std::swap(alloc_type_, src.alloc_type_);
     std::swap(v_, src.v_);
     return *this;
   }
 
   /// Deallocate vector and its descriptor.
-  virtual ~vec_dynamic() { free(); }
+  virtual ~dyna() { free(); }
 };
 
 
 /// Interface to vector-storage not owned by interface.
 /// @tparam T  Type of each element in vector.
-template<typename T> class vec_view {
-  using view= typename c::iface<T>::vector_view;
-  view view_; ///< GSL's view of data outside instance.
+template<typename T> class view {
+  using cview_t= typename c::iface<T>::vector_view;
+  cview_t view_; ///< GSL's view of data outside instance.
 
 public:
   /// Type of each element.
@@ -185,14 +185,14 @@ public:
 
   /// Constructor called by TBS.
   /// @param v  View to copy.
-  vec_view(view const &v): view_(v) {}
+  view(cview_t const &v): view_(v) {}
 
   /// GSL's native, C-language interface to vector-view.
   /// @return  GSL's native, C-language interface to vector-view.
-  view const &cview() const { return view_; }
+  cview_t const &cview() const { return view_; }
 };
 
 
-} // namespace gsl
+} // namespace gsl::vec
 
 // EOF

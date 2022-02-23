@@ -20,15 +20,15 @@ using std::enable_if_t;
 /// @tparam S  Number of elements in vector.
 /// @tparam T  Type of each element in vector.
 template<unsigned S, typename T= double>
-struct vector_s: public vec::iface<vec_static<S, T>> {
-  using P= vec::iface<vec_static<S, T>>; ///< Type of ancestor.
+struct vector_s: public vec::iface<vec::stat<S, T>> {
+  using P= vec::iface<vec::stat<S, T>>; ///< Type of ancestor.
   using P::P;
 
   /// Construct by copying from dynamic vector of same size.
   /// - Mismatch in size produces run-time abort.
   /// @tparam OT  Type of other elements.
   /// @param ov  Reference to source-vector.
-  template<typename OT> vector_s(vec::iface<vec_static<0, OT>> const &ov) {
+  template<typename OT> vector_s(vec::iface<vec::stat<0, OT>> const &ov) {
     memcpy(*this, ov);
   }
 
@@ -36,7 +36,7 @@ struct vector_s: public vec::iface<vec_static<S, T>> {
   /// - Mismatch in size produces run-time abort.
   /// @tparam OT  Type of other elements.
   /// @param ov  Reference to source-vector.
-  template<typename OT> vector_s(vec::iface<vec_view<OT>> const &ov) {
+  template<typename OT> vector_s(vec::iface<vec::view<OT>> const &ov) {
     memcpy(*this, ov);
   }
 
@@ -50,7 +50,7 @@ struct vector_s: public vec::iface<vec_static<S, T>> {
   /// @param d  Data to copy for initialization.
   vector_s(T const (&d)[S]) {
     auto const cview= c::iface<T const>::vector_view_array(d, 1, S);
-    memcpy(*this, vec::iface<vec_view<T const>>(cview));
+    memcpy(*this, vec::iface<vec::view<T const>>(cview));
   }
 
   /// Initialize GSL's view, and initialize vector by copying from array.
@@ -70,7 +70,7 @@ struct vector_s: public vec::iface<vec_static<S, T>> {
       throw std::runtime_error("source-array not big enough");
     }
     auto const cview= c::iface<T const>::vector_view_array(d + i, s, S);
-    memcpy(*this, vec::iface<vec_view<T const>>(cview));
+    memcpy(*this, vec::iface<vec::view<T const>>(cview));
   }
 
   /// Initialize GSL's view, and initialize elements by copying from array.
@@ -105,15 +105,15 @@ struct vector_s: public vec::iface<vec_static<S, T>> {
 /// Vector with storage allocated dynamically, at run-time, and owned by
 /// instance of vector.
 /// @tparam T  Type of each element in vector.
-template<typename T> struct vector_d: public vec::iface<vec_dynamic<T>> {
-  using P= vec::iface<vec_dynamic<T>>; ///< Type of ancestor.
+template<typename T> struct vector_d: public vec::iface<vec::dyna<T>> {
+  using P= vec::iface<vec::dyna<T>>; ///< Type of ancestor.
   using P::P;
 };
 
 
 /// Vector with storage not owned by instance of vector.
-template<typename T> struct vector_v: public vec::iface<vec_view<T>> {
-  using P= vec::iface<vec_view<T>>; ///< Type of ancestor.
+template<typename T> struct vector_v: public vec::iface<vec::view<T>> {
+  using P= vec::iface<vec::view<T>>; ///< Type of ancestor.
   using P::P;
 
   /// Initialize view of standard (decayed) C-array.  Arguments are reordered
@@ -142,7 +142,7 @@ template<typename T> struct vector_v: public vec::iface<vec_view<T>> {
 
   /// Initialize view of other view.
   /// @param v  Other view.
-  vector_v(vec::iface<vec_view<T>> v): P(v.cview()) {}
+  vector_v(vec::iface<vec::view<T>> v): P(v.cview()) {}
 };
 
 
