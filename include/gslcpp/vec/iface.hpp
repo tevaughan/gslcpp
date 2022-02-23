@@ -94,19 +94,15 @@ template<stor S> struct iface: public S {
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to mutable element.
-  elem *ptr(size_t i) {
-    if constexpr(std::is_const_v<elem>) {
-      return gsl_vector_const_ptr(&v(), i);
-    } else {
-      return gsl_vector_ptr(&v(), i);
-    }
-  }
+  elem *ptr(size_t i) { return c::iface<elem>::vector_ptr(&v(), i); }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to immutable element.
-  elem const *ptr(size_t i) const { return gsl_vector_const_ptr(&v(), i); }
+  elem const *ptr(size_t i) const {
+    return c::iface<elem const>::vector_ptr(&v(), i);
+  }
 
   /// Set every element.
   /// @param x  Value to which each element should be set.

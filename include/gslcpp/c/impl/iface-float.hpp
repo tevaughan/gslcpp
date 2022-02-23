@@ -48,6 +48,14 @@ template<> struct iface<float> {
   static elem_t vector_get(vector const *v, size_t i) {
     return gsl_vector_float_get(v, i);
   }
+
+  /// Fetch pointer to element at offset `i` with bounds-checking.
+  /// @param v  Pointer to gsl_vector.
+  /// @param i  Offset of element.
+  /// @return  Pointer to element.
+  static elem_t *vector_ptr(vector *v, size_t i) {
+    return gsl_vector_float_ptr(v, i);
+  }
 };
 
 
@@ -87,6 +95,14 @@ template<> struct iface<float const> {
   /// @return  Copy of element.
   static elem_t vector_get(vector *v, size_t i) {
     return gsl_vector_float_get(v, i);
+  }
+
+  /// Fetch pointer to element at offset `i` with bounds-checking.
+  /// @param v  Pointer to gsl_vector.
+  /// @param i  Offset of element.
+  /// @return  Pointer to element.
+  static elem_t *vector_ptr(vector *v, size_t i) {
+    return gsl_vector_float_const_ptr(v, i);
   }
 };
 
