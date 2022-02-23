@@ -1,10 +1,17 @@
 /// @file       include/gslcpp/c/iface.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition for gsl::c::iface_, gsl::c::iface.
+///
+/// @brief      Definition for
+///             gsl::c::vector,
+///             gsl::c::vector_view,
+///             gsl::c::basic_iface,
+///             gsl::c::setter_iface, and
+///             gsl::c::iface.
 
 #pragma once
 
-#include "impl/iface-double.hpp" // impl::iface<double>
+#include "xf-double.hpp" // xf<double>
+#include "xf-float.hpp" // xf<float>
 #include <concepts> // same_as
 
 /// Namespace for interface to GSL's native, C-language functions and types.
@@ -15,26 +22,61 @@ using std::remove_const_t;
 using std::same_as;
 
 
-/// Interface required for template referring to GSL's native C-types and
-/// C-functions for a given element-type.
-/// @tparam I  Candidate type for interface.
-template<typename I>
-concept interface=
-      requires(typename I::elem_t *e, std::size_t s, typename I::vector *v) {
-  typename I::elem_t;
-  typename I::vector;
-  typename I::vector_view;
-  { I::vector_view_array(e, s, s) } -> same_as<typename I::vector_view>;
-  { I::subvector(v, s, s, s) } -> same_as<typename I::vector_view>;
-  { I::vector_get(v, s) } -> same_as<remove_const_t<typename I::elem_t>>;
-  { I::vector_ptr(v, s) } -> same_as<typename I::elem_t *>;
+/// Specific type of `gsl_vector` corresponding to element-type `E`. For
+/// example, when `E==double`, the type is `gsl_vector`, and when `E==float`,
+/// the type is `gsl_vector_float`.
+/// @param E  Type of each element.
+template<typename E> using vector= typename xf<E>::vector;
+
+/// Specific type of `gsl_vector_view` corresponding to element-type `E`.  For
+/// example, when `E==double`, the type is `gsl_vector_view`, and when
+/// `E==float`, the type is `gsl_vector_float_view`.
+/// @param E  Type of each element.
+template<typename E> using vector_view= typename xf<E>::vector_view;
+
+
+/// Requirements on the basic interface to GSL's native C-types and
+/// C-functions.  The type of each element of the vector or the matrix might be
+/// either `const` or non-`const`.
+/// @tparam E  type of each element.
+template<typename E>
+concept basic_iface= requires(E *e, std::size_t s, vector<E> *v) {
+  typename vector<E>;
+  typename vector_view<E>;
+  { xf<E>::vector_view_array(e, s, s) } -> same_as<vector_view<E>>;
+  { xf<E>::subvector(v, s, s, s) } -> same_as<vector_view<E>>;
+  { xf<E>::vector_get(v, s) } -> same_as<remove_const_t<E>>;
+  { xf<E>::vector_ptr(v, s) } -> same_as<E *>;
 };
 
 
-/// GSL's native C-style interfaces associated with element-type `E`.
-/// @param E  Type of each element in vector or matrix.
+/// Requirements on the full interface to GSL's native C-types and C-functions.
+/// The type of each element of the vector or the matrix must be non-`const`.
+/// @tparam E  Type of each element.
 template<typename E>
-requires interface<impl::iface<E>> struct iface: public impl::iface<E> {};
+concept setter_iface= basic_iface<E> &&
+requires(E const &e, std::size_t s, vector<E> *v) {
+  { xf<E>::vector_set(v, s, e) } -> same_as<void>;
+};
+
+
+/// Declaration of generic template for GSL's native C-style interfaces
+/// associated with elements of type `E`.  Two specializations are defined, one
+/// for elements of non-`const` type and the other for elements of
+/// `const`-type.
+/// @tparam E  Type of each element.
+template<typename E> struct iface;
+
+
+/// Specialization for vector- and matrix-elements of `const`-type.
+/// @param E  Non-`const` version of `const`-type of each element.
+template<typename E>
+requires basic_iface<E const> struct iface<E const>: public xf<E const> {};
+
+
+/// Specialization for vector- and matrix-elements of non-`const` type.
+/// @param E  (Non-`const`) type of each element.
+template<typename E> requires setter_iface<E> struct iface<E>: public xf<E> {};
 
 
 } // namespace gsl::c

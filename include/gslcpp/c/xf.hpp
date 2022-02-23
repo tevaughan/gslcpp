@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/impl/iface.hpp
+/// @file       include/gslcpp/c/xf.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Declaration for gsl::c::impl::iface.
+/// @brief      Declaration for gsl::c::xf.
 
 #pragma once
 
@@ -10,19 +10,19 @@
 #  define HAVE_INLINE
 #endif
 
-#include <gsl/gsl_vector.h> // gsl_vector_view, gsl_vector_const_view
+#include <gsl/gsl_vector.h> // gsl_vector, gsl_vector_float, etc.
 
 /// Namespace for implementation, by type of element in vector or matrix, of
 /// interface to GSL's native, C-language functions and types.
-namespace gsl::c::impl {
+namespace gsl::c {
 
 
 /// Generic template for struct that provides, on basis of element-type `E`,
 /// appropriate GSL C-types and functions.
 /// @tparam E  Type of each element in vector.
-template<typename E> struct iface;
+template<typename E> struct xf;
 
 
-}
+} // namespace gsl::c
 
 // EOF

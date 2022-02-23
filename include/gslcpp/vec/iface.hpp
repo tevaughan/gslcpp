@@ -32,7 +32,7 @@ template<stor S> struct iface: public S {
   using S::v;
 
   /// Type of each element.
-  using elem= typename S::elem;
+  using E= typename S::elem;
 
   /// Type of iterator that points to mutable element.
   using iterator= vec::iterator<iface>;
@@ -63,50 +63,50 @@ template<stor S> struct iface: public S {
   /// Pointer to first element in vector.
   /// - Be careful to check `v().stride` in case data be not contiguous.
   /// @return  Pointer to first element.
-  elem *data() { return v().data; }
+  E *data() { return v().data; }
 
   /// Pointer to first element in immutable vector.
   /// - Be careful to check `v().stride` in case data be not contiguous.
   /// @return  Pointer to first immutable element.
-  elem const *data() const { return v().data; }
+  E const *data() const { return v().data; }
 
   /// Read element with bounds-checking.
   /// @param i  Offset of element.
   /// @return  Value of element.
-  elem get(size_t i) const { return c::iface<elem>::vector_get(&v(), i); }
+  E get(size_t i) const { return c::iface<E>::vector_get(&v(), i); }
 
   /// Write element with bounds-checking.
   /// @param i  Offset of element.
   /// @param x  New value for element.
-  void set(size_t i, elem const &x) { gsl_vector_set(&v(), i, x); }
+  void set(size_t i, E const &x) { c::iface<E>::vector_set(&v(), i, x); }
 
   /// Read element without bounds-checking.
   /// @param i  Offset of element.
   /// @return  Reference to immutable element.
-  elem const &operator[](size_t i) const { return data()[i * v().stride]; }
+  E const &operator[](size_t i) const { return data()[i * v().stride]; }
 
   /// Write element without bounds-checking.
   /// @param i  Offset of element.
   /// @return  Reference to mutable element.
-  elem &operator[](size_t i) { return data()[i * v().stride]; }
+  E &operator[](size_t i) { return data()[i * v().stride]; }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to mutable element.
-  elem *ptr(size_t i) { return c::iface<elem>::vector_ptr(&v(), i); }
+  E *ptr(size_t i) { return c::iface<E>::vector_ptr(&v(), i); }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to immutable element.
-  elem const *ptr(size_t i) const {
-    return c::iface<elem const>::vector_ptr(&v(), i);
+  E const *ptr(size_t i) const {
+    return c::iface<E const>::vector_ptr(&v(), i);
   }
 
   /// Set every element.
   /// @param x  Value to which each element should be set.
-  void set_all(elem const &x) { gsl_vector_set_all(&v(), x); }
+  void set_all(E const &x) { gsl_vector_set_all(&v(), x); }
 
   /// Set every element to zero.
   void set_zero() { gsl_vector_set_zero(&v()); }
@@ -147,8 +147,8 @@ template<stor S> struct iface: public S {
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
-  iface<view<elem>> subvector(size_t n, size_t i= 0, size_t s= 1) {
-    return c::iface<elem>::subvector(&v(), i, s, n);
+  iface<view<E>> subvector(size_t n, size_t i= 0, size_t s= 1) {
+    return c::iface<E>::subvector(&v(), i, s, n);
   }
 
   /// View of subvector of vector.  Arguments are reordered from those given to
@@ -159,20 +159,18 @@ template<stor S> struct iface: public S {
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
-  iface<view<elem const>> subvector(size_t n, size_t i= 0, size_t s= 1) const {
-    return c::iface<elem const>::subvector(&v(), i, s, n);
+  iface<view<E const>> subvector(size_t n, size_t i= 0, size_t s= 1) const {
+    return c::iface<E const>::subvector(&v(), i, s, n);
   }
 
   /// View of vector.
   /// @return  View of vector.
-  iface<view<elem>> view() {
-    return c::iface<elem>::subvector(&v(), 0, 1, size());
-  }
+  iface<view<E>> view() { return c::iface<E>::subvector(&v(), 0, 1, size()); }
 
   /// View of vector.
   /// @return  View of vector.
-  iface<vec::view<elem const>> view() const {
-    return c::iface<elem const>::subvector(&v(), 0, 1, size());
+  iface<vec::view<E const>> view() const {
+    return c::iface<E const>::subvector(&v(), 0, 1, size());
   }
 
   /// Swap elements within this vector.
@@ -258,12 +256,12 @@ template<stor S> struct iface: public S {
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
   /// @return  TBD: GSL's documentation does not specify.
-  int scale(elem const &x) { return gsl_vector_scale(&v(), x); }
+  int scale(E const &x) { return gsl_vector_scale(&v(), x); }
 
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
   /// @return  Reference to this vector after modification.
-  iface &operator*=(elem const &x) {
+  iface &operator*=(E const &x) {
     scale(x);
     return *this;
   }
@@ -271,24 +269,24 @@ template<stor S> struct iface: public S {
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
   /// @return  TBD: GSL's documentation does not specify.
-  int add_constant(elem const &x) { return gsl_vector_add_constant(&v(), x); }
+  int add_constant(E const &x) { return gsl_vector_add_constant(&v(), x); }
 
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
   /// @return  Reference to this vector after modification.
-  iface &operator+=(elem const &x) {
+  iface &operator+=(E const &x) {
     add_constant(x);
     return *this;
   }
 
   /// Sum of elements.
   /// @return  Sum of elements.
-  elem sum() const {
+  E sum() const {
     if constexpr(gsl::VERSION.at_least(2, 7)) {
       return gsl_vector_sum(&v());
     } else {
       // TODO: Use interface for Eigen here.
-      elem s= 0;
+      std::remove_const_t<E> s= 0;
       for(auto const &e: *this) s+= e;
       return s;
     }
@@ -296,16 +294,16 @@ template<stor S> struct iface: public S {
 
   /// Greatest value of any element.
   /// @return  Greatest value of any element.
-  elem max() const { return gsl_vector_max(&v()); }
+  E max() const { return gsl_vector_max(&v()); }
 
   /// Least value of any element.
   /// @return  Least value of any element.
-  elem min() const { return gsl_vector_min(&v()); }
+  E min() const { return gsl_vector_min(&v()); }
 
   /// Greatest value and least value of any element.
   /// @param min_out  On return, least value.
   /// @param max_out  On return, greatest value.
-  void minmax(elem &min_out, elem &max_out) const {
+  void minmax(E &min_out, E &max_out) const {
     gsl_vector_minmax(&v(), &min_out, &max_out);
   }
 
@@ -392,10 +390,10 @@ std::ostream &operator<<(std::ostream &os, iface<U> const &u) {
 /// @return  TBD: GSL's documentation does not specify.
 template<typename T, typename U>
 int axpby(
-  typename T::element_t const &alpha,
-  iface<T> const &x,
-  typename U::element_t const &beta,
-  iface<U> &y) {
+      typename T::elem const &alpha,
+      iface<T> const &x,
+      typename U::elem const &beta,
+      iface<U> &y) {
   if constexpr(gsl::VERSION.at_least(2, 7)) {
     return gsl_vector_axpby(alpha, &x.v(), beta, &y.v());
   } else {
