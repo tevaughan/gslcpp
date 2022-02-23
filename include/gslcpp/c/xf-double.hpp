@@ -78,12 +78,29 @@ template<> struct xf<double> {
     return gsl_vector_set_basis(v, i);
   }
 
-  /// Write non-portable binary image of vector to file.
+  /// Write non-portable binary-image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.
   /// @return  Zero only on success.
   static int vector_fwrite(FILE *f, vector const *v) {
     return gsl_vector_fwrite(f, v);
+  }
+
+  /// Read non-portable binary-image of vector from file.
+  /// @param f  Pointer to structure for buffered interface.
+  /// @param v  Pointer to gsl_vector.
+  /// @return  Zero only on success.
+  static int vector_fread(FILE *f, vector *v) {
+    return gsl_vector_fread(f, v);
+  }
+
+  /// Write ASCII-formatted representation of vector to file.
+  /// @param flp  Pointer to structure for buffered interface.
+  /// @param vec  Pointer to gsl_vector.
+  /// @param fmt  printf()-style format-string.
+  /// @return  Zero only on success.
+  static int vector_fprintf(FILE *flp, vector const *vec, char const *fmt) {
+    return gsl_vector_fprintf(flp, vec, fmt);
   }
 };
 
@@ -137,6 +154,15 @@ template<> struct xf<double const> {
   /// @return  Zero only on success.
   static int vector_fwrite(FILE *f, vector *v) {
     return gsl_vector_fwrite(f, v);
+  }
+
+  /// Write ASCII-formatted representation of vector to file.
+  /// @param flp  Pointer to structure for buffered interface.
+  /// @param vec  Pointer to gsl_vector.
+  /// @param fmt  printf()-style format-string.
+  /// @return  Zero only on success.
+  static int vector_fprintf(FILE *flp, vector *vec, char const *fmt) {
+    return gsl_vector_fprintf(flp, vec, fmt);
   }
 };
 

@@ -117,22 +117,22 @@ template<stor S> struct iface: public S {
   /// @return  TBD: GSL's documentation does not specify.
   int set_basis(size_t i) { return c::iface<E>::vector_set_basis(&v(), i); }
 
-  /// Write non-portable binary image of vector to file.
+  /// Write non-portable binary-image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
   int fwrite(FILE *f) const { return c::iface<E>::vector_fwrite(f, &v()); }
 
-  /// Read non-portable binary image of vector from file.
+  /// Read non-portable binary-image of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fread(FILE *f) { return gsl_vector_fread(f, &v()); };
+  int fread(FILE *f) { return c::iface<E>::vector_fread(f, &v()); };
 
   /// Write ASCII-formatted representation of vector to file.
   /// @param flp  Pointer to structure for buffered interface.
   /// @param fmt  printf()-style format-string.
   /// @return  Zero only on success.
   int fprintf(FILE *flp, char const *fmt) const {
-    return gsl_vector_fprintf(flp, &v(), fmt);
+    return c::iface<E>::vector_fprintf(flp, &v(), fmt);
   }
 
   /// Read ASCII-formatted representation of vector from file.
