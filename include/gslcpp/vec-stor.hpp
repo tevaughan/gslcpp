@@ -5,7 +5,7 @@
 ///             gsl::vec_stor,
 ///             gsl::vec_static,
 ///             gsl::vec_dynamic, and
-///             gsl::vector_view.
+///             gsl::vec_view.
 
 #pragma once
 
@@ -167,7 +167,7 @@ public:
 
 /// Interface to vector-storage not owned by interface.
 /// @tparam T  Type of each element in vector.
-template<typename T> class vector_view {
+template<typename T> class vec_view {
   using view= typename c::iface<T>::vector_view;
   view view_; ///< GSL's view of data outside instance.
 
@@ -185,7 +185,7 @@ public:
 
   /// Constructor called by TBS.
   /// @param v  View to copy.
-  vector_view(view const &v): view_(v) {}
+  vec_view(view const &v): view_(v) {}
 
   /// GSL's native, C-language interface to vector-view.
   /// @return  GSL's native, C-language interface to vector-view.
