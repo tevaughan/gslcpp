@@ -12,9 +12,9 @@ using gsl::axpby;
 #endif
 
 
-using gsl::vec_iface;
 using gsl::vector_s;
 using gsl::vector_v;
+using gsl::vec::iface;
 using std::ostringstream;
 
 

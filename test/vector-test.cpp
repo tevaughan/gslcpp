@@ -5,10 +5,10 @@
 #include "gslcpp/vector.hpp"
 #include <catch.hpp>
 
-using gsl::vec_iface;
-using gsl::vector_s;
 using gsl::vector_d;
+using gsl::vector_s;
 using gsl::vector_v;
+using gsl::vec::iface;
 
 
 TEST_CASE("Stack-vector's default constructor works.", "[vector]") {
@@ -22,10 +22,10 @@ TEST_CASE("Stack-vector's constructor from array works.", "[vector]") {
 
   vector_s v(d); // No template-parameter required!
   REQUIRE(v.size() == 4);
-  REQUIRE(v[0]==2.0);
-  REQUIRE(v[1]==4.0);
-  REQUIRE(v[2]==6.0);
-  REQUIRE(v[3]==8.0);
+  REQUIRE(v[0] == 2.0);
+  REQUIRE(v[1] == 4.0);
+  REQUIRE(v[2] == 6.0);
+  REQUIRE(v[3] == 8.0);
 
   vector_s<2> w(d, 1, 2);
   REQUIRE(w[0] == 4.0);
@@ -60,7 +60,7 @@ TEST_CASE("Stack-vector's copy-assignment operator works.", "[vector]") {
 /// @param b  Reference to instance of vec_iface<T>.
 /// @param s  Stride.
 template<typename T>
-void check(double const *a, vec_iface<T> const &b, size_t s= 1) {
+void check(double const *a, iface<T> const &b, size_t s= 1) {
   for(size_t j= 0, i= 0; j < b.size(); ++j) {
     REQUIRE(a[i] == b[j]);
     i+= s; // Explicitly step with stride through memory.
@@ -117,7 +117,6 @@ TEST_CASE("vec::subarray() provides right view.", "[vec]") {
   double const c[]= {1.0, -1.0, 2.0, -2.0, 5.0, -3.0};
   check(c, iv);
 }
-
 
 
 // EOF
