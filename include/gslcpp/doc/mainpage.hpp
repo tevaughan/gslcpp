@@ -1,4 +1,4 @@
-/// @file       include/gslcpp/doc.hpp
+/// @file       include/gslcpp/doc/mainpage.hpp
 /// @brief      Documentation for main page in output of Doxygen.
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 
