@@ -152,7 +152,7 @@ template<vec_stor S> struct vec_iface: public S {
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
   vec_iface<vector_view<elem>> subvector(size_t n, size_t i= 0, size_t s= 1) {
-    return c_iface<elem>::subvector(&v(), i, s, n);
+    return iface<elem>::subvector(&v(), i, s, n);
   }
 
   /// View of subvector of vector.  Arguments are reordered from those given to
@@ -165,19 +165,19 @@ template<vec_stor S> struct vec_iface: public S {
   /// @return  View of subvector.
   vec_iface<vector_view<elem const>>
   subvector(size_t n, size_t i= 0, size_t s= 1) const {
-    return c_iface<elem const>::subvector(&v(), i, s, n);
+    return iface<elem const>::subvector(&v(), i, s, n);
   }
 
   /// View of vector.
   /// @return  View of vector.
   vec_iface<vector_view<elem>> view() {
-    return c_iface<elem>::subvector(&v(), 0, 1, size());
+    return iface<elem>::subvector(&v(), 0, 1, size());
   }
 
   /// View of vector.
   /// @return  View of vector.
   vec_iface<vector_view<elem const>> view() const {
-    return c_iface<elem const>::subvector(&v(), 0, 1, size());
+    return iface<elem const>::subvector(&v(), 0, 1, size());
   }
 
   /// Swap elements within this vector.

@@ -9,17 +9,21 @@
 
 #pragma once
 
-#include "c-iface.hpp" // c_iface
+#include "c/iface.hpp" // c_iface
 
 namespace gsl {
+
+
+using c::iface;
+using std::same_as;
 
 
 /// Interface required for template referring to storage for vector.
 /// @tparam T  Candidate type of storage for vector.
 template<typename T> concept vec_stor= requires(T &x, T const &y) {
   typename T::elem;
-  { x.v() } -> same_as<typename c_iface<typename T::elem>::vector &>;
-  { y.v() } -> same_as<typename c_iface<typename T::elem>::vector const &>;
+  { x.v() } -> same_as<typename iface<typename T::elem>::vector &>;
+  { y.v() } -> same_as<typename iface<typename T::elem>::vector const &>;
 };
 
 
@@ -31,7 +35,7 @@ template<typename T> concept vec_stor= requires(T &x, T const &y) {
 template<unsigned S, typename T= double> class vec_static {
   static_assert(S > 0);
 
-  using view= typename c_iface<T>::vector_view;
+  using view= typename iface<T>::vector_view;
 
   T d_[S]; ///< Storage for data.
   view view_; ///< GSL's view of data within instance of vector.
@@ -73,7 +77,7 @@ private:
   alloc_type alloc_type_= alloc_type::ALLOC;
 
   /// Pointer to allocated descriptor for vector.
-  typename c_iface<T>::vec *v_= nullptr;
+  typename iface<T>::vec *v_= nullptr;
 
   /// Deallocate vector and its descriptor.
   void free() {
@@ -165,7 +169,7 @@ public:
 /// Interface to vector-storage not owned by interface.
 /// @tparam T  Type of each element in vector.
 template<typename T> class vector_view {
-  using view= typename c_iface<T>::vector_view;
+  using view= typename iface<T>::vector_view;
   view view_; ///< GSL's view of data outside instance.
 
 public:

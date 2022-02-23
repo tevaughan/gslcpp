@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c-iface.hpp
+/// @file       include/gslcpp/c/iface.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition for gsl::c_iface_, gsl::c_iface.
+/// @brief      Definition for gsl::c::iface_, gsl::c::iface.
 
 #pragma once
 
@@ -14,7 +14,7 @@
 #include <gsl/gsl_vector.h> // gsl_vector_view, gsl_vector_const_view
 #include <stdexcept> // runtime_error
 
-namespace gsl {
+namespace gsl::c {
 
 
 using std::runtime_error;
@@ -25,8 +25,8 @@ using std::same_as;
 /// C-functions for a given element-type.
 /// @tparam I  Candidate type for interface.
 template<typename I>
-concept c_interface=
-  requires(typename I::elem_t *e, size_t s, typename I::vector *v) {
+concept
+  interface= requires(typename I::elem_t *e, size_t s, typename I::vector *v) {
   typename I::elem_t;
   typename I::vector;
   typename I::vector_view;
@@ -38,11 +38,11 @@ concept c_interface=
 /// Generic template for struct that provides, on basis of element-type `E`,
 /// appropriate GSL C-types and functions.
 /// @tparam E  Type of each element in vector.
-template<typename E> struct c_iface_;
+template<typename E> struct iface_;
 
 
 /// Specialization for non-const double.
-template<> struct c_iface_<double> {
+template<> struct iface_<double> {
   /// Type of each element in vector or matrix.
   using elem_t= double;
 
@@ -74,7 +74,7 @@ template<> struct c_iface_<double> {
 
 
 /// Specialization for const double.
-template<> struct c_iface_<double const> {
+template<> struct iface_<double const> {
   /// Type of each element in vector or matrix.
   using elem_t= double const;
 
@@ -108,8 +108,8 @@ template<> struct c_iface_<double const> {
 /// GSL's native C-style interfaces associated with element-type `E`.
 /// @param E  Type of each element in vector or matrix.
 template<typename E>
-requires c_interface<c_iface_<E>> struct c_iface: public c_iface_<E> {
-  using P= c_iface_<E>; ///< Type of ancestor.
+requires interface<iface_<E>> struct iface: public iface_<E> {
+  using P= iface_<E>; ///< Type of ancestor.
 
   using P::subvector;
   using P::vector_view_array;
@@ -119,6 +119,6 @@ requires c_interface<c_iface_<E>> struct c_iface: public c_iface_<E> {
 };
 
 
-} // namespace gsl
+} // namespace gsl::c
 
 // EOF
