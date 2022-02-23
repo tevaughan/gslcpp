@@ -102,6 +102,14 @@ template<> struct xf<float> {
   static int vector_fprintf(FILE *flp, vector const *vec, char const *fmt) {
     return gsl_vector_float_fprintf(flp, vec, fmt);
   }
+
+  /// Read ASCII-formatted representation of vector from file.
+  /// @param f  Pointer to structure for buffered interface.
+  /// @param v  Pointer to vector.
+  /// @return  Zero only on success.
+  static int vector_fscanf(FILE *f, vector *v) {
+    return gsl_vector_float_fscanf(f, v);
+  }
 };
 
 

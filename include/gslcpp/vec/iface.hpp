@@ -138,7 +138,7 @@ template<stor S> struct iface: public S {
   /// Read ASCII-formatted representation of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fscanf(FILE *f) { return gsl_vector_fscanf(f, &v()); }
+  int fscanf(FILE *f) { return c::iface<E>::vector_fscanf(f, &v()); }
 
   /// View of subvector of vector.  Arguments are reordered from those given to
   /// gsl_vector_subvector_with_stride().  Putting initial offset and stride at

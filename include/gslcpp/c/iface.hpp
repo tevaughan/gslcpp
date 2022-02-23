@@ -64,6 +64,7 @@ requires(E const &e, std::size_t s, vector<E> *v, FILE *f) {
   { xf<E>::vector_set_zero(v) } -> same_as<void>;
   { xf<E>::vector_set_basis(v, s) } -> same_as<int>;
   { xf<E>::vector_fread(f, v) } -> same_as<int>;
+  { xf<E>::vector_fscanf(f, v) } -> same_as<int>;
 };
 
 
