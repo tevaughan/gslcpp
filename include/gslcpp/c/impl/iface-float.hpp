@@ -22,7 +22,7 @@ template<> struct iface<float> {
   /// GSL's C-library type for view of non-const elements.
   using vector_view= gsl_vector_float_view;
 
-  /// Function that converts array to GSL's native view.
+  /// GSL's native view of array.
   /// @param b  Pointer to first element of view.
   /// @param s  Stride of successive elements relative to pointer.
   /// @param n  Number of elements in view.
@@ -31,7 +31,7 @@ template<> struct iface<float> {
     return gsl_vector_float_view_array_with_stride(b, s, n);
   }
 
-  /// Function that converts subvector to GSL's native view.
+  /// GSL's native view of subvector.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset in gsl_vector of first element in view.
   /// @param s  Stride of elements in view relative to offsets in `v`.
@@ -39,6 +39,14 @@ template<> struct iface<float> {
   /// @return  GSL's native, C-style view.
   static vector_view subvector(vector *v, size_t i, size_t s, size_t n) {
     return gsl_vector_float_subvector_with_stride(v, i, s, n);
+  }
+
+  /// Fetch copy of element at offset `i` with bounds-checking.
+  /// @param v  Pointer to gsl_vector.
+  /// @param i  Offset of element.
+  /// @return  Copy of element.
+  static elem_t vector_get(vector const *v, size_t i) {
+    return gsl_vector_float_get(v, i);
   }
 };
 
@@ -54,7 +62,7 @@ template<> struct iface<float const> {
   /// GSL's C-library type for view of non-const elements.
   using vector_view= gsl_vector_float_const_view;
 
-  /// Function that converts array to GSL's native view.
+  /// GSL's native view of array.
   /// @param b  Pointer to first element of view.
   /// @param s  Stride of successive elements relative to pointer.
   /// @param n  Number of elements in view.
@@ -63,7 +71,7 @@ template<> struct iface<float const> {
     return gsl_vector_float_const_view_array_with_stride(b, s, n);
   }
 
-  /// Function that converts subvector to GSL's native view.
+  /// GSL's native view of subvector.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset in gsl_vector of first element in view.
   /// @param s  Stride of elements in view relative to offsets in `v`.
@@ -71,6 +79,14 @@ template<> struct iface<float const> {
   /// @return  GSL's native, C-style view.
   static vector_view subvector(vector *v, size_t i, size_t s, size_t n) {
     return gsl_vector_float_const_subvector_with_stride(v, i, s, n);
+  }
+
+  /// Fetch copy of element at offset `i` with bounds-checking.
+  /// @param v  Pointer to gsl_vector.
+  /// @param i  Offset of element.
+  /// @return  Copy of element.
+  static elem_t vector_get(vector *v, size_t i) {
+    return gsl_vector_float_get(v, i);
   }
 };
 

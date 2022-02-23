@@ -100,7 +100,7 @@ TEST_CASE("vec_iface::ptr() retrieves pointer of element.", "[vec-iface]") {
 
 
 TEST_CASE(
-  "vec_iface::set_all() and vec_iface::set_zero() work.", "[vec-iface]") {
+      "vec_iface::set_all() and vec_iface::set_zero() work.", "[vec-iface]") {
   v3 b;
   b.set_all(3.1);
   REQUIRE(b[0] == 3.1);
@@ -114,7 +114,8 @@ TEST_CASE(
 
 
 TEST_CASE(
-  "vec_iface::set_basis() constructs simple basis-vector.", "[vec-iface]") {
+      "vec_iface::set_basis() constructs simple basis-vector.",
+      "[vec-iface]") {
   v3 b;
   for(unsigned i= 0; i < b.size(); ++i) {
     b.set_basis(i);
@@ -146,7 +147,7 @@ TEST_CASE("vec_iface::fwrite() and vec_iface::fread() work.", "[vec-iface]") {
 
 
 TEST_CASE(
-  "vec_iface::fprintf() and vec_iface::fscanf() work.", "[vec-iface]") {
+      "vec_iface::fprintf() and vec_iface::fscanf() work.", "[vec-iface]") {
   FILE *f= fopen("output-test.txt", "w");
   a.fprintf(f, "%g");
   fclose(f);

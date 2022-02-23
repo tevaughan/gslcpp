@@ -6,10 +6,13 @@
 #
 # Use whatever version you like, but probably need at least clang++-10.
 
-CC:=clang
-CXX:=clang++
+CC:=clang-12
+CXX:=clang++-12
 
-.PHONY : all build_prep clean doc tests_cov
+VER:=$(patsubst clang++-%,%,$(CXX))
+CLANG_FORMAT:=$(if $(VER),clang-format-$(VER),clang-format)
+
+.PHONY : all build_prep clean doc format tests_cov
 
 all : tests_cov
 
@@ -23,6 +26,9 @@ build_prep:
 	@if ! test -d build; then\
 	  mkdir build && cd build && CC=$(CC) CXX=$(CXX) cmake ..;\
 	 fi
+
+format:
+	find . -name '*.hpp' -o -name '*.cpp' -exec $(CLANG_FORMAT) -i {} \;
 
 clean :
 	@rm -frv build

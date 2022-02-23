@@ -137,7 +137,7 @@ TEST_CASE("Comparison of iterators for less-than works.", "[vec::iterator]") {
 
 
 TEST_CASE(
-  "Comparison of iterators for greater-than works.", "[vec::iterator]") {
+      "Comparison of iterators for greater-than works.", "[vec::iterator]") {
   auto i= a.begin() + 1;
   auto j= a.begin();
   REQUIRE(i > j);
@@ -148,8 +148,8 @@ TEST_CASE(
 
 
 TEST_CASE(
-  "Comparison of iterators for less-than-or-equal-to works.",
-  "[vec::iterator]") {
+      "Comparison of iterators for less-than-or-equal-to works.",
+      "[vec::iterator]") {
   auto i= a.begin();
   auto j= a.begin() + 1;
   REQUIRE(i++ <= j);
@@ -161,8 +161,8 @@ TEST_CASE(
 
 
 TEST_CASE(
-  "Comparison of iterators for greater-than-or-equal-to works.",
-  "[vec::iterator]") {
+      "Comparison of iterators for greater-than-or-equal-to works.",
+      "[vec::iterator]") {
   auto i= a.begin() + 1;
   auto j= a.begin();
   REQUIRE(i >= j++);

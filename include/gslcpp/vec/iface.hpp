@@ -73,7 +73,7 @@ template<stor S> struct iface: public S {
   /// Read element with bounds-checking.
   /// @param i  Offset of element.
   /// @return  Value of element.
-  elem get(size_t i) const { return gsl_vector_get(&v(), i); }
+  elem get(size_t i) const { return c::iface<elem>::vector_get(&v(), i); }
 
   /// Write element with bounds-checking.
   /// @param i  Offset of element.
