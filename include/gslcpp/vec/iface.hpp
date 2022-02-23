@@ -28,7 +28,8 @@ template<stor S> struct iface: public S {
   /// Inherit assigment.
   using S::operator=;
 
-  /// Reference to gsl_vector.
+  /// Reference to instance of c::iface<S::elem>::vector, which is either
+  /// gsl_vector, gsl_vector_float, etc.
   using S::v;
 
   /// Type of each element.
@@ -106,20 +107,20 @@ template<stor S> struct iface: public S {
 
   /// Set every element.
   /// @param x  Value to which each element should be set.
-  void set_all(E const &x) { gsl_vector_set_all(&v(), x); }
+  void set_all(E const &x) { c::iface<E>::vector_set_all(&v(), x); }
 
   /// Set every element to zero.
-  void set_zero() { gsl_vector_set_zero(&v()); }
+  void set_zero() { c::iface<E>::vector_set_zero(&v()); }
 
   /// Set element at offset `i` to unity and every other element to zero.
   /// @param i  Offset of element set to unity.
   /// @return  TBD: GSL's documentation does not specify.
-  int set_basis(size_t i) { return gsl_vector_set_basis(&v(), i); }
+  int set_basis(size_t i) { return c::iface<E>::vector_set_basis(&v(), i); }
 
   /// Write non-portable binary image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fwrite(FILE *f) const { return gsl_vector_fwrite(f, &v()); }
+  int fwrite(FILE *f) const { return c::iface<E>::vector_fwrite(f, &v()); }
 
   /// Read non-portable binary image of vector from file.
   /// @param f  Pointer to structure for buffered interface.

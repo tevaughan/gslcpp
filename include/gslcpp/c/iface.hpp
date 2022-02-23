@@ -40,13 +40,14 @@ template<typename E> using vector_view= typename xf<E>::vector_view;
 /// either `const` or non-`const`.
 /// @tparam E  type of each element.
 template<typename E>
-concept basic_iface= requires(E *e, std::size_t s, vector<E> *v) {
+concept basic_iface= requires(E *e, std::size_t s, vector<E> *v, FILE *f) {
   typename vector<E>;
   typename vector_view<E>;
   { xf<E>::vector_view_array(e, s, s) } -> same_as<vector_view<E>>;
   { xf<E>::subvector(v, s, s, s) } -> same_as<vector_view<E>>;
   { xf<E>::vector_get(v, s) } -> same_as<remove_const_t<E>>;
   { xf<E>::vector_ptr(v, s) } -> same_as<E *>;
+  { xf<E>::vector_fwrite(f, v) } -> same_as<int>;
 };
 
 
@@ -57,6 +58,9 @@ template<typename E>
 concept setter_iface= basic_iface<E> &&
 requires(E const &e, std::size_t s, vector<E> *v) {
   { xf<E>::vector_set(v, s, e) } -> same_as<void>;
+  { xf<E>::vector_set_all(v, e) } -> same_as<void>;
+  { xf<E>::vector_set_zero(v) } -> same_as<void>;
+  { xf<E>::vector_set_basis(v, s) } -> same_as<int>;
 };
 
 

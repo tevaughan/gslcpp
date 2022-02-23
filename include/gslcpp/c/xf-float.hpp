@@ -58,6 +58,33 @@ template<> struct xf<float> {
   static void vector_set(vector *v, size_t i, float x) {
     gsl_vector_float_set(v, i, x);
   }
+
+  /// Set same value into every element of vector.
+  /// @param v  Pointer to gsl_vector.
+  /// @param x  Same new value for every element.
+  static void vector_set_all(vector *v, float x) {
+    gsl_vector_float_set_all(v, x);
+  }
+
+  /// Set zero into every element of vector.
+  /// @param v  Pointer to gsl_vector.
+  static void vector_set_zero(vector *v) { gsl_vector_float_set_zero(v); }
+
+  /// Set element at offset `i` to unity and every other element to zero.
+  /// @param v  Pointer to gsl_vector.
+  /// @param i  Offset of element to set to unity.
+  /// @return  TBD: GSL's documentation does not specify.
+  static int vector_set_basis(vector *v, size_t i) {
+    return gsl_vector_float_set_basis(v, i);
+  }
+
+  /// Write non-portable binary image of vector to file.
+  /// @param f  Pointer to structure for buffered interface.
+  /// @param v  Pointer to gsl_vector.
+  /// @return  Zero only on success.
+  static int vector_fwrite(FILE *f, vector const *v) {
+    return gsl_vector_float_fwrite(f, v);
+  }
 };
 
 
@@ -102,6 +129,14 @@ template<> struct xf<float const> {
   /// @return  Pointer to element.
   static float const *vector_ptr(vector *v, size_t i) {
     return gsl_vector_float_const_ptr(v, i);
+  }
+
+  /// Write non-portable binary image of vector to file.
+  /// @param f  Pointer to structure for buffered interface.
+  /// @param v  Pointer to gsl_vector.
+  /// @return  Zero only on success.
+  static int vector_fwrite(FILE *f, vector *v) {
+    return gsl_vector_float_fwrite(f, v);
   }
 };
 
