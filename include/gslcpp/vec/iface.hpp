@@ -74,12 +74,12 @@ template<stor S> struct iface: public S {
   /// Read element with bounds-checking.
   /// @param i  Offset of element.
   /// @return  Value of element.
-  E get(size_t i) const { return c::iface<E>::vector_get(&v(), i); }
+  E get(size_t i) const { return c::iface<E>::get(&v(), i); }
 
   /// Write element with bounds-checking.
   /// @param i  Offset of element.
   /// @param x  New value for element.
-  void set(size_t i, E const &x) { c::iface<E>::vector_set(&v(), i, x); }
+  void set(size_t i, E const &x) { c::iface<E>::set(&v(), i, x); }
 
   /// Read element without bounds-checking.
   /// @param i  Offset of element.
@@ -95,50 +95,50 @@ template<stor S> struct iface: public S {
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to mutable element.
-  E *ptr(size_t i) { return c::iface<E>::vector_ptr(&v(), i); }
+  E *ptr(size_t i) { return c::iface<E>::ptr(&v(), i); }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to immutable element.
   E const *ptr(size_t i) const {
-    return c::iface<E const>::vector_ptr(&v(), i);
+    return c::iface<E const>::ptr(&v(), i);
   }
 
   /// Set every element.
   /// @param x  Value to which each element should be set.
-  void set_all(E const &x) { c::iface<E>::vector_set_all(&v(), x); }
+  void set_all(E const &x) { c::iface<E>::set_all(&v(), x); }
 
   /// Set every element to zero.
-  void set_zero() { c::iface<E>::vector_set_zero(&v()); }
+  void set_zero() { c::iface<E>::set_zero(&v()); }
 
   /// Set element at offset `i` to unity and every other element to zero.
   /// @param i  Offset of element set to unity.
   /// @return  TBD: GSL's documentation does not specify.
-  int set_basis(size_t i) { return c::iface<E>::vector_set_basis(&v(), i); }
+  int set_basis(size_t i) { return c::iface<E>::set_basis(&v(), i); }
 
   /// Write non-portable binary-image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fwrite(FILE *f) const { return c::iface<E>::vector_fwrite(f, &v()); }
+  int fwrite(FILE *f) const { return c::iface<E>::fwrite(f, &v()); }
 
   /// Read non-portable binary-image of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fread(FILE *f) { return c::iface<E>::vector_fread(f, &v()); };
+  int fread(FILE *f) { return c::iface<E>::fread(f, &v()); };
 
   /// Write ASCII-formatted representation of vector to file.
   /// @param flp  Pointer to structure for buffered interface.
   /// @param fmt  printf()-style format-string.
   /// @return  Zero only on success.
   int fprintf(FILE *flp, char const *fmt) const {
-    return c::iface<E>::vector_fprintf(flp, &v(), fmt);
+    return c::iface<E>::fprintf(flp, &v(), fmt);
   }
 
   /// Read ASCII-formatted representation of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fscanf(FILE *f) { return c::iface<E>::vector_fscanf(f, &v()); }
+  int fscanf(FILE *f) { return c::iface<E>::fscanf(f, &v()); }
 
   /// View of subvector of vector.  Arguments are reordered from those given to
   /// gsl_vector_subvector_with_stride().  Putting initial offset and stride at

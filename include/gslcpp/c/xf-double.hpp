@@ -39,42 +39,36 @@ template<> struct xf<double> {
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
   /// @return  Copy of element.
-  static double vector_get(vector const *v, size_t i) {
-    return gsl_vector_get(v, i);
-  }
+  static double get(vector const *v, size_t i) { return gsl_vector_get(v, i); }
 
   /// Fetch pointer to element at offset `i` with bounds-checking.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
   /// @return  Pointer to element.
-  static double *vector_ptr(vector *v, size_t i) {
-    return gsl_vector_ptr(v, i);
-  }
+  static double *ptr(vector *v, size_t i) { return gsl_vector_ptr(v, i); }
 
   /// Set value of element at offset `i` with bounds-checking.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
   /// @param x  New value for element.
-  static void vector_set(vector *v, size_t i, double const &x) {
+  static void set(vector *v, size_t i, double const &x) {
     gsl_vector_set(v, i, x);
   }
 
   /// Set same value into every element of vector.
   /// @param v  Pointer to gsl_vector.
   /// @param x  Same new value for every element.
-  static void vector_set_all(vector *v, double const &x) {
-    gsl_vector_set_all(v, x);
-  }
+  static void set_all(vector *v, double const &x) { gsl_vector_set_all(v, x); }
 
   /// Set zero into every element of vector.
   /// @param v  Pointer to gsl_vector.
-  static void vector_set_zero(vector *v) { gsl_vector_set_zero(v); }
+  static void set_zero(vector *v) { gsl_vector_set_zero(v); }
 
   /// Set element at offset `i` to unity and every other element to zero.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element to set to unity.
   /// @return  TBD: GSL's documentation does not specify.
-  static int vector_set_basis(vector *v, size_t i) {
+  static int set_basis(vector *v, size_t i) {
     return gsl_vector_set_basis(v, i);
   }
 
@@ -82,7 +76,7 @@ template<> struct xf<double> {
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.
   /// @return  Zero only on success.
-  static int vector_fwrite(FILE *f, vector const *v) {
+  static int fwrite(FILE *f, vector const *v) {
     return gsl_vector_fwrite(f, v);
   }
 
@@ -90,16 +84,14 @@ template<> struct xf<double> {
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.
   /// @return  Zero only on success.
-  static int vector_fread(FILE *f, vector *v) {
-    return gsl_vector_fread(f, v);
-  }
+  static int fread(FILE *f, vector *v) { return gsl_vector_fread(f, v); }
 
   /// Write ASCII-formatted representation of vector to file.
   /// @param flp  Pointer to structure for buffered interface.
   /// @param vec  Pointer to gsl_vector.
   /// @param fmt  printf()-style format-string.
   /// @return  Zero only on success.
-  static int vector_fprintf(FILE *flp, vector const *vec, char const *fmt) {
+  static int fprintf(FILE *flp, vector const *vec, char const *fmt) {
     return gsl_vector_fprintf(flp, vec, fmt);
   }
 
@@ -107,9 +99,7 @@ template<> struct xf<double> {
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to vector.
   /// @return  Zero only on success.
-  static int vector_fscanf(FILE *f, vector *v) {
-    return gsl_vector_fscanf(f, v);
-  }
+  static int fscanf(FILE *f, vector *v) { return gsl_vector_fscanf(f, v); }
 };
 
 
@@ -144,15 +134,13 @@ template<> struct xf<double const> {
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
   /// @return  Copy of element.
-  static double vector_get(vector *v, size_t i) {
-    return gsl_vector_get(v, i);
-  }
+  static double get(vector *v, size_t i) { return gsl_vector_get(v, i); }
 
   /// Fetch pointer to element at offset `i` with bounds-checking.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
   /// @return  Pointer to element.
-  static double const *vector_ptr(vector *v, size_t i) {
+  static double const *ptr(vector *v, size_t i) {
     return gsl_vector_const_ptr(v, i);
   }
 
@@ -160,16 +148,14 @@ template<> struct xf<double const> {
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.
   /// @return  Zero only on success.
-  static int vector_fwrite(FILE *f, vector *v) {
-    return gsl_vector_fwrite(f, v);
-  }
+  static int fwrite(FILE *f, vector *v) { return gsl_vector_fwrite(f, v); }
 
   /// Write ASCII-formatted representation of vector to file.
   /// @param flp  Pointer to structure for buffered interface.
   /// @param vec  Pointer to gsl_vector.
   /// @param fmt  printf()-style format-string.
   /// @return  Zero only on success.
-  static int vector_fprintf(FILE *flp, vector *vec, char const *fmt) {
+  static int fprintf(FILE *flp, vector *vec, char const *fmt) {
     return gsl_vector_fprintf(flp, vec, fmt);
   }
 };

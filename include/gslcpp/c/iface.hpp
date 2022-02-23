@@ -46,10 +46,10 @@ concept basic_iface=
   typename vector_view<E>;
   { xf<E>::vector_view_array(e, s, s) } -> same_as<vector_view<E>>;
   { xf<E>::subvector(v, s, s, s) } -> same_as<vector_view<E>>;
-  { xf<E>::vector_get(v, s) } -> same_as<remove_const_t<E>>;
-  { xf<E>::vector_ptr(v, s) } -> same_as<E *>;
-  { xf<E>::vector_fwrite(f, v) } -> same_as<int>;
-  { xf<E>::vector_fprintf(f, v, c) } -> same_as<int>;
+  { xf<E>::get(v, s) } -> same_as<remove_const_t<E>>;
+  { xf<E>::ptr(v, s) } -> same_as<E *>;
+  { xf<E>::fwrite(f, v) } -> same_as<int>;
+  { xf<E>::fprintf(f, v, c) } -> same_as<int>;
 };
 
 
@@ -59,12 +59,12 @@ concept basic_iface=
 template<typename E>
 concept setter_iface= basic_iface<E> &&
 requires(E const &e, std::size_t s, vector<E> *v, FILE *f) {
-  { xf<E>::vector_set(v, s, e) } -> same_as<void>;
-  { xf<E>::vector_set_all(v, e) } -> same_as<void>;
-  { xf<E>::vector_set_zero(v) } -> same_as<void>;
-  { xf<E>::vector_set_basis(v, s) } -> same_as<int>;
-  { xf<E>::vector_fread(f, v) } -> same_as<int>;
-  { xf<E>::vector_fscanf(f, v) } -> same_as<int>;
+  { xf<E>::set(v, s, e) } -> same_as<void>;
+  { xf<E>::set_all(v, e) } -> same_as<void>;
+  { xf<E>::set_zero(v) } -> same_as<void>;
+  { xf<E>::set_basis(v, s) } -> same_as<int>;
+  { xf<E>::fread(f, v) } -> same_as<int>;
+  { xf<E>::fscanf(f, v) } -> same_as<int>;
 };
 
 
