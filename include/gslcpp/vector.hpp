@@ -36,7 +36,7 @@ struct vector_s: public vec_iface<vec_static<S, T>> {
   /// - Mismatch in size produces run-time abort.
   /// @tparam OT  Type of other elements.
   /// @param ov  Reference to source-vector.
-  template<typename OT> vector_s(vec_iface<vec_view<OT>> const &ov) {
+  template<typename OT> vector_s(vec_iface<vector_view<OT>> const &ov) {
     memcpy(*this, ov);
   }
 
@@ -49,8 +49,8 @@ struct vector_s: public vec_iface<vec_static<S, T>> {
   /// ~~~
   /// @param d  Data to copy for initialization.
   vector_s(T const (&d)[S]) {
-    auto const cview= c_iface<T const>::vec_view_array(d, 1, S);
-    memcpy(*this, vec_iface<vec_view<T const>>(cview));
+    auto const cview= c_iface<T const>::vector_view_array(d, 1, S);
+    memcpy(*this, vec_iface<vector_view<T const>>(cview));
   }
 
   /// Initialize GSL's view, and initialize vector by copying from array.
@@ -69,8 +69,8 @@ struct vector_s: public vec_iface<vec_static<S, T>> {
     if(i + s * (S - 1) > N - 1) {
       throw std::runtime_error("source-array not big enough");
     }
-    auto const cview= c_iface<T const>::vec_view_array(d + i, s, S);
-    memcpy(*this, vec_iface<vec_view<T const>>(cview));
+    auto const cview= c_iface<T const>::vector_view_array(d + i, s, S);
+    memcpy(*this, vec_iface<vector_view<T const>>(cview));
   }
 
   /// Initialize GSL's view, and initialize elements by copying from array.
@@ -112,8 +112,8 @@ template<typename T> struct vector_d: public vec_iface<vec_dynamic<T>> {
 
 
 /// Vector with storage not owned by instance of vector.
-template<typename T> struct vector_v: public vec_iface<vec_view<T>> {
-  using P= vec_iface<vec_view<T>>; ///< Type of ancestor.
+template<typename T> struct vector_v: public vec_iface<vector_view<T>> {
+  using P= vec_iface<vector_view<T>>; ///< Type of ancestor.
   using P::P;
 
   /// Initialize view of standard (decayed) C-array.  Arguments are reordered
@@ -125,7 +125,7 @@ template<typename T> struct vector_v: public vec_iface<vec_view<T>> {
   /// @param n  Number of elements in view.
   /// @param s  Stride of view relative to array.
   vector_v(size_t n, T *b, size_t s= 1):
-      P(c_iface<T>::vec_view_array(b, s, n)) {}
+      P(c_iface<T>::vector_view_array(b, s, n)) {}
 
   /// Initialize view of non-decayed C-array.  Arguments are reordered from
   /// those given to gsl_vector_subvector_with_stride().  Putting initial
@@ -138,11 +138,11 @@ template<typename T> struct vector_v: public vec_iface<vec_view<T>> {
   /// @param s  Stride of view relative to array.
   template<int N>
   vector_v(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      P(c_iface<T>::vec_view_array(b + i, s, n)) {}
+      P(c_iface<T>::vector_view_array(b + i, s, n)) {}
 
   /// Initialize view of other view.
   /// @param v  Other view.
-  vector_v(vec_iface<vec_view<T>> v): P(v.cview()) {}
+  vector_v(vec_iface<vector_view<T>> v): P(v.cview()) {}
 };
 
 

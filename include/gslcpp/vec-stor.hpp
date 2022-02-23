@@ -5,7 +5,7 @@
 ///             gsl::vec_stor,
 ///             gsl::vec_static,
 ///             gsl::vec_dynamic, and
-///             gsl::vec_view.
+///             gsl::vector_view.
 
 #pragma once
 
@@ -18,8 +18,8 @@ namespace gsl {
 /// @tparam T  Candidate type of storage for vector.
 template<typename T> concept vec_stor= requires(T &x, T const &y) {
   typename T::elem;
-  { x.v() } -> same_as<typename c_iface<typename T::elem>::vec &>;
-  { y.v() } -> same_as<typename c_iface<typename T::elem>::vec const &>;
+  { x.v() } -> same_as<typename c_iface<typename T::elem>::vector &>;
+  { y.v() } -> same_as<typename c_iface<typename T::elem>::vector const &>;
 };
 
 
@@ -31,7 +31,7 @@ template<typename T> concept vec_stor= requires(T &x, T const &y) {
 template<unsigned S, typename T= double> class vec_static {
   static_assert(S > 0);
 
-  using view= typename c_iface<T>::vec_view;
+  using view= typename c_iface<T>::vector_view;
 
   T d_[S]; ///< Storage for data.
   view view_; ///< GSL's view of data within instance of vector.
@@ -164,8 +164,8 @@ public:
 
 /// Interface to vector-storage not owned by interface.
 /// @tparam T  Type of each element in vector.
-template<typename T> class vec_view {
-  using view= typename c_iface<T>::vec_view;
+template<typename T> class vector_view {
+  using view= typename c_iface<T>::vector_view;
   view view_; ///< GSL's view of data outside instance.
 
 public:
@@ -182,7 +182,7 @@ public:
 
   /// Constructor called by TBS.
   /// @param v  View to copy.
-  vec_view(view const &v): view_(v) {}
+  vector_view(view const &v): view_(v) {}
 
   /// GSL's native, C-language interface to vector-view.
   /// @return  GSL's native, C-language interface to vector-view.

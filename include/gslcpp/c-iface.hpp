@@ -25,13 +25,13 @@ using std::same_as;
 /// C-functions for a given element-type.
 /// @tparam I  Candidate type for interface.
 template<typename I>
-concept
-  c_interface= requires(typename I::elem *e, size_t s, typename I::vec *v) {
-  typename I::elem;
-  typename I::vec;
-  typename I::vec_view;
-  { I::vec_view_array(e, s, s) } -> same_as<typename I::vec_view>;
-  { I::subvector(v, s, s, s) } -> same_as<typename I::vec_view>;
+concept c_interface=
+  requires(typename I::elem_t *e, size_t s, typename I::vector *v) {
+  typename I::elem_t;
+  typename I::vector;
+  typename I::vector_view;
+  { I::vector_view_array(e, s, s) } -> same_as<typename I::vector_view>;
+  { I::subvector(v, s, s, s) } -> same_as<typename I::vector_view>;
 };
 
 
@@ -44,20 +44,20 @@ template<typename E> struct c_iface_;
 /// Specialization for non-const double.
 template<> struct c_iface_<double> {
   /// Type of each element in vector or matrix.
-  using elem= double;
+  using elem_t= double;
 
   /// GSL's C-library type for non-const elements.
-  using vec= gsl_vector;
+  using vector= gsl_vector;
 
   /// GSL's C-library type for view of non-const elements.
-  using vec_view= gsl_vector_view;
+  using vector_view= gsl_vector_view;
 
   /// Function that converts array to GSL's native view.
   /// @param b  Pointer to first element of view.
   /// @param s  Stride of successive elements relative to pointer.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vec_view vec_view_array(elem *b, size_t s, size_t n) {
+  static vector_view vector_view_array(elem_t *b, size_t s, size_t n) {
     return gsl_vector_view_array_with_stride(b, s, n);
   }
 
@@ -67,7 +67,7 @@ template<> struct c_iface_<double> {
   /// @param s  Stride of elements in view relative to offsets in `v`.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vec_view subvector(vec *v, size_t i, size_t s, size_t n) {
+  static vector_view subvector(vector *v, size_t i, size_t s, size_t n) {
     return gsl_vector_subvector_with_stride(v, i, s, n);
   }
 };
@@ -76,20 +76,20 @@ template<> struct c_iface_<double> {
 /// Specialization for const double.
 template<> struct c_iface_<double const> {
   /// Type of each element in vector or matrix.
-  using elem= double const;
+  using elem_t= double const;
 
   /// GSL's C-library type for non-const elements.
-  using vec= gsl_vector const;
+  using vector= gsl_vector const;
 
   /// GSL's C-library type for view of non-const elements.
-  using vec_view= gsl_vector_const_view;
+  using vector_view= gsl_vector_const_view;
 
   /// Function that converts array to GSL's native view.
   /// @param b  Pointer to first element of view.
   /// @param s  Stride of successive elements relative to pointer.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vec_view vec_view_array(elem *b, size_t s, size_t n) {
+  static vector_view vector_view_array(elem_t *b, size_t s, size_t n) {
     return gsl_vector_const_view_array_with_stride(b, s, n);
   }
 
@@ -99,7 +99,7 @@ template<> struct c_iface_<double const> {
   /// @param s  Stride of elements in view relative to offsets in `v`.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vec_view subvector(vec *v, size_t i, size_t s, size_t n) {
+  static vector_view subvector(vector *v, size_t i, size_t s, size_t n) {
     return gsl_vector_const_subvector_with_stride(v, i, s, n);
   }
 };
@@ -112,10 +112,10 @@ requires c_interface<c_iface_<E>> struct c_iface: public c_iface_<E> {
   using P= c_iface_<E>; ///< Type of ancestor.
 
   using P::subvector;
-  using P::vec_view_array;
-  using typename P::elem;
-  using typename P::vec;
-  using typename P::vec_view;
+  using P::vector_view_array;
+  using typename P::elem_t;
+  using typename P::vector;
+  using typename P::vector_view;
 };
 
 

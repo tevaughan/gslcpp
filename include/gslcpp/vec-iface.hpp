@@ -5,7 +5,7 @@
 #pragma once
 
 #include "vec-iterator.hpp" // vec_iterator
-#include "vec-stor.hpp" // c_iface, gsl_vector, vec_stor, vec_view, ...
+#include "vec-stor.hpp" // c_iface, gsl_vector, vec_stor, vector_view, ...
 #include "version.hpp" // VERSION
 #include <iostream> // ostream
 
@@ -151,7 +151,7 @@ template<vec_stor S> struct vec_iface: public S {
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
-  vec_iface<vec_view<elem>> subvector(size_t n, size_t i= 0, size_t s= 1) {
+  vec_iface<vector_view<elem>> subvector(size_t n, size_t i= 0, size_t s= 1) {
     return c_iface<elem>::subvector(&v(), i, s, n);
   }
 
@@ -163,20 +163,20 @@ template<vec_stor S> struct vec_iface: public S {
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
-  vec_iface<vec_view<elem const>>
+  vec_iface<vector_view<elem const>>
   subvector(size_t n, size_t i= 0, size_t s= 1) const {
     return c_iface<elem const>::subvector(&v(), i, s, n);
   }
 
   /// View of vector.
   /// @return  View of vector.
-  vec_iface<vec_view<elem>> view() {
+  vec_iface<vector_view<elem>> view() {
     return c_iface<elem>::subvector(&v(), 0, 1, size());
   }
 
   /// View of vector.
   /// @return  View of vector.
-  vec_iface<vec_view<elem const>> view() const {
+  vec_iface<vector_view<elem const>> view() const {
     return c_iface<elem const>::subvector(&v(), 0, 1, size());
   }
 
