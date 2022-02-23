@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "../vec-iterator.hpp" // vec_iterator
 #include "../vec-stor.hpp" // c::iface, vec_stor, vector_view, ...
 #include "../version.hpp" // VERSION
+#include "iterator.hpp" // iterator
 #include <iostream> // ostream
 
 namespace gsl {
@@ -35,10 +35,10 @@ template<vec_stor S> struct iface: public S {
   using elem= typename S::elem;
 
   /// Type of iterator that points to mutable element.
-  using iterator= vec_iterator<iface>;
+  using iterator= vec::iterator<iface>;
 
   /// Type of iterator that points to immutable element.
-  using const_iterator= vec_iterator<iface const>;
+  using const_iterator= vec::iterator<iface const>;
 
   /// Iterator that points to first element.
   /// @return  Iterator that points to first element.
