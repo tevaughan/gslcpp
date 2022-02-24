@@ -44,26 +44,31 @@ template<typename E> using vector_view= typename xf<E>::vector_view;
 /// `E` may here be a `const` or a non-`const` type and is the primitive type
 /// (such as `double`) of each element in a vector or matrix.
 ///
-/// For explanation of the relationships between `basic_iface` and \ref
-/// gsl::c::setter_iface "setter_iface", however, let us suppose, for the
-/// moment, that `E` designates a non-`const` type.  Then `xf<E>` implements
-/// static functions, each of which calls the appropriate function in GSL's
-/// native C-interface.  `xf<E const>` implements all of `basic_iface`, and
-/// `xf<E>` implements all of \ref gsl::c::setter_iface "setter_iface".
+/// However, for explanation of the relationships between `basic_iface` and
+/// \ref gsl::c::setter_iface "setter_iface",
+/// let us suppose, for the moment, that `E` designates a non-`const` type.
 ///
-/// Although `xf<E>` inherits from `xf<E const>`, three of the functions
-/// identified in `basic_iface` and implemented in `xf<E const>` must be
-/// re-implemented in `xf<E>` so that the non-`const` version exists for each
-/// function.  They are
-/// - `xf<E>::vector_view_array()`
-/// - `xf<E>::subvector()`, and
-/// - `xf<E>::ptr()`.
+///   - Then `xf<E>` implements static functions, each of which calls the
+///     appropriate function in GSL's native C-interface.
+///
+///   - `xf<E const>` implements all of `basic_iface`, and `xf<E>` implements
+///     all of
+///     \ref gsl::c::setter_iface "setter_iface".
+///
+///   - Although `xf<E>` inherits from `xf<E const>`, three of the functions
+///     identified in `basic_iface` and implemented in `xf<E const>` must be
+///     re-implemented in `xf<E>` so that the non-`const` version exists for
+///     each function.
+///
+///   - They are
+///       - `xf<E>::vector_view_array()`
+///       - `xf<E>::subvector()`, and
+///       - `xf<E>::ptr()`.
 ///
 /// \sa \ref gsl::c::setter_iface "setter_iface"
-/// \sa \ref gsl::c::xf<double>::vector_view_array()
-///          "xf<double>::vector_view_array"
-/// \sa \ref gsl::c::xf<double>::subvector() "xf<double>::subvector"
-/// \sa \ref gsl::c::xf<double>::ptr() "xf<double>::ptr"
+/// \sa \ref gsl::c::xf<double>::vector_view_array() "vector_view_array"
+/// \sa \ref gsl::c::xf<double>::subvector() "subvector"
+/// \sa \ref gsl::c::xf<double>::ptr() "ptr"
 ///
 /// @tparam E  Type of each element; `E` can be `const` or non-`const`.
 template<typename E>
@@ -134,21 +139,39 @@ requires(
 };
 
 
-/// Declaration of generic template for GSL's native C-style interfaces
-/// associated with elements of type `E`.  Two specializations are defined, one
-/// for elements of non-`const` type and the other for elements of
-/// `const`-type.
-/// @tparam E  Type of each element.
-template<typename E> struct iface;
+/// Generic template for GSL's native C-style interfaces associated with
+/// elements of type `E`.
+///
+/// \anchor generic_c_iface
+///
+/// Consider a primitive, non-`const` type `P`.  Two specializations are
+/// defined in relation to `P`:
+/// - \ref c_iface_nonconst "iface<P>" and
+/// - \ref c_iface_const "iface <P const>".
+///
+/// @tparam P  Primitive type of each element in vector or matrix.
+template<typename P> struct iface;
 
 
 /// Specialization for vector- and matrix-elements of `const`-type.
+///
+/// \anchor c_iface_const
+///
+/// `iface<E const>` implements
+/// \ref gsl::c::basic_iface "basic_iface<E const>".
+///
 /// @param E  Non-`const` version of `const`-type of each element.
 template<typename E>
 requires basic_iface<E const> struct iface<E const>: public xf<E const> {};
 
 
 /// Specialization for vector- and matrix-elements of non-`const` type.
+///
+/// \anchor c_iface_nonconst
+///
+/// `iface<E>` (for non-`const` `E`) implements
+/// \ref gsl::c::setter_iface "setter_iface<E>".
+///
 /// @param E  (Non-`const`) type of each element.
 template<typename E> requires setter_iface<E> struct iface<E>: public xf<E> {};
 
