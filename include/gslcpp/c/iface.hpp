@@ -62,6 +62,10 @@ concept basic_iface= requires(
   { xf<E>::max_index(v) } -> same_as<std::size_t>;
   { xf<E>::min_index(v) } -> same_as<std::size_t>;
   { xf<E>::minmax_index(v, sp, sp) } -> same_as<void>;
+  { xf<E>::isnull(v) } -> same_as<bool>;
+  { xf<E>::ispos(v) } -> same_as<bool>;
+  { xf<E>::isneg(v) } -> same_as<bool>;
+  { xf<E>::isnonneg(v) } -> same_as<bool>;
 };
 
 

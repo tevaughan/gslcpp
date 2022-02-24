@@ -209,6 +209,26 @@ template<> struct xf<double> {
   static void minmax_index(vector const *v, size_t *min, size_t *max) {
     gsl_vector_minmax_index(v, min, max);
   }
+
+  /// True only if every element have zero value.
+  /// @param v  Pointer to vector.
+  /// @return  True only if every element have zero value.
+  static bool isnull(vector const *v) { return gsl_vector_isnull(v); }
+
+  /// True only if every element be positive.
+  /// @param v  Pointer to vector.
+  /// @return  True only if every element be positive.
+  static bool ispos(vector const *v) { return gsl_vector_ispos(v); }
+
+  /// True only if every element be negative.
+  /// @param v  Pointer to vector.
+  /// @return  True only if every element be negative.
+  static bool isneg(vector const *v) { return gsl_vector_isneg(v); }
+
+  /// True only if every element be non-negative.
+  /// @param v  Pointer to vector.
+  /// @return  True only if every element be non-negative.
+  static bool isnonneg(vector const *v) { return gsl_vector_isnonneg(v); }
 };
 
 
@@ -317,6 +337,26 @@ template<> struct xf<double const> {
   static void minmax_index(vector *v, size_t *min, size_t *max) {
     gsl_vector_minmax_index(v, min, max);
   }
+
+  /// True only if every element have zero value.
+  /// @param v  Pointer to vector.
+  /// @return  True only if every element have zero value.
+  static bool isnull(vector *v) { return gsl_vector_isnull(v); }
+
+  /// True only if every element be positive.
+  /// @param v  Pointer to vector.
+  /// @return  True only if every element be positive.
+  static bool ispos(vector *v) { return gsl_vector_ispos(v); }
+
+  /// True only if every element be negative.
+  /// @param v  Pointer to vector.
+  /// @return  True only if every element be negative.
+  static bool isneg(vector *v) { return gsl_vector_isneg(v); }
+
+  /// True only if every element be non-negative.
+  /// @param v  Pointer to vector.
+  /// @return  True only if every element be non-negative.
+  static bool isnonneg(vector *v) { return gsl_vector_isnonneg(v); }
 };
 
 

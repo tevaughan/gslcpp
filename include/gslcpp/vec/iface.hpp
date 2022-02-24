@@ -316,19 +316,19 @@ template<stor S> struct iface: public S {
 
   /// True only if every element have zero value.
   /// @return  True only if every element be zero.
-  bool isnull() const { return gsl_vector_isnull(&v()); }
+  bool isnull() const { return c::iface<E>::isnull(&v()); }
 
   /// True only if every element be positive.
   /// @return  True only if every element be positive.
-  bool ispos() const { return gsl_vector_ispos(&v()); }
+  bool ispos() const { return c::iface<E>::ispos(&v()); }
 
   /// True only if every element be negative.
   /// @return  True only if every element be negative.
-  bool isneg() const { return gsl_vector_isneg(&v()); }
+  bool isneg() const { return c::iface<E>::isneg(&v()); }
 
   /// True only if every element be non-negative.
   /// @return  True only if every element be non-negative.
-  bool isnonneg() const { return gsl_vector_isnonneg(&v()); }
+  bool isnonneg() const { return c::iface<E>::isnonneg(&v()); }
 };
 
 
