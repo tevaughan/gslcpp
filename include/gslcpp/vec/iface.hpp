@@ -301,17 +301,17 @@ template<stor S> struct iface: public S {
 
   /// Offset of greatest value.
   /// @return  Offset of greatest value.
-  size_t max_index() const { return gsl_vector_max_index(&v()); }
+  size_t max_index() const { return c::iface<E>::max_index(&v()); }
 
   /// Offset of least value.
   /// @return  Offset of least value.
-  size_t min_index() const { return gsl_vector_min_index(&v()); }
+  size_t min_index() const { return c::iface<E>::min_index(&v()); }
 
   /// Offset of least value and offset of greatest value.
   /// @param imin  On return, offset of least value.
   /// @param imax  On return, offset of greatest value.
   void minmax_index(size_t &imin, size_t &imax) const {
-    gsl_vector_minmax_index(&v(), &imin, &imax);
+    c::iface<E>::minmax_index(&v(), &imin, &imax);
   }
 
   /// True only if every element have zero value.

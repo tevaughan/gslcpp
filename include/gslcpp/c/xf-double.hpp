@@ -184,6 +184,31 @@ template<> struct xf<double> {
   static void minmax(vector const *v, double *min, double *max) {
     gsl_vector_minmax(v, min, max);
   }
+
+  /// Offset of element with maximum value.
+  /// @param v  Pointer to vector.
+  /// @return  Offset of element with maximum value.
+  static std::size_t max_index(vector const *v) {
+    return gsl_vector_max_index(v);
+  }
+
+  /// Offset of element with minimum value.
+  /// @param v  Pointer to vector.
+  /// @return  Offset of element with minimum value.
+  static std::size_t min_index(vector const *v) {
+    return gsl_vector_min_index(v);
+  }
+
+  /// Offset of element with minimum value and offset of element with maximum
+  /// value.
+  /// @param v  Pointer to vector.
+  /// @param min  Pointer to buffer into which offset of minimum value is to be
+  ///             stored.
+  /// @param max  Pointer to buffer into which offset of maximum value is to be
+  ///             stored.
+  static void minmax_index(vector const *v, size_t *min, size_t *max) {
+    gsl_vector_minmax_index(v, min, max);
+  }
 };
 
 
@@ -270,6 +295,27 @@ template<> struct xf<double const> {
   /// @param max  Pointer to buffer into which greatest value is loaded.
   static void minmax(vector *v, double *min, double *max) {
     gsl_vector_minmax(v, min, max);
+  }
+
+  /// Offset of element with maximum value.
+  /// @param v  Pointer to vector.
+  /// @return  Offset of element with maximum value.
+  static std::size_t max_index(vector *v) { return gsl_vector_max_index(v); }
+
+  /// Offset of element with minimum value.
+  /// @param v  Pointer to vector.
+  /// @return  Offset of element with minimum value.
+  static std::size_t min_index(vector *v) { return gsl_vector_min_index(v); }
+
+  /// Offset of element with minimum value and offset of element with maximum
+  /// value.
+  /// @param v  Pointer to vector.
+  /// @param min  Pointer to buffer into which offset of minimum value is to be
+  ///             stored.
+  /// @param max  Pointer to buffer into which offset of maximum value is to be
+  ///             stored.
+  static void minmax_index(vector *v, size_t *min, size_t *max) {
+    gsl_vector_minmax_index(v, min, max);
   }
 };
 

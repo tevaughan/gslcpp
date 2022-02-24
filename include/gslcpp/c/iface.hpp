@@ -45,7 +45,8 @@ concept basic_iface= requires(
       vector<E> *v,
       FILE *f,
       char const *c,
-      remove_const_t<E> *nce) {
+      remove_const_t<E> *nce,
+      std::size_t *sp) {
   typename vector<E>;
   typename vector_view<E>;
   { xf<E>::vector_view_array(e, s, s) } -> same_as<vector_view<E>>;
@@ -58,6 +59,9 @@ concept basic_iface= requires(
   { xf<E>::max(v) } -> same_as<remove_const_t<E>>;
   { xf<E>::min(v) } -> same_as<remove_const_t<E>>;
   { xf<E>::minmax(v, nce, nce) } -> same_as<void>;
+  { xf<E>::max_index(v) } -> same_as<std::size_t>;
+  { xf<E>::min_index(v) } -> same_as<std::size_t>;
+  { xf<E>::minmax_index(v, sp, sp) } -> same_as<void>;
 };
 
 
@@ -65,8 +69,15 @@ concept basic_iface= requires(
 /// The type of each element of the vector or the matrix must be non-`const`.
 /// @tparam E  Type of each element.
 template<typename E>
-concept setter_iface= basic_iface<E> &&requires(
-      E const &e, std::size_t s, vector<E> *v, vector<E> const *cv, FILE *f) {
+concept setter_iface= //
+      basic_iface<E> //
+            && //
+            requires(
+                  E const &e,
+                  std::size_t s,
+                  vector<E> *v,
+                  vector<E> const *cv,
+                  FILE *f) {
   { xf<E>::set(v, s, e) } -> same_as<void>;
   { xf<E>::set_all(v, e) } -> same_as<void>;
   { xf<E>::set_zero(v) } -> same_as<void>;
