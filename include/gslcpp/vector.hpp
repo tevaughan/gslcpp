@@ -1,6 +1,12 @@
-/// @file       include/gslcpp/vector.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition for gsl::vector_s, gsl::vector_d, and gsl::vector_v.
+/// \dir        include
+/// \brief      Top-level directory of include-files of any library.
+
+/// \dir        include/gslcpp
+/// \brief      Top-level directory for gslcpp's header-only library.
+
+/// \file       include/gslcpp/vector.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition for gsl::vector_s, gsl::vector_d, and gsl::vector_v.
 
 #pragma once
 

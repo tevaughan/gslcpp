@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/vec/iterator.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition for gsl::vec::iterator.
+/// \file       include/gslcpp/vec/iterator.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition for gsl::vec::iterator.
 
 #pragma once
 

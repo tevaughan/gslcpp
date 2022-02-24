@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/xf-double.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition for gsl::c::xf<double>, gsl::c::xf<double const>.
+/// \file       include/gslcpp/c/xf-double.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition for gsl::c::xf<double>, gsl::c::xf<double const>.
 
 #pragma once
 #include "xf.hpp"

@@ -1,7 +1,7 @@
-/// @file       include/gslcpp/vec/stor.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \file       include/gslcpp/vec/stor.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
 ///
-/// @brief      Definition for
+/// \brief      Definition for
 ///             gsl::vec::stor,
 ///             gsl::vec::stat,
 ///             gsl::vec::dyna, and

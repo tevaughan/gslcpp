@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/version.hpp
-/// @brief      Definition of GSL_AT_LEAST and EIGEN_AT_LEAST.
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \file       include/gslcpp/version.hpp
+/// \brief      Definition of GSL_AT_LEAST() and EIGEN_AT_LEAST().
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
 
 #pragma once
 

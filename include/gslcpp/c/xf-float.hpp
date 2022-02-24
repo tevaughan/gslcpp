@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/xf-float.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition for gsl::c::xf<float>, gsl::c::xf<float const>.
+/// \file       include/gslcpp/c/xf-float.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition for gsl::c::xf<float>, gsl::c::xf<float const>.
 
 #pragma once
 #include "xf.hpp"

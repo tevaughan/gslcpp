@@ -1,7 +1,10 @@
-/// @file       include/gslcpp/c/iface.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \dir        include/gslcpp/c
+/// \brief      Interface to GSL's native, C-language functions and types.
+
+/// \file       include/gslcpp/c/iface.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
 ///
-/// @brief      Definition for
+/// \brief      Definition for
 ///             gsl::c::vector,
 ///             gsl::c::vector_view,
 ///             gsl::c::basic_iface,
@@ -13,7 +16,7 @@
 #include "xf.hpp" // xf
 #include <concepts> // same_as
 
-/// Namespace for interface to GSL's native, C-language functions and types.
+/// Interface to GSL's native, C-language functions and types.
 namespace gsl::c {
 
 

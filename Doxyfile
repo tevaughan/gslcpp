@@ -358,7 +358,7 @@ AUTOLINK_SUPPORT       = YES
 # diagrams that involve STL classes more complete and accurate.
 # The default value is: NO.
 
-BUILTIN_STL_SUPPORT    = NO
+BUILTIN_STL_SUPPORT    = YES
 
 # If you use Microsoft's C++/CLI language, you should set this option to YES to
 # enable parsing support.
@@ -484,7 +484,7 @@ EXTRACT_ALL            = NO
 # be included in the documentation.
 # The default value is: NO.
 
-EXTRACT_PRIVATE        = NO
+EXTRACT_PRIVATE        = YES
 
 # If the EXTRACT_PRIV_VIRTUAL tag is set to YES, documented private virtual
 # methods of a class will be included in the documentation.
@@ -496,13 +496,13 @@ EXTRACT_PRIV_VIRTUAL   = NO
 # scope will be included in the documentation.
 # The default value is: NO.
 
-EXTRACT_PACKAGE        = NO
+EXTRACT_PACKAGE        = YES
 
 # If the EXTRACT_STATIC tag is set to YES, all static members of a file will be
 # included in the documentation.
 # The default value is: NO.
 
-EXTRACT_STATIC         = NO
+EXTRACT_STATIC         = YES
 
 # If the EXTRACT_LOCAL_CLASSES tag is set to YES, classes (and structs) defined
 # locally in source files will be included in the documentation. If set to NO,
@@ -686,7 +686,7 @@ SORT_BY_SCOPE_NAME     = NO
 # accept a match between prototype and implementation in such cases.
 # The default value is: NO.
 
-STRICT_PROTO_MATCHING  = NO
+STRICT_PROTO_MATCHING  = YES
 
 # The GENERATE_TODOLIST tag can be used to enable (YES) or disable (NO) the todo
 # list. This list is created by putting \todo commands in the documentation.

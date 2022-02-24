@@ -1,6 +1,9 @@
-/// @file       include/gslcpp/vec/iface.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition for gsl::vec::iface.
+/// \dir        include/gslcpp/vec
+/// \brief      Types and functions specific to interface to GSL's vectors.
+
+/// \file       include/gslcpp/vec/iface.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition for gsl::vec::iface.
 
 #pragma once
 

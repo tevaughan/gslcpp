@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/xf.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Declaration for gsl::c::xf.
+/// \file       include/gslcpp/c/xf.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Declaration for gsl::c::xf.
 
 #pragma once
 // Use inline-definition of each accessor-function.
