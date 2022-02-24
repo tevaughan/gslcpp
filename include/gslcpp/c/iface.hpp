@@ -21,15 +21,19 @@ using std::remove_const_t;
 using std::same_as;
 
 
-/// Specific type of `gsl_vector` corresponding to element-type `E`. For
-/// example, when `E==double`, the type is `gsl_vector`, and when `E==float`,
-/// the type is `gsl_vector_float`.
+/// Specific type of `gsl_vector` corresponding to element-type `E`.
+///
+/// For example, when `E==double`, the type is `gsl_vector`, and when
+/// `E==float`, the type is `gsl_vector_float`.
+///
 /// @param E  Type of each element.
 template<typename E> using vector= typename xf<E>::vector;
 
-/// Specific type of `gsl_vector_view` corresponding to element-type `E`.  For
-/// example, when `E==double`, the type is `gsl_vector_view`, and when
+/// Specific type of `gsl_vector_view` corresponding to element-type `E`.
+///
+/// For example, when `E==double`, the type is `gsl_vector_view`, and when
 /// `E==float`, the type is `gsl_vector_float_view`.
+///
 /// @param E  Type of each element.
 template<typename E> using vector_view= typename xf<E>::vector_view;
 
@@ -40,26 +44,28 @@ template<typename E> using vector_view= typename xf<E>::vector_view;
 /// `E` may here be a `const` or a non-`const` type and is the primitive type
 /// (such as `double`) of each element in a vector or matrix.
 ///
-/// For discussion in the present paragraph about relationships between
-/// `basic_iface` and `setter_iface`, let us suppose, for the moment, that `E`
-/// designates a non-`const` type.  Then `xf<E>` (for example, see
-/// `xf<double>`) implements static functions, each of which calls the
-/// appropriate function in GSL's native C-interface. `xf<E const>` implements
-/// all of `basic_iface`, and `xf<E>` implements all of `setter_iface`.
+/// For explanation of the relationships between `basic_iface` and \ref
+/// gsl::c::setter_iface "setter_iface", however, let us suppose, for the
+/// moment, that `E` designates a non-`const` type.  Then `xf<E>` (for example,
+/// \ref gsl::c::xf<double> "xf<double>") implements static functions, each of
+/// which calls the appropriate function in GSL's native C-interface.  `xf<E
+/// const>` implements all of `basic_iface`, and `xf<E>` implements all of \ref
+/// gsl::c::setter_iface "setter_iface".
 ///
 /// Although `xf<E>` inherits from `xf<E const>`, three of the functions
 /// identified in `basic_iface` and implemented in `xf<E const>` must be
 /// re-implemented in `xf<E>` so that the non-`const` version exists for each
 /// function.  They are
-/// - `xf<E>::vector_view_array`
-/// - `xf<E>::subvector`, and
-/// - `xf<E>::ptr`.
+/// - `xf<E>::vector_view_array()`
+/// - `xf<E>::subvector()`, and
+/// - `xf<E>::ptr()`.
 ///
-/// \see setter_iface
-/// \see xf<double>
-/// \see xf<double>::vector_view_array
-/// \see xf<double>::subvector
-/// \see xf<double>::ptr
+/// \sa \ref gsl::c::setter_iface "setter_iface"
+/// \sa \ref gsl::c::xf<double> "xf<double>"
+/// \sa \ref gsl::c::xf<double>::vector_view_array()
+///          "xf<double>::vector_view_array"
+/// \sa \ref gsl::c::xf<double>::subvector() "xf<double>::subvector"
+/// \sa \ref gsl::c::xf<double>::ptr() "xf<double>::ptr"
 ///
 /// @tparam E  Type of each element; `E` can be `const` or non-`const`.
 template<typename E>
@@ -103,7 +109,7 @@ concept basic_iface= requires(
 /// identified in `setter_iface` need be implemented only in xf<E>, not also in
 /// xf<E const>.
 ///
-/// \see basic_iface
+/// \see gsl::c::basic_iface "basic_iface"
 ///
 /// @tparam E  Type of each element.
 template<typename E>

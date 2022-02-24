@@ -28,7 +28,7 @@ using Eigen::Stride;
 /// Generic template for struct that provides, on basis of element-type `E`,
 /// appropriate GSL C-types and functions.
 ///
-/// \sa basic_iface
+/// \sa \ref gsl::c::basic_iface "basic_iface"
 ///
 /// @tparam E  Primitive type (either `const` or non-`const) of each element in
 ///            vector or array.
