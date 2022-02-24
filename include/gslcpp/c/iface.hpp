@@ -107,7 +107,7 @@ concept basic_iface= requires(
 /// identified in `setter_iface` need be implemented only in xf<E>, not also in
 /// xf<E const>.
 ///
-/// \see gsl::c::basic_iface "basic_iface"
+/// \sa \ref gsl::c::basic_iface "basic_iface"
 ///
 /// @tparam E  Type of each element.
 template<typename E>

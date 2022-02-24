@@ -18,6 +18,7 @@ namespace gsl {
 template<typename T> class vector_v;
 
 
+/// Types and functions specific to the interface to GSL's vectors.
 namespace vec {
 
 
