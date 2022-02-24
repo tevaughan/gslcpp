@@ -3,6 +3,7 @@
 /// @brief      Definition for gsl::c::xf<double>, gsl::c::xf<double const>.
 
 #pragma once
+
 #include "xf.hpp"
 
 namespace gsl::c {
@@ -154,6 +155,14 @@ template<> struct xf<double> {
   static int add_constant(vector *v, double const &x) {
     return gsl_vector_add_constant(v, x);
   }
+
+  static double sum(vector const *v) {
+#if GSL_AT_LEAST(2, 7)
+    return gsl_vector_sum(v);
+#else
+    return sum_for_gsl_lt_2p7(*v);
+#endif
+  }
 };
 
 
@@ -211,6 +220,14 @@ template<> struct xf<double const> {
   /// @return  Zero only on success.
   static int fprintf(FILE *flp, vector *vec, char const *fmt) {
     return gsl_vector_fprintf(flp, vec, fmt);
+  }
+
+  static double sum(vector *v) {
+#if GSL_AT_LEAST(2, 7)
+    return gsl_vector_sum(v);
+#else
+    return sum_for_gsl_lt_2p7(*v);
+#endif
   }
 };
 

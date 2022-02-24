@@ -164,6 +164,14 @@ template<> struct xf<float> {
   static int add_constant(vector *v, float x) {
     return gsl_vector_float_add_constant(v, x);
   }
+
+  static float sum(vector const *v) {
+#if GSL_AT_LEAST(2, 7)
+    return gsl_vector_float_sum(v);
+#else
+    return sum_for_gsl_lt_2p7(*v);
+#endif
+  }
 };
 
 
@@ -223,6 +231,14 @@ template<> struct xf<float const> {
   /// @return  Zero only on success.
   static int fprintf(FILE *flp, vector *vec, char const *fmt) {
     return gsl_vector_float_fprintf(flp, vec, fmt);
+  }
+
+  static float sum(vector *v) {
+#if GSL_AT_LEAST(2, 7)
+    return gsl_vector_float_sum(v);
+#else
+    return sum_for_gsl_lt_2p7(*v);
+#endif
   }
 };
 

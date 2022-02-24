@@ -10,8 +10,7 @@
 
 #pragma once
 
-#include "xf-double.hpp" // xf<double>
-#include "xf-float.hpp" // xf<float>
+#include "xf.hpp" // xf
 #include <concepts> // same_as
 
 /// Namespace for interface to GSL's native, C-language functions and types.
@@ -50,6 +49,7 @@ concept basic_iface=
   { xf<E>::ptr(v, s) } -> same_as<E *>;
   { xf<E>::fwrite(f, v) } -> same_as<int>;
   { xf<E>::fprintf(f, v, c) } -> same_as<int>;
+  { xf<E>::sum(v) } -> same_as<remove_const_t<E>>;
 };
 
 

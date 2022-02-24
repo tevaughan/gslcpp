@@ -2,7 +2,7 @@ clang-12
 %cpp -std=c++20
 -I/usr/include/eigen3
 -I/home/tevaugha/Src/gslcpp/include
--DGSL_VERSION_MAJOR=2
--DGSL_VERSION_MINOR=5
--DEIGEN_VERSION_MAJOR=3
--DEIGEN_VERSION_MINOR=3
+-DGSL_MAJOR=2
+-DGSL_MINOR=5
+-DEIGEN_MAJOR=3
+-DEIGEN_MINOR=3

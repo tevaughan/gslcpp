@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "../c/xf-double.hpp" // xf<double>
+#include "../c/xf-float.hpp" // xf<float>
 #include "../version.hpp" // VERSION
 #include "iterator.hpp" // iterator
 #include "stor.hpp" // c::iface, stor, view, ...
@@ -280,16 +282,7 @@ template<stor S> struct iface: public S {
 
   /// Sum of elements.
   /// @return  Sum of elements.
-  E sum() const {
-    if constexpr(gsl::VERSION.at_least(2, 7)) {
-      return gsl_vector_sum(&v());
-    } else {
-      // TODO: Use interface for Eigen here.
-      std::remove_const_t<E> s= 0;
-      for(auto const &e: *this) s+= e;
-      return s;
-    }
-  }
+  E sum() const { return c::iface<E>::sum(&v()); }
 
   /// Greatest value of any element.
   /// @return  Greatest value of any element.
@@ -393,12 +386,12 @@ int axpby(
       iface<T> const &x,
       typename U::elem const &beta,
       iface<U> &y) {
-  if constexpr(gsl::VERSION.at_least(2, 7)) {
-    return gsl_vector_axpby(alpha, &x.v(), beta, &y.v());
-  } else {
-    // TODO: Use Eigen.
-    throw "not implemented yet";
-  }
+#if GSL_AT_LEAST(2, 7)
+  return gsl_vector_axpby(alpha, &x.v(), beta, &y.v());
+#else
+  // TODO: Use Eigen.
+  throw "not implemented yet";
+#endif
 }
 
 
