@@ -189,7 +189,7 @@ template<stor S> struct iface: public S {
   /// @param b  Vector whose contents should be added into this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int add(iface<T> const &b) {
-    return gsl_vector_add(&v(), &b.v());
+    return c::iface<E>::add(&v(), &b.v());
   }
 
   /// Subtract contents of `b` from this vector in place.
@@ -197,7 +197,7 @@ template<stor S> struct iface: public S {
   /// @param b  Vector whose contents should be subtracted from this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int sub(iface<T> const &b) {
-    return gsl_vector_sub(&v(), &b.v());
+    return c::iface<E>::sub(&v(), &b.v());
   }
 
   /// Multiply contents of `b` into this vector in place.
@@ -205,7 +205,7 @@ template<stor S> struct iface: public S {
   /// @param b  Vector whose contents should be multiplied into this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int mul(iface<T> const &b) {
-    return gsl_vector_mul(&v(), &b.v());
+    return c::iface<E>::mul(&v(), &b.v());
   }
 
   /// Divide contents of `b` into this vector in place.
@@ -213,7 +213,7 @@ template<stor S> struct iface: public S {
   /// @param b  Vector whose contents should be divided into this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int div(iface<T> const &b) {
-    return gsl_vector_div(&v(), &b.v());
+    return c::iface<E>::div(&v(), &b.v());
   }
 
   /// Add contents of `b` into this vector in place.
@@ -255,7 +255,7 @@ template<stor S> struct iface: public S {
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
   /// @return  TBD: GSL's documentation does not specify.
-  int scale(E const &x) { return gsl_vector_scale(&v(), x); }
+  int scale(E const &x) { return c::iface<E>::scale(&v(), x); }
 
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
@@ -268,7 +268,7 @@ template<stor S> struct iface: public S {
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
   /// @return  TBD: GSL's documentation does not specify.
-  int add_constant(E const &x) { return gsl_vector_add_constant(&v(), x); }
+  int add_constant(E const &x) { return c::iface<E>::add_constant(&v(), x); }
 
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.

@@ -118,6 +118,52 @@ template<> struct xf<float> {
   /// @param v  Pointer to vector.
   /// @return  TBD: GSL's documentation does not specify.
   static int reverse(vector *v) { return gsl_vector_float_reverse(v); }
+
+  /// Add contents of `cv` into `v` in place.
+  /// @param v  Pointer to vector into which `cv` should be accumulated.
+  /// @param cv  Pointer to vector whose contents should be added into `v`.
+  /// @return  TBD: GSL's documentation does not specify.
+  static int add(vector *v, vector const *cv) {
+    return gsl_vector_float_add(v, cv);
+  }
+
+  /// Subtract contents of `cv` from `v` in place.
+  /// @param v  Pointer to vector that should be reduced by `cv`.
+  /// @param cv  Pointer to vector to be subtracted from `v`.
+  /// @return  TBD: GSL's documentation does not specify.
+  static int sub(vector *v, vector const *cv) {
+    return gsl_vector_float_sub(v, cv);
+  }
+
+  /// Multiply contents of `cv` into `v` in place.
+  /// @param v  Pointer to vector into which `cv` should be multiplied.
+  /// @param cv  Pointer to vector to be multiplied into `v`.
+  /// @return  TBD: GSL's documentation does not specify.
+  static int mul(vector *v, vector const *cv) {
+    return gsl_vector_float_mul(v, cv);
+  }
+
+  /// Dive `cv` into `v` in place.
+  /// @param v  Pointer to vector that should be divided by `cv`.
+  /// @param cv  Pointer to vector whose contents should be divided into `v`.
+  /// @return  TBD: GSL's documentation does not specify.
+  static int div(vector *v, vector const *cv) {
+    return gsl_vector_float_div(v, cv);
+  }
+
+  /// Multiply scalar into vector in place.
+  /// @param v  Pointer to vector to be scaled.
+  /// @param x  Scalar to multiply into `v`.
+  /// @return  TBD: GSL's documentation does not specify.
+  static int scale(vector *v, float x) { return gsl_vector_float_scale(v, x); }
+
+  /// Add constant into each element of `v` in place.
+  /// @param v  Pointer to vector whose elements are to be added to.
+  /// @param x  Constant to add into `v`.
+  /// @return  TBD: GSL's documentation does not specify.
+  static int add_constant(vector *v, float x) {
+    return gsl_vector_float_add_constant(v, x);
+  }
 };
 
 

@@ -57,8 +57,8 @@ concept basic_iface=
 /// The type of each element of the vector or the matrix must be non-`const`.
 /// @tparam E  Type of each element.
 template<typename E>
-concept setter_iface= basic_iface<E> &&
-requires(E const &e, std::size_t s, vector<E> *v, FILE *f) {
+concept setter_iface= basic_iface<E> &&requires(
+      E const &e, std::size_t s, vector<E> *v, vector<E> const *cv, FILE *f) {
   { xf<E>::set(v, s, e) } -> same_as<void>;
   { xf<E>::set_all(v, e) } -> same_as<void>;
   { xf<E>::set_zero(v) } -> same_as<void>;
@@ -67,6 +67,12 @@ requires(E const &e, std::size_t s, vector<E> *v, FILE *f) {
   { xf<E>::fscanf(f, v) } -> same_as<int>;
   { xf<E>::swap_elements(v, s, s) } -> same_as<int>;
   { xf<E>::reverse(v) } -> same_as<int>;
+  { xf<E>::add(v, cv) } -> same_as<int>;
+  { xf<E>::sub(v, cv) } -> same_as<int>;
+  { xf<E>::mul(v, cv) } -> same_as<int>;
+  { xf<E>::div(v, cv) } -> same_as<int>;
+  { xf<E>::scale(v, e) } -> same_as<int>;
+  { xf<E>::add_constant(v, e) } -> same_as<int>;
 };
 
 
