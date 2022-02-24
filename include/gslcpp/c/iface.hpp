@@ -144,13 +144,13 @@ requires(
 ///
 /// \anchor generic_c_iface
 ///
-/// Consider a primitive, non-`const` type `P`.  Two specializations are
-/// defined in relation to `P`:
-/// - \ref c_iface_nonconst "iface<P>" and
-/// - \ref c_iface_const "iface <P const>".
+/// Consider a primitive, non-`const` type `E`.  Two specializations are
+/// defined in relation to `E`:
+/// - \ref c_iface_nonconst "iface<E>" and
+/// - \ref c_iface_const "iface <E const>".
 ///
-/// @tparam P  Primitive type of each element in vector or matrix.
-template<typename P> struct iface;
+/// @tparam E  Primitive type of each element in vector or matrix.
+template<typename E> struct iface;
 
 
 /// Specialization for vector- and matrix-elements of `const`-type.
@@ -159,6 +159,8 @@ template<typename P> struct iface;
 ///
 /// `iface<E const>` implements
 /// \ref gsl::c::basic_iface "basic_iface<E const>".
+///
+/// \sa \ref generic_c_iface
 ///
 /// @param E  Non-`const` version of `const`-type of each element.
 template<typename E>
@@ -171,6 +173,8 @@ requires basic_iface<E const> struct iface<E const>: public xf<E const> {};
 ///
 /// `iface<E>` (for non-`const` `E`) implements
 /// \ref gsl::c::setter_iface "setter_iface<E>".
+///
+/// \sa \ref generic_c_iface
 ///
 /// @param E  (Non-`const`) type of each element.
 template<typename E> requires setter_iface<E> struct iface<E>: public xf<E> {};
