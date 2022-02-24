@@ -36,7 +36,7 @@ template<stor S> struct iface: public S {
   using S::v;
 
   /// Type of each element.
-  using E= typename S::elem;
+  using E= typename S::E;
 
   /// Type of iterator that points to mutable element.
   using iterator= vec::iterator<iface>;
@@ -383,11 +383,11 @@ std::ostream &operator<<(std::ostream &os, iface<U> const &u) {
 /// @return  TBD: GSL's documentation does not specify.
 template<typename T, typename U>
 int axpby(
-      typename T::elem const &alpha,
+      typename T::E const &alpha,
       iface<T> const &x,
-      typename U::elem const &beta,
+      typename U::E const &beta,
       iface<U> &y) {
-  return c::iface<typename U::elem>::axpby(alpha, &x.v(), beta, &y.v());
+  return c::iface<typename U::E>::axpby(alpha, &x.v(), beta, &y.v());
 }
 
 
@@ -399,7 +399,7 @@ int axpby(
 /// @return  True only if vectors be equal.
 template<typename S1, typename S2>
 bool equal(iface<S1> const &v1, iface<S2> const &v2) {
-  return c::iface<typename S1::elem>::equal(&v1.v(), &v2.v());
+  return c::iface<typename S1::E>::equal(&v1.v(), &v2.v());
 }
 
 
@@ -411,7 +411,7 @@ bool equal(iface<S1> const &v1, iface<S2> const &v2) {
 /// @return  TBD: GSL's documentation does not specify.
 template<typename T, typename U>
 int memcpy(iface<T> &dst, iface<U> const &src) {
-  return c::iface<typename T::elem>::memcpy(&dst.v(), &src.v());
+  return c::iface<typename T::E>::memcpy(&dst.v(), &src.v());
 }
 
 
@@ -422,7 +422,7 @@ int memcpy(iface<T> &dst, iface<U> const &src) {
 /// @param v2  Other vector.
 /// @return  TBD: GSL's documentation does not specify.
 template<typename S1, typename S2> int swap(iface<S1> &v1, iface<S2> &v2) {
-  return c::iface<typename S1::elem>::swap(&v1.v(), &v2.v());
+  return c::iface<typename S1::E>::swap(&v1.v(), &v2.v());
 }
 
 

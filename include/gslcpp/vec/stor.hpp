@@ -20,31 +20,32 @@ using std::same_as;
 /// Interface required for template referring to storage for vector.
 /// @tparam T  Candidate type of storage for vector.
 template<typename T> concept stor= requires(T &x, T const &y) {
-  typename T::elem;
-  { x.v() } -> same_as<typename c::iface<typename T::elem>::vector &>;
-  { y.v() } -> same_as<typename c::iface<typename T::elem>::vector const &>;
+  typename T::E;
+  { x.v() } -> same_as<typename c::iface<typename T::E>::vector &>;
+  { y.v() } -> same_as<typename c::iface<typename T::E>::vector const &>;
 };
 
 
 /// Interface to vector-storage allocated on stack, statically, at
-/// compile-time, and owned by instance of interface.  `S` indicates number of
-/// elements in instance of generic template.
+/// compile-time, and owned by instance of interface.
+///
+/// `S` indicates number of elements in instance of generic template.
+///
 /// @tparam S  Positive size.
 /// @tparam T  Type of each element in vector.
 template<unsigned S, typename T= double> class stat {
   static_assert(S > 0);
 
-  using view= typename c::iface<T>::vector_view;
+public:
+  using E= T; ///< Type of each element.
 
+private:
   T d_[S]; ///< Storage for data.
-  view view_; ///< GSL's view of data within instance of vector.
+  c::vector_view<E> view_; ///< GSL's view of data within instance of vector.
 
 public:
   /// Initialize GSL's view of static storage, but do not initialize elements.
   stat(): view_(gsl_vector_view_array(d_, S)) {}
-
-  /// Type of each element.
-  using elem= T;
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.
@@ -52,7 +53,7 @@ public:
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to immutable vector.
-  auto const &v() const { return view_.vector; }
+  auto &v() const { return view_.vector; }
 };
 
 
@@ -67,8 +68,7 @@ public:
     CALLOC ///< Initialize each element to zero after allocation.
   };
 
-  /// Type of each element.
-  using elem= T;
+  using E= T; ///< Type of each element.
 
 private:
   /// Identifier for one of two possible allocation-methods.
@@ -76,7 +76,7 @@ private:
   alloc_type alloc_type_= alloc_type::ALLOC;
 
   /// Pointer to allocated descriptor for vector.
-  typename c::iface<T>::vec *v_= nullptr;
+  c::vector<E> *v_= nullptr;
 
   /// Deallocate vector and its descriptor.
   void free() {
@@ -100,7 +100,7 @@ public:
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to immutable vector.
-  auto const &v() const { return *v_; }
+  auto &v() const { return *v_; }
 
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
@@ -168,28 +168,28 @@ public:
 /// Interface to vector-storage not owned by interface.
 /// @tparam T  Type of each element in vector.
 template<typename T> class view {
-  using cview_t= typename c::iface<T>::vector_view;
-  cview_t view_; ///< GSL's view of data outside instance.
+public:
+  using E= T; ///< Type of each element.
+
+private:
+  c::vector_view<E> view_; ///< GSL's view of data outside instance.
 
 public:
-  /// Type of each element.
-  using elem= T;
-
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.
   auto &v() { return view_.vector; }
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to immutable vector.
-  auto const &v() const { return view_.vector; }
+  auto &v() const { return view_.vector; }
 
   /// Constructor called by TBS.
   /// @param v  View to copy.
-  view(cview_t const &v): view_(v) {}
+  view(c::vector_view<E> const &v): view_(v) {}
 
   /// GSL's native, C-language interface to vector-view.
   /// @return  GSL's native, C-language interface to vector-view.
-  cview_t const &cview() const { return view_; }
+  auto &cview() const { return view_; }
 };
 
 
