@@ -51,47 +51,35 @@ template<typename E> using vector_view= typename xf<E>::vector_view;
 /// \ref gsl::c::setter_iface "setter_iface",
 /// let us suppose, for the moment, that `E` designates a non-`const` type.
 ///
-///   - Then `xf<E>` implements static functions, each of which calls the
-///     appropriate function in GSL's native C-interface.
+///   - Then `xf<E const>` implements static functions, each of which calls
+///     the appropriate function in GSL's native C-interface, in order to
+///     cover all of `basic_iface`, and
 ///
-///   - `xf<E const>` implements all of `basic_iface`, and `xf<E>` implements
-///     all of
+///   - `xf<E>` inherits from `xf<E const>` in order to pick up the
+///     functions needed to cover `basic_iface`.
+///
+///   - `xf<E>` implements additional static functions in order to cover
 ///     \ref gsl::c::setter_iface "setter_iface".
-///
-///   - Although `xf<E>` inherits from `xf<E const>`, three of the functions
-///     identified in `basic_iface` and implemented in `xf<E const>` must be
-///     re-implemented in `xf<E>` so that the non-`const` version exists for
-///     each function.
-///
-///   - They are
-///       - `xf<E>::vector_view_array()`
-///       - `xf<E>::subvector()`, and
-///       - `xf<E>::ptr()`.
-///
-/// \sa \ref gsl::c::setter_iface "setter_iface"
-/// \sa \ref gsl::c::xf<double>::vector_view_array() "vector_view_array"
-/// \sa \ref gsl::c::xf<double>::subvector() "subvector"
-/// \sa \ref gsl::c::xf<double>::ptr() "ptr"
 ///
 /// @tparam E  Type of each element; `E` can be `const` or non-`const`.
 template<typename E>
 concept basic_iface= requires(
-      E *e,
-      FILE *f,
-      char const *c,
-      remove_const_t<E> *nce,
-      std::size_t *sp,
-      std::size_t s,
-      vector<E> *v) {
+      E *ep, ///< Pointer to element.
+      FILE *f, ///< Pointer to buffered file-interface.
+      char const *c, ///< Pointer to printf-style format-string.
+      remove_const_t<E> *nce, ///< Pointer to guaranteed non-const element.
+      std::size_t *sp, ///< Pointer to offset.
+      std::size_t s, ///< Offset.
+      vector<E> *v ///< Pointer to gsl_vector.
+) {
   typename vector<E>;
   typename vector_view<E>;
-  // Need const and non-const versions of vector_view_array.
-  { xf<E>::vector_view_array(e, s, s) } -> same_as<vector_view<E>>;
-  // Need const and non-const versions of subvector.
-  { xf<E>::subvector(v, s, s, s) } -> same_as<vector_view<E>>;
+  {
+    xf<E>::vector_const_view_array(ep, s, s)
+    } -> same_as<vector_view<E const>>;
+  { xf<E>::const_subvector(v, s, s, s) } -> same_as<vector_view<E const>>;
   { xf<E>::get(v, s) } -> same_as<remove_const_t<E>>;
-  // Need const and non-const versions of ptr.
-  { xf<E>::ptr(v, s) } -> same_as<E *>;
+  { xf<E>::const_ptr(v, s) } -> same_as<E const *>;
   { xf<E>::fwrite(f, v) } -> same_as<int>;
   { xf<E>::fprintf(f, v, c) } -> same_as<int>;
   { xf<E>::sum(v) } -> same_as<remove_const_t<E>>;
@@ -121,11 +109,20 @@ concept basic_iface= requires(
 template<typename E>
 concept setter_iface= basic_iface<E> && //
 requires(
-      E const &e, std::size_t s, vector<E> *v, vector<E> const *cv, FILE *f) {
+      E * ep, ///< Pointer to element.
+      E const &e, ///< Reference to immutable element.
+      FILE *f, ///< Pointer to buffered file-interface.
+      std::size_t s, ///< Offset.
+      vector<E> *v, ///< Pointer to gsl_vector.
+      vector<E> const *cv ///< Pointer to gsl_vector const.
+) {
+  { xf<E>::vector_view_array(ep, s, s) } -> same_as<vector_view<E>>;
+  { xf<E>::subvector(v, s, s, s) } -> same_as<vector_view<E>>;
   { xf<E>::set(v, s, e) } -> same_as<void>;
   { xf<E>::set_all(v, e) } -> same_as<void>;
   { xf<E>::set_zero(v) } -> same_as<void>;
   { xf<E>::set_basis(v, s) } -> same_as<int>;
+  { xf<E>::ptr(v, s) } -> same_as<E *>;
   { xf<E>::fread(f, v) } -> same_as<int>;
   { xf<E>::fscanf(f, v) } -> same_as<int>;
   { xf<E>::swap_elements(v, s, s) } -> same_as<int>;
@@ -142,43 +139,27 @@ requires(
 };
 
 
-/// Generic template for GSL's native C-style interfaces associated with
-/// elements of type `E`.
-///
-/// \anchor generic_c_iface
-///
-/// Consider a primitive, non-`const` type `E`.  Two specializations are
-/// defined in relation to `E`:
-/// - \ref c_iface_nonconst "iface<E>" and
-/// - \ref c_iface_const "iface <E const>".
-///
+/// Generic template for interface to GSL-containers with element-type `E`.
+/// \anchor c_iface_generic
+/// \sa \ref c_iface_nonconst
+/// \sa \ref c_iface_const
 /// @tparam E  Primitive type of each element in vector or matrix.
 template<typename E> struct iface;
 
 
-/// Specialization for vector- and matrix-elements of `const`-type.
-///
+/// Specialization for elements of `const`-type.
 /// \anchor c_iface_const
-///
-/// `iface<E const>` implements
-/// \ref gsl::c::basic_iface "basic_iface<E const>".
-///
-/// \sa \ref generic_c_iface
-///
+/// `iface<E const>` implements gsl::c::basic_iface.
+/// \sa \ref c_iface_generic
 /// @param E  Non-`const` version of `const`-type of each element.
 template<typename E>
 requires basic_iface<E const> struct iface<E const>: public xf<E const> {};
 
 
-/// Specialization for vector- and matrix-elements of non-`const` type.
-///
+/// Specialization for elements of non-`const` type.
 /// \anchor c_iface_nonconst
-///
-/// `iface<E>` (for non-`const` `E`) implements
-/// \ref gsl::c::setter_iface "setter_iface<E>".
-///
-/// \sa \ref generic_c_iface
-///
+/// `iface<E>` (for non-`const` `E`) implements  gsl::c::setter_iface.
+/// \sa \ref c_iface_generic
 /// @param E  (Non-`const`) type of each element.
 template<typename E> requires setter_iface<E> struct iface<E>: public xf<E> {};
 

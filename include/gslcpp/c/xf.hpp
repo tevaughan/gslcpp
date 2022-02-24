@@ -17,8 +17,13 @@ namespace gsl::c {
 
 /// Generic template for struct that provides, on basis of element-type `E`,
 /// appropriate GSL C-types and functions.
+/// \anchor xf_generic
 ///
 /// \sa \ref gsl::c::basic_iface "basic_iface"
+/// \sa \ref xf_double_const
+/// \sa \ref xf_double
+/// \sa \ref xf_float_const
+/// \sa \ref xf_float
 ///
 /// @tparam E  Primitive type (either `const` or non-`const) of each element in
 ///            vector or array.

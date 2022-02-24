@@ -17,6 +17,9 @@
 namespace gsl {
 
 
+using std::is_const_v;
+
+
 // Forward declaration.
 template<typename T> class vector_v;
 
@@ -101,13 +104,19 @@ template<stor S> struct iface: public S {
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to mutable element.
-  E *ptr(size_t i) { return c::iface<E>::ptr(&v(), i); }
+  E *ptr(size_t i) {
+    if constexpr(is_const_v<E>) {
+      return c::iface<E>::const_ptr(&v(), i);
+    } else {
+      return c::iface<E>::ptr(&v(), i);
+    }
+  }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to immutable element.
-  E const *ptr(size_t i) const { return c::iface<E const>::ptr(&v(), i); }
+  E const *ptr(size_t i) const { return c::iface<E>::const_ptr(&v(), i); }
 
   /// Set every element.
   /// @param x  Value to which each element should be set.
@@ -165,7 +174,7 @@ template<stor S> struct iface: public S {
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
   iface<view<E const>> subvector(size_t n, size_t i= 0, size_t s= 1) const {
-    return c::iface<E const>::subvector(&v(), i, s, n);
+    return c::iface<E>::const_subvector(&v(), i, s, n);
   }
 
   /// View of vector.
@@ -175,7 +184,7 @@ template<stor S> struct iface: public S {
   /// View of vector.
   /// @return  View of vector.
   iface<vec::view<E const>> view() const {
-    return c::iface<E const>::subvector(&v(), 0, 1, size());
+    return c::iface<E>::const_subvector(&v(), 0, 1, size());
   }
 
   /// Swap elements within this vector.

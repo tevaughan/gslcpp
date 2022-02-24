@@ -9,6 +9,8 @@ namespace gsl::c {
 
 
 /// Specialization for `double const`.
+/// \anchor xf_double_const
+/// \sa xf_generic
 template<> struct xf<double const> {
   /// GSL's C-library type for non-const elements.
   using vector= gsl_vector const;
@@ -21,7 +23,8 @@ template<> struct xf<double const> {
   /// @param s  Stride of successive elements relative to pointer.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vector_view vector_view_array(double const *b, size_t s, size_t n) {
+  static vector_view
+  vector_const_view_array(double const *b, size_t s, size_t n) {
     return gsl_vector_const_view_array_with_stride(b, s, n);
   }
 
@@ -31,7 +34,7 @@ template<> struct xf<double const> {
   /// @param s  Stride of elements in view relative to offsets in `v`.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vector_view subvector(vector *v, size_t i, size_t s, size_t n) {
+  static vector_view const_subvector(vector *v, size_t i, size_t s, size_t n) {
     return gsl_vector_const_subvector_with_stride(v, i, s, n);
   }
 
@@ -45,7 +48,7 @@ template<> struct xf<double const> {
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
   /// @return  Pointer to element.
-  static double const *ptr(vector *v, size_t i) {
+  static double const *const_ptr(vector *v, size_t i) {
     return gsl_vector_const_ptr(v, i);
   }
 
@@ -143,6 +146,8 @@ template<> struct xf<double const> {
 
 
 /// Specialization for `double`.
+/// \anchor xf_double
+/// \sa xf_generic
 template<> struct xf<double>: public xf<double const> {
   /// GSL's C-library type for non-const elements.
   using vector= gsl_vector;

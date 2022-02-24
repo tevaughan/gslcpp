@@ -9,6 +9,8 @@ namespace gsl::c {
 
 
 /// Specialization for `float const`.
+/// \anchor xf_float_const
+/// \sa xf_generic
 template<> struct xf<float const> {
   /// GSL's C-library type for non-const elements.
   using vector= gsl_vector_float const;
@@ -21,7 +23,8 @@ template<> struct xf<float const> {
   /// @param s  Stride of successive elements relative to pointer.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vector_view vector_view_array(float const *b, size_t s, size_t n) {
+  static vector_view
+  vector_const_view_array(float const *b, size_t s, size_t n) {
     return gsl_vector_float_const_view_array_with_stride(b, s, n);
   }
 
@@ -31,7 +34,7 @@ template<> struct xf<float const> {
   /// @param s  Stride of elements in view relative to offsets in `v`.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vector_view subvector(vector *v, size_t i, size_t s, size_t n) {
+  static vector_view const_subvector(vector *v, size_t i, size_t s, size_t n) {
     return gsl_vector_float_const_subvector_with_stride(v, i, s, n);
   }
 
@@ -45,7 +48,7 @@ template<> struct xf<float const> {
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
   /// @return  Pointer to element.
-  static float const *ptr(vector *v, size_t i) {
+  static float const *const_ptr(vector *v, size_t i) {
     return gsl_vector_float_const_ptr(v, i);
   }
 
@@ -147,6 +150,8 @@ template<> struct xf<float const> {
 
 
 /// Specialization for `float`.
+/// \anchor xf_float
+/// \sa xf_generic
 template<> struct xf<float>: public xf<float const> {
   /// GSL's C-library type for non-const elements.
   using vector= gsl_vector_float;
