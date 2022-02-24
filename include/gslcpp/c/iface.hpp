@@ -39,8 +39,13 @@ template<typename E> using vector_view= typename xf<E>::vector_view;
 /// either `const` or non-`const`.
 /// @tparam E  type of each element.
 template<typename E>
-concept basic_iface=
-      requires(E *e, std::size_t s, vector<E> *v, FILE *f, char const *c) {
+concept basic_iface= requires(
+      E *e,
+      std::size_t s,
+      vector<E> *v,
+      FILE *f,
+      char const *c,
+      remove_const_t<E> *nce) {
   typename vector<E>;
   typename vector_view<E>;
   { xf<E>::vector_view_array(e, s, s) } -> same_as<vector_view<E>>;
@@ -50,6 +55,9 @@ concept basic_iface=
   { xf<E>::fwrite(f, v) } -> same_as<int>;
   { xf<E>::fprintf(f, v, c) } -> same_as<int>;
   { xf<E>::sum(v) } -> same_as<remove_const_t<E>>;
+  { xf<E>::max(v) } -> same_as<remove_const_t<E>>;
+  { xf<E>::min(v) } -> same_as<remove_const_t<E>>;
+  { xf<E>::minmax(v, nce, nce) } -> same_as<void>;
 };
 
 

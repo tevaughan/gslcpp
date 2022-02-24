@@ -21,10 +21,20 @@
 #endif
 
 
+/// True at preprocessing time only if GSL's version be at least so great as
+/// specified version.
+/// @param maj  GSL's major version-number.
+/// @param min  GSL's minor version-number.
+/// @return  True during preprocessing if GSL's version be great enough.
 #define GSL_AT_LEAST(maj, min) \
   GSL_MAJOR > (maj) || (GSL_MAJOR == (maj) && GSL_MAJOR >= (min))
 
 
+/// True at preprocessing time only if Eigen's version be at least so great as
+/// specified version.
+/// @param maj  Eigen's major version-number.
+/// @param min  Eigen's minor version-number.
+/// @return  True during preprocessing if Eigen's version be great enough.
 #define EIGEN_AT_LEAST(maj, min) \
   EIGEN_MAJOR > (maj) || (EIGEN_MAJOR == (maj) && EIGEN_MAJOR >= (min))
 

@@ -286,17 +286,17 @@ template<stor S> struct iface: public S {
 
   /// Greatest value of any element.
   /// @return  Greatest value of any element.
-  E max() const { return gsl_vector_max(&v()); }
+  E max() const { return c::iface<E>::max(&v()); }
 
   /// Least value of any element.
   /// @return  Least value of any element.
-  E min() const { return gsl_vector_min(&v()); }
+  E min() const { return c::iface<E>::min(&v()); }
 
   /// Greatest value and least value of any element.
   /// @param min_out  On return, least value.
   /// @param max_out  On return, greatest value.
   void minmax(E &min_out, E &max_out) const {
-    gsl_vector_minmax(&v(), &min_out, &max_out);
+    c::iface<E>::minmax(&v(), &min_out, &max_out);
   }
 
   /// Offset of greatest value.

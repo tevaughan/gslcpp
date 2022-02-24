@@ -50,6 +50,10 @@ message("--   Using ${EIGEN_MAJOR} as major version-number")
 message("--   Using ${EIGEN_MINOR} as minor version-number")
 add_definitions(-DEIGEN_MAJOR=${EIGEN_MAJOR})
 add_definitions(-DEIGEN_MINOR=${EIGEN_MINOR})
+# TODO: Add this flag to the right declaration (not add_definitions!).
+# This is needed in case the installed version of Eigen causes this warning to
+# be emitted.
+add_definitions(-Wno-deprecated-anon-enum-enum-conversion)
 
 # doxygen
 #

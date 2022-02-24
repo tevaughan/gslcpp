@@ -31,6 +31,8 @@ using Eigen::Stride;
 template<typename E> struct xf;
 
 
+/// Type of each element in gsl_vector of type V.
+/// @tparam V  Type of gsl_vector (for example, gsl_vector_float).
 template<typename V>
 using vdata_t= std::remove_reference_t<decltype(*V::data)>;
 
@@ -39,6 +41,7 @@ using vdata_t= std::remove_reference_t<decltype(*V::data)>;
 /// This function uses Eigen to compute the sum.
 /// @tparam V  Type of gsl_vector.
 /// @param v  Reference to vector.
+/// @return  Sum of elements.
 template<typename V> vdata_t<V> sum_for_gsl_lt_2p7(V const &v) {
   using E= vdata_t<V>;
   using S= Stride<Dynamic, Dynamic>;

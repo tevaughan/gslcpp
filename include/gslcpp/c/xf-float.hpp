@@ -165,12 +165,33 @@ template<> struct xf<float> {
     return gsl_vector_float_add_constant(v, x);
   }
 
+  /// Sum of elements in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Sum.
   static float sum(vector const *v) {
 #if GSL_AT_LEAST(2, 7)
     return gsl_vector_float_sum(v);
 #else
     return sum_for_gsl_lt_2p7(*v);
 #endif
+  }
+
+  /// Maximum value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Maximum value.
+  static double max(vector const *v) { return gsl_vector_float_max(v); }
+
+  /// Minimum value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Minimum value.
+  static double min(vector const *v) { return gsl_vector_float_min(v); }
+
+  /// Greatest value and least value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @param min  Pointer to buffer into which least value is loaded.
+  /// @param max  Pointer to buffer into which greatest value is loaded.
+  static void minmax(vector const *v, float *min, float *max) {
+    gsl_vector_float_minmax(v, min, max);
   }
 };
 
@@ -233,12 +254,33 @@ template<> struct xf<float const> {
     return gsl_vector_float_fprintf(flp, vec, fmt);
   }
 
+  /// Sum of elements in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Sum.
   static float sum(vector *v) {
 #if GSL_AT_LEAST(2, 7)
     return gsl_vector_float_sum(v);
 #else
     return sum_for_gsl_lt_2p7(*v);
 #endif
+  }
+
+  /// Maximum value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Maximum value.
+  static double max(vector *v) { return gsl_vector_float_max(v); }
+
+  /// Minimum value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Minimum value.
+  static double min(vector *v) { return gsl_vector_float_min(v); }
+
+  /// Greatest value and least value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @param min  Pointer to buffer into which least value is loaded.
+  /// @param max  Pointer to buffer into which greatest value is loaded.
+  static void minmax(vector *v, float *min, float *max) {
+    gsl_vector_float_minmax(v, min, max);
   }
 };
 

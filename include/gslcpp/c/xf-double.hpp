@@ -156,12 +156,33 @@ template<> struct xf<double> {
     return gsl_vector_add_constant(v, x);
   }
 
+  /// Sum of elements in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Sum.
   static double sum(vector const *v) {
 #if GSL_AT_LEAST(2, 7)
     return gsl_vector_sum(v);
 #else
     return sum_for_gsl_lt_2p7(*v);
 #endif
+  }
+
+  /// Maximum value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Maximum value.
+  static double max(vector const *v) { return gsl_vector_max(v); }
+
+  /// Minimum value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Minimum value.
+  static double min(vector const *v) { return gsl_vector_min(v); }
+
+  /// Greatest value and least value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @param min  Pointer to buffer into which least value is loaded.
+  /// @param max  Pointer to buffer into which greatest value is loaded.
+  static void minmax(vector const *v, double *min, double *max) {
+    gsl_vector_minmax(v, min, max);
   }
 };
 
@@ -222,12 +243,33 @@ template<> struct xf<double const> {
     return gsl_vector_fprintf(flp, vec, fmt);
   }
 
+  /// Sum of elements in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Sum.
   static double sum(vector *v) {
 #if GSL_AT_LEAST(2, 7)
     return gsl_vector_sum(v);
 #else
     return sum_for_gsl_lt_2p7(*v);
 #endif
+  }
+
+  /// Maximum value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Maximum value.
+  static double max(vector *v) { return gsl_vector_max(v); }
+
+  /// Minimum value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @return  Minimum value.
+  static double min(vector *v) { return gsl_vector_min(v); }
+
+  /// Greatest value and least value of any element in vector.
+  /// @param v  Pointer to vector.
+  /// @param min  Pointer to buffer into which least value is loaded.
+  /// @param max  Pointer to buffer into which greatest value is loaded.
+  static void minmax(vector *v, double *min, double *max) {
+    gsl_vector_minmax(v, min, max);
   }
 };
 
