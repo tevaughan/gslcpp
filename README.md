@@ -28,13 +28,13 @@ For the initial release:
 At present:
   - The C++-interface to `gsl_vector` is implemented.
     - The design allows adding element-types easily.
-    - Initially, the only type supported is `double`.
+    - Initially, the only types supported are `double` and `float`.
     - The unit-tests are almost done.
       - Class `vector_s` for stack-allocation is fully tested.
       - Class `vector_v` for vector-views is fully tested.
       - Class `vector_d` for dynamic allocation is not yet tested.
   - The C++-interface to the minimizers is not implemented yet.
-  - Interfaces with Eigen are not yet implemented.
+  - Only a few interfaces with Eigen are so far implemented.
 
 The design of support for vectors allows adding support for matrices easily.
   - Adding support for GSL-matrices will likely be the major feature in the
