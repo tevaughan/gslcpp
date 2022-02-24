@@ -240,6 +240,21 @@ template<> struct xf<float> {
   static bool isnonneg(vector const *v) {
     return gsl_vector_float_isnonneg(v);
   }
+
+  /// Linearly combine in place as `y = a*x + b*y`. This is implemented via
+  /// Eigen if the installed GSL have version less than 2.7.
+  /// @param a  Coefficient of first vector.
+  /// @param x  Pointer to first vector.
+  /// @param b  Coefficient of second vector.
+  /// @param y  Pointer to second vector and to result.
+  /// @return  TBD for GSL, zero if Eigen be used.
+  static int axpby(float a, vector const *x, float b, vector *y) {
+#if GSL_AT_LEAST(2, 7)
+    return gsl_vector_float_axpby(a, x, b, y);
+#else
+    return axpby_for_gsl_lt_2p7(a, *x, b, *y);
+#endif
+  }
 };
 
 

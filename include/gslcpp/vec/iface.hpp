@@ -386,12 +386,7 @@ int axpby(
       iface<T> const &x,
       typename U::elem const &beta,
       iface<U> &y) {
-#if GSL_AT_LEAST(2, 7)
-  return gsl_vector_axpby(alpha, &x.v(), beta, &y.v());
-#else
-  // TODO: Use Eigen.
-  throw "not implemented yet";
-#endif
+  return c::iface<typename U::elem>::axpby(alpha, &x.v(), beta, &y.v());
 }
 
 

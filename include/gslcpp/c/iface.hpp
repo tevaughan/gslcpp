@@ -96,6 +96,7 @@ concept setter_iface= //
   { xf<E>::div(v, cv) } -> same_as<int>;
   { xf<E>::scale(v, e) } -> same_as<int>;
   { xf<E>::add_constant(v, e) } -> same_as<int>;
+  { xf<E>::axpby(e, cv, e, v) } -> same_as<int>;
 };
 
 

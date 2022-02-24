@@ -7,13 +7,9 @@
 #include <sstream> // ostringstream
 
 
-#if defined(GSL_VER) && GSL_VER > 26
-using gsl::axpby;
-#endif
-
-
 using gsl::vector_s;
 using gsl::vector_v;
+using gsl::vec::axpby;
 using gsl::vec::iface;
 using std::ostringstream;
 
@@ -301,9 +297,7 @@ TEST_CASE("vec_iface's adding constant works.", "[vec-iface]") {
 
 
 TEST_CASE("vec_iface's statistical functions work.", "[vec-iface]") {
-#if defined(GSL_VER) && GSL_VER > 26
   REQUIRE(a.sum() == 6.0);
-#endif
   REQUIRE(a.max() == 3.0);
   REQUIRE(a.min() == 1.0);
 
@@ -354,17 +348,15 @@ TEST_CASE("vec_iface::isnonneg() works.", "[vec-iface]") {
 }
 
 
-#if defined(GSL_VER) && GSL_VER > 26
 TEST_CASE("axpby() accumulates correctly into y.", "[vec]") {
   vector_s<3> const x({1.0, 2.0, 3.0});
   vector_s<3> y({2.0, 3.0, 1.0});
   double const a= 0.5;
   double const b= 1.5;
   axpby(a, x, b, y);
-  double const r[]= {3.5, 5.5, 3.0};
-  check(r, y);
+  vector_s<3> const r({3.5, 5.5, 3.0});
+  REQUIRE(y == r);
 }
-#endif
 
 
 TEST_CASE("equal() compares correctly.", "[vec]") {
