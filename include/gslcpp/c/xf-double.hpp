@@ -10,7 +10,7 @@ namespace gsl::c {
 
 /// Specialization for `double const`.
 /// \anchor xf_double_const
-/// \sa xf_generic
+/// \sa \ref xf_generic
 template<> struct xf<double const> {
   /// GSL's C-library type for non-const elements.
   using vector= gsl_vector const;
@@ -147,7 +147,7 @@ template<> struct xf<double const> {
 
 /// Specialization for `double`.
 /// \anchor xf_double
-/// \sa xf_generic
+/// \sa \ref xf_generic
 template<> struct xf<double>: public xf<double const> {
   /// GSL's C-library type for non-const elements.
   using vector= gsl_vector;
