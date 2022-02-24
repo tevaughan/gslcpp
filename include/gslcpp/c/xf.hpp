@@ -27,12 +27,15 @@ using Eigen::Stride;
 
 /// Generic template for struct that provides, on basis of element-type `E`,
 /// appropriate GSL C-types and functions.
-/// @tparam E  Type of each element in vector.
+///
+/// \sa basic_iface
+///
+/// @tparam E  Primitive type (either `const` or non-`const) of each element in
+///            vector or array.
 template<typename E> struct xf;
 
 
-#if GSL_AT_LEAST(2, 7)
-#else
+#if !GSL_AT_LEAST(2, 7)
 
 /// Type of each element in gsl_vector of type V.
 /// @tparam V  Type of gsl_vector (for example, gsl_vector_float).

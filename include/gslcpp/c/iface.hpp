@@ -35,25 +35,50 @@ template<typename E> using vector_view= typename xf<E>::vector_view;
 
 
 /// Requirements on the basic interface to GSL's native C-types and
-/// C-functions.  The type of each element of the vector or the matrix might be
-/// either `const` or non-`const`.  Suppose that `E` designates the non-`const`
-/// type of each element.  Each of the types and functions identified in
-/// `basic_iface` must be implemented both in xf<E> and in xf<E const>.
-/// @tparam E  Type of each element.
+/// C-functions.
+///
+/// `E` may here be a `const` or a non-`const` type and is the primitive type
+/// (such as `double`) of each element in a vector or matrix.
+///
+/// For discussion in the present paragraph about relationships between
+/// `basic_iface` and `setter_iface`, let us suppose, for the moment, that `E`
+/// designates a non-`const` type.  Then `xf<E>` (for example, see
+/// `xf<double>`) implements static functions, each of which calls the
+/// appropriate function in GSL's native C-interface. `xf<E const>` implements
+/// all of `basic_iface`, and `xf<E>` implements all of `setter_iface`.
+///
+/// Although `xf<E>` inherits from `xf<E const>`, three of the functions
+/// identified in `basic_iface` and implemented in `xf<E const>` must be
+/// re-implemented in `xf<E>` so that the non-`const` version exists for each
+/// function.  They are
+/// - `xf<E>::vector_view_array`
+/// - `xf<E>::subvector`, and
+/// - `xf<E>::ptr`.
+///
+/// \see setter_iface
+/// \see xf<double>
+/// \see xf<double>::vector_view_array
+/// \see xf<double>::subvector
+/// \see xf<double>::ptr
+///
+/// @tparam E  Type of each element; `E` can be `const` or non-`const`.
 template<typename E>
 concept basic_iface= requires(
       E *e,
-      std::size_t s,
-      vector<E> *v,
       FILE *f,
       char const *c,
       remove_const_t<E> *nce,
-      std::size_t *sp) {
+      std::size_t *sp,
+      std::size_t s,
+      vector<E> *v) {
   typename vector<E>;
   typename vector_view<E>;
+  // Need const and non-const versions of vector_view_array.
   { xf<E>::vector_view_array(e, s, s) } -> same_as<vector_view<E>>;
+  // Need const and non-const versions of subvector.
   { xf<E>::subvector(v, s, s, s) } -> same_as<vector_view<E>>;
   { xf<E>::get(v, s) } -> same_as<remove_const_t<E>>;
+  // Need const and non-const versions of ptr.
   { xf<E>::ptr(v, s) } -> same_as<E *>;
   { xf<E>::fwrite(f, v) } -> same_as<int>;
   { xf<E>::fprintf(f, v, c) } -> same_as<int>;
@@ -73,20 +98,18 @@ concept basic_iface= requires(
 
 
 /// Requirements on the full interface to GSL's native C-types and C-functions.
-/// The type of each element of the vector or the matrix must be non-`const`.
-/// Each of the types and functions identified in `setter_iface` need be
-/// implemented only in xf<E>, not also in xf<E const>.
+///
+/// `E` must here be a non-`const` type. Each of the types and functions
+/// identified in `setter_iface` need be implemented only in xf<E>, not also in
+/// xf<E const>.
+///
+/// \see basic_iface
+///
 /// @tparam E  Type of each element.
 template<typename E>
-concept setter_iface= //
-      basic_iface<E> //
-            && //
-            requires(
-                  E const &e,
-                  std::size_t s,
-                  vector<E> *v,
-                  vector<E> const *cv,
-                  FILE *f) {
+concept setter_iface= basic_iface<E> && //
+requires(
+      E const &e, std::size_t s, vector<E> *v, vector<E> const *cv, FILE *f) {
   { xf<E>::set(v, s, e) } -> same_as<void>;
   { xf<E>::set_all(v, e) } -> same_as<void>;
   { xf<E>::set_zero(v) } -> same_as<void>;
@@ -103,7 +126,7 @@ concept setter_iface= //
   { xf<E>::add_constant(v, e) } -> same_as<int>;
   { xf<E>::axpby(e, cv, e, v) } -> same_as<int>;
   { xf<E>::memcpy(v, cv) } -> same_as<int>;
-  { xf<E>::swap(v,v) } -> same_as<int>;
+  { xf<E>::swap(v, v) } -> same_as<int>;
 };
 
 
