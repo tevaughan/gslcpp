@@ -53,6 +53,13 @@ template<typename V> vdata_t<V> sum_for_gsl_lt_2p7(V const &v) {
 }
 
 
+/// Linear combination with effect, `y = a*x + b*y`.
+/// @tparam V  Type of vectors to be combined.
+/// @param a  Coefficient of first vector.
+/// @param x  Reference to first vector.
+/// @param b  Coefficient of second vector.
+/// @param y  Reference to second vector, which is updated.
+/// @return  Zero; GSL's version has undocumented return-value.
 template<typename V>
 int axpby_for_gsl_lt_2p7(
       vdata_t<V> const &a, V const &x, vdata_t<V> const &b, V &y) {

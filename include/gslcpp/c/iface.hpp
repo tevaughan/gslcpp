@@ -36,8 +36,10 @@ template<typename E> using vector_view= typename xf<E>::vector_view;
 
 /// Requirements on the basic interface to GSL's native C-types and
 /// C-functions.  The type of each element of the vector or the matrix might be
-/// either `const` or non-`const`.
-/// @tparam E  type of each element.
+/// either `const` or non-`const`.  Suppose that `E` designates the non-`const`
+/// type of each element.  Each of the types and functions identified in
+/// `basic_iface` must be implemented both in xf<E> and in xf<E const>.
+/// @tparam E  Type of each element.
 template<typename E>
 concept basic_iface= requires(
       E *e,
@@ -66,11 +68,14 @@ concept basic_iface= requires(
   { xf<E>::ispos(v) } -> same_as<bool>;
   { xf<E>::isneg(v) } -> same_as<bool>;
   { xf<E>::isnonneg(v) } -> same_as<bool>;
+  { xf<E>::equal(v, v) } -> same_as<bool>;
 };
 
 
 /// Requirements on the full interface to GSL's native C-types and C-functions.
 /// The type of each element of the vector or the matrix must be non-`const`.
+/// Each of the types and functions identified in `setter_iface` need be
+/// implemented only in xf<E>, not also in xf<E const>.
 /// @tparam E  Type of each element.
 template<typename E>
 concept setter_iface= //
@@ -97,6 +102,8 @@ concept setter_iface= //
   { xf<E>::scale(v, e) } -> same_as<int>;
   { xf<E>::add_constant(v, e) } -> same_as<int>;
   { xf<E>::axpby(e, cv, e, v) } -> same_as<int>;
+  { xf<E>::memcpy(v, cv) } -> same_as<int>;
+  { xf<E>::swap(v,v) } -> same_as<int>;
 };
 
 

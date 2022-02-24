@@ -398,7 +398,7 @@ int axpby(
 /// @return  True only if vectors be equal.
 template<typename S1, typename S2>
 bool equal(iface<S1> const &v1, iface<S2> const &v2) {
-  return gsl_vector_equal(&v1.v(), &v2.v());
+  return c::iface<typename S1::elem>::equal(&v1.v(), &v2.v());
 }
 
 
@@ -410,7 +410,7 @@ bool equal(iface<S1> const &v1, iface<S2> const &v2) {
 /// @return  TBD: GSL's documentation does not specify.
 template<typename T, typename U>
 int memcpy(iface<T> &dst, iface<U> const &src) {
-  return gsl_vector_memcpy(&dst.v(), &src.v());
+  return c::iface<typename T::elem>::memcpy(&dst.v(), &src.v());
 }
 
 
@@ -421,7 +421,7 @@ int memcpy(iface<T> &dst, iface<U> const &src) {
 /// @param v2  Other vector.
 /// @return  TBD: GSL's documentation does not specify.
 template<typename S1, typename S2> int swap(iface<S1> &v1, iface<S2> &v2) {
-  return gsl_vector_swap(&v1.v(), &v2.v());
+  return c::iface<typename S1::elem>::swap(&v1.v(), &v2.v());
 }
 
 

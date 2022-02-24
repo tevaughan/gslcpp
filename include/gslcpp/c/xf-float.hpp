@@ -255,6 +255,28 @@ template<> struct xf<float> {
     return axpby_for_gsl_lt_2p7(a, *x, b, *y);
 #endif
   }
+
+  /// Test equality of two vectors.
+  /// @param a  Pointer to one vector.
+  /// @param b  Pointer to other vector.
+  /// @return  True only if vectors be equal.
+  static bool equal(vector const *a, vector const *b) {
+    return gsl_vector_float_equal(a, b);
+  }
+
+  /// Copy data from source to destination.
+  /// @param d  Pointer to destination-vector.
+  /// @param s  Pointer to source-vector.
+  /// @return TBD: GSL's documentation does not specify.
+  static int memcpy(vector *d, vector const *s) {
+    return gsl_vector_float_memcpy(d, s);
+  }
+
+  /// Swap contents of one and other vector, each with same length.
+  /// @param a  Pointer to one vector.
+  /// @param b  Pointer to other vector.
+  /// @return  TBD: GSL's documentation does not specify.
+  static int swap(vector *a, vector *b) { return gsl_vector_float_swap(a, b); }
 };
 
 
@@ -385,6 +407,14 @@ template<> struct xf<float const> {
   /// @param v  Pointer to vector.
   /// @return  True only if every element be non-negative.
   static bool isnonneg(vector *v) { return gsl_vector_float_isnonneg(v); }
+
+  /// Test equality of two vectors.
+  /// @param a  Pointer to one vector.
+  /// @param b  Pointer to other vector.
+  /// @return  True only if vectors be equal.
+  static bool equal(vector *a, vector *b) {
+    return gsl_vector_float_equal(a, b);
+  }
 };
 
 
