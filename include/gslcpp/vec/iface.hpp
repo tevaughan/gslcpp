@@ -101,9 +101,7 @@ template<stor S> struct iface: public S {
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to immutable element.
-  E const *ptr(size_t i) const {
-    return c::iface<E const>::ptr(&v(), i);
-  }
+  E const *ptr(size_t i) const { return c::iface<E const>::ptr(&v(), i); }
 
   /// Set every element.
   /// @param x  Value to which each element should be set.
@@ -179,12 +177,12 @@ template<stor S> struct iface: public S {
   /// @param j  Offset of other element.
   /// @return  TBD: GSL's documentation does not specify.
   int swap_elements(size_t i, size_t j) {
-    return gsl_vector_swap_elements(&v(), i, j);
+    return c::iface<E>::swap_elements(&v(), i, j);
   }
 
   /// Reverse order of elements.
   /// @return  TBD: GSL's documentation does not specify.
-  int reverse() { return gsl_vector_reverse(&v()); }
+  int reverse() { return c::iface<E>::reverse(&v()); }
 
   /// Add contents of `b` into this vector in place.
   /// @tparam T  Type of vector to be added into this.

@@ -104,6 +104,20 @@ template<> struct xf<float> {
   static int fscanf(FILE *f, vector *v) {
     return gsl_vector_float_fscanf(f, v);
   }
+
+  /// Swap elements within vector.
+  /// @param v  Pointer to vector.
+  /// @param i  Offset of one element.
+  /// @param j  Offset of other element.
+  /// @return  TBD: GSL's documentation does not specify.
+  static int swap_elements(vector *v, size_t i, size_t j) {
+    return gsl_vector_float_swap_elements(v, i, j);
+  }
+
+  /// Reverse order of elements.
+  /// @param v  Pointer to vector.
+  /// @return  TBD: GSL's documentation does not specify.
+  static int reverse(vector *v) { return gsl_vector_float_reverse(v); }
 };
 
 

@@ -65,6 +65,8 @@ requires(E const &e, std::size_t s, vector<E> *v, FILE *f) {
   { xf<E>::set_basis(v, s) } -> same_as<int>;
   { xf<E>::fread(f, v) } -> same_as<int>;
   { xf<E>::fscanf(f, v) } -> same_as<int>;
+  { xf<E>::swap_elements(v, s, s) } -> same_as<int>;
+  { xf<E>::reverse(v) } -> same_as<int>;
 };
 
 
