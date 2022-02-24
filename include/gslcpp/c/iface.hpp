@@ -46,11 +46,10 @@ template<typename E> using vector_view= typename xf<E>::vector_view;
 ///
 /// For explanation of the relationships between `basic_iface` and \ref
 /// gsl::c::setter_iface "setter_iface", however, let us suppose, for the
-/// moment, that `E` designates a non-`const` type.  Then `xf<E>` (for example,
-/// \ref gsl::c::xf<double> "xf<double>") implements static functions, each of
-/// which calls the appropriate function in GSL's native C-interface.  `xf<E
-/// const>` implements all of `basic_iface`, and `xf<E>` implements all of \ref
-/// gsl::c::setter_iface "setter_iface".
+/// moment, that `E` designates a non-`const` type.  Then `xf<E>` implements
+/// static functions, each of which calls the appropriate function in GSL's
+/// native C-interface.  `xf<E const>` implements all of `basic_iface`, and
+/// `xf<E>` implements all of \ref gsl::c::setter_iface "setter_iface".
 ///
 /// Although `xf<E>` inherits from `xf<E const>`, three of the functions
 /// identified in `basic_iface` and implemented in `xf<E const>` must be
@@ -61,7 +60,6 @@ template<typename E> using vector_view= typename xf<E>::vector_view;
 /// - `xf<E>::ptr()`.
 ///
 /// \sa \ref gsl::c::setter_iface "setter_iface"
-/// \sa \ref gsl::c::xf<double> "xf<double>"
 /// \sa \ref gsl::c::xf<double>::vector_view_array()
 ///          "xf<double>::vector_view_array"
 /// \sa \ref gsl::c::xf<double>::subvector() "xf<double>::subvector"
