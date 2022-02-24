@@ -3,26 +3,16 @@
 /// @brief      Declaration for gsl::c::xf.
 
 #pragma once
-
 // Use inline-definition of each accessor-function.
 // - Define this before including `gsl_vector.h`.
 #ifndef HAVE_INLINE
 #  define HAVE_INLINE
 #endif
-
-#include "../version.hpp" // GSL_AT_LEAST()
-#include <Eigen/Core> // Map, Matrix
 #include <gsl/gsl_vector.h> // gsl_vector, gsl_vector_float, etc.
 
 /// Namespace for implementation, by type of element in vector or matrix, of
 /// interface to GSL's native, C-language functions and types.
 namespace gsl::c {
-
-
-using Eigen::Dynamic;
-using Eigen::Map;
-using Eigen::Matrix;
-using Eigen::Stride;
 
 
 /// Generic template for struct that provides, on basis of element-type `E`,
@@ -35,7 +25,20 @@ using Eigen::Stride;
 template<typename E> struct xf;
 
 
+} // namespace gsl::c
+
+#include "../version.hpp" // GSL_AT_LEAST()
 #if !GSL_AT_LEAST(2, 7)
+#  include <Eigen/Core> // Map, Matrix
+
+namespace gsl::c {
+
+
+using Eigen::Dynamic;
+using Eigen::Map;
+using Eigen::Matrix;
+using Eigen::Stride;
+
 
 /// Type of each element in gsl_vector of type V.
 /// @tparam V  Type of gsl_vector (for example, gsl_vector_float).
@@ -76,9 +79,9 @@ int axpby_for_gsl_lt_2p7(
   return 0;
 }
 
-#endif
-
 
 } // namespace gsl::c
+
+#endif // !GSL_AT_LEAST(2, 7)
 
 // EOF
