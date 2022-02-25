@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "../c/fprintf.hpp" // fprintf
 #include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
 #include "../c/ptr.hpp" // ptr
@@ -147,7 +148,7 @@ template<stor S> struct iface: public S {
   /// @param fmt  printf()-style format-string.
   /// @return  Zero only on success.
   int fprintf(FILE *flp, char const *fmt) const {
-    return c::iface<E>::fprintf(flp, &v(), fmt);
+    return c::fprintf(flp, &v(), fmt);
   }
 
   /// Read ASCII-formatted representation of vector from file.

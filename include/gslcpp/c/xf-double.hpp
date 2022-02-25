@@ -14,15 +14,6 @@ namespace gsl::c {
 /// Specialization for `double const`.
 /// \sa \ref xf_generic
 template<> struct xf<double const> {
-  /// Write ASCII-formatted representation of vector to file.
-  /// @param flp  Pointer to structure for buffered interface.
-  /// @param vec  Pointer to gsl_vector.
-  /// @param fmt  printf()-style format-string.
-  /// @return  Zero only on success.
-  static int fprintf(FILE *flp, vector<double const> *vec, char const *fmt) {
-    return gsl_vector_fprintf(flp, vec, fmt);
-  }
-
   /// Sum of elements in vector.
   /// @param v  Pointer to vector.
   /// @return  Sum.
