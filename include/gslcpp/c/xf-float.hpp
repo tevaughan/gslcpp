@@ -14,27 +14,6 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// True only if every element be positive.
-  /// @param v  Pointer to vector.
-  /// @return  True only if every element be positive.
-  static bool ispos(vector<float const> *v) {
-    return gsl_vector_float_ispos(v);
-  }
-
-  /// True only if every element be negative.
-  /// @param v  Pointer to vector.
-  /// @return  True only if every element be negative.
-  static bool isneg(vector<float const> *v) {
-    return gsl_vector_float_isneg(v);
-  }
-
-  /// True only if every element be non-negative.
-  /// @param v  Pointer to vector.
-  /// @return  True only if every element be non-negative.
-  static bool isnonneg(vector<float const> *v) {
-    return gsl_vector_float_isnonneg(v);
-  }
-
   /// Test equality of two vectors.
   /// @param a  Pointer to one vector.
   /// @param b  Pointer to other vector.

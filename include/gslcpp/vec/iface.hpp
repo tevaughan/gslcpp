@@ -11,7 +11,10 @@
 #include "../c/fprintf.hpp" // fprintf
 #include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
+#include "../c/isneg.hpp" // isneg
+#include "../c/isnonneg.hpp" // isnonneg
 #include "../c/isnull.hpp" // isnull
+#include "../c/ispos.hpp" // ispos
 #include "../c/max-index.hpp" // max_index
 #include "../c/max.hpp" // max
 #include "../c/min-index.hpp" // min_index
@@ -343,15 +346,15 @@ template<stor S> struct iface: public S {
 
   /// True only if every element be positive.
   /// @return  True only if every element be positive.
-  bool ispos() const { return c::iface<E>::ispos(&v()); }
+  bool ispos() const { return c::ispos(&v()); }
 
   /// True only if every element be negative.
   /// @return  True only if every element be negative.
-  bool isneg() const { return c::iface<E>::isneg(&v()); }
+  bool isneg() const { return c::isneg(&v()); }
 
   /// True only if every element be non-negative.
   /// @return  True only if every element be non-negative.
-  bool isnonneg() const { return c::iface<E>::isnonneg(&v()); }
+  bool isnonneg() const { return c::isnonneg(&v()); }
 };
 
 
