@@ -10,7 +10,9 @@
 
 #pragma once
 
-#include "vec/iface.hpp" // vec_iface, vec_stor, c_iface
+#include "vec/dyna.hpp" // vec::dyna
+#include "vec/iface.hpp" // vec::iface, vec::stor, c::iface
+#include "vec/stat.hpp" // vec::stat
 #include <algorithm> // swap
 #include <type_traits> // enable_if_t
 

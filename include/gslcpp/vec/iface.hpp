@@ -11,7 +11,8 @@
 #include "../c/xf-float.hpp" // xf<float>
 #include "../version.hpp" // VERSION
 #include "iterator.hpp" // iterator
-#include "stor.hpp" // c::iface, stor, view, ...
+#include "stor.hpp" // stor
+#include "view.hpp" // c::iface, view
 #include <iostream> // ostream
 
 namespace gsl {
