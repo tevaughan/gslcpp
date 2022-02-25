@@ -5,16 +5,12 @@
 /// \copyright  2022 Thomas E. Vaughan, all rights reserved.
 ///
 /// \brief      Definition for
-///             gsl::c::vector,
-///             gsl::c::vector_view,
 ///             gsl::c::basic_iface,
 ///             gsl::c::setter_iface, and
 ///             gsl::c::iface.
 
 #pragma once
 
-#include "vector-view.hpp" // c::vector_view
-#include "vector.hpp" // c::vector
 #include "xf.hpp" // xf
 #include <concepts> // same_as
 
@@ -63,8 +59,6 @@ concept basic_iface= requires(
       std::size_t s, ///< Offset.
       vector<E> *v ///< Pointer to gsl_vector.
 ) {
-  typename vector_view<E>;
-  { xf<E>::const_subvector(v, s, s, s) } -> same_as<vector_view<E const>>;
   { xf<E>::get(v, s) } -> same_as<remove_const_t<E>>;
   { xf<E>::const_ptr(v, s) } -> same_as<E const *>;
   { xf<E>::fwrite(f, v) } -> same_as<int>;
@@ -103,7 +97,6 @@ requires(
       vector<E> *v, ///< Pointer to gsl_vector.
       vector<E> const *cv ///< Pointer to gsl_vector const.
 ) {
-  { xf<E>::subvector(v, s, s, s) } -> same_as<vector_view<E>>;
   { xf<E>::set(v, s, e) } -> same_as<void>;
   { xf<E>::set_all(v, e) } -> same_as<void>;
   { xf<E>::set_zero(v) } -> same_as<void>;

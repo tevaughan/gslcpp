@@ -14,17 +14,6 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// GSL's native view of subvector.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset in gsl_vector of first element in view.
-  /// @param s  Stride of elements in view relative to offsets in `v`.
-  /// @param n  Number of elements in view.
-  /// @return  GSL's native, C-style view.
-  static vector_view<float const>
-  const_subvector(vector<float const> *v, size_t i, size_t s, size_t n) {
-    return gsl_vector_float_const_subvector_with_stride(v, i, s, n);
-  }
-
   /// Fetch copy of element at offset `i` with bounds-checking.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
@@ -154,17 +143,6 @@ template<> struct xf<float const> {
 /// Specialization for `float`.
 /// \sa \ref xf_generic
 template<> struct xf<float>: public xf<float const> {
-  /// GSL's native view of subvector.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset in gsl_vector of first element in view.
-  /// @param s  Stride of elements in view relative to offsets in `v`.
-  /// @param n  Number of elements in view.
-  /// @return  GSL's native, C-style view.
-  static vector_view<float>
-  subvector(vector<float> *v, size_t i, size_t s, size_t n) {
-    return gsl_vector_float_subvector_with_stride(v, i, s, n);
-  }
-
   /// Fetch pointer to element at offset `i` with bounds-checking.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
