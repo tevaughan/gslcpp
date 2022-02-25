@@ -2,10 +2,10 @@
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Tests for gsl::vector.
 
-#include "gslcpp/vector.hpp"
+#include "gslcpp/vector_s.hpp"
+#include "gslcpp/vector_v.hpp"
 #include <catch.hpp>
 
-using gsl::vector_d;
 using gsl::vector_s;
 using gsl::vector_v;
 using gsl::vec::iface;

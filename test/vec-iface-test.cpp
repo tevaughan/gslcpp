@@ -2,7 +2,8 @@
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Tests for gsl::vec_iface.
 
-#include "gslcpp/vector.hpp"
+#include "gslcpp/vector_s.hpp"
+#include "gslcpp/vector_v.hpp"
 #include <catch.hpp>
 #include <sstream> // ostringstream
 
