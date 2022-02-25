@@ -113,13 +113,6 @@ template<> struct xf<double const> {
 /// Specialization for `double`.
 /// \sa \ref xf_generic
 template<> struct xf<double>: public xf<double const> {
-  /// Set same value into every element of vector.
-  /// @param v  Pointer to gsl_vector.
-  /// @param x  Same new value for every element.
-  static void set_all(vector<double> *v, double const &x) {
-    gsl_vector_set_all(v, x);
-  }
-
   /// Set zero into every element of vector.
   /// @param v  Pointer to gsl_vector.
   static void set_zero(vector<double> *v) { gsl_vector_set_zero(v); }

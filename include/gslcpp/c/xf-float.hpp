@@ -119,13 +119,6 @@ template<> struct xf<float const> {
 /// Specialization for `float`.
 /// \sa \ref xf_generic
 template<> struct xf<float>: public xf<float const> {
-  /// Set same value into every element of vector.
-  /// @param v  Pointer to gsl_vector.
-  /// @param x  Same new value for every element.
-  static void set_all(vector<float> *v, float x) {
-    gsl_vector_float_set_all(v, x);
-  }
-
   /// Set zero into every element of vector.
   /// @param v  Pointer to gsl_vector.
   static void set_zero(vector<float> *v) { gsl_vector_float_set_zero(v); }

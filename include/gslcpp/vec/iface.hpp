@@ -10,6 +10,7 @@
 #include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
 #include "../c/ptr.hpp" // ptr
+#include "../c/set-all.hpp" // set_all
 #include "../c/set.hpp" // set
 #include "../c/subvector.hpp" // subvector
 #include "../c/xf-double.hpp" // xf<double>
@@ -120,7 +121,7 @@ template<stor S> struct iface: public S {
 
   /// Set every element.
   /// @param x  Value to which each element should be set.
-  void set_all(E const &x) { c::iface<E>::set_all(&v(), x); }
+  void set_all(E const &x) { c::set_all(&v(), x); }
 
   /// Set every element to zero.
   void set_zero() { c::iface<E>::set_zero(&v()); }
