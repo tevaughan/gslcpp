@@ -15,6 +15,7 @@
 #include "../c/max.hpp" // max
 #include "../c/min-index.hpp" // min_index
 #include "../c/min.hpp" // min
+#include "../c/minmax-index.hpp" // minmax_index
 #include "../c/minmax.hpp" // minmax
 #include "../c/ptr.hpp" // ptr
 #include "../c/set-all.hpp" // set_all
@@ -332,7 +333,7 @@ template<stor S> struct iface: public S {
   /// @param imin  On return, offset of least value.
   /// @param imax  On return, offset of greatest value.
   void minmax_index(size_t &imin, size_t &imax) const {
-    c::iface<E>::minmax_index(&v(), &imin, &imax);
+    c::minmax_index(&v(), &imin, &imax);
   }
 
   /// True only if every element have zero value.

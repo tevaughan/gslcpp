@@ -14,17 +14,6 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// Offset of element with minimum value and offset of element with maximum
-  /// value.
-  /// @param v  Pointer to vector.
-  /// @param min  Pointer to buffer into which offset of minimum value is to be
-  ///             stored.
-  /// @param max  Pointer to buffer into which offset of maximum value is to be
-  ///             stored.
-  static void minmax_index(vector<float const> *v, size_t *min, size_t *max) {
-    gsl_vector_float_minmax_index(v, min, max);
-  }
-
   /// True only if every element have zero value.
   /// @param v  Pointer to vector.
   /// @return  True only if every element have zero value.
