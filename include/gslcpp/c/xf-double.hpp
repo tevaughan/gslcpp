@@ -14,14 +14,6 @@ namespace gsl::c {
 /// Specialization for `double const`.
 /// \sa \ref xf_generic
 template<> struct xf<double const> {
-  /// Fetch pointer to element at offset `i` with bounds-checking.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset of element.
-  /// @return  Pointer to element.
-  static double const *const_ptr(vector<double const> *v, size_t i) {
-    return gsl_vector_const_ptr(v, i);
-  }
-
   /// Write non-portable binary image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.
@@ -129,14 +121,6 @@ template<> struct xf<double const> {
 /// Specialization for `double`.
 /// \sa \ref xf_generic
 template<> struct xf<double>: public xf<double const> {
-  /// Fetch pointer to element at offset `i` with bounds-checking.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset of element.
-  /// @return  Pointer to element.
-  static double *ptr(vector<double> *v, size_t i) {
-    return gsl_vector_ptr(v, i);
-  }
-
   /// Set same value into every element of vector.
   /// @param v  Pointer to gsl_vector.
   /// @param x  Same new value for every element.

@@ -14,14 +14,6 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// Fetch pointer to element at offset `i` with bounds-checking.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset of element.
-  /// @return  Pointer to element.
-  static float const *const_ptr(vector<float const> *v, size_t i) {
-    return gsl_vector_float_const_ptr(v, i);
-  }
-
   /// Write non-portable binary image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.
@@ -135,14 +127,6 @@ template<> struct xf<float const> {
 /// Specialization for `float`.
 /// \sa \ref xf_generic
 template<> struct xf<float>: public xf<float const> {
-  /// Fetch pointer to element at offset `i` with bounds-checking.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset of element.
-  /// @return  Pointer to element.
-  static float *ptr(vector<float> *v, size_t i) {
-    return gsl_vector_float_ptr(v, i);
-  }
-
   /// Set same value into every element of vector.
   /// @param v  Pointer to gsl_vector.
   /// @param x  Same new value for every element.

@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../c/get.hpp" // get
+#include "../c/ptr.hpp" // ptr
 #include "../c/set.hpp" // set
 #include "../c/subvector.hpp" // subvector
 #include "../c/xf-double.hpp" // xf<double>
@@ -108,19 +109,13 @@ template<stor S> struct iface: public S {
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to mutable element.
-  E *ptr(size_t i) {
-    if constexpr(is_const_v<E>) {
-      return c::iface<E>::const_ptr(&v(), i);
-    } else {
-      return c::iface<E>::ptr(&v(), i);
-    }
-  }
+  E *ptr(size_t i) { return c::ptr(&v(), i); }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to immutable element.
-  E const *ptr(size_t i) const { return c::iface<E>::const_ptr(&v(), i); }
+  E const *ptr(size_t i) const { return c::ptr(&v(), i); }
 
   /// Set every element.
   /// @param x  Value to which each element should be set.
