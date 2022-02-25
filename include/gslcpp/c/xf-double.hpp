@@ -14,13 +14,6 @@ namespace gsl::c {
 /// Specialization for `double const`.
 /// \sa \ref xf_generic
 template<> struct xf<double const> {
-  /// Offset of element with minimum value.
-  /// @param v  Pointer to vector.
-  /// @return  Offset of element with minimum value.
-  static std::size_t min_index(vector<double const> *v) {
-    return gsl_vector_min_index(v);
-  }
-
   /// Offset of element with minimum value and offset of element with maximum
   /// value.
   /// @param v  Pointer to vector.

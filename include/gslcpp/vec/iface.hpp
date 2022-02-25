@@ -13,6 +13,7 @@
 #include "../c/get.hpp" // get
 #include "../c/max-index.hpp" // max_index
 #include "../c/max.hpp" // max
+#include "../c/min-index.hpp" // min_index
 #include "../c/min.hpp" // min
 #include "../c/minmax.hpp" // minmax
 #include "../c/ptr.hpp" // ptr
@@ -325,7 +326,7 @@ template<stor S> struct iface: public S {
 
   /// Offset of least value.
   /// @return  Offset of least value.
-  size_t min_index() const { return c::iface<E>::min_index(&v()); }
+  size_t min_index() const { return c::min_index(&v()); }
 
   /// Offset of least value and offset of greatest value.
   /// @param imin  On return, offset of least value.

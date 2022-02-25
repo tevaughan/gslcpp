@@ -59,7 +59,6 @@ concept basic_iface= requires(
       std::size_t s, ///< Offset.
       vector<E> *v ///< Pointer to gsl_vector.
 ) {
-  { xf<E>::min_index(v) } -> same_as<std::size_t>;
   { xf<E>::minmax_index(v, sp, sp) } -> same_as<void>;
   { xf<E>::isnull(v) } -> same_as<bool>;
   { xf<E>::ispos(v) } -> same_as<bool>;
