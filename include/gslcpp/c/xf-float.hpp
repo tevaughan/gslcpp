@@ -14,11 +14,6 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// Maximum value of any element in vector.
-  /// @param v  Pointer to vector.
-  /// @return  Maximum value.
-  static double max(vector<float const> *v) { return gsl_vector_float_max(v); }
-
   /// Minimum value of any element in vector.
   /// @param v  Pointer to vector.
   /// @return  Minimum value.

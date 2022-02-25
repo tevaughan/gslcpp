@@ -59,7 +59,6 @@ concept basic_iface= requires(
       std::size_t s, ///< Offset.
       vector<E> *v ///< Pointer to gsl_vector.
 ) {
-  { xf<E>::max(v) } -> same_as<remove_const_t<E>>;
   { xf<E>::min(v) } -> same_as<remove_const_t<E>>;
   { xf<E>::minmax(v, nce, nce) } -> same_as<void>;
   { xf<E>::max_index(v) } -> same_as<std::size_t>;

@@ -11,6 +11,7 @@
 #include "../c/fprintf.hpp" // fprintf
 #include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
+#include "../c/max.hpp" // max
 #include "../c/ptr.hpp" // ptr
 #include "../c/set-all.hpp" // set_all
 #include "../c/set-zero.hpp" // set_zero
@@ -304,7 +305,7 @@ template<stor S> struct iface: public S {
 
   /// Greatest value of any element.
   /// @return  Greatest value of any element.
-  E max() const { return c::iface<E>::max(&v()); }
+  E max() const { return c::max(&v()); }
 
   /// Least value of any element.
   /// @return  Least value of any element.
