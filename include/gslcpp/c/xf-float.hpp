@@ -8,8 +8,8 @@
 namespace gsl::c {
 
 
-/// Specialization for `float const`.
 /// \anchor xf_float_const
+/// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
   /// GSL's C-library type for non-const elements.
@@ -149,8 +149,8 @@ template<> struct xf<float const> {
 };
 
 
-/// Specialization for `float`.
 /// \anchor xf_float
+/// Specialization for `float`.
 /// \sa \ref xf_generic
 template<> struct xf<float>: public xf<float const> {
   /// GSL's C-library type for non-const elements.

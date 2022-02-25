@@ -15,9 +15,9 @@
 namespace gsl::c {
 
 
+/// \anchor xf_generic
 /// Generic template for struct that provides, on basis of element-type `E`,
 /// appropriate GSL C-types and functions.
-/// \anchor xf_generic
 ///
 /// \sa \ref gsl::c::basic_iface "basic_iface"
 /// \sa \ref xf_double_const
