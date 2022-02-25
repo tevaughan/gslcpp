@@ -14,11 +14,6 @@ namespace gsl::c {
 /// Specialization for `double const`.
 /// \sa \ref xf_generic
 template<> struct xf<double const> {
-  /// True only if every element have zero value.
-  /// @param v  Pointer to vector.
-  /// @return  True only if every element have zero value.
-  static bool isnull(vector<double const> *v) { return gsl_vector_isnull(v); }
-
   /// True only if every element be positive.
   /// @param v  Pointer to vector.
   /// @return  True only if every element be positive.

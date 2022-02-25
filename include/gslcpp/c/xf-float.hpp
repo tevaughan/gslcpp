@@ -14,13 +14,6 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// True only if every element have zero value.
-  /// @param v  Pointer to vector.
-  /// @return  True only if every element have zero value.
-  static bool isnull(vector<float const> *v) {
-    return gsl_vector_float_isnull(v);
-  }
-
   /// True only if every element be positive.
   /// @param v  Pointer to vector.
   /// @return  True only if every element be positive.

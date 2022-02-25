@@ -11,6 +11,7 @@
 #include "../c/fprintf.hpp" // fprintf
 #include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
+#include "../c/isnull.hpp" // isnull
 #include "../c/max-index.hpp" // max_index
 #include "../c/max.hpp" // max
 #include "../c/min-index.hpp" // min_index
@@ -338,7 +339,7 @@ template<stor S> struct iface: public S {
 
   /// True only if every element have zero value.
   /// @return  True only if every element be zero.
-  bool isnull() const { return c::iface<E>::isnull(&v()); }
+  bool isnull() const { return c::isnull(&v()); }
 
   /// True only if every element be positive.
   /// @return  True only if every element be positive.

@@ -59,7 +59,6 @@ concept basic_iface= requires(
       std::size_t s, ///< Offset.
       vector<E> *v ///< Pointer to gsl_vector.
 ) {
-  { xf<E>::isnull(v) } -> same_as<bool>;
   { xf<E>::ispos(v) } -> same_as<bool>;
   { xf<E>::isneg(v) } -> same_as<bool>;
   { xf<E>::isnonneg(v) } -> same_as<bool>;
