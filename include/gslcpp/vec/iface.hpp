@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "../c/get.hpp" // get
 #include "../c/subvector.hpp" // subvector
 #include "../c/xf-double.hpp" // xf<double>
 #include "../c/xf-float.hpp" // xf<float>
@@ -85,7 +86,7 @@ template<stor S> struct iface: public S {
   /// Read element with bounds-checking.
   /// @param i  Offset of element.
   /// @return  Value of element.
-  E get(size_t i) const { return c::iface<E>::get(&v(), i); }
+  E get(size_t i) const { return c::get(&v(), i); }
 
   /// Write element with bounds-checking.
   /// @param i  Offset of element.

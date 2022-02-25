@@ -14,14 +14,6 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// Fetch copy of element at offset `i` with bounds-checking.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset of element.
-  /// @return  Copy of element.
-  static float get(vector<float const> *v, size_t i) {
-    return gsl_vector_float_get(v, i);
-  }
-
   /// Fetch pointer to element at offset `i` with bounds-checking.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.

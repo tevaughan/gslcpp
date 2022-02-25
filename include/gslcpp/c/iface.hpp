@@ -59,7 +59,6 @@ concept basic_iface= requires(
       std::size_t s, ///< Offset.
       vector<E> *v ///< Pointer to gsl_vector.
 ) {
-  { xf<E>::get(v, s) } -> same_as<remove_const_t<E>>;
   { xf<E>::const_ptr(v, s) } -> same_as<E const *>;
   { xf<E>::fwrite(f, v) } -> same_as<int>;
   { xf<E>::fprintf(f, v, c) } -> same_as<int>;
