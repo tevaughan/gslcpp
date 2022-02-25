@@ -21,8 +21,14 @@ namespace gsl {
 using std::enable_if_t;
 
 
-/// Vector whose storage is static, on stack, defined at compile-time, and
-/// owned by instance of vector.
+/// Vector whose storage has two key properties: (1) that its size is known
+/// statically, at compile-time, and (2) that it is owned by vector.
+///
+/// `vector_s` has storage by way of \ref gsl::vec::stat, and most of the
+/// interface is given by \ref gsl::vec::iface.
+///
+/// `vector_s` inherits these and provides template-constructors.
+///
 /// @tparam S  Number of elements in vector.
 /// @tparam T  Type of each element in vector.
 template<unsigned S, typename T= double>

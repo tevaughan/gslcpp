@@ -12,8 +12,8 @@ namespace gsl::vec {
 /// determined dynamically, at run-time, and (2) that it is owned by instance
 /// of interface.
 ///
-/// `dyna` implements concept vec::stor and can serve as template-type
-/// parameter for (and thus base of) vec::iface.
+/// `dyna` implements concept gsl::vec::stor and can serve as template-type
+/// parameter for (and thus base of) gsl::vec::iface.
 ///
 /// @tparam T  Type of each element in vector.
 template<typename T> class dyna {

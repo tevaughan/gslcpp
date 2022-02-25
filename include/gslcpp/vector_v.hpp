@@ -3,7 +3,6 @@
 /// \brief      Definition for gsl::vector_v.
 
 #pragma once
-
 #include "vec/iface.hpp" // vec::iface, vec::stor, c::iface
 
 /// Namespace for C++-interface to GSL.
@@ -11,6 +10,13 @@ namespace gsl {
 
 
 /// Vector with storage not owned by instance of vector.
+///
+/// `vector_v` has its interface to storage given by \ref gsl::vec::view, and
+/// most of the external interface is given by \ref gsl::vec::iface.
+///
+/// `vector_v` inherits these and provides template-constructors.
+///
+/// @tparam T  Type of each element.
 template<typename T> struct vector_v: public vec::iface<vec::view<T>> {
   using P= vec::iface<vec::view<T>>; ///< Type of ancestor.
   using P::P;

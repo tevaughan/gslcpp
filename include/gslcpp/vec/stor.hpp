@@ -14,7 +14,7 @@ using std::same_as;
 /// Interface storage for vector.
 ///
 /// `stor` defines what is necessary for template-type parameter for (and thus
-/// base of) vec::iface.
+/// base of) gsl::vec::iface.
 ///
 /// @tparam T  Candidate type granting access to storage for vector.
 template<typename T> concept stor= requires(T &x, T const &y) {

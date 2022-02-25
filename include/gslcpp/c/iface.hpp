@@ -24,7 +24,7 @@ using std::remove_const_t;
 using std::same_as;
 
 
-/// Specific type of `gsl_vector` corresponding to element-type `E`.
+/// GSL's native vector corresponding to element-type `E`.
 ///
 /// For example, when `E==double`, the type is `gsl_vector`, and when
 /// `E==float`, the type is `gsl_vector_float`.
@@ -32,7 +32,8 @@ using std::same_as;
 /// @param E  Type of each element.
 template<typename E> using vector= typename xf<E>::vector;
 
-/// Specific type of `gsl_vector_view` corresponding to element-type `E`.
+
+/// GSL's native view corresponding to element-type `E`.
 ///
 /// For example, when `E==double`, the type is `gsl_vector_view`, and when
 /// `E==float`, the type is `gsl_vector_float_view`.
@@ -48,8 +49,8 @@ template<typename E> using vector_view= typename xf<E>::vector_view;
 /// (such as `double`) of each element in a vector or matrix.
 ///
 /// However, for explanation of the relationships between `basic_iface` and
-/// \ref gsl::c::setter_iface "setter_iface",
-/// let us suppose, for the moment, that `E` designates a non-`const` type.
+/// gsl::c::setter_iface, let us suppose, for the moment, that `E` designates
+/// a non-`const` type.
 ///
 ///   - Then \ref xf_double_const "xf<E const>" implements static functions,
 ///     each of which calls the appropriate function in GSL's native
@@ -105,11 +106,11 @@ concept basic_iface= requires(
 
 /// Requirements on the full interface to GSL's native C-types and C-functions.
 ///
-/// `E` must here be a non-`const` type. Each of the types and functions
-/// identified in `setter_iface` need be implemented only in xf<E>, not also in
-/// xf<E const>.
+/// `E` must here be a non-`const` type.  Each of the types and functions
+/// identified in `setter_iface` need be implemented only in
+/// \ref xf_double "xf<E>", not also in \ref xf_double_const "xf<E const>".
 ///
-/// \sa \ref gsl::c::basic_iface "basic_iface"
+/// \sa \ref gsl::c::basic_iface
 ///
 /// @tparam E  Type of each element.
 template<typename E>
@@ -153,8 +154,8 @@ requires(
 template<typename E> struct iface;
 
 
-/// Specialization for elements of `const`-type.
 /// \anchor c_iface_const
+/// Specialization for elements of `const`-type.
 /// `iface<E const>` implements gsl::c::basic_iface.
 /// \sa \ref c_iface_generic
 /// @param E  Non-`const` version of `const`-type of each element.
@@ -162,8 +163,8 @@ template<typename E>
 requires basic_iface<E const> struct iface<E const>: public xf<E const> {};
 
 
-/// Specialization for elements of non-`const` type.
 /// \anchor c_iface_nonconst
+/// Specialization for elements of non-`const` type.
 /// `iface<E>` (for non-`const` `E`) implements  gsl::c::setter_iface.
 /// \sa \ref c_iface_generic
 /// @param E  (Non-`const`) type of each element.

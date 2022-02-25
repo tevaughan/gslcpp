@@ -10,8 +10,6 @@
 #endif
 #include <gsl/gsl_vector.h> // gsl_vector, gsl_vector_float, etc.
 
-/// Namespace for implementation, by type of element in vector or matrix, of
-/// interface to GSL's native, C-language functions and types.
 namespace gsl::c {
 
 
