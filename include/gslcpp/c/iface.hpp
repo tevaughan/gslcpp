@@ -95,7 +95,6 @@ requires(
       vector<E> *v, ///< Pointer to gsl_vector.
       vector<E> const *cv ///< Pointer to gsl_vector const.
 ) {
-  { xf<E>::set(v, s, e) } -> same_as<void>;
   { xf<E>::set_all(v, e) } -> same_as<void>;
   { xf<E>::set_zero(v) } -> same_as<void>;
   { xf<E>::set_basis(v, s) } -> same_as<int>;

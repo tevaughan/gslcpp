@@ -137,14 +137,6 @@ template<> struct xf<double>: public xf<double const> {
     return gsl_vector_ptr(v, i);
   }
 
-  /// Set value of element at offset `i` with bounds-checking.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset of element.
-  /// @param x  New value for element.
-  static void set(vector<double> *v, size_t i, double const &x) {
-    gsl_vector_set(v, i, x);
-  }
-
   /// Set same value into every element of vector.
   /// @param v  Pointer to gsl_vector.
   /// @param x  Same new value for every element.

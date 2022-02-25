@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../c/get.hpp" // get
+#include "../c/set.hpp" // set
 #include "../c/subvector.hpp" // subvector
 #include "../c/xf-double.hpp" // xf<double>
 #include "../c/xf-float.hpp" // xf<float>
@@ -91,7 +92,7 @@ template<stor S> struct iface: public S {
   /// Write element with bounds-checking.
   /// @param i  Offset of element.
   /// @param x  New value for element.
-  void set(size_t i, E const &x) { c::iface<E>::set(&v(), i, x); }
+  void set(size_t i, E const &x) { c::set(&v(), i, x); }
 
   /// Read element without bounds-checking.
   /// @param i  Offset of element.
