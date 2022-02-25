@@ -14,17 +14,6 @@ namespace gsl::c {
 /// Specialization for `double const`.
 /// \sa \ref xf_generic
 template<> struct xf<double const> {
-  /// Sum of elements in vector.
-  /// @param v  Pointer to vector.
-  /// @return  Sum.
-  static double sum(vector<double const> *v) {
-#if GSL_AT_LEAST(2, 7)
-    return gsl_vector_sum(v);
-#else
-    return sum_for_gsl_lt_2p7(*v);
-#endif
-  }
-
   /// Maximum value of any element in vector.
   /// @param v  Pointer to vector.
   /// @return  Maximum value.

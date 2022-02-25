@@ -14,17 +14,6 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// Sum of elements in vector.
-  /// @param v  Pointer to vector.
-  /// @return  Sum.
-  static float sum(vector<float const> *v) {
-#if GSL_AT_LEAST(2, 7)
-    return gsl_vector_float_sum(v);
-#else
-    return sum_for_gsl_lt_2p7(*v);
-#endif
-  }
-
   /// Maximum value of any element in vector.
   /// @param v  Pointer to vector.
   /// @return  Maximum value.

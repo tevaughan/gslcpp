@@ -15,6 +15,7 @@
 #include "../c/set-zero.hpp" // set_zero
 #include "../c/set.hpp" // set
 #include "../c/subvector.hpp" // subvector
+#include "../c/sum.hpp" // sum
 #include "../c/xf-double.hpp" // xf<double>
 #include "../c/xf-float.hpp" // xf<float>
 #include "../version.hpp" // VERSION
@@ -298,7 +299,7 @@ template<stor S> struct iface: public S {
 
   /// Sum of elements.
   /// @return  Sum of elements.
-  E sum() const { return c::iface<E>::sum(&v()); }
+  E sum() const { return c::sum(&v()); }
 
   /// Greatest value of any element.
   /// @return  Greatest value of any element.
