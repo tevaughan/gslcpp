@@ -14,11 +14,6 @@ namespace gsl::c {
 /// Specialization for `double const`.
 /// \sa \ref xf_generic
 template<> struct xf<double const> {
-  /// Minimum value of any element in vector.
-  /// @param v  Pointer to vector.
-  /// @return  Minimum value.
-  static double min(vector<double const> *v) { return gsl_vector_min(v); }
-
   /// Greatest value and least value of any element in vector.
   /// @param v  Pointer to vector.
   /// @param min  Pointer to buffer into which least value is loaded.

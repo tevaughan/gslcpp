@@ -14,11 +14,6 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// Minimum value of any element in vector.
-  /// @param v  Pointer to vector.
-  /// @return  Minimum value.
-  static double min(vector<float const> *v) { return gsl_vector_float_min(v); }
-
   /// Greatest value and least value of any element in vector.
   /// @param v  Pointer to vector.
   /// @param min  Pointer to buffer into which least value is loaded.

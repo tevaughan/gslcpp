@@ -12,6 +12,7 @@
 #include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
 #include "../c/max.hpp" // max
+#include "../c/min.hpp" // min
 #include "../c/ptr.hpp" // ptr
 #include "../c/set-all.hpp" // set_all
 #include "../c/set-zero.hpp" // set_zero
@@ -309,7 +310,7 @@ template<stor S> struct iface: public S {
 
   /// Least value of any element.
   /// @return  Least value of any element.
-  E min() const { return c::iface<E>::min(&v()); }
+  E min() const { return c::min(&v()); }
 
   /// Greatest value and least value of any element.
   /// @param min_out  On return, least value.
