@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::vec::view.
 
 #pragma once
-#include "../c/iface.hpp" // c_iface
+#include "../c/vector-view.hpp" // vector_view
 
 namespace gsl::vec {
 

@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::vec::stat.
 
 #pragma once
-#include "../c/iface.hpp"
+#include "../c/vector-view.hpp" // vector_view
 
 namespace gsl::vec {
 

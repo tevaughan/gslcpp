@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "vector.hpp" // vector
 #include "xf.hpp" // xf
 #include <concepts> // same_as
 
@@ -51,7 +52,6 @@ using std::same_as;
 /// @tparam E  Type of each element; `E` can be `const` or non-`const`.
 template<typename E>
 concept basic_iface= requires(
-      E *ep, ///< Pointer to element.
       FILE *f, ///< Pointer to buffered file-interface.
       char const *c, ///< Pointer to printf-style format-string.
       remove_const_t<E> *nce, ///< Pointer to guaranteed non-const element.
@@ -90,7 +90,6 @@ concept basic_iface= requires(
 template<typename E>
 concept setter_iface= basic_iface<E> && //
 requires(
-      E *ep, ///< Pointer to element.
       E const &e, ///< Reference to immutable element.
       FILE *f, ///< Pointer to buffered file-interface.
       std::size_t s, ///< Offset.
