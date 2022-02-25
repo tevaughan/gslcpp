@@ -3,6 +3,7 @@
 /// \brief      Definition for gsl::vector_v.
 
 #pragma once
+#include "c/vector-view-array.hpp" // vector_view_array
 #include "vec/iface.hpp" // vec::iface, vec::stor, c::iface
 
 /// Namespace for C++-interface to GSL.
@@ -15,6 +16,8 @@ namespace gsl {
 /// most of the external interface is given by \ref gsl::vec::iface.
 ///
 /// `vector_v` inherits these and provides template-constructors.
+///
+/// TODO: Provide specialization for T=gsl_complex, T=gsl_complex_float, etc.
 ///
 /// @tparam T  Type of each element.
 template<typename T> struct vector_v: public vec::iface<vec::view<T>> {
@@ -29,14 +32,7 @@ template<typename T> struct vector_v: public vec::iface<vec::view<T>> {
   /// @param b  Pointer to first element of array and of view.
   /// @param n  Number of elements in view.
   /// @param s  Stride of view relative to array.
-  vector_v(size_t n, T *b, size_t s= 1):
-      P([&] {
-        if constexpr(is_const_v<T>) {
-          return c::iface<T>::vector_const_view_array(b, s, n);
-        } else {
-          return c::iface<T>::vector_view_array(b, s, n);
-        }
-      }()) {}
+  vector_v(size_t n, T *b, size_t s= 1): P(c::vector_view_array<T>(b, s, n)) {}
 
   /// Initialize view of non-decayed C-array.  Arguments are reordered from
   /// those given to gsl_vector_subvector_with_stride().  Putting initial
@@ -49,13 +45,7 @@ template<typename T> struct vector_v: public vec::iface<vec::view<T>> {
   /// @param s  Stride of view relative to array.
   template<int N>
   vector_v(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
-      P([&] {
-        if constexpr(is_const_v<T>) {
-          return c::iface<T>::vector_const_view_array(b + i, s, n);
-        } else {
-          return c::iface<T>::vector_view_array(b + i, s, n);
-        }
-      }()) {}
+      P(c::vector_view_array<T>(b + i, s, n)) {}
 
   /// Initialize view of other view.
   /// @param v  Other view.

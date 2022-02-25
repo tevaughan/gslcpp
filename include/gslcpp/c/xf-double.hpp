@@ -14,16 +14,6 @@ namespace gsl::c {
 /// Specialization for `double const`.
 /// \sa \ref xf_generic
 template<> struct xf<double const> {
-  /// GSL's native view of array.
-  /// @param b  Pointer to first element of view.
-  /// @param s  Stride of successive elements relative to pointer.
-  /// @param n  Number of elements in view.
-  /// @return  GSL's native, C-style view.
-  static vector_view<double const>
-  vector_const_view_array(double const *b, size_t s, size_t n) {
-    return gsl_vector_const_view_array_with_stride(b, s, n);
-  }
-
   /// GSL's native view of subvector.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset in gsl_vector of first element in view.
@@ -158,15 +148,6 @@ template<> struct xf<double const> {
 /// Specialization for `double`.
 /// \sa \ref xf_generic
 template<> struct xf<double>: public xf<double const> {
-  /// GSL's native view of array.
-  /// @param b  Pointer to first element of view.
-  /// @param s  Stride of successive elements relative to pointer.
-  /// @param n  Number of elements in view.
-  /// @return  GSL's native, C-style view.
-  static vector_view<double> vector_view_array(double *b, size_t s, size_t n) {
-    return gsl_vector_view_array_with_stride(b, s, n);
-  }
-
   /// GSL's native view of subvector.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset in gsl_vector of first element in view.

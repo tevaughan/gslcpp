@@ -64,9 +64,6 @@ concept basic_iface= requires(
       vector<E> *v ///< Pointer to gsl_vector.
 ) {
   typename vector_view<E>;
-  {
-    xf<E>::vector_const_view_array(ep, s, s)
-    } -> same_as<vector_view<E const>>;
   { xf<E>::const_subvector(v, s, s, s) } -> same_as<vector_view<E const>>;
   { xf<E>::get(v, s) } -> same_as<remove_const_t<E>>;
   { xf<E>::const_ptr(v, s) } -> same_as<E const *>;
@@ -106,7 +103,6 @@ requires(
       vector<E> *v, ///< Pointer to gsl_vector.
       vector<E> const *cv ///< Pointer to gsl_vector const.
 ) {
-  { xf<E>::vector_view_array(ep, s, s) } -> same_as<vector_view<E>>;
   { xf<E>::subvector(v, s, s, s) } -> same_as<vector_view<E>>;
   { xf<E>::set(v, s, e) } -> same_as<void>;
   { xf<E>::set_all(v, e) } -> same_as<void>;
