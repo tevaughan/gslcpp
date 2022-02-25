@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "../c/axpby.hpp" // axpby
 #include "../c/fprintf.hpp" // fprintf
 #include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
@@ -403,7 +404,7 @@ int axpby(
       iface<T> const &x,
       typename U::E const &beta,
       iface<U> &y) {
-  return c::iface<typename U::E>::axpby(alpha, &x.v(), beta, &y.v());
+  return c::axpby(alpha, &x.v(), beta, &y.v());
 }
 
 

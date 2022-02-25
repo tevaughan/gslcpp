@@ -193,22 +193,6 @@ template<> struct xf<float>: public xf<float const> {
     return gsl_vector_float_add_constant(v, x);
   }
 
-  /// Linearly combine in place as `y = a*x + b*y`. This is implemented via
-  /// Eigen if the installed GSL have version less than 2.7.
-  /// @param a  Coefficient of first vector.
-  /// @param x  Pointer to first vector.
-  /// @param b  Coefficient of second vector.
-  /// @param y  Pointer to second vector and to result.
-  /// @return  TBD for GSL, zero if Eigen be used.
-  static int
-  axpby(float a, vector<float> const *x, float b, vector<float> *y) {
-#if GSL_AT_LEAST(2, 7)
-    return gsl_vector_float_axpby(a, x, b, y);
-#else
-    return axpby_for_gsl_lt_2p7(a, *x, b, *y);
-#endif
-  }
-
   /// Copy data from source to destination.
   /// @param d  Pointer to destination-vector.
   /// @param s  Pointer to source-vector.
