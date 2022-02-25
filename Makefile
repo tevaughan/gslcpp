@@ -28,7 +28,7 @@ build_prep:
 	 fi
 
 format:
-	find . -name '*.hpp' -o -name '*.cpp' -exec $(CLANG_FORMAT) -i {} \;
+	find . -name '*.hpp' -exec $(CLANG_FORMAT) -i {} \;
 
 clean :
 	@rm -frv build

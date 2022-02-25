@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include "vector-view.hpp" // c::vector_view
+#include "vector.hpp" // c::vector
 #include "xf.hpp" // xf
 #include <concepts> // same_as
 
@@ -22,24 +24,6 @@ namespace gsl::c {
 
 using std::remove_const_t;
 using std::same_as;
-
-
-/// GSL's native vector corresponding to element-type `E`.
-///
-/// For example, when `E==double`, the type is `gsl_vector`, and when
-/// `E==float`, the type is `gsl_vector_float`.
-///
-/// @param E  Type of each element.
-template<typename E> using vector= typename xf<E>::vector;
-
-
-/// GSL's native view corresponding to element-type `E`.
-///
-/// For example, when `E==double`, the type is `gsl_vector_view`, and when
-/// `E==float`, the type is `gsl_vector_float_view`.
-///
-/// @param E  Type of each element.
-template<typename E> using vector_view= typename xf<E>::vector_view;
 
 
 /// Requirements on the basic interface to GSL's native C-types and
@@ -79,7 +63,6 @@ concept basic_iface= requires(
       std::size_t s, ///< Offset.
       vector<E> *v ///< Pointer to gsl_vector.
 ) {
-  typename vector<E>;
   typename vector_view<E>;
   {
     xf<E>::vector_const_view_array(ep, s, s)
@@ -116,7 +99,7 @@ concept basic_iface= requires(
 template<typename E>
 concept setter_iface= basic_iface<E> && //
 requires(
-      E * ep, ///< Pointer to element.
+      E *ep, ///< Pointer to element.
       E const &e, ///< Reference to immutable element.
       FILE *f, ///< Pointer to buffered file-interface.
       std::size_t s, ///< Offset.

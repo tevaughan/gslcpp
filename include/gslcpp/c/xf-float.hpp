@@ -3,6 +3,8 @@
 /// \brief      Definition for gsl::c::xf<float>, gsl::c::xf<float const>.
 
 #pragma once
+#include "vector-view.hpp"
+#include "vector.hpp"
 #include "xf.hpp"
 
 namespace gsl::c {
@@ -12,18 +14,12 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// GSL's C-library type for non-const elements.
-  using vector= gsl_vector_float const;
-
-  /// GSL's C-library type for view of non-const elements.
-  using vector_view= gsl_vector_float_const_view;
-
   /// GSL's native view of array.
   /// @param b  Pointer to first element of view.
   /// @param s  Stride of successive elements relative to pointer.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vector_view
+  static vector_view<float const>
   vector_const_view_array(float const *b, size_t s, size_t n) {
     return gsl_vector_float_const_view_array_with_stride(b, s, n);
   }
@@ -34,7 +30,8 @@ template<> struct xf<float const> {
   /// @param s  Stride of elements in view relative to offsets in `v`.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vector_view const_subvector(vector *v, size_t i, size_t s, size_t n) {
+  static vector_view<float const>
+  const_subvector(vector<float const> *v, size_t i, size_t s, size_t n) {
     return gsl_vector_float_const_subvector_with_stride(v, i, s, n);
   }
 
@@ -42,13 +39,15 @@ template<> struct xf<float const> {
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
   /// @return  Copy of element.
-  static float get(vector *v, size_t i) { return gsl_vector_float_get(v, i); }
+  static float get(vector<float const> *v, size_t i) {
+    return gsl_vector_float_get(v, i);
+  }
 
   /// Fetch pointer to element at offset `i` with bounds-checking.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
   /// @return  Pointer to element.
-  static float const *const_ptr(vector *v, size_t i) {
+  static float const *const_ptr(vector<float const> *v, size_t i) {
     return gsl_vector_float_const_ptr(v, i);
   }
 
@@ -56,7 +55,7 @@ template<> struct xf<float const> {
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.
   /// @return  Zero only on success.
-  static int fwrite(FILE *f, vector *v) {
+  static int fwrite(FILE *f, vector<float const> *v) {
     return gsl_vector_float_fwrite(f, v);
   }
 
@@ -65,14 +64,14 @@ template<> struct xf<float const> {
   /// @param vec  Pointer to gsl_vector.
   /// @param fmt  printf()-style format-string.
   /// @return  Zero only on success.
-  static int fprintf(FILE *flp, vector *vec, char const *fmt) {
+  static int fprintf(FILE *flp, vector<float const> *vec, char const *fmt) {
     return gsl_vector_float_fprintf(flp, vec, fmt);
   }
 
   /// Sum of elements in vector.
   /// @param v  Pointer to vector.
   /// @return  Sum.
-  static float sum(vector *v) {
+  static float sum(vector<float const> *v) {
 #if GSL_AT_LEAST(2, 7)
     return gsl_vector_float_sum(v);
 #else
@@ -83,30 +82,34 @@ template<> struct xf<float const> {
   /// Maximum value of any element in vector.
   /// @param v  Pointer to vector.
   /// @return  Maximum value.
-  static double max(vector *v) { return gsl_vector_float_max(v); }
+  static double max(vector<float const> *v) { return gsl_vector_float_max(v); }
 
   /// Minimum value of any element in vector.
   /// @param v  Pointer to vector.
   /// @return  Minimum value.
-  static double min(vector *v) { return gsl_vector_float_min(v); }
+  static double min(vector<float const> *v) { return gsl_vector_float_min(v); }
 
   /// Greatest value and least value of any element in vector.
   /// @param v  Pointer to vector.
   /// @param min  Pointer to buffer into which least value is loaded.
   /// @param max  Pointer to buffer into which greatest value is loaded.
-  static void minmax(vector *v, float *min, float *max) {
+  static void minmax(vector<float const> *v, float *min, float *max) {
     gsl_vector_float_minmax(v, min, max);
   }
 
   /// Offset of element with maximum value.
   /// @param v  Pointer to vector.
   /// @return  Offset of element with maximum value.
-  static size_t max_index(vector *v) { return gsl_vector_float_max_index(v); }
+  static size_t max_index(vector<float const> *v) {
+    return gsl_vector_float_max_index(v);
+  }
 
   /// Offset of element with minimum value.
   /// @param v  Pointer to vector.
   /// @return  Offset of element with minimum value.
-  static size_t min_index(vector *v) { return gsl_vector_float_min_index(v); }
+  static size_t min_index(vector<float const> *v) {
+    return gsl_vector_float_min_index(v);
+  }
 
   /// Offset of element with minimum value and offset of element with maximum
   /// value.
@@ -115,35 +118,43 @@ template<> struct xf<float const> {
   ///             stored.
   /// @param max  Pointer to buffer into which offset of maximum value is to be
   ///             stored.
-  static void minmax_index(vector *v, size_t *min, size_t *max) {
+  static void minmax_index(vector<float const> *v, size_t *min, size_t *max) {
     gsl_vector_float_minmax_index(v, min, max);
   }
 
   /// True only if every element have zero value.
   /// @param v  Pointer to vector.
   /// @return  True only if every element have zero value.
-  static bool isnull(vector *v) { return gsl_vector_float_isnull(v); }
+  static bool isnull(vector<float const> *v) {
+    return gsl_vector_float_isnull(v);
+  }
 
   /// True only if every element be positive.
   /// @param v  Pointer to vector.
   /// @return  True only if every element be positive.
-  static bool ispos(vector *v) { return gsl_vector_float_ispos(v); }
+  static bool ispos(vector<float const> *v) {
+    return gsl_vector_float_ispos(v);
+  }
 
   /// True only if every element be negative.
   /// @param v  Pointer to vector.
   /// @return  True only if every element be negative.
-  static bool isneg(vector *v) { return gsl_vector_float_isneg(v); }
+  static bool isneg(vector<float const> *v) {
+    return gsl_vector_float_isneg(v);
+  }
 
   /// True only if every element be non-negative.
   /// @param v  Pointer to vector.
   /// @return  True only if every element be non-negative.
-  static bool isnonneg(vector *v) { return gsl_vector_float_isnonneg(v); }
+  static bool isnonneg(vector<float const> *v) {
+    return gsl_vector_float_isnonneg(v);
+  }
 
   /// Test equality of two vectors.
   /// @param a  Pointer to one vector.
   /// @param b  Pointer to other vector.
   /// @return  True only if vectors be equal.
-  static bool equal(vector *a, vector *b) {
+  static bool equal(vector<float const> *a, vector<float const> *b) {
     return gsl_vector_float_equal(a, b);
   }
 };
@@ -153,18 +164,12 @@ template<> struct xf<float const> {
 /// Specialization for `float`.
 /// \sa \ref xf_generic
 template<> struct xf<float>: public xf<float const> {
-  /// GSL's C-library type for non-const elements.
-  using vector= gsl_vector_float;
-
-  /// GSL's C-library type for view of non-const elements.
-  using vector_view= gsl_vector_float_view;
-
   /// GSL's native view of array.
   /// @param b  Pointer to first element of view.
   /// @param s  Stride of successive elements relative to pointer.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vector_view vector_view_array(float *b, size_t s, size_t n) {
+  static vector_view<float> vector_view_array(float *b, size_t s, size_t n) {
     return gsl_vector_float_view_array_with_stride(b, s, n);
   }
 
@@ -174,7 +179,8 @@ template<> struct xf<float>: public xf<float const> {
   /// @param s  Stride of elements in view relative to offsets in `v`.
   /// @param n  Number of elements in view.
   /// @return  GSL's native, C-style view.
-  static vector_view subvector(vector *v, size_t i, size_t s, size_t n) {
+  static vector_view<float>
+  subvector(vector<float> *v, size_t i, size_t s, size_t n) {
     return gsl_vector_float_subvector_with_stride(v, i, s, n);
   }
 
@@ -182,30 +188,34 @@ template<> struct xf<float>: public xf<float const> {
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
   /// @return  Pointer to element.
-  static float *ptr(vector *v, size_t i) { return gsl_vector_float_ptr(v, i); }
+  static float *ptr(vector<float> *v, size_t i) {
+    return gsl_vector_float_ptr(v, i);
+  }
 
   /// Set value of element at offset `i` with bounds-checking.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element.
   /// @param x  New value for element.
-  static void set(vector *v, size_t i, float x) {
+  static void set(vector<float> *v, size_t i, float x) {
     gsl_vector_float_set(v, i, x);
   }
 
   /// Set same value into every element of vector.
   /// @param v  Pointer to gsl_vector.
   /// @param x  Same new value for every element.
-  static void set_all(vector *v, float x) { gsl_vector_float_set_all(v, x); }
+  static void set_all(vector<float> *v, float x) {
+    gsl_vector_float_set_all(v, x);
+  }
 
   /// Set zero into every element of vector.
   /// @param v  Pointer to gsl_vector.
-  static void set_zero(vector *v) { gsl_vector_float_set_zero(v); }
+  static void set_zero(vector<float> *v) { gsl_vector_float_set_zero(v); }
 
   /// Set element at offset `i` to unity and every other element to zero.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element to set to unity.
   /// @return  TBD: GSL's documentation does not specify.
-  static int set_basis(vector *v, size_t i) {
+  static int set_basis(vector<float> *v, size_t i) {
     return gsl_vector_float_set_basis(v, i);
   }
 
@@ -213,7 +223,7 @@ template<> struct xf<float>: public xf<float const> {
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.
   /// @return  Zero only on success.
-  static int fwrite(FILE *f, vector const *v) {
+  static int fwrite(FILE *f, vector<float> const *v) {
     return gsl_vector_float_fwrite(f, v);
   }
 
@@ -221,13 +231,15 @@ template<> struct xf<float>: public xf<float const> {
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.
   /// @return  Zero only on success.
-  static int fread(FILE *f, vector *v) { return gsl_vector_float_fread(f, v); }
+  static int fread(FILE *f, vector<float> *v) {
+    return gsl_vector_float_fread(f, v);
+  }
 
   /// Read ASCII-formatted representation of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to vector.
   /// @return  Zero only on success.
-  static int fscanf(FILE *f, vector *v) {
+  static int fscanf(FILE *f, vector<float> *v) {
     return gsl_vector_float_fscanf(f, v);
   }
 
@@ -236,20 +248,20 @@ template<> struct xf<float>: public xf<float const> {
   /// @param i  Offset of one element.
   /// @param j  Offset of other element.
   /// @return  TBD: GSL's documentation does not specify.
-  static int swap_elements(vector *v, size_t i, size_t j) {
+  static int swap_elements(vector<float> *v, size_t i, size_t j) {
     return gsl_vector_float_swap_elements(v, i, j);
   }
 
   /// Reverse order of elements.
   /// @param v  Pointer to vector.
   /// @return  TBD: GSL's documentation does not specify.
-  static int reverse(vector *v) { return gsl_vector_float_reverse(v); }
+  static int reverse(vector<float> *v) { return gsl_vector_float_reverse(v); }
 
   /// Add contents of `cv` into `v` in place.
   /// @param v  Pointer to vector into which `cv` should be accumulated.
   /// @param cv  Pointer to vector whose contents should be added into `v`.
   /// @return  TBD: GSL's documentation does not specify.
-  static int add(vector *v, vector const *cv) {
+  static int add(vector<float> *v, vector<float> const *cv) {
     return gsl_vector_float_add(v, cv);
   }
 
@@ -257,7 +269,7 @@ template<> struct xf<float>: public xf<float const> {
   /// @param v  Pointer to vector that should be reduced by `cv`.
   /// @param cv  Pointer to vector to be subtracted from `v`.
   /// @return  TBD: GSL's documentation does not specify.
-  static int sub(vector *v, vector const *cv) {
+  static int sub(vector<float> *v, vector<float> const *cv) {
     return gsl_vector_float_sub(v, cv);
   }
 
@@ -265,7 +277,7 @@ template<> struct xf<float>: public xf<float const> {
   /// @param v  Pointer to vector into which `cv` should be multiplied.
   /// @param cv  Pointer to vector to be multiplied into `v`.
   /// @return  TBD: GSL's documentation does not specify.
-  static int mul(vector *v, vector const *cv) {
+  static int mul(vector<float> *v, vector<float> const *cv) {
     return gsl_vector_float_mul(v, cv);
   }
 
@@ -273,7 +285,7 @@ template<> struct xf<float>: public xf<float const> {
   /// @param v  Pointer to vector that should be divided by `cv`.
   /// @param cv  Pointer to vector whose contents should be divided into `v`.
   /// @return  TBD: GSL's documentation does not specify.
-  static int div(vector *v, vector const *cv) {
+  static int div(vector<float> *v, vector<float> const *cv) {
     return gsl_vector_float_div(v, cv);
   }
 
@@ -281,13 +293,15 @@ template<> struct xf<float>: public xf<float const> {
   /// @param v  Pointer to vector to be scaled.
   /// @param x  Scalar to multiply into `v`.
   /// @return  TBD: GSL's documentation does not specify.
-  static int scale(vector *v, float x) { return gsl_vector_float_scale(v, x); }
+  static int scale(vector<float> *v, float x) {
+    return gsl_vector_float_scale(v, x);
+  }
 
   /// Add constant into each element of `v` in place.
   /// @param v  Pointer to vector whose elements are to be added to.
   /// @param x  Constant to add into `v`.
   /// @return  TBD: GSL's documentation does not specify.
-  static int add_constant(vector *v, float x) {
+  static int add_constant(vector<float> *v, float x) {
     return gsl_vector_float_add_constant(v, x);
   }
 
@@ -298,7 +312,8 @@ template<> struct xf<float>: public xf<float const> {
   /// @param b  Coefficient of second vector.
   /// @param y  Pointer to second vector and to result.
   /// @return  TBD for GSL, zero if Eigen be used.
-  static int axpby(float a, vector const *x, float b, vector *y) {
+  static int
+  axpby(float a, vector<float> const *x, float b, vector<float> *y) {
 #if GSL_AT_LEAST(2, 7)
     return gsl_vector_float_axpby(a, x, b, y);
 #else
@@ -310,7 +325,7 @@ template<> struct xf<float>: public xf<float const> {
   /// @param d  Pointer to destination-vector.
   /// @param s  Pointer to source-vector.
   /// @return TBD: GSL's documentation does not specify.
-  static int memcpy(vector *d, vector const *s) {
+  static int memcpy(vector<float> *d, vector<float> const *s) {
     return gsl_vector_float_memcpy(d, s);
   }
 
@@ -318,7 +333,9 @@ template<> struct xf<float>: public xf<float const> {
   /// @param a  Pointer to one vector.
   /// @param b  Pointer to other vector.
   /// @return  TBD: GSL's documentation does not specify.
-  static int swap(vector *a, vector *b) { return gsl_vector_float_swap(a, b); }
+  static int swap(vector<float> *a, vector<float> *b) {
+    return gsl_vector_float_swap(a, b);
+  }
 };
 
 
