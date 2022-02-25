@@ -13,6 +13,7 @@
 #include "../c/get.hpp" // get
 #include "../c/max.hpp" // max
 #include "../c/min.hpp" // min
+#include "../c/minmax.hpp" // minmax
 #include "../c/ptr.hpp" // ptr
 #include "../c/set-all.hpp" // set_all
 #include "../c/set-zero.hpp" // set_zero
@@ -313,11 +314,9 @@ template<stor S> struct iface: public S {
   E min() const { return c::min(&v()); }
 
   /// Greatest value and least value of any element.
-  /// @param min_out  On return, least value.
-  /// @param max_out  On return, greatest value.
-  void minmax(E &min_out, E &max_out) const {
-    c::iface<E>::minmax(&v(), &min_out, &max_out);
-  }
+  /// @param min  On return, least value.
+  /// @param max  On return, greatest value.
+  void minmax(E &min, E &max) const { c::minmax(&v(), &min, &max); }
 
   /// Offset of greatest value.
   /// @return  Offset of greatest value.

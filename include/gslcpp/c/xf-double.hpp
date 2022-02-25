@@ -14,14 +14,6 @@ namespace gsl::c {
 /// Specialization for `double const`.
 /// \sa \ref xf_generic
 template<> struct xf<double const> {
-  /// Greatest value and least value of any element in vector.
-  /// @param v  Pointer to vector.
-  /// @param min  Pointer to buffer into which least value is loaded.
-  /// @param max  Pointer to buffer into which greatest value is loaded.
-  static void minmax(vector<double const> *v, double *min, double *max) {
-    gsl_vector_minmax(v, min, max);
-  }
-
   /// Offset of element with maximum value.
   /// @param v  Pointer to vector.
   /// @return  Offset of element with maximum value.
