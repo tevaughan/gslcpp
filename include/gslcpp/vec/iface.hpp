@@ -11,6 +11,7 @@
 #include "../c/get.hpp" // get
 #include "../c/ptr.hpp" // ptr
 #include "../c/set-all.hpp" // set_all
+#include "../c/set-zero.hpp" // set_zero
 #include "../c/set.hpp" // set
 #include "../c/subvector.hpp" // subvector
 #include "../c/xf-double.hpp" // xf<double>
@@ -124,7 +125,7 @@ template<stor S> struct iface: public S {
   void set_all(E const &x) { c::set_all(&v(), x); }
 
   /// Set every element to zero.
-  void set_zero() { c::iface<E>::set_zero(&v()); }
+  void set_zero() { c::set_zero(&v()); }
 
   /// Set element at offset `i` to unity and every other element to zero.
   /// @param i  Offset of element set to unity.

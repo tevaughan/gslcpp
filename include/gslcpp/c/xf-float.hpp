@@ -119,10 +119,6 @@ template<> struct xf<float const> {
 /// Specialization for `float`.
 /// \sa \ref xf_generic
 template<> struct xf<float>: public xf<float const> {
-  /// Set zero into every element of vector.
-  /// @param v  Pointer to gsl_vector.
-  static void set_zero(vector<float> *v) { gsl_vector_float_set_zero(v); }
-
   /// Set element at offset `i` to unity and every other element to zero.
   /// @param v  Pointer to gsl_vector.
   /// @param i  Offset of element to set to unity.
