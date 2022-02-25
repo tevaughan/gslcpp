@@ -14,13 +14,6 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// Offset of element with maximum value.
-  /// @param v  Pointer to vector.
-  /// @return  Offset of element with maximum value.
-  static size_t max_index(vector<float const> *v) {
-    return gsl_vector_float_max_index(v);
-  }
-
   /// Offset of element with minimum value.
   /// @param v  Pointer to vector.
   /// @return  Offset of element with minimum value.

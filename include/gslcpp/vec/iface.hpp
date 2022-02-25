@@ -11,6 +11,7 @@
 #include "../c/fprintf.hpp" // fprintf
 #include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
+#include "../c/max-index.hpp" // max_index
 #include "../c/max.hpp" // max
 #include "../c/min.hpp" // min
 #include "../c/minmax.hpp" // minmax
@@ -320,7 +321,7 @@ template<stor S> struct iface: public S {
 
   /// Offset of greatest value.
   /// @return  Offset of greatest value.
-  size_t max_index() const { return c::iface<E>::max_index(&v()); }
+  size_t max_index() const { return c::max_index(&v()); }
 
   /// Offset of least value.
   /// @return  Offset of least value.
