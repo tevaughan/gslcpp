@@ -14,14 +14,6 @@ namespace gsl::c {
 /// Specialization for `float const`.
 /// \sa \ref xf_generic
 template<> struct xf<float const> {
-  /// Write non-portable binary image of vector to file.
-  /// @param f  Pointer to structure for buffered interface.
-  /// @param v  Pointer to gsl_vector.
-  /// @return  Zero only on success.
-  static int fwrite(FILE *f, vector<float const> *v) {
-    return gsl_vector_float_fwrite(f, v);
-  }
-
   /// Write ASCII-formatted representation of vector to file.
   /// @param flp  Pointer to structure for buffered interface.
   /// @param vec  Pointer to gsl_vector.

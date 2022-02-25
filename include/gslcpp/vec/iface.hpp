@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
 #include "../c/ptr.hpp" // ptr
 #include "../c/set.hpp" // set
@@ -132,7 +133,7 @@ template<stor S> struct iface: public S {
   /// Write non-portable binary-image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fwrite(FILE *f) const { return c::iface<E>::fwrite(f, &v()); }
+  int fwrite(FILE *f) const { return c::fwrite(f, &v()); }
 
   /// Read non-portable binary-image of vector from file.
   /// @param f  Pointer to structure for buffered interface.

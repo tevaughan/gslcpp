@@ -3,6 +3,7 @@
 /// @brief      Definition of gslcpp::c::subvector.
 
 #pragma once
+#include "vector.hpp"
 
 namespace gsl::c {
 

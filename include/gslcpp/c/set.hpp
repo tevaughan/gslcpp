@@ -3,6 +3,7 @@
 /// @brief      Definition of gslcpp::c::set.
 
 #pragma once
+#include "vector.hpp"
 
 namespace gsl::c {
 
