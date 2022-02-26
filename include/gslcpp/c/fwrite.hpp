@@ -1,6 +1,6 @@
 /// @file       include/gslcpp/c/fwrite.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::FILE *f, c::fwrite.
+/// @brief      Definition of gslc::fwrite.
 
 #pragma once
 #include "vector.hpp"

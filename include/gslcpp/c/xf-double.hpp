@@ -10,18 +10,7 @@
 namespace gsl::c {
 
 
-/// \anchor xf_double
-/// Specialization for `double`.
-/// \sa \ref xf_generic
 template<> struct xf<double> {
-  /// Read non-portable binary-image of vector from file.
-  /// @param f  Pointer to structure for buffered interface.
-  /// @param v  Pointer to gsl_vector.
-  /// @return  Zero only on success.
-  static int fread(FILE *f, vector<double> *v) {
-    return gsl_vector_fread(f, v);
-  }
-
   /// Read ASCII-formatted representation of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to vector.

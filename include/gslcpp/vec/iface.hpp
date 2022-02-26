@@ -10,6 +10,7 @@
 #include "../c/axpby.hpp" // axpby
 #include "../c/equal.hpp" // equal
 #include "../c/fprintf.hpp" // fprintf
+#include "../c/fread.hpp" // fread
 #include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
 #include "../c/isneg.hpp" // isneg
@@ -155,7 +156,7 @@ template<stor S> struct iface: public S {
   /// Read non-portable binary-image of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fread(FILE *f) { return c::iface<E>::fread(f, &v()); };
+  int fread(FILE *f) { return c::fread(f, &v()); };
 
   /// Write ASCII-formatted representation of vector to file.
   /// @param flp  Pointer to structure for buffered interface.

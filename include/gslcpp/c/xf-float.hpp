@@ -11,22 +11,6 @@ namespace gsl::c {
 
 
 template<> struct xf<float> {
-  /// Write non-portable binary image of vector to file.
-  /// @param f  Pointer to structure for buffered interface.
-  /// @param v  Pointer to gsl_vector.
-  /// @return  Zero only on success.
-  static int fwrite(FILE *f, vector<float> const *v) {
-    return gsl_vector_float_fwrite(f, v);
-  }
-
-  /// Read non-portable binary-image of vector from file.
-  /// @param f  Pointer to structure for buffered interface.
-  /// @param v  Pointer to gsl_vector.
-  /// @return  Zero only on success.
-  static int fread(FILE *f, vector<float> *v) {
-    return gsl_vector_float_fread(f, v);
-  }
-
   /// Read ASCII-formatted representation of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to vector.

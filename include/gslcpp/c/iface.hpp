@@ -26,25 +26,9 @@ using std::same_as;
 template<typename E> concept basic_iface= true;
 
 
-/// Requirements on the full interface to GSL's native C-types and C-functions.
-///
-/// `E` must here be a non-`const` type.  Each of the types and functions
-/// identified in `setter_iface` need be implemented only in
-/// \ref xf_double "xf<E>", not also in \ref xf_double_const "xf<E const>".
-///
-/// \sa \ref gsl::c::basic_iface
-///
-/// @tparam E  Type of each element.
 template<typename E>
-concept setter_iface= basic_iface<E> && //
-requires(
-      E const &e, ///< Reference to immutable element.
-      FILE *f, ///< Pointer to buffered file-interface.
-      std::size_t s, ///< Offset.
-      vector<E> *v, ///< Pointer to gsl_vector.
-      vector<E> const *cv ///< Pointer to gsl_vector const.
-) {
-  { xf<E>::fread(f, v) } -> same_as<int>;
+concept setter_iface= basic_iface<E> &&requires(
+      E const &e, FILE *f, std::size_t s, vector<E> *v, vector<E> const *cv) {
   { xf<E>::fscanf(f, v) } -> same_as<int>;
   { xf<E>::swap_elements(v, s, s) } -> same_as<int>;
   { xf<E>::reverse(v) } -> same_as<int>;
