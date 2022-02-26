@@ -28,14 +28,6 @@ template<> struct xf<double const> {
 /// Specialization for `double`.
 /// \sa \ref xf_generic
 template<> struct xf<double>: public xf<double const> {
-  /// Set element at offset `i` to unity and every other element to zero.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset of element to set to unity.
-  /// @return  TBD: GSL's documentation does not specify.
-  static int set_basis(vector<double> *v, size_t i) {
-    return gsl_vector_set_basis(v, i);
-  }
-
   /// Read non-portable binary-image of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.

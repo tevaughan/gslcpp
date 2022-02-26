@@ -23,6 +23,7 @@
 #include "../c/minmax.hpp" // minmax
 #include "../c/ptr.hpp" // ptr
 #include "../c/set-all.hpp" // set_all
+#include "../c/set-basis.hpp" // set_basis
 #include "../c/set-zero.hpp" // set_zero
 #include "../c/set.hpp" // set
 #include "../c/subvector.hpp" // subvector
@@ -143,7 +144,7 @@ template<stor S> struct iface: public S {
   /// Set element at offset `i` to unity and every other element to zero.
   /// @param i  Offset of element set to unity.
   /// @return  TBD: GSL's documentation does not specify.
-  int set_basis(size_t i) { return c::iface<E>::set_basis(&v(), i); }
+  int set_basis(size_t i) { return c::set_basis(&v(), i); }
 
   /// Write non-portable binary-image of vector to file.
   /// @param f  Pointer to structure for buffered interface.

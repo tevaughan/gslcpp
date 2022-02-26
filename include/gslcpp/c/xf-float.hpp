@@ -28,14 +28,6 @@ template<> struct xf<float const> {
 /// Specialization for `float`.
 /// \sa \ref xf_generic
 template<> struct xf<float>: public xf<float const> {
-  /// Set element at offset `i` to unity and every other element to zero.
-  /// @param v  Pointer to gsl_vector.
-  /// @param i  Offset of element to set to unity.
-  /// @return  TBD: GSL's documentation does not specify.
-  static int set_basis(vector<float> *v, size_t i) {
-    return gsl_vector_float_set_basis(v, i);
-  }
-
   /// Write non-portable binary image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.
