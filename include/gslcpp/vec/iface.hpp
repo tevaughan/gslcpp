@@ -11,6 +11,7 @@
 #include "../c/equal.hpp" // equal
 #include "../c/fprintf.hpp" // fprintf
 #include "../c/fread.hpp" // fread
+#include "../c/fscanf.hpp" // fscanf
 #include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
 #include "../c/isneg.hpp" // isneg
@@ -169,7 +170,7 @@ template<stor S> struct iface: public S {
   /// Read ASCII-formatted representation of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fscanf(FILE *f) { return c::iface<E>::fscanf(f, &v()); }
+  int fscanf(FILE *f) { return c::fscanf(f, &v()); }
 
   /// View of subvector of vector.  Arguments are reordered from those given to
   /// gsl_vector_subvector_with_stride().  Putting initial offset and stride at

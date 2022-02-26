@@ -1,7 +1,3 @@
-/// \file       include/gslcpp/c/xf-double.hpp
-/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// \brief      Definition for gsl::c::xf<double>, gsl::c::xf<double const>.
-
 #pragma once
 #include "vector-view.hpp"
 #include "vector.hpp"
@@ -11,14 +7,6 @@ namespace gsl::c {
 
 
 template<> struct xf<double> {
-  /// Read ASCII-formatted representation of vector from file.
-  /// @param f  Pointer to structure for buffered interface.
-  /// @param v  Pointer to vector.
-  /// @return  Zero only on success.
-  static int fscanf(FILE *f, vector<double> *v) {
-    return gsl_vector_fscanf(f, v);
-  }
-
   /// Swap elements within vector.
   /// @param v  Pointer to vector.
   /// @param i  Offset of one element.

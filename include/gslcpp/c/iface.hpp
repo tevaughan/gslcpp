@@ -27,9 +27,8 @@ template<typename E> concept basic_iface= true;
 
 
 template<typename E>
-concept setter_iface= basic_iface<E> &&requires(
-      E const &e, FILE *f, std::size_t s, vector<E> *v, vector<E> const *cv) {
-  { xf<E>::fscanf(f, v) } -> same_as<int>;
+concept setter_iface= basic_iface<E> &&
+requires(E const &e, std::size_t s, vector<E> *v, vector<E> const *cv) {
   { xf<E>::swap_elements(v, s, s) } -> same_as<int>;
   { xf<E>::reverse(v) } -> same_as<int>;
   { xf<E>::add(v, cv) } -> same_as<int>;
