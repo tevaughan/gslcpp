@@ -3,7 +3,8 @@
 /// \brief      Definition for gsl::vec::stor.
 
 #pragma once
-#include "../c/iface.hpp" // c_iface
+#include "../c/vector.hpp" // vector
+#include <concepts> // same_as
 
 namespace gsl::vec {
 

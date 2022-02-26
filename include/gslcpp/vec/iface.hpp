@@ -40,9 +40,7 @@
 #include "../c/subvector.hpp" // subvector
 #include "../c/sum.hpp" // sum
 #include "../c/swap-elements.hpp" // swap_elements
-#include "../c/xf-double.hpp" // xf<double>
-#include "../c/xf-float.hpp" // xf<float>
-#include "../version.hpp" // VERSION
+#include "../c/swap.hpp" // swap
 #include "iterator.hpp" // iterator
 #include "stor.hpp" // stor
 #include "view.hpp" // c::iface, view
@@ -460,7 +458,7 @@ int memcpy(iface<T> &dst, iface<U> const &src) {
 /// @param v2  Other vector.
 /// @return  TBD: GSL's documentation does not specify.
 template<typename S1, typename S2> int swap(iface<S1> &v1, iface<S2> &v2) {
-  return c::iface<typename S1::E>::swap(&v1.v(), &v2.v());
+  return c::swap(&v1.v(), &v2.v());
 }
 
 
