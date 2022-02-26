@@ -7,14 +7,6 @@ namespace gsl::c {
 
 
 template<> struct xf<double> {
-  /// Dive `cv` into `v` in place.
-  /// @param v  Pointer to vector that should be divided by `cv`.
-  /// @param cv  Pointer to vector whose contents should be divided into `v`.
-  /// @return  TBD: GSL's documentation does not specify.
-  static int div(vector<double> *v, vector<double> const *cv) {
-    return gsl_vector_div(v, cv);
-  }
-
   /// Multiply scalar into vector in place.
   /// @param v  Pointer to vector to be scaled.
   /// @param x  Scalar to multiply into `v`.

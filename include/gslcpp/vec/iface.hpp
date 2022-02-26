@@ -9,6 +9,7 @@
 
 #include "../c/add.hpp" // add
 #include "../c/axpby.hpp" // axpby
+#include "../c/div.hpp" // div
 #include "../c/equal.hpp" // equal
 #include "../c/fprintf.hpp" // fprintf
 #include "../c/fread.hpp" // fread
@@ -252,7 +253,7 @@ template<stor S> struct iface: public S {
   /// @param b  Vector whose contents should be divided into this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int div(iface<T> const &b) {
-    return c::iface<E>::div(&v(), &b.v());
+    return c::div(&v(), &b.v());
   }
 
   /// Add contents of `b` into this vector in place.
