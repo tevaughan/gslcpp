@@ -1,16 +1,4 @@
-/// \dir        include/gslcpp/c
-/// \brief      Interface to GSL's native, C-language functions and types.
-
-/// \file       include/gslcpp/c/iface.hpp
-/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
-///
-/// \brief      Definition for
-///             gsl::c::basic_iface,
-///             gsl::c::setter_iface, and
-///             gsl::c::iface.
-
 #pragma once
-
 #include "vector.hpp" // vector
 #include "xf.hpp" // xf
 #include <concepts> // same_as
@@ -19,7 +7,6 @@
 namespace gsl::c {
 
 
-using std::remove_const_t;
 using std::same_as;
 
 
@@ -29,7 +16,6 @@ template<typename E> concept basic_iface= true;
 template<typename E>
 concept setter_iface= basic_iface<E> &&
 requires(E const &e, std::size_t s, vector<E> *v, vector<E> const *cv) {
-  { xf<E>::swap_elements(v, s, s) } -> same_as<int>;
   { xf<E>::reverse(v) } -> same_as<int>;
   { xf<E>::add(v, cv) } -> same_as<int>;
   { xf<E>::sub(v, cv) } -> same_as<int>;

@@ -31,6 +31,7 @@
 #include "../c/set.hpp" // set
 #include "../c/subvector.hpp" // subvector
 #include "../c/sum.hpp" // sum
+#include "../c/swap-elements.hpp" // swap_elements
 #include "../c/xf-double.hpp" // xf<double>
 #include "../c/xf-float.hpp" // xf<float>
 #include "../version.hpp" // VERSION
@@ -211,7 +212,7 @@ template<stor S> struct iface: public S {
   /// @param j  Offset of other element.
   /// @return  TBD: GSL's documentation does not specify.
   int swap_elements(size_t i, size_t j) {
-    return c::iface<E>::swap_elements(&v(), i, j);
+    return c::swap_elements(&v(), i, j);
   }
 
   /// Reverse order of elements.
