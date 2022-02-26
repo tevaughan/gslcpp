@@ -23,6 +23,7 @@
 #include "../c/ispos.hpp" // ispos
 #include "../c/max-index.hpp" // max_index
 #include "../c/max.hpp" // max
+#include "../c/memcpy.hpp" // memcpy
 #include "../c/min-index.hpp" // min_index
 #include "../c/min.hpp" // min
 #include "../c/minmax-index.hpp" // minmax_index
@@ -448,7 +449,7 @@ bool equal(iface<S1> const &v1, iface<S2> const &v2) {
 /// @return  TBD: GSL's documentation does not specify.
 template<typename T, typename U>
 int memcpy(iface<T> &dst, iface<U> const &src) {
-  return c::iface<typename T::E>::memcpy(&dst.v(), &src.v());
+  return c::memcpy(&dst.v(), &src.v());
 }
 
 

@@ -16,7 +16,6 @@ template<typename E> concept basic_iface= true;
 template<typename E>
 concept setter_iface= basic_iface<E> &&
 requires(E const &e, std::size_t s, vector<E> *v, vector<E> const *cv) {
-  { xf<E>::memcpy(v, cv) } -> same_as<int>;
   { xf<E>::swap(v, v) } -> same_as<int>;
 };
 
