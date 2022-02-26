@@ -3,7 +3,8 @@
 /// \brief      Definition for gsl::vec::dyna.
 
 #pragma once
-#include "../c/vector.hpp"
+#include "../c/type-map.hpp"
+#include <algorithm> // swap
 
 namespace gsl::vec {
 
