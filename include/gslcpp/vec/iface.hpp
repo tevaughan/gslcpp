@@ -25,6 +25,7 @@
 #include "../c/min.hpp" // min
 #include "../c/minmax-index.hpp" // minmax_index
 #include "../c/minmax.hpp" // minmax
+#include "../c/mul.hpp" // mul
 #include "../c/ptr.hpp" // ptr
 #include "../c/reverse.hpp" // reverse
 #include "../c/set-all.hpp" // set_all
@@ -243,7 +244,7 @@ template<stor S> struct iface: public S {
   /// @param b  Vector whose contents should be multiplied into this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int mul(iface<T> const &b) {
-    return c::iface<E>::mul(&v(), &b.v());
+    return c::mul(&v(), &b.v());
   }
 
   /// Divide contents of `b` into this vector in place.

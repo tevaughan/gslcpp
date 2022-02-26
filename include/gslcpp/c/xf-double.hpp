@@ -7,14 +7,6 @@ namespace gsl::c {
 
 
 template<> struct xf<double> {
-  /// Multiply contents of `cv` into `v` in place.
-  /// @param v  Pointer to vector into which `cv` should be multiplied.
-  /// @param cv  Pointer to vector to be multiplied into `v`.
-  /// @return  TBD: GSL's documentation does not specify.
-  static int mul(vector<double> *v, vector<double> const *cv) {
-    return gsl_vector_mul(v, cv);
-  }
-
   /// Dive `cv` into `v` in place.
   /// @param v  Pointer to vector that should be divided by `cv`.
   /// @param cv  Pointer to vector whose contents should be divided into `v`.
