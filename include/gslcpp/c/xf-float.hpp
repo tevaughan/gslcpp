@@ -7,14 +7,6 @@ namespace gsl::c {
 
 
 template<> struct xf<float> {
-  /// Add constant into each element of `v` in place.
-  /// @param v  Pointer to vector whose elements are to be added to.
-  /// @param x  Constant to add into `v`.
-  /// @return  TBD: GSL's documentation does not specify.
-  static int add_constant(vector<float> *v, float x) {
-    return gsl_vector_float_add_constant(v, x);
-  }
-
   /// Copy data from source to destination.
   /// @param d  Pointer to destination-vector.
   /// @param s  Pointer to source-vector.

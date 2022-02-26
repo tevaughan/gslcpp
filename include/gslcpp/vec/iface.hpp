@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "../c/add-constant.hpp" // add_constant
 #include "../c/add.hpp" // add
 #include "../c/axpby.hpp" // axpby
 #include "../c/div.hpp" // div
@@ -309,7 +310,7 @@ template<stor S> struct iface: public S {
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
   /// @return  TBD: GSL's documentation does not specify.
-  int add_constant(E const &x) { return c::iface<E>::add_constant(&v(), x); }
+  int add_constant(E const &x) { return c::add_constant(&v(), x); }
 
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
