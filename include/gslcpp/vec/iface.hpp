@@ -29,6 +29,7 @@
 #include "../c/mul.hpp" // mul
 #include "../c/ptr.hpp" // ptr
 #include "../c/reverse.hpp" // reverse
+#include "../c/scale.hpp" // scale
 #include "../c/set-all.hpp" // set_all
 #include "../c/set-basis.hpp" // set_basis
 #include "../c/set-zero.hpp" // set_zero
@@ -295,7 +296,7 @@ template<stor S> struct iface: public S {
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
   /// @return  TBD: GSL's documentation does not specify.
-  int scale(E const &x) { return c::iface<E>::scale(&v(), x); }
+  int scale(E const &x) { return c::scale(&v(), x); }
 
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.

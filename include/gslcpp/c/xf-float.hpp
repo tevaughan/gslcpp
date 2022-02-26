@@ -7,14 +7,6 @@ namespace gsl::c {
 
 
 template<> struct xf<float> {
-  /// Multiply scalar into vector in place.
-  /// @param v  Pointer to vector to be scaled.
-  /// @param x  Scalar to multiply into `v`.
-  /// @return  TBD: GSL's documentation does not specify.
-  static int scale(vector<float> *v, float x) {
-    return gsl_vector_float_scale(v, x);
-  }
-
   /// Add constant into each element of `v` in place.
   /// @param v  Pointer to vector whose elements are to be added to.
   /// @param x  Constant to add into `v`.
