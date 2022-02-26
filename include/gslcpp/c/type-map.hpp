@@ -1,6 +1,11 @@
 /// @file       include/gslcpp/c/type-map.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::type_map, gsl::c::vector, gsl::c::matrix.
+///
+/// @brief      Definition of
+///             gsl::c::type_map<>,
+///             gsl::c::vector<>,
+///             gsl::c::vector_view<>,
+///             gsl::c::matrix<>.
 
 #pragma once
 

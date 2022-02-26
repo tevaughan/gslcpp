@@ -1,10 +1,10 @@
-/// @file       include/gslcpp/c/type-map.hpp
+/// @file       include/gslcpp/c/compat.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 ///
 /// @brief      Definition for
-///             gsl::c::data_t,
-///             gsl::c::sum_for_gsl_lt_2p7,
-///             gsl::c::axpby_for_gsl_lt_2p7.
+///             gsl::c::data_t<V>,
+///             gsl::c::sum_for_gsl_lt_2p7(),
+///             gsl::c::axpby_for_gsl_lt_2p7().
 
 #pragma once
 
@@ -27,7 +27,8 @@ template<typename V> using data_t= std::remove_reference_t<decltype(*V::data)>;
 
 
 /// Sum of elements in vector, for use when GSL's version be less than 2.7.
-/// This function uses Eigen to compute the sum.
+/// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
+/// This implementation uses Eigen to compute the sum.
 /// @tparam V  Type of gsl_vector.
 /// @param v  Reference to vector.
 /// @return  Sum of elements.
@@ -39,7 +40,13 @@ template<typename V> data_t<V> sum_for_gsl_lt_2p7(V const &v) {
 }
 
 
-/// Linear combination with effect, `y = a*x + b*y`.
+/// Linear combination with effect, `y = a*x + b*y`, for use when GSL's version
+/// be less than 2.7.
+///
+/// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_axpby
+///
+/// This implementation uses Eigen to produce the effect.
+///
 /// @tparam V  Type of vectors to be combined.
 /// @param a  Coefficient of first vector.
 /// @param x  Reference to first vector.

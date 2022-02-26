@@ -1,6 +1,6 @@
 /// @file       include/gslcpp/c/axpby.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of c::axpby.
+/// @brief      Definition of gsl::c::axpby().
 
 #pragma once
 #include "compat.hpp"
@@ -19,6 +19,7 @@ namespace gsl::c {
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(double const &a,
       c::vector<double const> *x,
@@ -36,6 +37,7 @@ axpby(double const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(float const &a,
       c::vector<float const> *x,
@@ -53,6 +55,7 @@ axpby(float const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(long double const &a,
       c::vector<long double const> *x,
@@ -70,6 +73,7 @@ axpby(long double const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(int const &a, c::vector<int const> *x, int const &b, c::vector<int> *y) {
   return gsl_vector_int_axpby(a, x, b, y);
@@ -84,6 +88,7 @@ axpby(int const &a, c::vector<int const> *x, int const &b, c::vector<int> *y) {
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(unsigned const &a,
       c::vector<unsigned const> *x,
@@ -101,6 +106,7 @@ axpby(unsigned const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(long const &a,
       c::vector<long const> *x,
@@ -118,6 +124,7 @@ axpby(long const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(unsigned long const &a,
       c::vector<unsigned long const> *x,
@@ -135,6 +142,7 @@ axpby(unsigned long const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(short const &a,
       c::vector<short const> *x,
@@ -152,6 +160,7 @@ axpby(short const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(unsigned short const &a,
       c::vector<unsigned short const> *x,
@@ -169,6 +178,7 @@ axpby(unsigned short const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(char const &a,
       c::vector<char const> *x,
@@ -186,6 +196,7 @@ axpby(char const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(unsigned char const &a,
       c::vector<unsigned char const> *x,
@@ -203,6 +214,7 @@ axpby(unsigned char const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(gsl_complex const &a,
       c::vector<gsl_complex const> *x,
@@ -220,6 +232,7 @@ axpby(gsl_complex const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(gsl_complex_float const &a,
       c::vector<gsl_complex_float const> *x,
@@ -237,6 +250,7 @@ axpby(gsl_complex_float const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  TBD: GSL's documentation does not specify.
 inline int
 axpby(gsl_complex_long_double const &a,
       c::vector<gsl_complex_long_double const> *x,
@@ -264,6 +278,8 @@ axpby(gsl_complex_long_double const &a,
 /// @param b  Coefficient of vector `y`.
 /// @param y  Pointer to vector that is multiplied by `b` and then updated as
 ///           `a*x + b*y`.
+/// @return  GSL's documentation does not specify, but this implementation
+///          returns zero.
 template<typename V>
 int axpby(data_t<V> const &a, V const *x, data_t<V> const &b, V *y) {
   return axpby_for_gsl_lt_2p7(a, *x, b, *y);

@@ -1,6 +1,6 @@
 /// @file       include/gslcpp/c/add-constant.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::add_constant.
+/// @brief      Definition of gsl::c::add_constant().
 
 #pragma once
 #include "type-map.hpp"

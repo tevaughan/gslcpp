@@ -1,6 +1,6 @@
 /// @file       include/gslcpp/c/add.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::add.
+/// @brief      Definition of gsl::c::add().
 
 #pragma once
 #include "type-map.hpp"
