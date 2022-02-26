@@ -10,24 +10,7 @@
 namespace gsl::c {
 
 
-/// \anchor xf_float_const
-/// Specialization for `float const`.
-/// \sa \ref xf_generic
-template<> struct xf<float const> {
-  /// Test equality of two vectors.
-  /// @param a  Pointer to one vector.
-  /// @param b  Pointer to other vector.
-  /// @return  True only if vectors be equal.
-  static bool equal(vector<float const> *a, vector<float const> *b) {
-    return gsl_vector_float_equal(a, b);
-  }
-};
-
-
-/// \anchor xf_float
-/// Specialization for `float`.
-/// \sa \ref xf_generic
-template<> struct xf<float>: public xf<float const> {
+template<> struct xf<float> {
   /// Write non-portable binary image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.

@@ -23,44 +23,7 @@ using std::remove_const_t;
 using std::same_as;
 
 
-/// Requirements on the basic interface to GSL's native C-types and
-/// C-functions.
-///
-/// `E` may here be a `const` or a non-`const` type and is the primitive type
-/// (such as `double`) of each element in a vector or matrix.
-///
-/// However, for explanation of the relationships between `basic_iface` and
-/// gsl::c::setter_iface, let us suppose, for the moment, that `E` designates
-/// a non-`const` type.
-///
-///   - Then \ref xf_double_const "xf<E const>" implements static functions,
-///     each of which calls the appropriate function in GSL's native
-///     C-interface, in order to cover all of `basic_iface`, and
-///
-///   - \ref xf_double "xf<E>" inherits from \ref xf_double_const "xf<E const>"
-///     in order to pick up the functions needed to cover `basic_iface`.
-///
-///   - \ref xf_double "xf<E>" implements additional static functions in order
-///     to cover \ref gsl::c::setter_iface "setter_iface".
-///
-/// \see \ref xf_generic
-/// \see \ref xf_double_const
-/// \see \ref xf_double
-/// \see \ref xf_float_const
-/// \see \ref xf_float
-///
-/// @tparam E  Type of each element; `E` can be `const` or non-`const`.
-template<typename E>
-concept basic_iface= requires(
-      FILE *f, ///< Pointer to buffered file-interface.
-      char const *c, ///< Pointer to printf-style format-string.
-      remove_const_t<E> *nce, ///< Pointer to guaranteed non-const element.
-      std::size_t *sp, ///< Pointer to offset.
-      std::size_t s, ///< Offset.
-      vector<E> *v ///< Pointer to gsl_vector.
-) {
-  { xf<E>::equal(v, v) } -> same_as<bool>;
-};
+template<typename E> concept basic_iface= true;
 
 
 /// Requirements on the full interface to GSL's native C-types and C-functions.

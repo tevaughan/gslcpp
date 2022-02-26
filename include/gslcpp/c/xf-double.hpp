@@ -10,24 +10,10 @@
 namespace gsl::c {
 
 
-/// \anchor xf_double_const
-/// Specialization for `double const`.
-/// \sa \ref xf_generic
-template<> struct xf<double const> {
-  /// Test equality of two vectors.
-  /// @param a  Pointer to one vector.
-  /// @param b  Pointer to other vector.
-  /// @return  True only if vectors be equal.
-  static bool equal(vector<double const> *a, vector<double const> *b) {
-    return gsl_vector_equal(a, b);
-  }
-};
-
-
 /// \anchor xf_double
 /// Specialization for `double`.
 /// \sa \ref xf_generic
-template<> struct xf<double>: public xf<double const> {
+template<> struct xf<double> {
   /// Read non-portable binary-image of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @param v  Pointer to gsl_vector.

@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../c/axpby.hpp" // axpby
+#include "../c/equal.hpp" // equal
 #include "../c/fprintf.hpp" // fprintf
 #include "../c/fwrite.hpp" // fwrite
 #include "../c/get.hpp" // get
@@ -425,7 +426,7 @@ int axpby(
 /// @return  True only if vectors be equal.
 template<typename S1, typename S2>
 bool equal(iface<S1> const &v1, iface<S2> const &v2) {
-  return c::iface<typename S1::E>::equal(&v1.v(), &v2.v());
+  return c::equal(&v1.v(), &v2.v());
 }
 
 
