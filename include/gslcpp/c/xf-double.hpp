@@ -7,14 +7,6 @@ namespace gsl::c {
 
 
 template<> struct xf<double> {
-  /// Add contents of `cv` into `v` in place.
-  /// @param v  Pointer to vector into which `cv` should be accumulated.
-  /// @param cv  Pointer to vector to be added into `v`.
-  /// @return  TBD: GSL's documentation does not specify.
-  static int add(vector<double> *v, vector<double> const *cv) {
-    return gsl_vector_add(v, cv);
-  }
-
   /// Subtract contents of `cv` from `v` in place.
   /// @param v  Pointer to vector that should be reduced by `cv`.
   /// @param cv  Pointer to vector to be subtracted from `v`.

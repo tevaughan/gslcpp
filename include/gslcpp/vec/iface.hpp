@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "../c/add.hpp" // add
 #include "../c/axpby.hpp" // axpby
 #include "../c/equal.hpp" // equal
 #include "../c/fprintf.hpp" // fprintf
@@ -225,7 +226,7 @@ template<stor S> struct iface: public S {
   /// @param b  Vector whose contents should be added into this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int add(iface<T> const &b) {
-    return c::iface<E>::add(&v(), &b.v());
+    return c::add(&v(), &b.v());
   }
 
   /// Subtract contents of `b` from this vector in place.
