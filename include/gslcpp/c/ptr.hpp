@@ -1,4 +1,4 @@
-/// @file       include/gslcpp/c/subvector.hpp
+/// @file       include/gslcpp/c/ptr.hpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Definition of gslcpp::c::ptr().
 
