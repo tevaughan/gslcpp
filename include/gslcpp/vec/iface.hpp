@@ -25,6 +25,7 @@
 #include "../c/minmax-index.hpp" // minmax_index
 #include "../c/minmax.hpp" // minmax
 #include "../c/ptr.hpp" // ptr
+#include "../c/reverse.hpp" // reverse
 #include "../c/set-all.hpp" // set_all
 #include "../c/set-basis.hpp" // set_basis
 #include "../c/set-zero.hpp" // set_zero
@@ -217,7 +218,7 @@ template<stor S> struct iface: public S {
 
   /// Reverse order of elements.
   /// @return  TBD: GSL's documentation does not specify.
-  int reverse() { return c::iface<E>::reverse(&v()); }
+  int reverse() { return c::reverse(&v()); }
 
   /// Add contents of `b` into this vector in place.
   /// @tparam T  Type of vector to be added into this.

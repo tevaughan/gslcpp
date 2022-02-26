@@ -7,11 +7,6 @@ namespace gsl::c {
 
 
 template<> struct xf<double> {
-  /// Reverse order of elements.
-  /// @param v  Pointer to vector.
-  /// @return  TBD: GSL's documentation does not specify.
-  static int reverse(vector<double> *v) { return gsl_vector_reverse(v); }
-
   /// Add contents of `cv` into `v` in place.
   /// @param v  Pointer to vector into which `cv` should be accumulated.
   /// @param cv  Pointer to vector to be added into `v`.
