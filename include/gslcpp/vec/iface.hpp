@@ -31,6 +31,7 @@
 #include "../c/set-basis.hpp" // set_basis
 #include "../c/set-zero.hpp" // set_zero
 #include "../c/set.hpp" // set
+#include "../c/sub.hpp" // sub
 #include "../c/subvector.hpp" // subvector
 #include "../c/sum.hpp" // sum
 #include "../c/swap-elements.hpp" // swap_elements
@@ -234,7 +235,7 @@ template<stor S> struct iface: public S {
   /// @param b  Vector whose contents should be subtracted from this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int sub(iface<T> const &b) {
-    return c::iface<E>::sub(&v(), &b.v());
+    return c::sub(&v(), &b.v());
   }
 
   /// Multiply contents of `b` into this vector in place.
