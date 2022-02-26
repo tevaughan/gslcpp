@@ -3,7 +3,7 @@
 /// @brief      Definition of gsl::c::mul.
 
 #pragma once
-#include "vector.hpp"
+#include "type-map.hpp"
 
 namespace gsl::c {
 

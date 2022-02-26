@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::vec::dyna.
 
 #pragma once
-#include "../c/iface.hpp" // c_iface
+#include "../c/vector.hpp"
 
 namespace gsl::vec {
 

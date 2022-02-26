@@ -3,7 +3,7 @@
 /// @brief      Definition of gsl::c::add_constant.
 
 #pragma once
-#include "vector.hpp"
+#include "type-map.hpp"
 
 namespace gsl::c {
 

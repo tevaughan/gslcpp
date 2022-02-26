@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::vec::stor.
 
 #pragma once
-#include "../c/vector.hpp" // vector
+#include "../c/type-map.hpp" // vector
 #include <concepts> // same_as
 
 namespace gsl::vec {

@@ -3,7 +3,7 @@
 /// @brief      Definition of gsl::c::div.
 
 #pragma once
-#include "vector.hpp"
+#include "type-map.hpp"
 
 namespace gsl::c {
 

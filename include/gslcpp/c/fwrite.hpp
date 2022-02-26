@@ -3,7 +3,7 @@
 /// @brief      Definition of gslc::fwrite.
 
 #pragma once
-#include "vector.hpp"
+#include "type-map.hpp"
 
 namespace gsl::c {
 

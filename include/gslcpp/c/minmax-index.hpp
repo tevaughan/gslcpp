@@ -3,7 +3,7 @@
 /// @brief      Definition of gslcpp::c::minmax_index.
 
 #pragma once
-#include "vector.hpp" // vector
+#include "type-map.hpp" // vector
 
 namespace gsl::c {
 

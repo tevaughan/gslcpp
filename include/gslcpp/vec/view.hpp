@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::vec::view.
 
 #pragma once
-#include "../c/vector-view.hpp" // vector_view
+#include "../c/type-map.hpp" // vector_view
 
 namespace gsl::vec {
 

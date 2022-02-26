@@ -3,7 +3,7 @@
 /// @brief      Definition of gslcpp::c::subvector.
 
 #pragma once
-#include "vector-view.hpp"
+#include "type-map.hpp"
 
 namespace gsl::c {
 

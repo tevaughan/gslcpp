@@ -3,7 +3,8 @@
 /// @brief      Definition of gslcpp::c::sum.
 
 #pragma once
-#include "vector.hpp" // vector, GSL_AT_LEAST(), sum_for_gsl_lt_2p7()
+#include "compat.hpp" // GSL_AT_LEAST(), sum_for_gsl_lt_2p7()
+#include "type-map.hpp" // vector
 
 namespace gsl::c {
 

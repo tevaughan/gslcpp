@@ -3,7 +3,7 @@
 /// @brief      Definition of gslcpp::c::vector_view_array.
 
 #pragma once
-#include "vector-view.hpp"
+#include "type-map.hpp"
 
 namespace gsl::c {
 

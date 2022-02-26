@@ -3,7 +3,7 @@
 /// @brief      Definition of gslcpp::c::ispos.
 
 #pragma once
-#include "vector.hpp"
+#include "type-map.hpp"
 
 namespace gsl::c {
 
