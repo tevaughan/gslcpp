@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/vector-view-array.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::vector_view_array.
+/// \file       include/gslcpp/c/vector-view-array.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::vector_view_array.
 
 #pragma once
 #include "type-map.hpp"

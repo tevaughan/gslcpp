@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/ptr.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::c::ptr().
+/// \file       include/gslcpp/c/ptr.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::ptr().
 
 #pragma once
 #include "type-map.hpp"

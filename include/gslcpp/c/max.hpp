@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/max.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::c::max().
+/// \file       include/gslcpp/c/max.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::max().
 
 #pragma once
 #include "type-map.hpp" // vector

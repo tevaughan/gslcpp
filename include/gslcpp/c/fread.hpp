@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/fread.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::fread().
+/// \file       include/gslcpp/c/fread.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::fread().
 
 #pragma once
 #include "type-map.hpp"

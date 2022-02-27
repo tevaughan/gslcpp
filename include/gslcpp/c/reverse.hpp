@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/reverse.hpp
-/// @copyright  2022 Thomas E. Vaughan
-/// @brief      Definition of gsl::c::reverse().
+/// \file       include/gslcpp/c/reverse.hpp
+/// \copyright  2022 Thomas E. Vaughan
+/// \brief      Definition of gsl::c::reverse().
 
 #pragma once
 #include "type-map.hpp"

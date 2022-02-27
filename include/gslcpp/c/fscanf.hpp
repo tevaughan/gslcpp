@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/fscanf.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::fscanf().
+/// \file       include/gslcpp/c/fscanf.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::fscanf().
 
 #pragma once
 #include "type-map.hpp"

@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/sum.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::c::sum().
+/// \file       include/gslcpp/c/sum.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::sum().
 
 #pragma once
 #include "compat.hpp" // GSL_AT_LEAST(), sum_for_gsl_lt_2p7()

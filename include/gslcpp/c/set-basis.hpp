@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/set-basis.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::c::set_basis().
+/// \file       include/gslcpp/c/set-basis.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::set_basis().
 
 #pragma once
 #include "type-map.hpp"

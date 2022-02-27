@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/mul.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::mul().
+/// \file       include/gslcpp/c/mul.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::mul().
 
 #pragma once
 #include "type-map.hpp"

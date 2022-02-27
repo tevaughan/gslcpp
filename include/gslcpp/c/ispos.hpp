@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/ispos.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::c::ispos().
+/// \file       include/gslcpp/c/ispos.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::ispos().
 
 #pragma once
 #include "type-map.hpp"

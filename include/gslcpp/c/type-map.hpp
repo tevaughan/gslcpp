@@ -1,11 +1,11 @@
-/// @file       include/gslcpp/c/type-map.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \file       include/gslcpp/c/type-map.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
 ///
-/// @brief      Definition of
-///             gsl::c::type_map<>,
-///             gsl::c::vector<>,
-///             gsl::c::vector_view<>,
-///             gsl::c::matrix<>.
+/// \brief      Definition of
+///             gsl::c::type_map,
+///             \ref vector,
+///             \ref vector_view,
+///             \ref matrix.
 
 #pragma once
 
@@ -401,16 +401,19 @@ template<> struct type_map<gsl_complex_long_double const> {
 };
 
 
+/// \anchor vector
 /// GSL's native vector-type corresponding to element-type `E`.
 /// @tparam E  Type of element for vector.
 template<typename E> using vector= typename type_map<E>::vector;
 
 
+/// \anchor vector_view
 /// GSL's native view of vector corresponding to element-type `E`.
 /// @tparam E  Type of element for vector.
 template<typename E> using vector_view= typename type_map<E>::vector_view;
 
 
+/// \anchor matrix
 /// GSL's native matrix-type corresponding to element-type `E`.
 /// @tparam E  Type of element for matrix.
 template<typename E> using matrix= typename type_map<E>::matrix;

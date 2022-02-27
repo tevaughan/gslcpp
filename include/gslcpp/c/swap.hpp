@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/swap.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::swap().
+/// \file       include/gslcpp/c/swap.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::swap().
 
 #pragma once
 #include "type-map.hpp"

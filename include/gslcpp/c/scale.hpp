@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/scale.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::scale().
+/// \file       include/gslcpp/c/scale.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::scale().
 
 #pragma once
 #include "type-map.hpp"

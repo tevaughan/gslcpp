@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/fwrite.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslc::fwrite().
+/// \file       include/gslcpp/c/fwrite.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::fwrite().
 
 #pragma once
 #include "type-map.hpp"

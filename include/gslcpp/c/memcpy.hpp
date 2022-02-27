@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/memcpy.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::memcpy().
+/// \file       include/gslcpp/c/memcpy.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::memcpy().
 
 #pragma once
 #include "type-map.hpp"

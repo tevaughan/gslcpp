@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/set-all.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::c::set_all().
+/// \file       include/gslcpp/c/set-all.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::set_all().
 
 #pragma once
 #include "type-map.hpp"

@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/sub.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::sub().
+/// \file       include/gslcpp/c/sub.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::sub().
 
 #pragma once
 #include "type-map.hpp"

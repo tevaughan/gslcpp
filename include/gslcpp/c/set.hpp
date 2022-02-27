@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/set.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::c::set().
+/// \file       include/gslcpp/c/set.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::set().
 
 #pragma once
 #include "type-map.hpp"

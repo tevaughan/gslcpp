@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/min-index.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::c::min_index().
+/// \file       include/gslcpp/c/min-index.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::min_index().
 
 #pragma once
 #include "type-map.hpp" // vector

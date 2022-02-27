@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/isneg.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::c::isneg().
+/// \file       include/gslcpp/c/isneg.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::isneg().
 
 #pragma once
 #include "type-map.hpp"

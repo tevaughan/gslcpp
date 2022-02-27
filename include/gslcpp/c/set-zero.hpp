@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/set-zero.hpp
-/// @copyright  2022 Thomas E. Vaughan
-/// @brief      Definition of gsl::c::set_zero().
+/// \file       include/gslcpp/c/set-zero.hpp
+/// \copyright  2022 Thomas E. Vaughan
+/// \brief      Definition of gsl::c::set_zero().
 
 #pragma once
 #include "type-map.hpp"

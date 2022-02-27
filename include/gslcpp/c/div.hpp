@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/div.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gsl::c::div().
+/// \file       include/gslcpp/c/div.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::div().
 
 #pragma once
 #include "type-map.hpp"

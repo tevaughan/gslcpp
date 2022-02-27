@@ -1,8 +1,8 @@
-/// @file       include/gslcpp/c/compat.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \file       include/gslcpp/c/compat.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
 ///
-/// @brief      Definition for
-///             gsl::c::data_t<V>,
+/// \brief      Definition for
+///             \ref data_t,
 ///             gsl::c::sum_for_gsl_lt_2p7(),
 ///             gsl::c::axpby_for_gsl_lt_2p7().
 
@@ -21,6 +21,7 @@ using Eigen::Matrix;
 using Eigen::Stride;
 
 
+/// \anchor data_t
 /// Type of each element in gsl_vector of type V.
 /// @tparam V  Type of gsl_vector (for example, gsl_vector_float).
 template<typename V> using data_t= std::remove_reference_t<decltype(*V::data)>;

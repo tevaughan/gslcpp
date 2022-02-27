@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/minmax.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::c::minmax().
+/// \file       include/gslcpp/c/minmax.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::minmax().
 
 #pragma once
 #include "type-map.hpp" // vector

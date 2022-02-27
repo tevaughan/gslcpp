@@ -1,6 +1,6 @@
-/// @file       include/gslcpp/c/isnull.hpp
-/// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Definition of gslcpp::c::isnull().
+/// \file       include/gslcpp/c/isnull.hpp
+/// \copyright  2022 Thomas E. Vaughan, all rights reserved.
+/// \brief      Definition of gsl::c::isnull().
 
 #pragma once
 #include "type-map.hpp"
