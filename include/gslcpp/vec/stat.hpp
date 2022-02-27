@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::vec::stat.
 
 #pragma once
-#include "../c/type-map.hpp" // vector_view
+#include "../wrap/type-map.hpp" // vector_view
 
 namespace gsl::vec {
 
@@ -25,7 +25,7 @@ public:
 
 private:
   T d_[S]; ///< Storage for data.
-  c::vector_view<E> view_; ///< GSL's view of data within instance of vector.
+  w_vector_view<E> view_; ///< GSL's view of data within instance of vector.
 
 public:
   /// Initialize GSL's view of static storage, but do not initialize elements.

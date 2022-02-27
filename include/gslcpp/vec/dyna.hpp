@@ -1,9 +1,9 @@
 /// \file       include/gslcpp/vec/dyna.hpp
 /// \copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// \brief      Definition for gsl::vec::dyna.
+/// \brief      Definition for gsl::vew_dyna.
 
 #pragma once
-#include "../c/type-map.hpp"
+#include "../wrap/type-map.hpp"
 #include <algorithm> // swap
 
 namespace gsl::vec {
@@ -13,7 +13,7 @@ namespace gsl::vec {
 /// determined dynamically, at run-time, and (2) that it is owned by instance
 /// of interface.
 ///
-/// `dyna` implements concept gsl::vec::stor and can serve as template-type
+/// `dyna` implements concept gsl::vew_stor and can serve as template-type
 /// parameter for (and thus base of) gsl::vec::iface.
 ///
 /// @tparam T  Type of each element in vector.
@@ -33,7 +33,7 @@ private:
   alloc_type alloc_type_= alloc_type::ALLOC;
 
   /// Pointer to allocated descriptor for vector.
-  c::vector<E> *v_= nullptr;
+  w_vector<E> *v_= nullptr;
 
   /// Deallocate vector and its descriptor.
   void free() {

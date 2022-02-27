@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::vec::view.
 
 #pragma once
-#include "../c/type-map.hpp" // vector_view
+#include "../wrap/type-map.hpp" // vector_view
 
 namespace gsl::vec {
 
@@ -19,7 +19,7 @@ public:
   using E= T; ///< Type of each element.
 
 private:
-  c::vector_view<E> view_; ///< GSL's view of data outside instance.
+  w_vector_view<E> view_; ///< GSL's view of data outside instance.
 
 public:
   /// Reference to GSL's interface to vector.
@@ -32,7 +32,7 @@ public:
 
   /// Constructor called by TBS.
   /// @param v  View to copy.
-  view(c::vector_view<E> const &v): view_(v) {}
+  view(w_vector_view<E> const &v): view_(v) {}
 
   /// GSL's native, C-language interface to vector-view.
   /// @return  GSL's native, C-language interface to vector-view.

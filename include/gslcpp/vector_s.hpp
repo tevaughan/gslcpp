@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "c/vector-view-array.hpp" // vector_view_array
-#include "vec/iface.hpp" // vec::iface, vec::stor, c::iface
+#include "vec/iface.hpp" // vec::iface, vec::stor
 #include "vec/stat.hpp" // vec::stat
+#include "wrap/vector-view-array.hpp" // vector_view_array
 #include <type_traits> // enable_if_t
 
 /// Namespace for C++-interface to GSL.
@@ -62,7 +62,7 @@ struct vector_s: public vec::iface<vec::stat<S, T>> {
   /// ~~~
   /// @param d  Data to copy for initialization.
   vector_s(T const (&d)[S]) {
-    auto const cview= c::vector_view_array<T const>(d, 1, S);
+    auto const cview= w_vector_view_array<T const>(d, 1, S);
     memcpy(*this, vec::iface<vec::view<T const>>(cview));
   }
 
@@ -82,7 +82,7 @@ struct vector_s: public vec::iface<vec::stat<S, T>> {
     if(i + s * (S - 1) > N - 1) {
       throw std::runtime_error("source-array not big enough");
     }
-    auto const cview= c::vector_view_array<T const>(d + i, s, S);
+    auto const cview= w_vector_view_array<T const>(d + i, s, S);
     memcpy(*this, vec::iface<vec::view<T const>>(cview));
   }
 

@@ -7,43 +7,43 @@
 
 #pragma once
 
-#include "../c/add-constant.hpp" // add_constant
-#include "../c/add.hpp" // add
-#include "../c/axpby.hpp" // axpby
-#include "../c/div.hpp" // div
-#include "../c/equal.hpp" // equal
-#include "../c/fprintf.hpp" // fprintf
-#include "../c/fread.hpp" // fread
-#include "../c/fscanf.hpp" // fscanf
-#include "../c/fwrite.hpp" // fwrite
-#include "../c/get.hpp" // get
-#include "../c/isneg.hpp" // isneg
-#include "../c/isnonneg.hpp" // isnonneg
-#include "../c/isnull.hpp" // isnull
-#include "../c/ispos.hpp" // ispos
-#include "../c/max-index.hpp" // max_index
-#include "../c/max.hpp" // max
-#include "../c/memcpy.hpp" // memcpy
-#include "../c/min-index.hpp" // min_index
-#include "../c/min.hpp" // min
-#include "../c/minmax-index.hpp" // minmax_index
-#include "../c/minmax.hpp" // minmax
-#include "../c/mul.hpp" // mul
-#include "../c/ptr.hpp" // ptr
-#include "../c/reverse.hpp" // reverse
-#include "../c/scale.hpp" // scale
-#include "../c/set-all.hpp" // set_all
-#include "../c/set-basis.hpp" // set_basis
-#include "../c/set-zero.hpp" // set_zero
-#include "../c/set.hpp" // set
-#include "../c/sub.hpp" // sub
-#include "../c/subvector.hpp" // subvector
-#include "../c/sum.hpp" // sum
-#include "../c/swap-elements.hpp" // swap_elements
-#include "../c/swap.hpp" // swap
+#include "../wrap/add-constant.hpp" // add_constant
+#include "../wrap/add.hpp" // add
+#include "../wrap/axpby.hpp" // axpby
+#include "../wrap/div.hpp" // div
+#include "../wrap/equal.hpp" // equal
+#include "../wrap/fprintf.hpp" // fprintf
+#include "../wrap/fread.hpp" // fread
+#include "../wrap/fscanf.hpp" // fscanf
+#include "../wrap/fwrite.hpp" // fwrite
+#include "../wrap/get.hpp" // get
+#include "../wrap/isneg.hpp" // isneg
+#include "../wrap/isnonneg.hpp" // isnonneg
+#include "../wrap/isnull.hpp" // isnull
+#include "../wrap/ispos.hpp" // ispos
+#include "../wrap/max-index.hpp" // max_index
+#include "../wrap/max.hpp" // max
+#include "../wrap/memcpy.hpp" // memcpy
+#include "../wrap/min-index.hpp" // min_index
+#include "../wrap/min.hpp" // min
+#include "../wrap/minmax-index.hpp" // minmax_index
+#include "../wrap/minmax.hpp" // minmax
+#include "../wrap/mul.hpp" // mul
+#include "../wrap/ptr.hpp" // ptr
+#include "../wrap/reverse.hpp" // reverse
+#include "../wrap/scale.hpp" // scale
+#include "../wrap/set-all.hpp" // set_all
+#include "../wrap/set-basis.hpp" // set_basis
+#include "../wrap/set-zero.hpp" // set_zero
+#include "../wrap/set.hpp" // set
+#include "../wrap/sub.hpp" // sub
+#include "../wrap/subvector.hpp" // subvector
+#include "../wrap/sum.hpp" // sum
+#include "../wrap/swap-elements.hpp" // swap_elements
+#include "../wrap/swap.hpp" // swap
 #include "iterator.hpp" // iterator
 #include "stor.hpp" // stor
-#include "view.hpp" // c::iface, view
+#include "view.hpp" // view
 #include <iostream> // ostream
 
 namespace gsl {
@@ -69,8 +69,8 @@ template<stor S> struct iface: public S {
   /// Inherit assigment.
   using S::operator=;
 
-  /// Reference to instance of c::iface<S::elem>::vector, which is either
-  /// gsl_vector, gsl_vector_float, etc.
+  /// Reference to instance of w_vector<S::E>, which is either gsl_vector,
+  /// gsl_vector_float, etc.
   using S::v;
 
   /// Type of each element.
@@ -115,12 +115,12 @@ template<stor S> struct iface: public S {
   /// Read element with bounds-checking.
   /// @param i  Offset of element.
   /// @return  Value of element.
-  E get(size_t i) const { return c::get(&v(), i); }
+  E get(size_t i) const { return w_get(&v(), i); }
 
   /// Write element with bounds-checking.
   /// @param i  Offset of element.
   /// @param x  New value for element.
-  void set(size_t i, E const &x) { c::set(&v(), i, x); }
+  void set(size_t i, E const &x) { w_set(&v(), i, x); }
 
   /// Read element without bounds-checking.
   /// @param i  Offset of element.
@@ -136,48 +136,48 @@ template<stor S> struct iface: public S {
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to mutable element.
-  E *ptr(size_t i) { return c::ptr(&v(), i); }
+  E *ptr(size_t i) { return w_ptr(&v(), i); }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to immutable element.
-  E const *ptr(size_t i) const { return c::ptr(&v(), i); }
+  E const *ptr(size_t i) const { return w_ptr(&v(), i); }
 
   /// Set every element.
   /// @param x  Value to which each element should be set.
-  void set_all(E const &x) { c::set_all(&v(), x); }
+  void set_all(E const &x) { w_set_all(&v(), x); }
 
   /// Set every element to zero.
-  void set_zero() { c::set_zero(&v()); }
+  void set_zero() { w_set_zero(&v()); }
 
   /// Set element at offset `i` to unity and every other element to zero.
   /// @param i  Offset of element set to unity.
   /// @return  TBD: GSL's documentation does not specify.
-  int set_basis(size_t i) { return c::set_basis(&v(), i); }
+  int set_basis(size_t i) { return w_set_basis(&v(), i); }
 
   /// Write non-portable binary-image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fwrite(FILE *f) const { return c::fwrite(f, &v()); }
+  int fwrite(FILE *f) const { return w_fwrite(f, &v()); }
 
   /// Read non-portable binary-image of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fread(FILE *f) { return c::fread(f, &v()); };
+  int fread(FILE *f) { return w_fread(f, &v()); };
 
   /// Write ASCII-formatted representation of vector to file.
   /// @param flp  Pointer to structure for buffered interface.
   /// @param fmt  printf()-style format-string.
   /// @return  Zero only on success.
   int fprintf(FILE *flp, char const *fmt) const {
-    return c::fprintf(flp, &v(), fmt);
+    return w_fprintf(flp, &v(), fmt);
   }
 
   /// Read ASCII-formatted representation of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fscanf(FILE *f) { return c::fscanf(f, &v()); }
+  int fscanf(FILE *f) { return w_fscanf(f, &v()); }
 
   /// View of subvector of vector.  Arguments are reordered from those given to
   /// gsl_vector_subvector_with_stride().  Putting initial offset and stride at
@@ -188,7 +188,7 @@ template<stor S> struct iface: public S {
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
   iface<view<E>> subvector(size_t n, size_t i= 0, size_t s= 1) {
-    return c::subvector(&v(), i, s, n);
+    return w_subvector(&v(), i, s, n);
   }
 
   /// View of subvector of vector.  Arguments are reordered from those given to
@@ -200,17 +200,17 @@ template<stor S> struct iface: public S {
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
   iface<view<E const>> subvector(size_t n, size_t i= 0, size_t s= 1) const {
-    return c::subvector(&v(), i, s, n);
+    return w_subvector(&v(), i, s, n);
   }
 
   /// View of vector.
   /// @return  View of vector.
-  iface<view<E>> view() { return c::subvector(&v(), 0, 1, size()); }
+  iface<view<E>> view() { return w_subvector(&v(), 0, 1, size()); }
 
   /// View of vector.
   /// @return  View of vector.
   iface<vec::view<E const>> view() const {
-    return c::subvector(&v(), 0, 1, size());
+    return w_subvector(&v(), 0, 1, size());
   }
 
   /// Swap elements within this vector.
@@ -218,19 +218,19 @@ template<stor S> struct iface: public S {
   /// @param j  Offset of other element.
   /// @return  TBD: GSL's documentation does not specify.
   int swap_elements(size_t i, size_t j) {
-    return c::swap_elements(&v(), i, j);
+    return w_swap_elements(&v(), i, j);
   }
 
   /// Reverse order of elements.
   /// @return  TBD: GSL's documentation does not specify.
-  int reverse() { return c::reverse(&v()); }
+  int reverse() { return w_reverse(&v()); }
 
   /// Add contents of `b` into this vector in place.
   /// @tparam T  Type of vector to be added into this.
   /// @param b  Vector whose contents should be added into this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int add(iface<T> const &b) {
-    return c::add(&v(), &b.v());
+    return w_add(&v(), &b.v());
   }
 
   /// Subtract contents of `b` from this vector in place.
@@ -238,7 +238,7 @@ template<stor S> struct iface: public S {
   /// @param b  Vector whose contents should be subtracted from this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int sub(iface<T> const &b) {
-    return c::sub(&v(), &b.v());
+    return w_sub(&v(), &b.v());
   }
 
   /// Multiply contents of `b` into this vector in place.
@@ -246,7 +246,7 @@ template<stor S> struct iface: public S {
   /// @param b  Vector whose contents should be multiplied into this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int mul(iface<T> const &b) {
-    return c::mul(&v(), &b.v());
+    return w_mul(&v(), &b.v());
   }
 
   /// Divide contents of `b` into this vector in place.
@@ -254,7 +254,7 @@ template<stor S> struct iface: public S {
   /// @param b  Vector whose contents should be divided into this.
   /// @return  TBD: GSL's documentation does not specify.
   template<typename T> int div(iface<T> const &b) {
-    return c::div(&v(), &b.v());
+    return w_div(&v(), &b.v());
   }
 
   /// Add contents of `b` into this vector in place.
@@ -296,7 +296,7 @@ template<stor S> struct iface: public S {
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
   /// @return  TBD: GSL's documentation does not specify.
-  int scale(E const &x) { return c::scale(&v(), x); }
+  int scale(E const &x) { return w_scale(&v(), x); }
 
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
@@ -309,7 +309,7 @@ template<stor S> struct iface: public S {
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
   /// @return  TBD: GSL's documentation does not specify.
-  int add_constant(E const &x) { return c::add_constant(&v(), x); }
+  int add_constant(E const &x) { return w_add_constant(&v(), x); }
 
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
@@ -321,51 +321,51 @@ template<stor S> struct iface: public S {
 
   /// Sum of elements.
   /// @return  Sum of elements.
-  E sum() const { return c::sum(&v()); }
+  E sum() const { return w_sum(&v()); }
 
   /// Greatest value of any element.
   /// @return  Greatest value of any element.
-  E max() const { return c::max(&v()); }
+  E max() const { return w_max(&v()); }
 
   /// Least value of any element.
   /// @return  Least value of any element.
-  E min() const { return c::min(&v()); }
+  E min() const { return w_min(&v()); }
 
   /// Greatest value and least value of any element.
   /// @param min  On return, least value.
   /// @param max  On return, greatest value.
-  void minmax(E &min, E &max) const { c::minmax(&v(), &min, &max); }
+  void minmax(E &min, E &max) const { w_minmax(&v(), &min, &max); }
 
   /// Offset of greatest value.
   /// @return  Offset of greatest value.
-  size_t max_index() const { return c::max_index(&v()); }
+  size_t max_index() const { return w_max_index(&v()); }
 
   /// Offset of least value.
   /// @return  Offset of least value.
-  size_t min_index() const { return c::min_index(&v()); }
+  size_t min_index() const { return w_min_index(&v()); }
 
   /// Offset of least value and offset of greatest value.
   /// @param imin  On return, offset of least value.
   /// @param imax  On return, offset of greatest value.
   void minmax_index(size_t &imin, size_t &imax) const {
-    c::minmax_index(&v(), &imin, &imax);
+    w_minmax_index(&v(), &imin, &imax);
   }
 
   /// True only if every element have zero value.
   /// @return  True only if every element be zero.
-  bool isnull() const { return c::isnull(&v()); }
+  bool isnull() const { return w_isnull(&v()); }
 
   /// True only if every element be positive.
   /// @return  True only if every element be positive.
-  bool ispos() const { return c::ispos(&v()); }
+  bool ispos() const { return w_ispos(&v()); }
 
   /// True only if every element be negative.
   /// @return  True only if every element be negative.
-  bool isneg() const { return c::isneg(&v()); }
+  bool isneg() const { return w_isneg(&v()); }
 
   /// True only if every element be non-negative.
   /// @return  True only if every element be non-negative.
-  bool isnonneg() const { return c::isnonneg(&v()); }
+  bool isnonneg() const { return w_isnonneg(&v()); }
 };
 
 
@@ -423,7 +423,7 @@ int axpby(
       iface<T> const &x,
       typename U::E const &beta,
       iface<U> &y) {
-  return c::axpby(alpha, &x.v(), beta, &y.v());
+  return w_axpby(alpha, &x.v(), beta, &y.v());
 }
 
 
@@ -435,7 +435,7 @@ int axpby(
 /// @return  True only if vectors be equal.
 template<typename S1, typename S2>
 bool equal(iface<S1> const &v1, iface<S2> const &v2) {
-  return c::equal(&v1.v(), &v2.v());
+  return w_equal(&v1.v(), &v2.v());
 }
 
 
@@ -447,7 +447,7 @@ bool equal(iface<S1> const &v1, iface<S2> const &v2) {
 /// @return  TBD: GSL's documentation does not specify.
 template<typename T, typename U>
 int memcpy(iface<T> &dst, iface<U> const &src) {
-  return c::memcpy(&dst.v(), &src.v());
+  return w_memcpy(&dst.v(), &src.v());
 }
 
 
@@ -458,7 +458,7 @@ int memcpy(iface<T> &dst, iface<U> const &src) {
 /// @param v2  Other vector.
 /// @return  TBD: GSL's documentation does not specify.
 template<typename S1, typename S2> int swap(iface<S1> &v1, iface<S2> &v2) {
-  return c::swap(&v1.v(), &v2.v());
+  return w_swap(&v1.v(), &v2.v());
 }
 
 

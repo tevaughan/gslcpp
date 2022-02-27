@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::vec::stor.
 
 #pragma once
-#include "../c/type-map.hpp" // vector
+#include "../wrap/type-map.hpp" // vector
 #include <concepts> // same_as
 
 namespace gsl::vec {
@@ -20,8 +20,8 @@ using std::same_as;
 /// @tparam T  Candidate type granting access to storage for vector.
 template<typename T> concept stor= requires(T &x, T const &y) {
   typename T::E;
-  { x.v() } -> same_as<c::vector<typename T::E> &>;
-  { y.v() } -> same_as<c::vector<typename T::E> const &>;
+  { x.v() } -> same_as<w_vector<typename T::E> &>;
+  { y.v() } -> same_as<w_vector<typename T::E> const &>;
 };
 
 
