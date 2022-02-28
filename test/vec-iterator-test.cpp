@@ -7,7 +7,7 @@
 
 
 using gsl::vector_s;
-using gsl::vec::iterator;
+using gsl::v_iterator;
 
 
 using v3= vector_s<3>;
@@ -20,17 +20,17 @@ v3 b;
 TEST_CASE("Construction and dereference work.", "[vec::iterator]") {
   b= v3({-1.0, -2.0, -3.0});
 
-  iterator<v3 const> ia(a, 0);
+  v_iterator<v3 const> ia(a, 0);
   REQUIRE(*ia == a[0]);
 
-  iterator<v3> ib(b, 2);
+  v_iterator<v3> ib(b, 2);
   REQUIRE(*ib == b[2]);
 }
 
 
 TEST_CASE("Relative dereference works.", "[vec::iterator]") {
   b= a;
-  iterator<v3> ib(b, 1);
+  v_iterator<v3> ib(b, 1);
   REQUIRE(ib[+0] == 2.0);
   REQUIRE(ib[-1] == 1.0);
   REQUIRE(ib[+1] == 3.0);

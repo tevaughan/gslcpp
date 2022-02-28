@@ -702,6 +702,12 @@ struct type_map<gsl_complex_long_double const>:
 };
 
 
+/// Type of element in C-style array used to initialize view.
+/// %w_array_elem is different from E if E be a complex type.
+/// @tparam E  Type of element for vector.
+template<typename E> using w_array_elem= typename type_map<E>::A;
+
+
 /// GSL's native vector-type corresponding to element-type `E`.
 /// \anchor w_vector
 /// @tparam E  Type of element for vector.

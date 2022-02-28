@@ -1,6 +1,6 @@
-/// \file       include/gslcpp/vec/dyna.hpp
+/// \file       include/gslcpp/vec/v-dyna.hpp
 /// \copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// \brief      Definition for gsl::dyna.
+/// \brief      Definition for gsl::v_dyna.
 
 #pragma once
 #include "../wrap/free.hpp" // w_free
@@ -16,11 +16,11 @@ namespace gsl {
 /// determined dynamically, at run-time, and (2) that it is owned by instance
 /// of interface.
 ///
-/// `dyna` implements concept gsl::vew_stor and can serve as template-type
+/// %v_dyna implements concept gsl::vew_stor and can serve as template-type
 /// parameter for (and thus base of) gsl::iface.
 ///
 /// @tparam T  Type of each element in vector.
-template<typename T> class dyna {
+template<typename T> class v_dyna {
 public:
   /// Identifier for each of two possible allocation-methods.
   enum class alloc_type {
@@ -75,7 +75,7 @@ public:
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
   /// @param a  Method to use for allocation.
-  dyna(size_t n, alloc_type a= alloc_type::ALLOC): alloc_type_(a) {
+  v_dyna(size_t n, alloc_type a= alloc_type::ALLOC): alloc_type_(a) {
     v_= allocate(n);
   }
 
@@ -87,7 +87,7 @@ public:
   /// @tparam V  Type of view.
   /// @param src  Vector to copy.
   template<int S, typename V>
-  dyna(vector<S, V> const &src): alloc_type_(alloc_type::ALLOC) {
+  v_dyna(vector<S, V> const &src): alloc_type_(alloc_type::ALLOC) {
     v_= allocate(src.pv()->size);
     memcpy(*this, src);
   }
@@ -97,7 +97,7 @@ public:
   /// - Note that this is not a templated constructor because moving works only
   ///   from other vector<DCON>.
   /// @param src  Vector to move.
-  dyna(dyna &&src): alloc_type_(src.alloc_type_), v_(src.v_) {
+  v_dyna(v_dyna &&src): alloc_type_(src.alloc_type_), v_(src.v_) {
     src.alloc_type_= alloc_type::ALLOC;
     src.v_= nullptr;
   }
@@ -110,7 +110,7 @@ public:
   /// @tparam V  Type of view.
   /// @param src  Vector to copy.
   /// @return  Reference to instance after modification.
-  template<int S, typename V> dyna &operator=(vector<S, V> const &src) {
+  template<int S, typename V> v_dyna &operator=(vector<S, V> const &src) {
     alloc_type_= alloc_type::ALLOC;
     v_= allocate(src.pv()->size);
     memcpy(*this, src);
@@ -124,14 +124,14 @@ public:
   /// vector<DCON>.
   /// @param src  Vector to exchange state with.
   /// @return  Reference to instance after modification.
-  dyna &operator=(dyna &&src) {
+  v_dyna &operator=(v_dyna &&src) {
     swap_(alloc_type_, src.alloc_type_);
     swap_(v_, src.v_);
     return *this;
   }
 
   /// Deallocate vector and its descriptor.
-  virtual ~dyna() { free(); }
+  virtual ~v_dyna() { free(); }
 };
 
 

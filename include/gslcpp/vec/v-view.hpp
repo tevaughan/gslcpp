@@ -1,11 +1,11 @@
-/// \file       include/gslcpp/vec/view.hpp
+/// \file       include/gslcpp/vec/v-view.hpp
 /// \copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// \brief      Definition for gsl::vec::view.
+/// \brief      Definition for gsl::view.
 
 #pragma once
 #include "../wrap/type-map.hpp" // vector_view
 
-namespace gsl::vec {
+namespace gsl {
 
 
 /// Interface to vector-storage not owned by interface.
@@ -14,7 +14,7 @@ namespace gsl::vec {
 /// parameter for (and thus base of) vec::iface.
 ///
 /// @tparam T  Type of each element in vector.
-template<typename T> class view {
+template<typename T> class v_view {
 public:
   using E= T; ///< Type of each element.
 
@@ -32,7 +32,7 @@ public:
 
   /// Constructor called by TBS.
   /// @param v  View to copy.
-  view(w_vector_view<E> const &v): view_(v) {}
+  v_view(w_vector_view<E> const &v): view_(v) {}
 
   /// GSL's native, C-language interface to vector-view.
   /// @return  GSL's native, C-language interface to vector-view.
@@ -40,6 +40,6 @@ public:
 };
 
 
-} // namespace gsl::vec
+} // namespace gsl
 
 // EOF

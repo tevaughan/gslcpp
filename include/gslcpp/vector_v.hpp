@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::vector_v.
 
 #pragma once
-#include "vec/iface.hpp" // vec::iface, vec::stor
+#include "vec/v-iface.hpp" // v_iface, v_stor
 #include "wrap/vector-view-array.hpp" // w_vector_view_array
 
 /// Namespace for C++-interface to GSL.
@@ -12,16 +12,14 @@ namespace gsl {
 
 /// Vector with storage not owned by instance of vector.
 ///
-/// `vector_v` has its interface to storage given by \ref gsl::vec::view, and
-/// most of the external interface is given by \ref gsl::vec::iface.
+/// %vector_v has its interface to storage given by \ref gsl::v_view, and
+/// most of the external interface is given by \ref gsl::v_iface.
 ///
-/// `vector_v` inherits these and provides template-constructors.
-///
-/// TODO: Provide specialization for T=gsl_complex, T=gsl_complex_float, etc.
+/// %vector_v inherits these and provides template-constructors.
 ///
 /// @tparam T  Type of each element.
-template<typename T> struct vector_v: public vec::iface<vec::view<T>> {
-  using P= vec::iface<vec::view<T>>; ///< Type of ancestor.
+template<typename T> struct vector_v: public v_iface<v_view<T>> {
+  using P= v_iface<v_view<T>>; ///< Type of ancestor.
   using P::P;
 
   /// Initialize view of standard (decayed) C-array.  Arguments are reordered
@@ -32,7 +30,8 @@ template<typename T> struct vector_v: public vec::iface<vec::view<T>> {
   /// @param b  Pointer to first element of array and of view.
   /// @param n  Number of elements in view.
   /// @param s  Stride of view relative to array.
-  vector_v(size_t n, T *b, size_t s= 1): P(w_vector_view_array<T>(b, s, n)) {}
+  vector_v(size_t n, w_array_elem<T> *b, size_t s= 1):
+      P(w_vector_view_array<T>(b, s, n)) {}
 
   /// Initialize view of non-decayed C-array.  Arguments are reordered from
   /// those given to gsl_vector_subvector_with_stride().  Putting initial
@@ -44,12 +43,16 @@ template<typename T> struct vector_v: public vec::iface<vec::view<T>> {
   /// @param i  Offset in array of first element in view.
   /// @param s  Stride of view relative to array.
   template<int N>
-  vector_v(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
+  vector_v(
+        w_array_elem<T> (&b)[N],
+        size_t n= N * sizeof(w_array_elem<T>) / sizeof(T),
+        size_t i= 0,
+        size_t s= 1):
       P(w_vector_view_array<T>(b + i, s, n)) {}
 
   /// Initialize view of other view.
   /// @param v  Other view.
-  vector_v(vec::iface<vec::view<T>> v): P(v.cview()) {}
+  vector_v(v_iface<v_view<T>> v): P(v.cview()) {}
 };
 
 

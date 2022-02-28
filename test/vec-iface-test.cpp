@@ -8,10 +8,10 @@
 #include <sstream> // ostringstream
 
 
+using gsl::axpby;
+using gsl::v_iface;
 using gsl::vector_s;
 using gsl::vector_v;
-using gsl::vec::axpby;
-using gsl::vec::iface;
 using std::ostringstream;
 
 
@@ -62,7 +62,7 @@ TEST_CASE("vec_iface::stride() works.", "[vec-iface]") {
 TEST_CASE("vec_iface::data() works.", "[vec-iface]") {
   REQUIRE(a.data() == &a[0]);
   double b[]= {1.0, -1.0, 2.0, -2.0, 3.0, -3.0};
-  vector_v c(b, 3, 1, 2);
+  vector_v<double> c(b, 3, 1, 2);
   REQUIRE(c.data() == b + 1);
 }
 
