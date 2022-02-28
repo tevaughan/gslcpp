@@ -4,6 +4,7 @@
 
 #pragma once
 #include "../wrap/type-map.hpp" // vector_view
+#include "../wrap/vector-view-array.hpp" // vector_view_array
 
 namespace gsl::vec {
 
@@ -19,17 +20,22 @@ namespace gsl::vec {
 /// @tparam T  Type of each element in vector.
 template<unsigned S, typename T= double> class stat {
   static_assert(S > 0);
+  using A= typename type_map<T>::A;
 
 public:
-  using E= T; ///< Type of each element.
+  using E= T; ///< Type of each element in vector.
+  static_assert(sizeof(E) / sizeof(A) == 1 || sizeof(E) / sizeof(A) == 2);
 
 private:
-  T d_[S]; ///< Storage for data.
-  w_vector_view<E> view_; ///< GSL's view of data within instance of vector.
+  /// Storage for data.  If sizeof(E) be different from sizeof(A), then E is
+  /// a complex type, and we need twice the number of elements.
+  A d_[S * sizeof(E) / sizeof(A)];
+
+  w_vector_view<E> view_; ///< GSL's view of data.
 
 public:
   /// Initialize GSL's view of static storage, but do not initialize elements.
-  stat(): view_(gsl_vector_view_array(d_, S)) {}
+  stat(): view_(w_vector_view_array<E>(d_, 1, S)) {}
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.
