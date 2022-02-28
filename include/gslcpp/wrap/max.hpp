@@ -3,7 +3,7 @@
 /// \brief      Definition of gsl::w_max().
 
 #pragma once
-#include "type-map.hpp" // vector
+#include "container.hpp" // w_vector // vector
 
 namespace gsl {
 

@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::stor.
 
 #pragma once
-#include "../wrap/type-map.hpp" // vector
+#include "../wrap/container.hpp" // w_vector
 #include <concepts> // same_as
 
 namespace gsl {

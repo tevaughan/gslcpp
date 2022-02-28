@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::v_stat.
 
 #pragma once
-#include "../wrap/type-map.hpp" // vector_view
+#include "../wrap/c-array.hpp" // w_array_elem, w_array_size
 #include "../wrap/vector-view-array.hpp" // vector_view_array
 
 namespace gsl {
@@ -20,16 +20,14 @@ namespace gsl {
 /// @tparam T  Type of each element in vector.
 template<unsigned S, typename T= double> class v_stat {
   static_assert(S > 0);
-  using A= typename type_map<T>::A;
 
 public:
   using E= T; ///< Type of each element in vector.
-  static_assert(sizeof(E) / sizeof(A) == 1 || sizeof(E) / sizeof(A) == 2);
 
 private:
   /// Storage for data.  If sizeof(E) be different from sizeof(A), then E is
   /// a complex type, and we need twice the number of elements.
-  A d_[S * sizeof(E) / sizeof(A)];
+  w_array_elem<E> d_[w_array_size<E>(S)];
 
   w_vector_view<E> view_; ///< GSL's view of data.
 

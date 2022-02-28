@@ -3,7 +3,7 @@
 /// \brief      Definition for gsl::view.
 
 #pragma once
-#include "../wrap/type-map.hpp" // vector_view
+#include "../wrap/container.hpp" // w_vector_view
 
 namespace gsl {
 

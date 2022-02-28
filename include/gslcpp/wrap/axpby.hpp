@@ -4,7 +4,7 @@
 
 #pragma once
 #include "compat.hpp"
-#include "type-map.hpp"
+#include "container.hpp" // w_vector
 
 namespace gsl {
 

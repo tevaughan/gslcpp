@@ -4,7 +4,7 @@
 
 #pragma once
 #include "compat.hpp" // GSL_AT_LEAST(), sum_for_gsl_lt_2p7()
-#include "type-map.hpp" // vector
+#include "container.hpp" // w_vector // vector
 
 namespace gsl {
 

@@ -3,7 +3,7 @@
 /// \brief      Definition of gsl::w_swap_elements().
 
 #pragma once
-#include "type-map.hpp"
+#include "container.hpp" // w_vector
 
 namespace gsl {
 

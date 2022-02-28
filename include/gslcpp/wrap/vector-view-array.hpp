@@ -3,7 +3,7 @@
 /// \brief      Definition of gsl::w_vector_view_array.
 
 #pragma once
-#include "type-map.hpp"
+#include "container.hpp" // w_vector
 
 namespace gsl {
 
