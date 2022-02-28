@@ -1,12 +1,15 @@
 /// \file       include/gslcpp/vec/dyna.hpp
 /// \copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// \brief      Definition for gsl::vew_dyna.
+/// \brief      Definition for gsl::dyna.
 
 #pragma once
-#include "../wrap/type-map.hpp"
+#include "../wrap/free.hpp" // w_free
+#include "../wrap/type-map.hpp" // w_vector
+#include "../wrap/vector-alloc.hpp" // w_vector_alloc
+#include "../wrap/vector-calloc.hpp" // w_vector_calloc
 #include <algorithm> // swap
 
-namespace gsl::vec {
+namespace gsl {
 
 
 /// Interface to vector-storage with two key properties: (1) that its size is
@@ -14,7 +17,7 @@ namespace gsl::vec {
 /// of interface.
 ///
 /// `dyna` implements concept gsl::vew_stor and can serve as template-type
-/// parameter for (and thus base of) gsl::vec::iface.
+/// parameter for (and thus base of) gsl::iface.
 ///
 /// @tparam T  Type of each element in vector.
 template<typename T> class dyna {
@@ -37,17 +40,27 @@ private:
 
   /// Deallocate vector and its descriptor.
   void free() {
-    if(v_) gsl_vector_free(v_);
+    if(v_) w_free(v_);
     v_= nullptr;
   }
 
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
   /// @return  Pointer to vector's descriptor.
-  gsl_vector *allocate(size_t n) {
+  w_vector<E> *allocate(size_t n) {
     free();
-    if(alloc_type_ == alloc_type::ALLOC) return gsl_vector_alloc(n);
-    return gsl_vector_calloc(n);
+    if(alloc_type_ == alloc_type::ALLOC) return w_vector_alloc<E>(n);
+    return w_vector_calloc<E>(n);
+  }
+
+  /// Swap values held by two variables.
+  /// @tparam U  Common type of items.
+  /// @param a  Reference to first item.
+  /// @param b  Reference to second item.
+  template<typename U> static void swap_(U &a, U &b) {
+    U const tmp= a;
+    a= b;
+    b= tmp;
   }
 
 public:
@@ -112,8 +125,8 @@ public:
   /// @param src  Vector to exchange state with.
   /// @return  Reference to instance after modification.
   dyna &operator=(dyna &&src) {
-    std::swap(alloc_type_, src.alloc_type_);
-    std::swap(v_, src.v_);
+    swap_(alloc_type_, src.alloc_type_);
+    swap_(v_, src.v_);
     return *this;
   }
 
@@ -122,6 +135,6 @@ public:
 };
 
 
-} // namespace gsl::vec
+} // namespace gsl
 
 // EOF
