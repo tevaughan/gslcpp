@@ -10,9 +10,9 @@
 namespace gsl {
 
 
-/// Vector whose storage has two key properties: (1) that storage-size is
-/// determined dynamically, at run-time, and (2) that storage is owned by
-/// vector.
+/// Real or complex vector whose storage has two key properties: (1) that
+/// storage-size is determined dynamically, at run-time, and (2) that storage
+/// is owned by vector.
 ///
 /// Storage is provided by \ref gsl::v_dyna, and most of interface is
 /// provided by \ref gsl::v_iface.

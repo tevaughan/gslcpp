@@ -2,17 +2,17 @@
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Tests for gsl::vector.
 
-#include "gslcpp/vector_s.hpp"
-#include "gslcpp/vector_v.hpp"
+#include "gslcpp/static-vector.hpp"
+#include "gslcpp/vector-view.hpp"
 #include <catch.hpp>
 
-using gsl::vector_s;
-using gsl::vector_v;
+using gsl::static_vector;
 using gsl::v_iface;
+using gsl::vector_view;
 
 
 TEST_CASE("Stack-vector's default constructor works.", "[vector]") {
-  vector_s<3> v;
+  static_vector<3> v;
   REQUIRE(v.size() == 3);
 }
 
@@ -20,36 +20,36 @@ TEST_CASE("Stack-vector's default constructor works.", "[vector]") {
 TEST_CASE("Stack-vector's constructor from array works.", "[vector]") {
   double d[]= {2.0, 4.0, 6.0, 8.0};
 
-  vector_s v(d); // No template-parameter required!
+  static_vector v(d); // No template-parameter required!
   REQUIRE(v.size() == 4);
   REQUIRE(v[0] == 2.0);
   REQUIRE(v[1] == 4.0);
   REQUIRE(v[2] == 6.0);
   REQUIRE(v[3] == 8.0);
 
-  vector_s<2> w(d, 1, 2);
+  static_vector<2> w(d, 1, 2);
   REQUIRE(w[0] == 4.0);
   REQUIRE(w[1] == 8.0);
 
-  REQUIRE_THROWS(vector_s<3>(d, 0, 2));
-  REQUIRE_THROWS(vector_s<2>(d, 2, 2));
+  REQUIRE_THROWS(static_vector<3>(d, 0, 2));
+  REQUIRE_THROWS(static_vector<2>(d, 2, 2));
 }
 
 
 TEST_CASE("Stack-vector's copy-constructor works.", "[vector]") {
-  vector_s v({1.0, 2.0, 3.0});
-  vector_s w= v; // Copy.
+  static_vector v({1.0, 2.0, 3.0});
+  static_vector w= v; // Copy.
   REQUIRE(v == w);
 
-  vector_v view= v.view();
-  vector_s<3> x= view; // Copy from other kind of vector.
+  vector_view view= v.view();
+  static_vector<3> x= view; // Copy from other kind of vector.
   REQUIRE(x == v);
 }
 
 
 TEST_CASE("Stack-vector's copy-assignment operator works.", "[vector]") {
-  vector_s v({1.0, 2.0, 3.0});
-  vector_s<3> w;
+  static_vector v({1.0, 2.0, 3.0});
+  static_vector<3> w;
   w= v; // Assign.
 }
 
@@ -72,11 +72,12 @@ TEST_CASE("vector<VIEW> provides right view.", "[vector]") {
   double a[]= {1.0, 1.0, 2.0, 3.0, 5.0, 8.0}; // Mutable, non-decayed C-array.
   double const *b= a; // Decayed, immutable C-array.
 
-  auto mv= vector_v<double>(a, 3, 0, 2); // Mutable view of a[].
+  auto mv= vector_view<double>(a, 3, 0, 2); // Mutable view of a[].
   REQUIRE(mv.size() == 3);
   check(a, mv, 2);
 
-  auto iv= vector_v<double const>(4, b); // Immutable view, ultimately of a[].
+  auto iv=
+        vector_view<double const>(4, b); // Immutable view, ultimately of a[].
   REQUIRE(iv.size() == 4);
   check(a, iv);
 
@@ -99,12 +100,12 @@ TEST_CASE("vec::subarray() provides right view.", "[vec]") {
   double const(&b)[6]= a; // Immutable, non-decayed C-array.
 
   // Mutable view of a[], starting at Offset 1 and with Stride 2.
-  auto mv= vector_v<double>(a, 3, 1, 2);
+  auto mv= vector_view<double>(a, 3, 1, 2);
   REQUIRE(mv.size() == 3);
   check(a + 1, mv, 2);
 
   // Immutable view of a[], starting at Offset 0 and with Stride 1.
-  auto iv= vector_v<double const>(b);
+  auto iv= vector_view<double const>(b);
   REQUIRE(iv.size() == 6);
   check(b, iv);
 

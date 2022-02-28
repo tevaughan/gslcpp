@@ -1,6 +1,6 @@
 /// \file       include/gslcpp/wrap/complex.hpp
 /// \copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// \brief      Definition of gsl::complex.
+/// \brief      Definition of gsl::complex<A>, gsl::complex_type<A>.
 
 #pragma once
 #include <gsl/gsl_complex.h> // gsl_complex, etc.
@@ -55,6 +55,11 @@ template<> struct complex<long double const> {
   /// Type of complex element in vector or matrix.
   using E= gsl_complex_long_double const;
 };
+
+
+/// Type of complex element in vector or matrix.
+/// \tparam A  Type of element in C-style array used to initialize view.
+template<typename A> using complex_type= typename complex<A>::E;
 
 
 } // namespace gsl

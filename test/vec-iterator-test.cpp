@@ -2,15 +2,15 @@
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Tests for gsl::vec::iterator.
 
-#include "gslcpp/vector_s.hpp"
+#include "gslcpp/static-vector.hpp"
 #include <catch.hpp>
 
 
-using gsl::vector_s;
+using gsl::static_vector;
 using gsl::v_iterator;
 
 
-using v3= vector_s<3>;
+using v3= static_vector<3>;
 
 
 v3 const a({1.0, 2.0, 3.0});

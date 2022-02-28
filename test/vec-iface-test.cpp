@@ -2,20 +2,20 @@
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Tests for gsl::vec_iface.
 
-#include "gslcpp/vector_s.hpp"
-#include "gslcpp/vector_v.hpp"
+#include "gslcpp/static-vector.hpp"
+#include "gslcpp/vector-view.hpp"
 #include <catch.hpp>
 #include <sstream> // ostringstream
 
 
 using gsl::axpby;
+using gsl::static_vector;
 using gsl::v_iface;
-using gsl::vector_s;
-using gsl::vector_v;
+using gsl::vector_view;
 using std::ostringstream;
 
 
-using v3= vector_s<3>;
+using v3= static_vector<3>;
 
 
 v3 const a({1.0, 2.0, 3.0});
@@ -53,7 +53,7 @@ TEST_CASE("vec_iface::size() works.", "[vec-iface]") {
 
 TEST_CASE("vec_iface::stride() works.", "[vec-iface]") {
   REQUIRE(a.v().stride == 1);
-  vector_s<6> b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
+  static_vector<6> b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
   auto c= b.subvector(3, 1, 2);
   REQUIRE(c.v().stride == 2);
 }
@@ -62,7 +62,7 @@ TEST_CASE("vec_iface::stride() works.", "[vec-iface]") {
 TEST_CASE("vec_iface::data() works.", "[vec-iface]") {
   REQUIRE(a.data() == &a[0]);
   double b[]= {1.0, -1.0, 2.0, -2.0, 3.0, -3.0};
-  vector_v<double> c(b, 3, 1, 2);
+  vector_view<double> c(b, 3, 1, 2);
   REQUIRE(c.data() == b + 1);
 }
 
@@ -83,10 +83,10 @@ TEST_CASE("vec_iface's setters work.", "[vec-iface]") {
 
 
 TEST_CASE("vec_iface::ptr() retrieves pointer of element.", "[vec-iface]") {
-  vector_s<6> const b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
-  vector_s<6> c= b;
-  vector_v d= b.subvector(3, 1, 2);
-  vector_v e= c.subvector(3, 1, 2);
+  static_vector<6> const b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
+  static_vector<6> c= b;
+  vector_view d= b.subvector(3, 1, 2);
+  vector_view e= c.subvector(3, 1, 2);
   REQUIRE(d.ptr(1) == b.ptr(3));
   REQUIRE(e.ptr(1) == c.ptr(3));
   REQUIRE(d.ptr(1) == b.v().data + 3);
@@ -161,8 +161,8 @@ TEST_CASE(
 
 
 TEST_CASE("vec_iface::subvector() works.", "[vec-iface]") {
-  vector_s<6> const b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
-  vector_s<6> c= b;
+  static_vector<6> const b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
+  static_vector<6> c= b;
   auto vb= b.subvector(3, 1, 2);
   auto vc= c.subvector(3, 1, 2);
   REQUIRE(vb[0] == -1.0);
@@ -350,20 +350,20 @@ TEST_CASE("vec_iface::isnonneg() works.", "[vec-iface]") {
 
 
 TEST_CASE("axpby() accumulates correctly into y.", "[vec]") {
-  vector_s<3> const x({1.0, 2.0, 3.0});
-  vector_s<3> y({2.0, 3.0, 1.0});
+  static_vector<3> const x({1.0, 2.0, 3.0});
+  static_vector<3> y({2.0, 3.0, 1.0});
   double const a= 0.5;
   double const b= 1.5;
   axpby(a, x, b, y);
-  vector_s<3> const r({3.5, 5.5, 3.0});
+  static_vector<3> const r({3.5, 5.5, 3.0});
   REQUIRE(y == r);
 }
 
 
 TEST_CASE("equal() compares correctly.", "[vec]") {
-  vector_s<3> const x({1.0, 2.0, 3.0});
-  vector_s<3> const y({2.0, 3.0, 1.0});
-  vector_s<3> const z({2.0, 3.0, 1.0});
+  static_vector<3> const x({1.0, 2.0, 3.0});
+  static_vector<3> const y({2.0, 3.0, 1.0});
+  static_vector<3> const z({2.0, 3.0, 1.0});
   REQUIRE(!equal(x, y));
   REQUIRE(x != y);
   REQUIRE(equal(y, z));
@@ -372,8 +372,8 @@ TEST_CASE("equal() compares correctly.", "[vec]") {
 
 
 TEST_CASE("memcpy() works.", "[vec]") {
-  vector_s<3> y({2.0, 3.0, 1.0});
-  vector_s<3> const z({1.0, 2.0, 3.0});
+  static_vector<3> y({2.0, 3.0, 1.0});
+  static_vector<3> const z({1.0, 2.0, 3.0});
   REQUIRE(!equal(y, z));
   memcpy(y, z);
   REQUIRE(equal(y, z));
@@ -381,10 +381,10 @@ TEST_CASE("memcpy() works.", "[vec]") {
 
 
 TEST_CASE("swap() works.", "[vec]") {
-  vector_s<3> const a({2.0, 3.0, 1.0});
-  vector_s<3> const b({1.0, 2.0, 3.0});
-  vector_s<3> c= a;
-  vector_s<3> d= b;
+  static_vector<3> const a({2.0, 3.0, 1.0});
+  static_vector<3> const b({1.0, 2.0, 3.0});
+  static_vector<3> c= a;
+  static_vector<3> d= b;
   REQUIRE(a == c);
   REQUIRE(b == d);
   swap(c, d);
@@ -394,7 +394,7 @@ TEST_CASE("swap() works.", "[vec]") {
 
 
 TEST_CASE("Stream-operator works.", "[vec]") {
-  vector_s<3> const a({2.0, 3.0, 1.0});
+  static_vector<3> const a({2.0, 3.0, 1.0});
   ostringstream oss;
   oss << a;
   REQUIRE(oss.str() == "[2,3,1]");
@@ -402,7 +402,7 @@ TEST_CASE("Stream-operator works.", "[vec]") {
 
 
 TEST_CASE("vec_iface::view() works.", "[vec-iface]") {
-  vector_s<3> const a({2.0, 3.0, 1.0});
+  static_vector<3> const a({2.0, 3.0, 1.0});
   auto const b= a.view();
   REQUIRE(a == b);
   REQUIRE(&a[0] == &b[0]);
@@ -412,14 +412,14 @@ TEST_CASE("vec_iface::view() works.", "[vec-iface]") {
 
 
 TEST_CASE("vec_iface::sum() works.", "[vec-iface]") {
-  vector_s<3> const a({2.0, 3.0, 1.0});
+  static_vector<3> const a({2.0, 3.0, 1.0});
   REQUIRE(a.sum() == 6.0);
 }
 
 
 TEST_CASE("vec_iface::isneg() works.", "[vec-iface]") {
-  vector_s<3> const a({-2.0, -3.0, 1.0});
-  vector_s<3> const b({-2.0, -3.0, -1.0});
+  static_vector<3> const a({-2.0, -3.0, 1.0});
+  static_vector<3> const b({-2.0, -3.0, -1.0});
   REQUIRE(a.isneg() == false);
   REQUIRE(b.isneg() == true);
 }
