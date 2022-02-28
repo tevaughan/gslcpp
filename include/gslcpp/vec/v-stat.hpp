@@ -13,8 +13,8 @@ namespace gsl {
 /// known statically, at compile-time, and (2) that it is owned by instance of
 /// interface.
 ///
-/// %v_stat implements concept \ref v_stor and can serve as template-type
-/// parameter for (and thus base of) \ref v_iface.
+/// %v_stat implements concept \ref gsl::v_stor and can serve as template-type
+/// parameter for (and thus base of) \ref gsl::v_iface.
 ///
 /// @tparam S  Positive size.
 /// @tparam T  Type of each element in vector.

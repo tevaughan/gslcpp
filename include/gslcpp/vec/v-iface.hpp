@@ -1,7 +1,7 @@
 /// \dir        include/gslcpp/vec
 /// \brief      Types and functions specific to interface to GSL's vectors.
 
-/// \file       include/gslcpp/vec/v-v_iface.hpp
+/// \file       include/gslcpp/vec/v-iface.hpp
 /// \copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// \brief      Definition for gsl::v_iface.
 

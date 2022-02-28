@@ -1,6 +1,6 @@
-/// \file       include/gslcpp/vec/stor.hpp
+/// \file       include/gslcpp/vec/v-stor.hpp
 /// \copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// \brief      Definition for gsl::stor.
+/// \brief      Definition for gsl::v_stor.
 
 #pragma once
 #include "../wrap/container.hpp" // w_vector

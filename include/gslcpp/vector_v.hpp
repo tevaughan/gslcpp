@@ -4,6 +4,7 @@
 
 #pragma once
 #include "vec/v-iface.hpp" // v_iface, v_stor
+#include "wrap/c-array.hpp" // w_array_elem
 #include "wrap/vector-view-array.hpp" // w_vector_view_array
 
 /// Namespace for C++-interface to GSL.

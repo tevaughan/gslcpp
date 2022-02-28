@@ -3,8 +3,8 @@
 /// \brief      Definition for gsl::v_dyna.
 
 #pragma once
+#include "../wrap/container.hpp" // w_vector
 #include "../wrap/free.hpp" // w_free
-#include "../wrap/type-map.hpp" // w_vector
 #include "../wrap/vector-alloc.hpp" // w_vector_alloc
 #include "../wrap/vector-calloc.hpp" // w_vector_calloc
 #include <algorithm> // swap
@@ -30,7 +30,7 @@ public:
 
   using E= T; ///< Type of each element.
 
-private:
+protected:
   /// Identifier for one of two possible allocation-methods.
   /// - By default, allocate without initialization.
   alloc_type alloc_type_= alloc_type::ALLOC;
@@ -79,20 +79,6 @@ public:
     v_= allocate(n);
   }
 
-  // Move to descendant.
-#if 0
-  /// Allocate vector and its descriptor, and perform deep copy on
-  /// construction.
-  /// @tparam S  Size-parameter indicating type of source.
-  /// @tparam V  Type of view.
-  /// @param src  Vector to copy.
-  template<int S, typename V>
-  v_dyna(vector<S, V> const &src): alloc_type_(alloc_type::ALLOC) {
-    v_= allocate(src.pv()->size);
-    memcpy(*this, src);
-  }
-#endif
-
   /// Move on construction.
   /// - Note that this is not a templated constructor because moving works only
   ///   from other vector<DCON>.
@@ -101,22 +87,6 @@ public:
     src.alloc_type_= alloc_type::ALLOC;
     src.v_= nullptr;
   }
-
-  // Move to descendant.
-#if 0
-  /// Deallocate existing vector and its descriptor; allocate new vector and
-  /// its descriptor; and perform deep copy on assignment.
-  /// @tparam S  Size-parameter indicating type of source.
-  /// @tparam V  Type of view.
-  /// @param src  Vector to copy.
-  /// @return  Reference to instance after modification.
-  template<int S, typename V> v_dyna &operator=(vector<S, V> const &src) {
-    alloc_type_= alloc_type::ALLOC;
-    v_= allocate(src.pv()->size);
-    memcpy(*this, src);
-    return *this;
-  }
-#endif
 
   /// Move on assignment.  This instance's original descriptor and data should
   /// be deallocated after move, when src's destructor is called.  Note that
