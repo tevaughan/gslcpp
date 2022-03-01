@@ -1,8 +1,9 @@
 
 add_executable(tests test-main.cpp
-  vec-iface-test.cpp
-  vec-iterator-test.cpp
-  vector-test.cpp
+  v-iface-test.cpp
+  v-iterator-test.cpp
+  static-vector-test.cpp
+  vector-view-test.cpp
   )
 
 target_include_directories(tests PRIVATE ../include)

@@ -123,7 +123,7 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-            > ${productsDir}/${Coverage_NAME}.html
+            | c++filt > ${productsDir}/${Coverage_NAME}.html
     # Clean up
     COMMAND ${CMAKE_COMMAND} -E remove
     ${Coverage_NAME}.profdata default.profraw

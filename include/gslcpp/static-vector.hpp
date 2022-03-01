@@ -38,14 +38,6 @@ struct static_vector: public v_iface<v_stat<S, T>> {
   using P= v_iface<v_stat<S, T>>; ///< Type of ancestor.
   using P::P;
 
-  /// Construct by copying from dynamic vector of same size.
-  /// - Mismatch in size produces run-time abort.
-  /// @tparam OT  Type of other elements.
-  /// @param ov  Reference to source-vector.
-  template<typename OT> static_vector(v_iface<v_stat<0, OT>> const &ov) {
-    memcpy(*this, ov);
-  }
-
   /// Construct by copying from view of same size.
   /// - Mismatch in size produces run-time abort.
   /// @tparam OT  Type of other elements.
