@@ -43,12 +43,12 @@ private:
   /// Specialization for constant type of element of vector.  Even if vector
   /// actually have non-const elements, const vector is treated as having const
   /// elements.
-  template<> struct element<true> { using type= double const; };
+  template<> struct element<true> { using type= typename V::E const; };
 
   /// Specialization for non-constant type of element for vector.  Even if
   /// vector actually have non-const elements, const vector is treated as
   /// having const elements.
-  template<> struct element<false> { using type= double; };
+  template<> struct element<false> { using type= typename V::E; };
 
   /// Type of element for vector.  Even if vector actually have non-const
   /// elements, const vector is treated as having const elements.

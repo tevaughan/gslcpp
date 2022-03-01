@@ -12,24 +12,53 @@ using gsl::axpby;
 using gsl::static_vector;
 using gsl::v_iface;
 using gsl::vector_view;
+using gsl::w_array_elem;
 using std::ostringstream;
 
 
 using v3= static_vector<3>;
-
-
 v3 const a({1.0, 2.0, 3.0});
 
 
-TEST_CASE("vec_iface::begin() works.", "[vec-iface]") {
-  v3 b= a;
+/// Globals for tests.
+/// \tparam E  Type of each element in vector.
+template<typename E> struct g {
+  constexpr static w_array_elem<E> ca[]= {1, 2, 3};
+  // 'inline' keyword required to initialize static member in-line.
+  static inline static_vector const a= ca;
+};
+
+
+/// Verify that begin() works for v_iface<E>.
+/// For non-const type E, this exercises both const and non-const begin().
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_begin() {
+  auto &a= g<E>::a;
+  auto b= a;
   auto ia= a.begin();
-  REQUIRE(*ia == 1.0);
+  REQUIRE(*ia == 1);
   auto ib= b.begin();
-  *ib++= -1.0;
-  *ib++= -2.0;
-  *ib= -3.0;
-  REQUIRE(*b.begin() == -1.0);
+  *ib++= 4;
+  *ib++= 5;
+  *ib= 6;
+  REQUIRE(*b.begin() == 4);
+  REQUIRE(*(b.begin() + 1) == 5);
+  REQUIRE(*(b.begin() + 2) == 6);
+}
+
+
+TEST_CASE("vec_iface::begin() works.", "[vec-iface]") {
+  verify_begin<double>();
+  verify_begin<float>();
+  verify_begin<long double>();
+  verify_begin<int>();
+  verify_begin<unsigned>();
+  verify_begin<long>();
+  verify_begin<unsigned long>();
+  verify_begin<short>();
+  verify_begin<unsigned short>();
+  verify_begin<char>();
+  verify_begin<unsigned char>();
 }
 
 
