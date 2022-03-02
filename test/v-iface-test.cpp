@@ -23,8 +23,11 @@ v3 const a({1.0, 2.0, 3.0});
 /// Globals for tests.
 /// \tparam E  Type of each element in vector.
 template<typename E> struct g {
+  /// Global C-array with three elements.
   constexpr static E ca[]= {1, 2, 3};
-  // 'inline' keyword required to initialize static member in-line.
+
+  /// Global test-vector constructed from `ca`.
+  /// 'inline' keyword required to initialize static member in-line.
   static inline static_vector const a= ca;
 };
 
@@ -47,6 +50,7 @@ template<typename E> void verify_begin() {
 }
 
 
+/// Verify that begin() works for each kind of v_iface.
 TEST_CASE("vec_iface::begin() works.", "[vec-iface]") {
   verify_begin<double>();
   verify_begin<float>();
@@ -65,16 +69,39 @@ TEST_CASE("vec_iface::begin() works.", "[vec-iface]") {
 }
 
 
-TEST_CASE("vec_iface::end() works.", "[vec-iface]") {
-  v3 b= a;
+/// Verify that end() works for v_iface<E>.
+/// For non-const type E, this exercises both const and non-const end().
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_end() {
+  auto &a= g<E>::a;
+  auto b= a;
   auto ia= a.end() - 1;
-  REQUIRE(*ia == 3.0);
+  REQUIRE(*ia == E(3));
   for(auto ib= b.begin(); ib != b.end(); ++ib) { *ib= a[ib - b.begin()]; }
   REQUIRE(a[0] == b[0]);
   REQUIRE(a[1] == b[1]);
   REQUIRE(a[2] == b[2]);
   REQUIRE(a.end() - a.begin() == b.size());
   REQUIRE(b.end() - b.begin() == b.size());
+}
+
+
+/// Verify that end() works fo each kind of v_iface.
+TEST_CASE("vec_iface::end() works.", "[vec-iface]") {
+  verify_end<double>();
+  verify_end<float>();
+  verify_end<long double>();
+  verify_end<int>();
+  verify_end<unsigned>();
+  verify_end<long>();
+  verify_end<unsigned long>();
+  verify_end<short>();
+  verify_end<unsigned short>();
+  verify_end<char>();
+  verify_end<unsigned char>();
+  verify_end<complex<double>>();
+  verify_end<complex<float>>();
+  verify_end<complex<long double>>();
 }
 
 
