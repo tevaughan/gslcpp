@@ -173,32 +173,94 @@ TEST_CASE("vec_iface::data() works.", "[vec-iface]") {
 }
 
 
+/// Verify that get() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_get() {
+  REQUIRE(g<E>::a.get(1) == E(2));
+  REQUIRE(g<E>::a[0] == E(1));
+}
+
+
+/// Verify that get() works for each kind of v_iface.
 TEST_CASE("vec_iface's getters work.", "[vec-iface]") {
-  REQUIRE(a.get(1) == 2.0);
-  REQUIRE(a[0] == 1.0);
+  verify_get<double>();
+  verify_get<float>();
+  verify_get<long double>();
+  verify_get<int>();
+  verify_get<unsigned>();
+  verify_get<long>();
+  verify_get<unsigned long>();
+  verify_get<short>();
+  verify_get<unsigned short>();
+  verify_get<char>();
+  verify_get<unsigned char>();
+  verify_get<complex<double>>();
+  verify_get<complex<float>>();
+  verify_get<complex<long double>>();
 }
 
 
+/// Verify that set() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_set() {
+  auto b= g<E>::a;
+  b[0]= E(10);
+  b.set(1, E(20));
+  REQUIRE(b[0] == E(10));
+  REQUIRE(b[1] == E(20));
+}
+
+
+/// Verify that set() works for each kind of v_iface.
 TEST_CASE("vec_iface's setters work.", "[vec-iface]") {
-  v3 b= a;
-  b[0]= -1.0;
-  b.set(1, -2.0);
-  REQUIRE(b[0] == -1.0);
-  REQUIRE(b[1] == -2.0);
+  verify_set<double>();
+  verify_set<float>();
+  verify_set<long double>();
+  verify_set<int>();
+  verify_set<unsigned>();
+  verify_set<long>();
+  verify_set<unsigned long>();
+  verify_set<short>();
+  verify_set<unsigned short>();
+  verify_set<char>();
+  verify_set<unsigned char>();
+  verify_set<complex<double>>();
+  verify_set<complex<float>>();
+  verify_set<complex<long double>>();
 }
 
 
-TEST_CASE("vec_iface::ptr() retrieves pointer of element.", "[vec-iface]") {
-  static_vector<6> const b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
-  static_vector<6> c= b;
+/// Verify that ptr() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_ptr() {
+  static_vector const b({E(1), E(2), E(3), E(4), E(5), E(6)});
+  static_vector c= b;
   vector_view d= b.subvector(3, 1, 2);
   vector_view e= c.subvector(3, 1, 2);
   REQUIRE(d.ptr(1) == b.ptr(3));
   REQUIRE(e.ptr(1) == c.ptr(3));
-  REQUIRE(d.ptr(1) == b.v().data + 3);
-  REQUIRE(e.ptr(1) == c.v().data + 3);
-  *e.ptr(1)= 9.0;
-  REQUIRE(c[3] == 9.0);
+  REQUIRE(d.ptr(1) == b.data() + 3);
+  REQUIRE(e.ptr(1) == c.data() + 3);
+  *e.ptr(1)= E(9);
+  REQUIRE(c[3] == E(9));
+}
+
+
+TEST_CASE("vec_iface::ptr() retrieves pointer of element.", "[vec-iface]") {
+  verify_ptr<double>();
+  verify_ptr<float>();
+  verify_ptr<long double>();
+  verify_ptr<int>();
+  verify_ptr<unsigned>();
+  verify_ptr<long>();
+  verify_ptr<unsigned long>();
+  verify_ptr<short>();
+  verify_ptr<unsigned short>();
+  verify_ptr<char>();
+  verify_ptr<unsigned char>();
+  verify_ptr<complex<double>>();
+  verify_ptr<complex<float>>();
+  verify_ptr<complex<long double>>();
 }
 
 
