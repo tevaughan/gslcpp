@@ -105,24 +105,71 @@ TEST_CASE("vec_iface::end() works.", "[vec-iface]") {
 }
 
 
+/// Verify that size() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_size() { REQUIRE(g<E>::a.size() == 3); }
+
+
+/// Verify that size() works for each kind of v_iface.
 TEST_CASE("vec_iface::size() works.", "[vec-iface]") {
-  REQUIRE(a.size() == 3);
+  verify_size<double>();
+  verify_size<float>();
+  verify_size<long double>();
+  verify_size<int>();
+  verify_size<unsigned>();
+  verify_size<long>();
+  verify_size<unsigned long>();
+  verify_size<short>();
+  verify_size<unsigned short>();
+  verify_size<char>();
+  verify_size<unsigned char>();
+  verify_size<complex<double>>();
+  verify_size<complex<float>>();
+  verify_size<complex<long double>>();
 }
 
 
-TEST_CASE("vec_iface::stride() works.", "[vec-iface]") {
-  REQUIRE(a.v().stride == 1);
-  static_vector<6> b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
-  auto c= b.subvector(3, 1, 2);
-  REQUIRE(c.v().stride == 2);
-}
-
-
-TEST_CASE("vec_iface::data() works.", "[vec-iface]") {
-  REQUIRE(a.data() == &a[0]);
-  double b[]= {1.0, -1.0, 2.0, -2.0, 3.0, -3.0};
-  vector_view<double> c(b, 3, 1, 2);
+/// Verify that data() points to right place for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_data() {
+  REQUIRE(g<E>::a.data() == &g<E>::a[0]);
+  E b[]= {1, 2, 3, 4, 5, 6};
+  vector_view c(b, 3, 1, 2);
   REQUIRE(c.data() == b + 1);
+}
+
+
+/// Verify that data() points to right place for each kind of v_iface.
+TEST_CASE("vec_iface::data() works.", "[vec-iface]") {
+  verify_data<double>();
+  verify_data<float>();
+  verify_data<long double>();
+  verify_data<int>();
+  verify_data<unsigned>();
+  verify_data<long>();
+  verify_data<unsigned long>();
+  verify_data<short>();
+  verify_data<unsigned short>();
+  verify_data<char>();
+  verify_data<unsigned char>();
+  verify_data<complex<double>>();
+  verify_data<complex<float>>();
+  verify_data<complex<long double>>();
+
+  verify_data<double const>();
+  verify_data<float const>();
+  verify_data<long double const>();
+  verify_data<int const>();
+  verify_data<unsigned const>();
+  verify_data<long const>();
+  verify_data<unsigned long const>();
+  verify_data<short const>();
+  verify_data<unsigned short const>();
+  verify_data<char const>();
+  verify_data<unsigned char const>();
+  verify_data<complex<double> const>();
+  verify_data<complex<float> const>();
+  verify_data<complex<long double> const>();
 }
 
 
