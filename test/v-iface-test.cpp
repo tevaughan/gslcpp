@@ -9,6 +9,7 @@
 
 
 using gsl::axpby;
+using gsl::complex;
 using gsl::static_vector;
 using gsl::v_iface;
 using gsl::vector_view;
@@ -35,14 +36,14 @@ template<typename E> void verify_begin() {
   auto &a= g<E>::a;
   auto b= a;
   auto ia= a.begin();
-  REQUIRE(*ia == 1);
+  REQUIRE(*ia == E(1));
   auto ib= b.begin();
   *ib++= 4;
   *ib++= 5;
   *ib= 6;
-  REQUIRE(*b.begin() == 4);
-  REQUIRE(*(b.begin() + 1) == 5);
-  REQUIRE(*(b.begin() + 2) == 6);
+  REQUIRE(*b.begin() == E(4));
+  REQUIRE(*(b.begin() + 1) == E(5));
+  REQUIRE(*(b.begin() + 2) == E(6));
 }
 
 
@@ -58,6 +59,9 @@ TEST_CASE("vec_iface::begin() works.", "[vec-iface]") {
   verify_begin<unsigned short>();
   verify_begin<char>();
   verify_begin<unsigned char>();
+  verify_begin<complex<double>>();
+  verify_begin<complex<float>>();
+  verify_begin<complex<long double>>();
 }
 
 
@@ -316,13 +320,13 @@ template<typename E> void verify_add_constant() {
   auto &a= g<E>::a;
   auto b= a;
   b.add_constant(1);
-  REQUIRE(b[0] == 2);
-  REQUIRE(b[1] == 3);
-  REQUIRE(b[2] == 4);
+  REQUIRE(b[0] == E(2));
+  REQUIRE(b[1] == E(3));
+  REQUIRE(b[2] == E(4));
   b+= 1;
-  REQUIRE(b[0] == 3);
-  REQUIRE(b[1] == 4);
-  REQUIRE(b[2] == 5);
+  REQUIRE(b[0] == E(3));
+  REQUIRE(b[1] == E(4));
+  REQUIRE(b[2] == E(5));
 }
 
 
@@ -338,6 +342,9 @@ TEST_CASE("vec_iface's adding constant works.", "[vec-iface]") {
   verify_add_constant<unsigned short>();
   verify_add_constant<char>();
   verify_add_constant<unsigned char>();
+  verify_add_constant<complex<double>>();
+  verify_add_constant<complex<float>>();
+  verify_add_constant<complex<long double>>();
 }
 
 

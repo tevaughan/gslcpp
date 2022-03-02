@@ -101,12 +101,12 @@ template<v_stor S> struct v_iface: public S {
   /// Pointer to first element in vector.
   /// - Be careful to check `v().stride` in case data be not contiguous.
   /// @return  Pointer to first element.
-  E *data() { return v().data; }
+  E *data() { return (E *)v().data; /* Cast for complex. */ }
 
   /// Pointer to first element in immutable vector.
   /// - Be careful to check `v().stride` in case data be not contiguous.
   /// @return  Pointer to first immutable element.
-  E const *data() const { return v().data; }
+  E const *data() const { return (E const *)v().data; /* Cast for complex. */ }
 
   /// Read element with bounds-checking.
   /// @param i  Offset of element.
