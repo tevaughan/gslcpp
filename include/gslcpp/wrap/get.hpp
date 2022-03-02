@@ -123,7 +123,7 @@ inline unsigned char w_get(w_vector<unsigned char const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Value of element or 0 on bounds-error.
-inline gsl_complex w_get(w_vector<gsl_complex const> *v, size_t i) {
+inline complex<double> w_get(w_vector<complex<double> const> *v, size_t i) {
   return gsl_vector_complex_get(v, i);
 }
 
@@ -133,8 +133,7 @@ inline gsl_complex w_get(w_vector<gsl_complex const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Value of element or 0 on bounds-error.
-inline gsl_complex_float
-w_get(w_vector<gsl_complex_float const> *v, size_t i) {
+inline complex<float> w_get(w_vector<complex<float> const> *v, size_t i) {
   return gsl_vector_complex_float_get(v, i);
 }
 
@@ -144,8 +143,8 @@ w_get(w_vector<gsl_complex_float const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Value of element or 0 on bounds-error.
-inline gsl_complex_long_double
-w_get(w_vector<gsl_complex_long_double const> *v, size_t i) {
+inline complex<long double>
+w_get(w_vector<complex<long double> const> *v, size_t i) {
   return gsl_vector_complex_long_double_get(v, i);
 }
 

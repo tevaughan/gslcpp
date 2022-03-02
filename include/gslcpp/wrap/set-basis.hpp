@@ -159,7 +159,7 @@ inline int w_set_basis(w_vector<unsigned char> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of component that should be set to unity.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_set_basis(w_vector<gsl_complex> *v, size_t i) {
+inline int w_set_basis(w_vector<complex<double>> *v, size_t i) {
   return gsl_vector_complex_set_basis(v, i);
 }
 
@@ -172,7 +172,7 @@ inline int w_set_basis(w_vector<gsl_complex> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of component that should be set to unity.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_set_basis(w_vector<gsl_complex_float> *v, size_t i) {
+inline int w_set_basis(w_vector<complex<float>> *v, size_t i) {
   return gsl_vector_complex_float_set_basis(v, i);
 }
 
@@ -185,7 +185,7 @@ inline int w_set_basis(w_vector<gsl_complex_float> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of component that should be set to unity.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_set_basis(w_vector<gsl_complex_long_double> *v, size_t i) {
+inline int w_set_basis(w_vector<complex<long double>> *v, size_t i) {
   return gsl_vector_complex_long_double_set_basis(v, i);
 }
 

@@ -22,9 +22,8 @@ namespace gsl {
 using std::enable_if_t;
 
 
-/// With real (not complex) elements, vector whose storage has two key
-/// properties: (1) that its size is known statically, at compile-time, and (2)
-/// that it is owned by vector.
+/// Vector whose storage has two key properties: (1) that its size is known
+/// statically, at compile-time, and (2) that it is owned by vector.
 ///
 /// %static_vector has storage by way of \ref gsl::v_stat, and most of the
 /// interface is given by \ref gsl::v_iface.
@@ -55,7 +54,7 @@ struct static_vector: public v_iface<v_stat<S, T>> {
   /// ~~~
   /// @param d  Data to copy for initialization.
   static_vector(T const (&d)[S]) {
-    auto const cview= w_vector_view_array<T const>(d, 1, S);
+    auto const cview= w_vector_view_array(d, 1, S);
     memcpy(*this, v_iface<v_view<T const>>(cview));
   }
 
@@ -75,7 +74,7 @@ struct static_vector: public v_iface<v_stat<S, T>> {
     if(i + s * (S - 1) > N - 1) {
       throw std::runtime_error("source-array not big enough");
     }
-    auto const cview= w_vector_view_array<T const>(d + i, s, S);
+    auto const cview= w_vector_view_array(d + i, s, S);
     memcpy(*this, v_iface<v_view<T const>>(cview));
   }
 
@@ -85,7 +84,7 @@ struct static_vector: public v_iface<v_stat<S, T>> {
   /// @param s  Stride.
   /// @param d  Decayed C-style array.
   static_vector(size_t s, T const *d): static_vector() {
-    auto const cview= w_vector_view_array<T const>(d, s, S);
+    auto const cview= w_vector_view_array(d, s, S);
     memcpy(*this, v_iface<v_view<T const>>(cview));
   }
 
@@ -105,7 +104,7 @@ struct static_vector: public v_iface<v_stat<S, T>> {
   /// @param d  Data to copy.
   /// @return  Reference to modified vector.
   static_vector &operator=(T const (&d)[S]) {
-    auto const cview= w_vector_view_array<T const>(d, 1, S);
+    auto const cview= w_vector_view_array(d, 1, S);
     memcpy(*this, v_iface<v_view<T const>>(cview));
     return *this;
   }

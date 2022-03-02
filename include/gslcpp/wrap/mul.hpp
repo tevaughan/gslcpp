@@ -126,7 +126,8 @@ w_mul(w_vector<unsigned char> *u, w_vector<unsigned char const> *v) {
 /// @param u  Pointer to vector that `v` will multiply into.
 /// @param v  Pointer to vector that will multiply in to `u`.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_mul(w_vector<gsl_complex> *u, w_vector<gsl_complex const> *v) {
+inline int
+w_mul(w_vector<complex<double>> *u, w_vector<complex<double> const> *v) {
   return gsl_vector_complex_mul(u, v);
 }
 
@@ -137,7 +138,7 @@ inline int w_mul(w_vector<gsl_complex> *u, w_vector<gsl_complex const> *v) {
 /// @param v  Pointer to vector that will multiply in to `u`.
 /// @return  TBD: GSL's documentation does not specify.
 inline int
-w_mul(w_vector<gsl_complex_float> *u, w_vector<gsl_complex_float const> *v) {
+w_mul(w_vector<complex<float>> *u, w_vector<complex<float> const> *v) {
   return gsl_vector_complex_float_mul(u, v);
 }
 
@@ -148,8 +149,8 @@ w_mul(w_vector<gsl_complex_float> *u, w_vector<gsl_complex_float const> *v) {
 /// @param v  Pointer to vector that will multiply in to `u`.
 /// @return  TBD: GSL's documentation does not specify.
 inline int
-w_mul(w_vector<gsl_complex_long_double> *u,
-      w_vector<gsl_complex_long_double const> *v) {
+w_mul(w_vector<complex<long double>> *u,
+      w_vector<complex<long double> const> *v) {
   return gsl_vector_complex_long_double_mul(u, v);
 }
 

@@ -106,7 +106,7 @@ inline unsigned char w_sum(w_vector<unsigned char const> *v) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
 /// @param v  Pointer to vector.
 /// @return  Sum of elements in `v`.
-inline gsl_complex w_sum(w_vector<gsl_complex const> *v) {
+inline complex<double> w_sum(w_vector<complex<double> const> *v) {
   return gsl_vector_complex_sum(v);
 }
 
@@ -115,7 +115,7 @@ inline gsl_complex w_sum(w_vector<gsl_complex const> *v) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
 /// @param v  Pointer to vector.
 /// @return  Sum of elements in `v`.
-inline gsl_complex_float w_sum(w_vector<gsl_complex_float const> *v) {
+inline complex<float> w_sum(w_vector<complex<float> const> *v) {
   return gsl_vector_complex_float_sum(v);
 }
 
@@ -124,8 +124,7 @@ inline gsl_complex_float w_sum(w_vector<gsl_complex_float const> *v) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
 /// @param v  Pointer to vector.
 /// @return  Sum of elements in `v`.
-inline gsl_complex_long_double
-w_sum(w_vector<gsl_complex_long_double const> *v) {
+inline complex<long double> w_sum(w_vector<complex<long double> const> *v) {
   return gsl_vector_complex_long_double_sum(v);
 }
 

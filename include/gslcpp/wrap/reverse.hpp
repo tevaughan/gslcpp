@@ -103,7 +103,7 @@ inline int w_reverse(w_vector<unsigned char> *v) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_reverse
 /// @param v  Pointer to vector.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_reverse(w_vector<gsl_complex> *v) {
+inline int w_reverse(w_vector<complex<double>> *v) {
   return gsl_vector_complex_reverse(v);
 }
 
@@ -112,7 +112,7 @@ inline int w_reverse(w_vector<gsl_complex> *v) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_reverse
 /// @param v  Pointer to vector.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_reverse(w_vector<gsl_complex_float> *v) {
+inline int w_reverse(w_vector<complex<float>> *v) {
   return gsl_vector_complex_float_reverse(v);
 }
 
@@ -121,7 +121,7 @@ inline int w_reverse(w_vector<gsl_complex_float> *v) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_reverse
 /// @param v  Pointer to vector.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_reverse(w_vector<gsl_complex_long_double> *v) {
+inline int w_reverse(w_vector<complex<long double>> *v) {
   return gsl_vector_complex_long_double_reverse(v);
 }
 

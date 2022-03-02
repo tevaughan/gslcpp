@@ -79,13 +79,15 @@ inline void w_free(w_vector<unsigned char> *v) { gsl_vector_uchar_free(v); }
 /// Deallocate memory for GSL's native vector.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_free
 /// @param v  Pointer to vector.
-inline void w_free(w_vector<gsl_complex> *v) { gsl_vector_complex_free(v); }
+inline void w_free(w_vector<complex<double>> *v) {
+  gsl_vector_complex_free(v);
+}
 
 
 /// Deallocate memory for GSL's native vector.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_free
 /// @param v  Pointer to vector.
-inline void w_free(w_vector<gsl_complex_float> *v) {
+inline void w_free(w_vector<complex<float>> *v) {
   gsl_vector_complex_float_free(v);
 }
 
@@ -93,7 +95,7 @@ inline void w_free(w_vector<gsl_complex_float> *v) {
 /// Deallocate memory for GSL's native vector.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_free
 /// @param v  Pointer to vector.
-inline void w_free(w_vector<gsl_complex_long_double> *v) {
+inline void w_free(w_vector<complex<long double>> *v) {
   gsl_vector_complex_long_double_free(v);
 }
 

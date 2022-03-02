@@ -126,7 +126,8 @@ w_div(w_vector<unsigned char> *u, w_vector<unsigned char const> *v) {
 /// @param u  Pointer to matrix whose elements should be divided into.
 /// @param v  Pointer to matrix whose elements divide into.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_div(w_vector<gsl_complex> *u, w_vector<gsl_complex const> *v) {
+inline int
+w_div(w_vector<complex<double>> *u, w_vector<complex<double> const> *v) {
   return gsl_vector_complex_div(u, v);
 }
 
@@ -137,7 +138,7 @@ inline int w_div(w_vector<gsl_complex> *u, w_vector<gsl_complex const> *v) {
 /// @param v  Pointer to matrix whose elements divide into.
 /// @return  TBD: GSL's documentation does not specify.
 inline int
-w_div(w_vector<gsl_complex_float> *u, w_vector<gsl_complex_float const> *v) {
+w_div(w_vector<complex<float>> *u, w_vector<complex<float> const> *v) {
   return gsl_vector_complex_float_div(u, v);
 }
 
@@ -148,8 +149,8 @@ w_div(w_vector<gsl_complex_float> *u, w_vector<gsl_complex_float const> *v) {
 /// @param v  Pointer to matrix whose elements divide into.
 /// @return  TBD: GSL's documentation does not specify.
 inline int
-w_div(w_vector<gsl_complex_long_double> *u,
-      w_vector<gsl_complex_long_double const> *v) {
+w_div(w_vector<complex<long double>> *u,
+      w_vector<complex<long double> const> *v) {
   return gsl_vector_complex_long_double_div(u, v);
 }
 

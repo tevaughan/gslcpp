@@ -123,7 +123,7 @@ inline int w_fwrite(FILE *f, w_vector<unsigned char const> *v) {
 /// @param f  Pointer to file-stream.
 /// @param v  Pointer to vector.
 /// @return  0 on success and `GSL_EFAILED` on problem writing to stream.
-inline int w_fwrite(FILE *f, w_vector<gsl_complex const> *v) {
+inline int w_fwrite(FILE *f, w_vector<complex<double> const> *v) {
   return gsl_vector_complex_fwrite(f, v);
 }
 
@@ -133,7 +133,7 @@ inline int w_fwrite(FILE *f, w_vector<gsl_complex const> *v) {
 /// @param f  Pointer to file-stream.
 /// @param v  Pointer to vector.
 /// @return  0 on success and `GSL_EFAILED` on problem writing to stream.
-inline int w_fwrite(FILE *f, w_vector<gsl_complex_float const> *v) {
+inline int w_fwrite(FILE *f, w_vector<complex<float> const> *v) {
   return gsl_vector_complex_float_fwrite(f, v);
 }
 
@@ -143,7 +143,7 @@ inline int w_fwrite(FILE *f, w_vector<gsl_complex_float const> *v) {
 /// @param f  Pointer to file-stream.
 /// @param v  Pointer to vector.
 /// @return  0 on success and `GSL_EFAILED` on problem writing to stream.
-inline int w_fwrite(FILE *f, w_vector<gsl_complex_long_double const> *v) {
+inline int w_fwrite(FILE *f, w_vector<complex<long double> const> *v) {
   return gsl_vector_complex_long_double_fwrite(f, v);
 }
 

@@ -135,7 +135,7 @@ inline int w_swap_elements(w_vector<unsigned char> *v, size_t i, size_t j) {
 /// @param i  Offset of one element to exchange.
 /// @param j  Offset of other element to exchange.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_swap_elements(w_vector<gsl_complex> *v, size_t i, size_t j) {
+inline int w_swap_elements(w_vector<complex<double>> *v, size_t i, size_t j) {
   return gsl_vector_complex_swap_elements(v, i, j);
 }
 
@@ -146,8 +146,7 @@ inline int w_swap_elements(w_vector<gsl_complex> *v, size_t i, size_t j) {
 /// @param i  Offset of one element to exchange.
 /// @param j  Offset of other element to exchange.
 /// @return  TBD: GSL's documentation does not specify.
-inline int
-w_swap_elements(w_vector<gsl_complex_float> *v, size_t i, size_t j) {
+inline int w_swap_elements(w_vector<complex<float>> *v, size_t i, size_t j) {
   return gsl_vector_complex_float_swap_elements(v, i, j);
 }
 
@@ -159,7 +158,7 @@ w_swap_elements(w_vector<gsl_complex_float> *v, size_t i, size_t j) {
 /// @param j  Offset of other element to exchange.
 /// @return  TBD: GSL's documentation does not specify.
 inline int
-w_swap_elements(w_vector<gsl_complex_long_double> *v, size_t i, size_t j) {
+w_swap_elements(w_vector<complex<long double>> *v, size_t i, size_t j) {
   return gsl_vector_complex_long_double_swap_elements(v, i, j);
 }
 

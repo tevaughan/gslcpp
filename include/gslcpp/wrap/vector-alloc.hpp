@@ -105,27 +105,29 @@ template<> w_vector<unsigned char> *w_vector_alloc<unsigned char>(size_t n) {
 }
 
 
-/// Specialization for gsl_complex.
+/// Specialization for complex<double>.
 /// @param n  Number of elements to allocate.
 /// @return  Pointer to GSL's native C-struct for vector.
-template<> w_vector<gsl_complex> *w_vector_alloc<gsl_complex>(size_t n) {
+template<>
+w_vector<complex<double>> *w_vector_alloc<complex<double>>(size_t n) {
   return gsl_vector_complex_alloc(n);
 }
 
 
-/// Specialization for gsl_complex_float.
+/// Specialization for complex<float>.
 /// @param n  Number of elements to allocate.
 /// @return  Pointer to GSL's native C-struct for vector.
-template<> w_vector<gsl_complex_float> *w_vector_alloc<gsl_complex_float>(size_t n) {
+template<> w_vector<complex<float>> *w_vector_alloc<complex<float>>(size_t n) {
   return gsl_vector_complex_float_alloc(n);
 }
 
 
-/// Specialization for gsl_complex_long_double.
+/// Specialization for complex<long double>.
 /// @param n  Number of elements to allocate.
 /// @return  Pointer to GSL's native C-struct for vector.
-template<> w_vector<gsl_complex_long_double> *
-w_vector_alloc<gsl_complex_long_double>(size_t n) {
+template<>
+w_vector<complex<long double>> *
+w_vector_alloc<complex<long double>>(size_t n) {
   return gsl_vector_complex_long_double_alloc(n);
 }
 

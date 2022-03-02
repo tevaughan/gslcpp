@@ -234,8 +234,8 @@ inline unsigned char const *w_ptr(w_vector<unsigned char const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline gsl_complex *w_ptr(w_vector<gsl_complex> *v, size_t i) {
-  return gsl_vector_complex_ptr(v, i);
+inline complex<double> *w_ptr(w_vector<complex<double>> *v, size_t i) {
+  return (complex<double> *)gsl_vector_complex_ptr(v, i);
 }
 
 
@@ -244,8 +244,9 @@ inline gsl_complex *w_ptr(w_vector<gsl_complex> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline gsl_complex const *w_ptr(w_vector<gsl_complex const> *v, size_t i) {
-  return gsl_vector_complex_const_ptr(v, i);
+inline complex<double> const *
+w_ptr(w_vector<complex<double> const> *v, size_t i) {
+  return (complex<double> const *)gsl_vector_complex_const_ptr(v, i);
 }
 
 
@@ -254,8 +255,8 @@ inline gsl_complex const *w_ptr(w_vector<gsl_complex const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline gsl_complex_float *w_ptr(w_vector<gsl_complex_float> *v, size_t i) {
-  return gsl_vector_complex_float_ptr(v, i);
+inline complex<float> *w_ptr(w_vector<complex<float>> *v, size_t i) {
+  return (complex<float> *)gsl_vector_complex_float_ptr(v, i);
 }
 
 
@@ -264,9 +265,9 @@ inline gsl_complex_float *w_ptr(w_vector<gsl_complex_float> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline gsl_complex_float const *
-w_ptr(w_vector<gsl_complex_float const> *v, size_t i) {
-  return gsl_vector_complex_float_const_ptr(v, i);
+inline complex<float> const *
+w_ptr(w_vector<complex<float> const> *v, size_t i) {
+  return (complex<float> const *)gsl_vector_complex_float_const_ptr(v, i);
 }
 
 
@@ -275,9 +276,9 @@ w_ptr(w_vector<gsl_complex_float const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline gsl_complex_long_double *
-w_ptr(w_vector<gsl_complex_long_double> *v, size_t i) {
-  return gsl_vector_complex_long_double_ptr(v, i);
+inline complex<long double> *
+w_ptr(w_vector<complex<long double>> *v, size_t i) {
+  return (complex<long double> *)gsl_vector_complex_long_double_ptr(v, i);
 }
 
 
@@ -286,9 +287,10 @@ w_ptr(w_vector<gsl_complex_long_double> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline gsl_complex_long_double const *
-w_ptr(w_vector<gsl_complex_long_double const> *v, size_t i) {
-  return gsl_vector_complex_long_double_const_ptr(v, i);
+inline complex<long double> const *
+w_ptr(w_vector<complex<long double> const> *v, size_t i) {
+  return (complex<long double> const *)
+        gsl_vector_complex_long_double_const_ptr(v, i);
 }
 
 

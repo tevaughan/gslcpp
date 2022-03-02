@@ -19,6 +19,7 @@
 #  define HAVE_INLINE
 #endif
 
+#include "complex.hpp" // gsl::complex
 #include <gsl/gsl_matrix.h> // gsl_matrix, gsl_matrix_float, etc.
 #include <gsl/gsl_vector.h> // gsl_vector, gsl_vector_float, etc.
 
@@ -33,17 +34,10 @@ template<typename E> struct container;
 /// Specialization for double.
 /// \sa \ref container
 template<> struct container<double> {
-  /// GSL's native type for vector.
-  using vector= gsl_vector;
-
-  /// GSL's native type for vector-view.
-  using vector_view= gsl_vector_view;
-
-  /// GSL's native type for matrix.
-  using matrix= gsl_matrix;
-
-  /// GSL's native type for matrix-view.
-  using matrix_view= gsl_matrix_view;
+  using vector= gsl_vector; ///< GSL's native type for vector.
+  using vector_view= gsl_vector_view; ///< GSL's native type for vector-view.
+  using matrix= gsl_matrix; ///< GSL's native type for matrix.
+  using matrix_view= gsl_matrix_view; ///< GSL's native type for matrix-view.
 };
 
 
@@ -406,7 +400,7 @@ template<> struct container<unsigned char const> {
 
 /// Specialization for gsl_complex.
 /// \sa \ref container
-template<> struct container<gsl_complex> {
+template<> struct container<complex<double>> {
   /// GSL's native type for vector.
   using vector= gsl_vector_complex;
 
@@ -423,7 +417,7 @@ template<> struct container<gsl_complex> {
 
 /// Specialization for gsl_complex const.
 /// \sa \ref container
-template<> struct container<gsl_complex const> {
+template<> struct container<complex<double> const> {
   /// GSL's native type for vector.
   using vector= gsl_vector_complex const;
 
@@ -440,7 +434,7 @@ template<> struct container<gsl_complex const> {
 
 /// Specialization for gsl_complex_float.
 /// \sa \ref container
-template<> struct container<gsl_complex_float> {
+template<> struct container<complex<float>> {
   /// GSL's native type for vector.
   using vector= gsl_vector_complex_float;
 
@@ -457,7 +451,7 @@ template<> struct container<gsl_complex_float> {
 
 /// Specialization for gsl_complex_float const.
 /// \sa \ref container
-template<> struct container<gsl_complex_float const> {
+template<> struct container<complex<float> const> {
   /// GSL's native type for vector.
   using vector= gsl_vector_complex_float const;
 
@@ -474,7 +468,7 @@ template<> struct container<gsl_complex_float const> {
 
 /// Specialization for gsl_complex_long_double.
 /// \sa \ref container
-template<> struct container<gsl_complex_long_double> {
+template<> struct container<complex<long double>> {
   /// GSL's native type for vector.
   using vector= gsl_vector_complex_long_double;
 
@@ -491,7 +485,7 @@ template<> struct container<gsl_complex_long_double> {
 
 /// Specialization for gsl_complex_long_double const.
 /// \sa \ref container
-template<> struct container<gsl_complex_long_double const> {
+template<> struct container<complex<long double> const> {
   /// GSL's native type for vector.
   using vector= gsl_vector_complex_long_double const;
 

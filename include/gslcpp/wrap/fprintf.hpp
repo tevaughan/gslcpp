@@ -140,7 +140,7 @@ w_fprintf(FILE *f, w_vector<unsigned char const> *v, char const *fmt) {
 /// @param fmt  Pointer to printf-style specifier of format.
 /// @return  0 on success or GSL_EFAILED on problem writing to file.
 inline int
-w_fprintf(FILE *f, w_vector<gsl_complex const> *v, char const *fmt) {
+w_fprintf(FILE *f, w_vector<complex<double> const> *v, char const *fmt) {
   return gsl_vector_complex_fprintf(f, v, fmt);
 }
 
@@ -152,7 +152,7 @@ w_fprintf(FILE *f, w_vector<gsl_complex const> *v, char const *fmt) {
 /// @param fmt  Pointer to printf-style specifier of format.
 /// @return  0 on success or GSL_EFAILED on problem writing to file.
 inline int
-w_fprintf(FILE *f, w_vector<gsl_complex_float const> *v, char const *fmt) {
+w_fprintf(FILE *f, w_vector<complex<float> const> *v, char const *fmt) {
   return gsl_vector_complex_float_fprintf(f, v, fmt);
 }
 
@@ -163,8 +163,8 @@ w_fprintf(FILE *f, w_vector<gsl_complex_float const> *v, char const *fmt) {
 /// @param v  Pointer to vector.
 /// @param fmt  Pointer to printf-style specifier of format.
 /// @return  0 on success or GSL_EFAILED on problem writing to file.
-inline int w_fprintf(
-      FILE *f, w_vector<gsl_complex_long_double const> *v, char const *fmt) {
+inline int
+w_fprintf(FILE *f, w_vector<complex<long double> const> *v, char const *fmt) {
   return gsl_vector_complex_long_double_fprintf(f, v, fmt);
 }
 

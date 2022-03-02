@@ -301,8 +301,8 @@ w_subvector(w_vector<unsigned char const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<gsl_complex>
-w_subvector(w_vector<gsl_complex> *v, size_t i, size_t s, size_t n) {
+inline w_vector_view<complex<double>>
+w_subvector(w_vector<complex<double>> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_subvector_with_stride(v, i, s, n);
 }
 
@@ -314,8 +314,8 @@ w_subvector(w_vector<gsl_complex> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<gsl_complex const>
-w_subvector(w_vector<gsl_complex const> *v, size_t i, size_t s, size_t n) {
+inline w_vector_view<complex<double> const>
+w_subvector(w_vector<complex<double> const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_const_subvector_with_stride(v, i, s, n);
 }
 
@@ -327,8 +327,8 @@ w_subvector(w_vector<gsl_complex const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<gsl_complex_float>
-w_subvector(w_vector<gsl_complex_float> *v, size_t i, size_t s, size_t n) {
+inline w_vector_view<complex<float>>
+w_subvector(w_vector<complex<float>> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_float_subvector_with_stride(v, i, s, n);
 }
 
@@ -340,8 +340,8 @@ w_subvector(w_vector<gsl_complex_float> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<gsl_complex_float const> w_subvector(
-      w_vector<gsl_complex_float const> *v, size_t i, size_t s, size_t n) {
+inline w_vector_view<complex<float> const>
+w_subvector(w_vector<complex<float> const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_float_const_subvector_with_stride(v, i, s, n);
 }
 
@@ -353,8 +353,8 @@ inline w_vector_view<gsl_complex_float const> w_subvector(
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<gsl_complex_long_double> w_subvector(
-      w_vector<gsl_complex_long_double> *v, size_t i, size_t s, size_t n) {
+inline w_vector_view<complex<long double>>
+w_subvector(w_vector<complex<long double>> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_long_double_subvector_with_stride(v, i, s, n);
 }
 
@@ -366,11 +366,8 @@ inline w_vector_view<gsl_complex_long_double> w_subvector(
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<gsl_complex_long_double const> w_subvector(
-      w_vector<gsl_complex_long_double const> *v,
-      size_t i,
-      size_t s,
-      size_t n) {
+inline w_vector_view<complex<long double> const> w_subvector(
+      w_vector<complex<long double> const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_long_double_const_subvector_with_stride(
         v, i, s, n);
 }

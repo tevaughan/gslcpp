@@ -216,10 +216,10 @@ inline int w_axpby(
 ///           `a*x + b*y`.
 /// @return  TBD: GSL's documentation does not specify.
 inline int w_axpby(
-      gsl_complex const &a,
-      w_vector<gsl_complex const> *x,
-      gsl_complex const &b,
-      w_vector<gsl_complex> *y) {
+      complex<double> const &a,
+      w_vector<complex<double> const> *x,
+      complex<double> const &b,
+      w_vector<complex<double>> *y) {
   return gsl_vector_complex_axpby(a, x, b, y);
 }
 
@@ -234,10 +234,10 @@ inline int w_axpby(
 ///           `a*x + b*y`.
 /// @return  TBD: GSL's documentation does not specify.
 inline int w_axpby(
-      gsl_complex_float const &a,
-      w_vector<gsl_complex_float const> *x,
-      gsl_complex_float const &b,
-      w_vector<gsl_complex_float> *y) {
+      complex<float> const &a,
+      w_vector<complex<float> const> *x,
+      complex<float> const &b,
+      w_vector<complex<float>> *y) {
   return gsl_vector_complex_float_axpby(a, x, b, y);
 }
 
@@ -252,10 +252,10 @@ inline int w_axpby(
 ///           `a*x + b*y`.
 /// @return  TBD: GSL's documentation does not specify.
 inline int w_axpby(
-      gsl_complex_long_double const &a,
-      w_vector<gsl_complex_long_double const> *x,
-      gsl_complex_long_double const &b,
-      w_vector<gsl_complex_long_double> *y) {
+      complex<long double> const &a,
+      w_vector<complex<long double> const> *x,
+      complex<long double> const &b,
+      w_vector<complex<long double>> *y) {
   return gsl_vector_complex_long_double_axpby(a, x, b, y);
 }
 

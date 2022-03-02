@@ -111,7 +111,7 @@ inline bool w_isnull(w_vector<unsigned char const> *v) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_isnull
 /// @param v  Pointer to vector.
 /// @return  True only if every element in `v` be zero.
-inline bool w_isnull(w_vector<gsl_complex const> *v) {
+inline bool w_isnull(w_vector<complex<double> const> *v) {
   return gsl_vector_complex_isnull(v);
 }
 
@@ -120,7 +120,7 @@ inline bool w_isnull(w_vector<gsl_complex const> *v) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_isnull
 /// @param v  Pointer to vector.
 /// @return  True only if every element in `v` be zero.
-inline bool w_isnull(w_vector<gsl_complex_float const> *v) {
+inline bool w_isnull(w_vector<complex<float> const> *v) {
   return gsl_vector_complex_float_isnull(v);
 }
 
@@ -129,7 +129,7 @@ inline bool w_isnull(w_vector<gsl_complex_float const> *v) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_isnull
 /// @param v  Pointer to vector.
 /// @return  True only if every element in `v` be zero.
-inline bool w_isnull(w_vector<gsl_complex_long_double const> *v) {
+inline bool w_isnull(w_vector<complex<long double> const> *v) {
   return gsl_vector_complex_long_double_isnull(v);
 }
 

@@ -12,7 +12,6 @@ using gsl::axpby;
 using gsl::static_vector;
 using gsl::v_iface;
 using gsl::vector_view;
-using gsl::w_array_elem;
 using std::ostringstream;
 
 
@@ -23,7 +22,7 @@ v3 const a({1.0, 2.0, 3.0});
 /// Globals for tests.
 /// \tparam E  Type of each element in vector.
 template<typename E> struct g {
-  constexpr static w_array_elem<E> ca[]= {1, 2, 3};
+  constexpr static E ca[]= {1, 2, 3};
   // 'inline' keyword required to initialize static member in-line.
   static inline static_vector const a= ca;
 };

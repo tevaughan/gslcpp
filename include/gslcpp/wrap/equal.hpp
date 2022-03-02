@@ -127,8 +127,8 @@ w_equal(w_vector<unsigned char const> *u, w_vector<unsigned char const> *v) {
 /// @param u  Pointer to one vector.
 /// @param v  Pointer to other vector.
 /// @return  True if vectors be equal.
-inline bool
-w_equal(w_vector<gsl_complex const> *u, w_vector<gsl_complex const> *v) {
+inline bool w_equal(
+      w_vector<complex<double> const> *u, w_vector<complex<double> const> *v) {
   return gsl_vector_complex_equal(u, v);
 }
 
@@ -138,9 +138,8 @@ w_equal(w_vector<gsl_complex const> *u, w_vector<gsl_complex const> *v) {
 /// @param u  Pointer to one vector.
 /// @param v  Pointer to other vector.
 /// @return  True if vectors be equal.
-inline bool w_equal(
-      w_vector<gsl_complex_float const> *u,
-      w_vector<gsl_complex_float const> *v) {
+inline bool
+w_equal(w_vector<complex<float> const> *u, w_vector<complex<float> const> *v) {
   return gsl_vector_complex_float_equal(u, v);
 }
 
@@ -151,8 +150,8 @@ inline bool w_equal(
 /// @param v  Pointer to other vector.
 /// @return  True if vectors be equal.
 inline bool w_equal(
-      w_vector<gsl_complex_long_double const> *u,
-      w_vector<gsl_complex_long_double const> *v) {
+      w_vector<complex<long double> const> *u,
+      w_vector<complex<long double> const> *v) {
   return gsl_vector_complex_long_double_equal(u, v);
 }
 

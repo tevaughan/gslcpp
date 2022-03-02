@@ -4,14 +4,13 @@
 
 #pragma once
 #include "vec/v-iface.hpp" // v_iface, v_stor
-#include "wrap/c-array.hpp" // w_array_elem
 #include "wrap/vector-view-array.hpp" // w_vector_view_array
 
 /// Namespace for C++-interface to GSL.
 namespace gsl {
 
 
-/// Real vector with storage not owned by instance of vector.
+/// Vector with storage not owned by instance of vector.
 ///
 /// %vector_view has its interface to storage given by \ref gsl::v_view, and
 /// most of the external interface is given by \ref gsl::v_iface.
@@ -31,8 +30,7 @@ template<typename T> struct vector_view: public v_iface<v_view<T>> {
   /// @param b  Pointer to first element of array and of view.
   /// @param n  Number of elements in view.
   /// @param s  Stride of view relative to array.
-  vector_view(size_t n, w_array_elem<T> *b, size_t s= 1):
-      P(w_vector_view_array<T>(b, s, n)) {}
+  vector_view(size_t n, T *b, size_t s= 1): P(w_vector_view_array(b, s, n)) {}
 
   /// Initialize view of non-decayed C-array.  Arguments are reordered from
   /// those given to gsl_vector_subvector_with_stride().  Putting initial
@@ -44,12 +42,8 @@ template<typename T> struct vector_view: public v_iface<v_view<T>> {
   /// @param i  Offset in array of first element in view.
   /// @param s  Stride of view relative to array.
   template<int N>
-  vector_view(
-        w_array_elem<T> (&b)[N],
-        size_t n= N * sizeof(w_array_elem<T>) / sizeof(T),
-        size_t i= 0,
-        size_t s= 1):
-      P(w_vector_view_array<T>(b + i, s, n)) {}
+  vector_view(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
+      P(w_vector_view_array(b + i, s, n)) {}
 
   /// Initialize view of other view.
   /// @param v  Other view.

@@ -183,7 +183,7 @@ inline int w_fscanf(FILE *f, w_vector<unsigned char> *v) {
 /// @param f  Pointer to file-stream.
 /// @param v  Pointer to vector that will be initialized from stream.
 /// @return  0 on success or GSL_EFAILED on problem reading from stream.
-inline int w_fscanf(FILE *f, w_vector<gsl_complex> *v) {
+inline int w_fscanf(FILE *f, w_vector<complex<double>> *v) {
   return gsl_vector_complex_fscanf(f, v);
 }
 
@@ -198,7 +198,7 @@ inline int w_fscanf(FILE *f, w_vector<gsl_complex> *v) {
 /// @param f  Pointer to file-stream.
 /// @param v  Pointer to vector that will be initialized from stream.
 /// @return  0 on success or GSL_EFAILED on problem reading from stream.
-inline int w_fscanf(FILE *f, w_vector<gsl_complex_float> *v) {
+inline int w_fscanf(FILE *f, w_vector<complex<float>> *v) {
   return gsl_vector_complex_float_fscanf(f, v);
 }
 
@@ -213,7 +213,7 @@ inline int w_fscanf(FILE *f, w_vector<gsl_complex_float> *v) {
 /// @param f  Pointer to file-stream.
 /// @param v  Pointer to vector that will be initialized from stream.
 /// @return  0 on success or GSL_EFAILED on problem reading from stream.
-inline int w_fscanf(FILE *f, w_vector<gsl_complex_long_double> *v) {
+inline int w_fscanf(FILE *f, w_vector<complex<long double>> *v) {
   return gsl_vector_complex_long_double_fscanf(f, v);
 }
 

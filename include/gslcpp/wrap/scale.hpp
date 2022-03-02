@@ -123,7 +123,7 @@ inline int w_scale(w_vector<unsigned char> *u, unsigned char const &v) {
 /// @param u  Pointer to vector.
 /// @param v  Scalar.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_scale(w_vector<gsl_complex> *u, gsl_complex const &v) {
+inline int w_scale(w_vector<complex<double>> *u, complex<double> const &v) {
   return gsl_vector_complex_scale(u, v);
 }
 
@@ -133,8 +133,7 @@ inline int w_scale(w_vector<gsl_complex> *u, gsl_complex const &v) {
 /// @param u  Pointer to vector.
 /// @param v  Scalar.
 /// @return  TBD: GSL's documentation does not specify.
-inline int
-w_scale(w_vector<gsl_complex_float> *u, gsl_complex_float const &v) {
+inline int w_scale(w_vector<complex<float>> *u, complex<float> const &v) {
   return gsl_vector_complex_float_scale(u, v);
 }
 
@@ -144,8 +143,8 @@ w_scale(w_vector<gsl_complex_float> *u, gsl_complex_float const &v) {
 /// @param u  Pointer to vector.
 /// @param v  Scalar.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_scale(
-      w_vector<gsl_complex_long_double> *u, gsl_complex_long_double const &v) {
+inline int
+w_scale(w_vector<complex<long double>> *u, complex<long double> const &v) {
   return gsl_vector_complex_long_double_scale(u, v);
 }
 

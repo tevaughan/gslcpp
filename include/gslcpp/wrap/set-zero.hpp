@@ -85,7 +85,7 @@ inline void w_set_zero(w_vector<unsigned char> *v) {
 /// Set every element of vector `v` to zero.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_set_zero
 /// @param v  Pointer to vector.
-inline void w_set_zero(w_vector<gsl_complex> *v) {
+inline void w_set_zero(w_vector<complex<double>> *v) {
   gsl_vector_complex_set_zero(v);
 }
 
@@ -93,7 +93,7 @@ inline void w_set_zero(w_vector<gsl_complex> *v) {
 /// Set every element of vector `v` to zero.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_set_zero
 /// @param v  Pointer to vector.
-inline void w_set_zero(w_vector<gsl_complex_float> *v) {
+inline void w_set_zero(w_vector<complex<float>> *v) {
   gsl_vector_complex_float_set_zero(v);
 }
 
@@ -101,7 +101,7 @@ inline void w_set_zero(w_vector<gsl_complex_float> *v) {
 /// Set every element of vector `v` to zero.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_set_zero
 /// @param v  Pointer to vector.
-inline void w_set_zero(w_vector<gsl_complex_long_double> *v) {
+inline void w_set_zero(w_vector<complex<long double>> *v) {
   gsl_vector_complex_long_double_set_zero(v);
 }
 

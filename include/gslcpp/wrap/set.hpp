@@ -126,7 +126,8 @@ w_set(w_vector<unsigned char> *v, size_t i, unsigned char const &x) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element whose value should change.
 /// @param x  New value for element at offset `i`.
-inline void w_set(w_vector<gsl_complex> *v, size_t i, gsl_complex const &x) {
+inline void
+w_set(w_vector<complex<double>> *v, size_t i, complex<double> const &x) {
   return gsl_vector_complex_set(v, i, x);
 }
 
@@ -137,7 +138,7 @@ inline void w_set(w_vector<gsl_complex> *v, size_t i, gsl_complex const &x) {
 /// @param i  Offset of element whose value should change.
 /// @param x  New value for element at offset `i`.
 inline void
-w_set(w_vector<gsl_complex_float> *v, size_t i, gsl_complex_float const &x) {
+w_set(w_vector<complex<float>> *v, size_t i, complex<float> const &x) {
   return gsl_vector_complex_float_set(v, i, x);
 }
 
@@ -148,9 +149,9 @@ w_set(w_vector<gsl_complex_float> *v, size_t i, gsl_complex_float const &x) {
 /// @param i  Offset of element whose value should change.
 /// @param x  New value for element at offset `i`.
 inline void
-w_set(w_vector<gsl_complex_long_double> *v,
+w_set(w_vector<complex<long double>> *v,
       size_t i,
-      gsl_complex_long_double const &x) {
+      complex<long double> const &x) {
   return gsl_vector_complex_long_double_set(v, i, x);
 }
 

@@ -138,7 +138,8 @@ w_memcpy(w_vector<unsigned char> *u, w_vector<unsigned char const> *v) {
 /// @param u  Pointer to vector that is destination of copying.
 /// @param v  Pointer to vector that is source of copying.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_memcpy(w_vector<gsl_complex> *u, w_vector<gsl_complex const> *v) {
+inline int
+w_memcpy(w_vector<complex<double>> *u, w_vector<complex<double> const> *v) {
   return gsl_vector_complex_memcpy(u, v);
 }
 
@@ -149,8 +150,8 @@ inline int w_memcpy(w_vector<gsl_complex> *u, w_vector<gsl_complex const> *v) {
 /// @param u  Pointer to vector that is destination of copying.
 /// @param v  Pointer to vector that is source of copying.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_memcpy(
-      w_vector<gsl_complex_float> *u, w_vector<gsl_complex_float const> *v) {
+inline int
+w_memcpy(w_vector<complex<float>> *u, w_vector<complex<float> const> *v) {
   return gsl_vector_complex_float_memcpy(u, v);
 }
 
@@ -162,8 +163,8 @@ inline int w_memcpy(
 /// @param v  Pointer to vector that is source of copying.
 /// @return  TBD: GSL's documentation does not specify.
 inline int w_memcpy(
-      w_vector<gsl_complex_long_double> *u,
-      w_vector<gsl_complex_long_double const> *v) {
+      w_vector<complex<long double>> *u,
+      w_vector<complex<long double> const> *v) {
   return gsl_vector_complex_long_double_memcpy(u, v);
 }
 

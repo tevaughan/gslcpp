@@ -123,7 +123,7 @@ inline int w_swap(w_vector<unsigned char> *u, w_vector<unsigned char> *v) {
 /// @param u  Pointer to one vector.
 /// @param v  Pointer to other vector.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_swap(w_vector<gsl_complex> *u, w_vector<gsl_complex> *v) {
+inline int w_swap(w_vector<complex<double>> *u, w_vector<complex<double>> *v) {
   return gsl_vector_complex_swap(u, v);
 }
 
@@ -133,8 +133,7 @@ inline int w_swap(w_vector<gsl_complex> *u, w_vector<gsl_complex> *v) {
 /// @param u  Pointer to one vector.
 /// @param v  Pointer to other vector.
 /// @return  TBD: GSL's documentation does not specify.
-inline int
-w_swap(w_vector<gsl_complex_float> *u, w_vector<gsl_complex_float> *v) {
+inline int w_swap(w_vector<complex<float>> *u, w_vector<complex<float>> *v) {
   return gsl_vector_complex_float_swap(u, v);
 }
 
@@ -144,9 +143,8 @@ w_swap(w_vector<gsl_complex_float> *u, w_vector<gsl_complex_float> *v) {
 /// @param u  Pointer to one vector.
 /// @param v  Pointer to other vector.
 /// @return  TBD: GSL's documentation does not specify.
-inline int w_swap(
-      w_vector<gsl_complex_long_double> *u,
-      w_vector<gsl_complex_long_double> *v) {
+inline int
+w_swap(w_vector<complex<long double>> *u, w_vector<complex<long double>> *v) {
   return gsl_vector_complex_long_double_swap(u, v);
 }
 

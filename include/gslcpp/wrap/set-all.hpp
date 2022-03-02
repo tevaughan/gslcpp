@@ -111,7 +111,7 @@ inline void w_set_all(w_vector<unsigned char> *v, unsigned char const &x) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_set_all
 /// @param v  Pointer to vector.
 /// @param x  Initializer for every element.
-inline void w_set_all(w_vector<gsl_complex> *v, gsl_complex const &x) {
+inline void w_set_all(w_vector<complex<double>> *v, complex<double> const &x) {
   return gsl_vector_complex_set_all(v, x);
 }
 
@@ -120,8 +120,7 @@ inline void w_set_all(w_vector<gsl_complex> *v, gsl_complex const &x) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_set_all
 /// @param v  Pointer to vector.
 /// @param x  Initializer for every element.
-inline void
-w_set_all(w_vector<gsl_complex_float> *v, gsl_complex_float const &x) {
+inline void w_set_all(w_vector<complex<float>> *v, complex<float> const &x) {
   return gsl_vector_complex_float_set_all(v, x);
 }
 
@@ -130,8 +129,8 @@ w_set_all(w_vector<gsl_complex_float> *v, gsl_complex_float const &x) {
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_set_all
 /// @param v  Pointer to vector.
 /// @param x  Initializer for every element.
-inline void w_set_all(
-      w_vector<gsl_complex_long_double> *v, gsl_complex_long_double const &x) {
+inline void
+w_set_all(w_vector<complex<long double>> *v, complex<long double> const &x) {
   return gsl_vector_complex_long_double_set_all(v, x);
 }
 
