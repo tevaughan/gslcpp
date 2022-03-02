@@ -12,7 +12,6 @@
 
 #include "vec/v-iface.hpp" // v_iface, v_stor
 #include "vec/v-stat.hpp" // v_stat
-#include "wrap/vector-view-array.hpp" // vector_view_array
 #include <type_traits> // enable_if_t
 
 /// Namespace for C++-interface to GSL.

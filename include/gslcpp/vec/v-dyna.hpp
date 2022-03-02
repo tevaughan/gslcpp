@@ -3,7 +3,6 @@
 /// \brief      Definition for gsl::v_dyna.
 
 #pragma once
-#include "../wrap/container.hpp" // w_vector
 #include "../wrap/free.hpp" // w_free
 #include "../wrap/vector-alloc.hpp" // w_vector_alloc
 #include "../wrap/vector-calloc.hpp" // w_vector_calloc
