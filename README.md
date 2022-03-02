@@ -19,26 +19,27 @@ interoperability with Eigen.
 
 I am working toward the initial release.
 
-For the initial release:
-  - The supported portions of GSL will include
-    - GSL's vector and
-    - GSL's minimization-routines (which depend on GSL's vector).
-  - Interoperability with Eigen will be provided for GSL's vector.
+For the initial release, `gslcpp` will wrap GSL's vector.
+  - All types (`gsl_vector_float`, `gsl_vector_int`,
+    `gsl_vector_complex_float`, etc.) are supported.
+  - Interoperability with Eigen is provided.
 
 At present:
-  - The C++-interface to `gsl_vector` is implemented.
-    - The design allows adding element-types easily.
-    - Initially, the only types supported are `double` and `float`.
-    - The unit-tests are almost done.
-      - Class `vector_s` for stack-allocation is fully tested.
-      - Class `vector_v` for vector-views is fully tested.
-      - Class `vector_d` for dynamic allocation is not yet tested.
-  - The C++-interface to the minimizers is not implemented yet.
+  - The C++-interface to `gsl_vector` et al. is fully implemented.
+  - The unit-tests are almost done.
+    - There is nearly complete coverage of the basic GSL-vector interface (all
+      of the `gsl_vector_*`-functions for `double`.
+    - A strategy for covering all types uniformly in unit-tests, even complex
+      types, has been implemented and demonstrated to work in a few cases.
+    - Constructor-types are not yet fully tested.
+      - Class `static_vector` for stack-allocation is fully tested.
+      - Class `vector_view` for vector-views is fully tested.
+      - Class `vector` for dynamic allocation is not yet tested.
   - Only a few interfaces with Eigen are so far implemented.
 
-The design of support for vectors allows adding support for matrices easily.
-  - Adding support for GSL-matrices will likely be the major feature in the
-    release after the initial release.
+Upcoming releases after initial release:
+  - Add support for multidimensional minimization.
+  - Add support for GSL-matrices.
 
 ## How to Build
 
