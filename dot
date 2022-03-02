@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
 # Make dot run with left-to-right (not top-to-bottom) ranks.
-/usr/bin/dot -Grankdir="LR" $*
+dot -Grankdir="LR" $*
 
 # EOF
