@@ -313,16 +313,32 @@ TEST_CASE("vec_iface's scaling works.", "[vec-iface]") {
 }
 
 
+template<typename E> void verify_add_constant() {
+  auto &a= g<E>::a;
+  auto b= a;
+  b.add_constant(1);
+  REQUIRE(b[0] == 2);
+  REQUIRE(b[1] == 3);
+  REQUIRE(b[2] == 4);
+  b+= 1;
+  REQUIRE(b[0] == 3);
+  REQUIRE(b[1] == 4);
+  REQUIRE(b[2] == 5);
+}
+
+
 TEST_CASE("vec_iface's adding constant works.", "[vec-iface]") {
-  v3 b= a;
-  b.add_constant(1.0);
-  REQUIRE(b[0] == 2.0);
-  REQUIRE(b[1] == 3.0);
-  REQUIRE(b[2] == 4.0);
-  b+= 1.0;
-  REQUIRE(b[0] == 3.0);
-  REQUIRE(b[1] == 4.0);
-  REQUIRE(b[2] == 5.0);
+  verify_add_constant<double>();
+  verify_add_constant<float>();
+  verify_add_constant<long double>();
+  verify_add_constant<int>();
+  verify_add_constant<unsigned>();
+  verify_add_constant<long>();
+  verify_add_constant<unsigned long>();
+  verify_add_constant<short>();
+  verify_add_constant<unsigned short>();
+  verify_add_constant<char>();
+  verify_add_constant<unsigned char>();
 }
 
 
