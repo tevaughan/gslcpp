@@ -12,11 +12,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Doxygen Action
-      uses: mattnotmitt/doxygen-action@v1.9.3
-      with:
-        doxyfile-path: ./Doxyfile
-        working-directory: .
+    #- name: Doxygen Action
+    #  uses: mattnotmitt/doxygen-action@v1.9.3
+    #  with:
+    #  doxyfile-path: ./Doxyfile
+    #  working-directory: .
 
     - run: >
         sudo apt-get install
@@ -33,6 +33,7 @@ jobs:
         make
 
     - run: make
+    - run: make doc
 
       # WARNING: Avoid installing 'publish_dir/.gitignore' in main branch if
       # purpose be to hide products of build in output of 'git status' and if
