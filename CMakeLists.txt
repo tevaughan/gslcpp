@@ -27,6 +27,9 @@ set(CMAKE_BUILD_TYPE Coverage)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+# This generates 'compile_commands.json' that Doxygen can use.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # clang-tidy
 find_program (CLANG_TIDY_EXE NAMES "clang-tidy")
 if(CLANG_TIDY_EXE)
