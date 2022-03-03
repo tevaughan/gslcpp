@@ -3,10 +3,10 @@
 ///
 /// \brief      Definition for
 ///             \ref elem_generic,
-///             elem<gsl_vector_complex>,
-///             elem<gsl_vector_complex_float>,
-///             elem<gsl_vector_complex_long_double>,
-///             \ref elem_t,
+///             gsl::elem<gsl_vector_complex>,
+///             gsl::elem<gsl_vector_complex_float>,
+///             gsl::elem<gsl_vector_complex_long_double>,
+///             gsl::elem_t,
 ///             gsl::sum_for_gsl_lt_2p7(),
 ///             gsl::axpby_for_gsl_lt_2p7().
 
@@ -65,7 +65,6 @@ template<> struct elem<gsl_vector_complex_long_double> {
 };
 
 
-/// \anchor elem_t
 /// Type of element (e.g., float) in vector of type V.
 /// \tparam V  Type of gsl_vector (e.g., gsl_vector_float).
 template<typename V> using elem_t= typename elem<V>::type;
