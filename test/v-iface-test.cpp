@@ -367,6 +367,9 @@ TEST_CASE("v_iface::fwrite() and v_iface::fread() work.", "[v-iface]") {
 }
 
 
+/// Format-string for fprintf().
+/// \tparam E  Type of each element in vector.
+/// \return  Format-string for fprintf().
 template<typename E> constexpr auto fmt() {
   if constexpr(std::is_same_v<E, complex<double>>) return "%g";
   if constexpr(std::is_same_v<E, complex<float>>) return "%g";
@@ -542,6 +545,7 @@ template<typename E> void verify_add() {
 }
 
 
+/// Verify that add() works for any kind of iface.
 TEST_CASE("v_iface::add() works.", "[v-iface]") {
   verify_add<double>();
   verify_add<float>();
@@ -560,54 +564,118 @@ TEST_CASE("v_iface::add() works.", "[v-iface]") {
 }
 
 
-TEST_CASE("v_iface's subtraction in place works.", "[v-iface]") {
-  v3 b;
+/// Verify that sub() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_sub() {
+  static_vector<3, E> b;
 
-  b.set_all(1.0);
-  b.sub(a);
-  REQUIRE(b[0] == +0.0);
-  REQUIRE(b[1] == -1.0);
-  REQUIRE(b[2] == -2.0);
+  b.set_all(E(3));
+  b.sub(g<E>::a);
+  REQUIRE(b[0] == E(2));
+  REQUIRE(b[1] == E(1));
+  REQUIRE(b[2] == E(0));
 
-  b.set_all(1.0);
-  b-= a;
-  REQUIRE(b[0] == +0.0);
-  REQUIRE(b[1] == -1.0);
-  REQUIRE(b[2] == -2.0);
+  b.set_all(E(3));
+  b-= g<E>::a;
+  REQUIRE(b[0] == E(2));
+  REQUIRE(b[1] == E(1));
+  REQUIRE(b[2] == E(0));
 }
 
 
-TEST_CASE("v_iface's multiplication in place works.", "[v-iface]") {
-  v3 b;
-
-  b.set_all(1.0);
-  b.mul(a);
-  REQUIRE(b[0] == 1.0);
-  REQUIRE(b[1] == 2.0);
-  REQUIRE(b[2] == 3.0);
-
-  b.set_all(1.0);
-  b*= a;
-  REQUIRE(b[0] == 1.0);
-  REQUIRE(b[1] == 2.0);
-  REQUIRE(b[2] == 3.0);
+/// Verify that sub works for any kind of iface.
+TEST_CASE("v_iface::sub() works.", "[v-iface]") {
+  verify_sub<double>();
+  verify_sub<float>();
+  verify_sub<long double>();
+  verify_sub<int>();
+  verify_sub<short>();
+  verify_sub<long>();
+  verify_sub<unsigned>();
+  verify_sub<unsigned short>();
+  verify_sub<unsigned long>();
+  verify_sub<char>();
+  verify_sub<unsigned char>();
+  verify_sub<complex<double>>();
+  verify_sub<complex<float>>();
+  verify_sub<complex<long double>>();
 }
 
 
-TEST_CASE("v_iface's division in place works.", "[v-iface]") {
-  v3 b;
+/// Verify that mul() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_mul() {
+  static_vector<3, E> b;
 
-  b.set_all(1.0);
+  b.set_all(E(1));
+  b.mul(g<E>::a);
+  REQUIRE(b[0] == E(1));
+  REQUIRE(b[1] == E(2));
+  REQUIRE(b[2] == E(3));
+
+  b.set_all(E(1));
+  b*= g<E>::a;
+  REQUIRE(b[0] == E(1));
+  REQUIRE(b[1] == E(2));
+  REQUIRE(b[2] == E(3));
+}
+
+
+/// Verify that mul() works for any kind of v_iface.
+TEST_CASE("v_iface::mul() works.", "[v-iface]") {
+  verify_mul<double>();
+  verify_mul<float>();
+  verify_mul<long double>();
+  verify_mul<int>();
+  verify_mul<short>();
+  verify_mul<long>();
+  verify_mul<unsigned>();
+  verify_mul<unsigned short>();
+  verify_mul<unsigned long>();
+  verify_mul<char>();
+  verify_mul<unsigned char>();
+  verify_mul<complex<double>>();
+  verify_mul<complex<float>>();
+  verify_mul<complex<long double>>();
+}
+
+
+/// Verify that div() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_div() {
+  static_vector<3, E> const a({2, 4, 8});
+  static_vector<3, E> b;
+
+  b.set_all(E(16));
   b.div(a);
-  REQUIRE(b[0] == 1.0 / 1.0);
-  REQUIRE(b[1] == 1.0 / 2.0);
-  REQUIRE(b[2] == 1.0 / 3.0);
+  REQUIRE(b[0] == E(8));
+  REQUIRE(b[1] == E(4));
+  REQUIRE(b[2] == E(2));
 
-  b.set_all(1.0);
+  b.set_all(E(16));
   b/= a;
-  REQUIRE(b[0] == 1.0 / 1.0);
-  REQUIRE(b[1] == 1.0 / 2.0);
-  REQUIRE(b[2] == 1.0 / 3.0);
+  REQUIRE(b[0] == E(8));
+  REQUIRE(b[1] == E(4));
+  REQUIRE(b[2] == E(2));
+}
+
+
+/// Verify that div() works for any kind of v_iface.
+TEST_CASE("v_iface::div() works.", "[v-iface]") {
+  verify_div<double>();
+  verify_div<float>();
+  verify_div<long double>();
+  verify_div<int>();
+  verify_div<short>();
+  verify_div<long>();
+  verify_div<unsigned>();
+  verify_div<unsigned short>();
+  verify_div<unsigned long>();
+  verify_div<char>();
+  verify_div<unsigned char>();
+  verify_div<complex<double>>();
+  verify_div<complex<float>>();
+  verify_div<complex<long double>>();
 }
 
 
