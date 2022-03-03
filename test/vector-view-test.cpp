@@ -1,4 +1,4 @@
-/// @file       gsl/vector-view-test.cpp
+/// @file       test/vector-view-test.cpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Tests for gsl::vector_view.
 

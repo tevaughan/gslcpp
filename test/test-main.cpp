@@ -1,4 +1,4 @@
-/// @file       gsl/test-main.cpp
+/// @file       test/test-main.cpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Main module for test-cases.
 

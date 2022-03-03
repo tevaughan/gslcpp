@@ -1,4 +1,4 @@
-/// @file       gsl/static-vector-test.cpp
+/// @file       test/static-vector-test.cpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Tests for gsl::static_vector.
 
