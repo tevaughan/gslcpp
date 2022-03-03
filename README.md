@@ -25,12 +25,12 @@ For the initial release, `gslcpp` will wrap GSL's vector.
   - Interoperability with Eigen is provided.
 
 At present:
-  - The C++-interface to `gsl_vector` et al. is fully implemented.
+  - The GSL-vector interface (all of the `gsl_vector_*`-functions and for *all*
+    types of vector, whether double, float, complex, etc.) is fully
+    implemented.
   - The unit-tests are almost done.
-    - There is nearly complete coverage of the basic GSL-vector interface (all
-      of the `gsl_vector_*`-functions for `double`.
-    - A strategy for covering all types uniformly in unit-tests, even complex
-      types, has been implemented and demonstrated to work in a few cases.
+    - There is now complete coverage of the GSL-vector interface (for all
+      functions and types of vector).
     - Constructor-types are not yet fully tested.
       - Class `static_vector` for stack-allocation is fully tested.
       - Class `vector_view` for vector-views is fully tested.

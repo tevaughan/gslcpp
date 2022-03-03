@@ -116,7 +116,7 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-            > ${productsDir}/${Coverage_NAME}.txt
+            | c++filt > ${productsDir}/${Coverage_NAME}.txt
     COMMAND ${LLVM_COV_PATH}
             show
             --format=html
