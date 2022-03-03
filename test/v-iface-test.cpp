@@ -1,6 +1,6 @@
 /// @file       test/v-iface-test.cpp
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// @brief      Tests for gsl::vec_iface.
+/// @brief      Tests for gsl::v_iface.
 
 #include "gslcpp/static-vector.hpp"
 #include "gslcpp/vector-view.hpp"
@@ -52,7 +52,7 @@ template<typename E> void verify_begin() {
 
 
 /// Verify that begin() works for each kind of v_iface.
-TEST_CASE("vec_iface::begin() works.", "[v-iface]") {
+TEST_CASE("v_iface::begin() works.", "[v-iface]") {
   verify_begin<double>();
   verify_begin<float>();
   verify_begin<long double>();
@@ -88,7 +88,7 @@ template<typename E> void verify_end() {
 
 
 /// Verify that end() works fo each kind of v_iface.
-TEST_CASE("vec_iface::end() works.", "[v-iface]") {
+TEST_CASE("v_iface::end() works.", "[v-iface]") {
   verify_end<double>();
   verify_end<float>();
   verify_end<long double>();
@@ -112,7 +112,7 @@ template<typename E> void verify_size() { REQUIRE(g<E>::a.size() == 3); }
 
 
 /// Verify that size() works for each kind of v_iface.
-TEST_CASE("vec_iface::size() works.", "[v-iface]") {
+TEST_CASE("v_iface::size() works.", "[v-iface]") {
   verify_size<double>();
   verify_size<float>();
   verify_size<long double>();
@@ -141,7 +141,7 @@ template<typename E> void verify_data() {
 
 
 /// Verify that data() points to right place for each kind of v_iface.
-TEST_CASE("vec_iface::data() works.", "[v-iface]") {
+TEST_CASE("v_iface::data() works.", "[v-iface]") {
   verify_data<double>();
   verify_data<float>();
   verify_data<long double>();
@@ -183,7 +183,7 @@ template<typename E> void verify_get() {
 
 
 /// Verify that get() works for each kind of v_iface.
-TEST_CASE("vec_iface's getters work.", "[v-iface]") {
+TEST_CASE("v_iface's getters work.", "[v-iface]") {
   verify_get<double>();
   verify_get<float>();
   verify_get<long double>();
@@ -213,7 +213,7 @@ template<typename E> void verify_set() {
 
 
 /// Verify that set() works for each kind of v_iface.
-TEST_CASE("vec_iface's setters work.", "[v-iface]") {
+TEST_CASE("v_iface's setters work.", "[v-iface]") {
   verify_set<double>();
   verify_set<float>();
   verify_set<long double>();
@@ -247,7 +247,7 @@ template<typename E> void verify_ptr() {
 }
 
 
-TEST_CASE("vec_iface::ptr() retrieves pointer of element.", "[v-iface]") {
+TEST_CASE("v_iface::ptr() retrieves pointer of element.", "[v-iface]") {
   verify_ptr<double>();
   verify_ptr<float>();
   verify_ptr<long double>();
@@ -315,7 +315,7 @@ template<typename E> void verify_set_basis() {
 
 
 /// Verify that set_basis() works for each kind of v_iface.
-TEST_CASE("vec_iface::set_basis() works.", "[v-iface]") {
+TEST_CASE("v_iface::set_basis() works.", "[v-iface]") {
   verify_set_basis<double>();
   verify_set_basis<float>();
   verify_set_basis<long double>();
@@ -349,7 +349,7 @@ template<typename E> void verify_fwrite_fread() {
 
 
 /// Verify that fwrite() and fread() work for each kind of v_iface.
-TEST_CASE("vec_iface::fwrite() and vec_iface::fread() work.", "[v-iface]") {
+TEST_CASE("v_iface::fwrite() and v_iface::fread() work.", "[v-iface]") {
   verify_fwrite_fread<double>();
   verify_fwrite_fread<float>();
   verify_fwrite_fread<long double>();
@@ -398,7 +398,7 @@ template<typename E> void verify_fprintf_fscanf() {
 
 
 /// Verify that fprintf() and fscanf() work for each kind of v_iface.
-TEST_CASE("vec_iface::fprintf() and vec_iface::fscanf() work.", "[v-iface]") {
+TEST_CASE("v_iface::fprintf() and v_iface::fscanf() work.", "[v-iface]") {
   verify_fprintf_fscanf<double>();
   verify_fprintf_fscanf<float>();
   verify_fprintf_fscanf<long double>();
@@ -416,23 +416,26 @@ TEST_CASE("vec_iface::fprintf() and vec_iface::fscanf() work.", "[v-iface]") {
 }
 
 
-TEST_CASE("vec_iface::subvector() works.", "[v-iface]") {
-  static_vector<6> const b({1.0, -1.0, 2.0, -2.0, 3.0, -3.0});
-  static_vector<6> c= b;
+/// Verify that subvector() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_subvector() {
+  E const cb[]= {1, 2, 3, 4, 5, 6};
+  static_vector const b= cb;
+  static_vector c= b;
   auto vb= b.subvector(3, 1, 2);
   auto vc= c.subvector(3, 1, 2);
-  REQUIRE(vb[0] == -1.0);
-  REQUIRE(vc[0] == -1.0);
-  REQUIRE(vb[1] == -2.0);
-  REQUIRE(vc[1] == -2.0);
-  REQUIRE(vb[2] == -3.0);
-  REQUIRE(vc[2] == -3.0);
-  vc[0]= -7.0;
-  vc[1]= -8.0;
-  vc[2]= -9.0;
-  REQUIRE(c[1] == -7.0);
-  REQUIRE(c[3] == -8.0);
-  REQUIRE(c[5] == -9.0);
+  REQUIRE(vb[0] == E(2));
+  REQUIRE(vc[0] == E(2));
+  REQUIRE(vb[1] == E(4));
+  REQUIRE(vc[1] == E(4));
+  REQUIRE(vb[2] == E(6));
+  REQUIRE(vc[2] == E(6));
+  vc[0]= E(7);
+  vc[1]= E(8);
+  vc[2]= E(9);
+  REQUIRE(c[1] == E(7));
+  REQUIRE(c[3] == E(8));
+  REQUIRE(c[5] == E(9));
   auto vvc= vc.subvector(2, 0, 2);
   REQUIRE(vvc[0] == vc[0]);
   REQUIRE(vvc[1] == vc[2]);
@@ -441,42 +444,123 @@ TEST_CASE("vec_iface::subvector() works.", "[v-iface]") {
 }
 
 
-TEST_CASE("vec_iface::swap_elements() works.", "[v-iface]") {
-  v3 b= a;
+/// Verify that subvector() works for any kind of v_iface.
+TEST_CASE("v_iface::subvector() works.", "[v-iface]") {
+  verify_subvector<double>();
+  verify_subvector<float>();
+  verify_subvector<long double>();
+  verify_subvector<int>();
+  verify_subvector<short>();
+  verify_subvector<long>();
+  verify_subvector<unsigned>();
+  verify_subvector<unsigned short>();
+  verify_subvector<unsigned long>();
+  verify_subvector<char>();
+  verify_subvector<unsigned char>();
+  verify_subvector<complex<double>>();
+  verify_subvector<complex<float>>();
+  verify_subvector<complex<long double>>();
+}
+
+
+/// Verify that swap_elements() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_swap_elements() {
+  auto b= g<E>::a;
   b.swap_elements(0, 1);
-  REQUIRE(a[0] == b[1]);
-  REQUIRE(a[1] == b[0]);
-  REQUIRE(a[2] == b[2]);
+  REQUIRE(g<E>::a[0] == b[1]);
+  REQUIRE(g<E>::a[1] == b[0]);
+  REQUIRE(g<E>::a[2] == b[2]);
 }
 
 
-TEST_CASE("vec_iface::reverse() works.", "[v-iface]") {
-  v3 b= a;
+/// Verify that swap_elements() works for each kind of v_iface.
+TEST_CASE("v_iface::swap_elements() works.", "[v-iface]") {
+  verify_swap_elements<double>();
+  verify_swap_elements<float>();
+  verify_swap_elements<long double>();
+  verify_swap_elements<int>();
+  verify_swap_elements<short>();
+  verify_swap_elements<long>();
+  verify_swap_elements<unsigned>();
+  verify_swap_elements<unsigned short>();
+  verify_swap_elements<unsigned long>();
+  verify_swap_elements<char>();
+  verify_swap_elements<unsigned char>();
+  verify_swap_elements<complex<double>>();
+  verify_swap_elements<complex<float>>();
+  verify_swap_elements<complex<long double>>();
+}
+
+
+/// Verify that reverse() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_reverse() {
+  auto b= g<E>::a;
   b.reverse();
-  REQUIRE(b[0] == a[2]);
-  REQUIRE(b[1] == a[1]);
-  REQUIRE(b[2] == a[0]);
+  REQUIRE(b[0] == g<E>::a[2]);
+  REQUIRE(b[1] == g<E>::a[1]);
+  REQUIRE(b[2] == g<E>::a[0]);
 }
 
 
-TEST_CASE("vec_iface's addition in place works.", "[v-iface]") {
-  v3 b;
-
-  b.set_all(1.0);
-  b.add(a);
-  REQUIRE(b[0] == 2.0);
-  REQUIRE(b[1] == 3.0);
-  REQUIRE(b[2] == 4.0);
-
-  b.set_all(1.0);
-  b+= a;
-  REQUIRE(b[0] == 2.0);
-  REQUIRE(b[1] == 3.0);
-  REQUIRE(b[2] == 4.0);
+/// Verify that reverse() works for any kind of v_iface.
+TEST_CASE("v_iface::reverse() works.", "[v-iface]") {
+  verify_reverse<double>();
+  verify_reverse<float>();
+  verify_reverse<long double>();
+  verify_reverse<int>();
+  verify_reverse<short>();
+  verify_reverse<long>();
+  verify_reverse<unsigned>();
+  verify_reverse<unsigned short>();
+  verify_reverse<unsigned long>();
+  verify_reverse<char>();
+  verify_reverse<unsigned char>();
+  verify_reverse<complex<double>>();
+  verify_reverse<complex<float>>();
+  verify_reverse<complex<long double>>();
 }
 
 
-TEST_CASE("vec_iface's subtraction in place works.", "[v-iface]") {
+/// Verify that add() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_add() {
+  static_vector<3, E> b;
+
+  b.set_all(E(1));
+  b.add(g<E>::a);
+  REQUIRE(b[0] == E(2));
+  REQUIRE(b[1] == E(3));
+  REQUIRE(b[2] == E(4));
+
+  b.set_all(E(1));
+  b+= g<E>::a;
+  REQUIRE(b[0] == E(2));
+  REQUIRE(b[1] == E(3));
+  REQUIRE(b[2] == E(4));
+}
+
+
+TEST_CASE("v_iface::add() works.", "[v-iface]") {
+  verify_add<double>();
+  verify_add<float>();
+  verify_add<long double>();
+  verify_add<int>();
+  verify_add<short>();
+  verify_add<long>();
+  verify_add<unsigned>();
+  verify_add<unsigned short>();
+  verify_add<unsigned long>();
+  verify_add<char>();
+  verify_add<unsigned char>();
+  verify_add<complex<double>>();
+  verify_add<complex<float>>();
+  verify_add<complex<long double>>();
+}
+
+
+TEST_CASE("v_iface's subtraction in place works.", "[v-iface]") {
   v3 b;
 
   b.set_all(1.0);
@@ -493,7 +577,7 @@ TEST_CASE("vec_iface's subtraction in place works.", "[v-iface]") {
 }
 
 
-TEST_CASE("vec_iface's multiplication in place works.", "[v-iface]") {
+TEST_CASE("v_iface's multiplication in place works.", "[v-iface]") {
   v3 b;
 
   b.set_all(1.0);
@@ -510,7 +594,7 @@ TEST_CASE("vec_iface's multiplication in place works.", "[v-iface]") {
 }
 
 
-TEST_CASE("vec_iface's division in place works.", "[v-iface]") {
+TEST_CASE("v_iface's division in place works.", "[v-iface]") {
   v3 b;
 
   b.set_all(1.0);
@@ -527,7 +611,7 @@ TEST_CASE("vec_iface's division in place works.", "[v-iface]") {
 }
 
 
-TEST_CASE("vec_iface's scaling works.", "[v-iface]") {
+TEST_CASE("v_iface's scaling works.", "[v-iface]") {
   v3 b= a;
   b.scale(2.0);
   REQUIRE(b[0] == 2.0);
@@ -554,7 +638,7 @@ template<typename E> void verify_add_constant() {
 }
 
 
-TEST_CASE("vec_iface's adding constant works.", "[v-iface]") {
+TEST_CASE("v_iface's adding constant works.", "[v-iface]") {
   verify_add_constant<double>();
   verify_add_constant<float>();
   verify_add_constant<long double>();
@@ -572,7 +656,7 @@ TEST_CASE("vec_iface's adding constant works.", "[v-iface]") {
 }
 
 
-TEST_CASE("vec_iface's statistical functions work.", "[v-iface]") {
+TEST_CASE("v_iface's statistical functions work.", "[v-iface]") {
   REQUIRE(a.sum() == 6.0);
   REQUIRE(a.max() == 3.0);
   REQUIRE(a.min() == 1.0);
@@ -594,7 +678,7 @@ TEST_CASE("vec_iface's statistical functions work.", "[v-iface]") {
 }
 
 
-TEST_CASE("vec_iface::isnull() works.", "[v-iface]") {
+TEST_CASE("v_iface::isnull() works.", "[v-iface]") {
   v3 b= a;
   REQUIRE(b.isnull() == false);
 
@@ -603,7 +687,7 @@ TEST_CASE("vec_iface::isnull() works.", "[v-iface]") {
 }
 
 
-TEST_CASE("vec_iface::ispos() works.", "[v-iface]") {
+TEST_CASE("v_iface::ispos() works.", "[v-iface]") {
   v3 b= a;
   REQUIRE(b.ispos() == true);
 
@@ -612,7 +696,7 @@ TEST_CASE("vec_iface::ispos() works.", "[v-iface]") {
 }
 
 
-TEST_CASE("vec_iface::isnonneg() works.", "[v-iface]") {
+TEST_CASE("v_iface::isnonneg() works.", "[v-iface]") {
   v3 b= a;
   REQUIRE(b.isnonneg() == true);
 
@@ -676,7 +760,7 @@ TEST_CASE("Stream-operator works.", "[vec]") {
 }
 
 
-TEST_CASE("vec_iface::view() works.", "[v-iface]") {
+TEST_CASE("v_iface::view() works.", "[v-iface]") {
   static_vector<3> const a({2.0, 3.0, 1.0});
   auto const b= a.view();
   REQUIRE(a == b);
@@ -686,13 +770,13 @@ TEST_CASE("vec_iface::view() works.", "[v-iface]") {
 }
 
 
-TEST_CASE("vec_iface::sum() works.", "[v-iface]") {
+TEST_CASE("v_iface::sum() works.", "[v-iface]") {
   static_vector<3> const a({2.0, 3.0, 1.0});
   REQUIRE(a.sum() == 6.0);
 }
 
 
-TEST_CASE("vec_iface::isneg() works.", "[v-iface]") {
+TEST_CASE("v_iface::isneg() works.", "[v-iface]") {
   static_vector<3> const a({-2.0, -3.0, 1.0});
   static_vector<3> const b({-2.0, -3.0, -1.0});
   REQUIRE(a.isneg() == false);
