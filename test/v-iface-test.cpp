@@ -760,6 +760,18 @@ template<typename E> constexpr bool is_complex() {
 }
 
 
+/// True if type E be unsigned.
+/// \tparam E  Type of each element in vector.
+/// \return  True if E be unsigned.
+template<typename E> constexpr bool is_unsigned() {
+  constexpr bool uc= is_same_v<E, unsigned char>;
+  constexpr bool us= is_same_v<E, unsigned short>;
+  constexpr bool ui= is_same_v<E, unsigned int>;
+  constexpr bool ul= is_same_v<E, unsigned long>;
+  return uc || us || ui || ul;
+}
+
+
 /// Verify that statistical functions work for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_stats() {
@@ -884,11 +896,7 @@ template<typename E> void verify_isnonneg() {
   b.add_constant(E(-1));
   REQUIRE(b.isnonneg() == true);
   b.add_constant(E(-1));
-  constexpr bool uc= is_same_v<E, unsigned char>;
-  constexpr bool us= is_same_v<E, unsigned short>;
-  constexpr bool ui= is_same_v<E, unsigned int>;
-  constexpr bool ul= is_same_v<E, unsigned long>;
-  if constexpr(uc || us || ui || ul) {
+  if constexpr(is_unsigned<E>()) {
     REQUIRE(b.isnonneg() == true);
   } else {
     REQUIRE(b.isnonneg() == false);
@@ -915,21 +923,81 @@ TEST_CASE("v_iface::isnonneg() works.", "[v-iface]") {
 }
 
 
-TEST_CASE("axpby() accumulates correctly into y.", "[vec]") {
-  static_vector<3> const x({1.0, 2.0, 3.0});
-  static_vector<3> y({2.0, 3.0, 1.0});
-  double const a= 0.5;
-  double const b= 1.5;
+/// Verify that isneg() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_isneg() {
+  auto b= g<E>::a;
+  REQUIRE(b.isneg() == false);
+  if constexpr(is_complex<E>()) {
+    b.add_constant(E(-4, -1));
+  } else {
+    b.add_constant(E(-4));
+  }
+  if constexpr(is_unsigned<E>()) {
+    REQUIRE(b.isneg() == false);
+  } else {
+    REQUIRE(b.isneg() == true);
+  }
+}
+
+
+/// Verify that isneg() works for any kind of v_iface.
+TEST_CASE("v_iface::isneg() works.", "[v-iface]") {
+  verify_isneg<double>();
+  verify_isneg<float>();
+  verify_isneg<long double>();
+  verify_isneg<int>();
+  verify_isneg<unsigned>();
+  verify_isneg<long>();
+  verify_isneg<unsigned long>();
+  verify_isneg<short>();
+  verify_isneg<unsigned short>();
+  verify_isneg<char>();
+  verify_isneg<unsigned char>();
+  verify_isneg<complex<double>>();
+  verify_isneg<complex<float>>();
+  verify_isneg<complex<long double>>();
+}
+
+
+/// Verify that axpby() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_axpby() {
+  static_vector const x({E(1), E(2), E(3)});
+  static_vector y({E(2), E(3), E(1)});
+  E const a= 1;
+  E const b= 2;
   axpby(a, x, b, y);
-  static_vector<3> const r({3.5, 5.5, 3.0});
+  static_vector const r({E(5), E(8), E(5)});
   REQUIRE(y == r);
 }
 
 
-TEST_CASE("equal() compares correctly.", "[vec]") {
-  static_vector<3> const x({1.0, 2.0, 3.0});
-  static_vector<3> const y({2.0, 3.0, 1.0});
-  static_vector<3> const z({2.0, 3.0, 1.0});
+/// Verify the axpby() works for any kind of v_iface.
+TEST_CASE("v_iface::axpby() works.", "[v-iface]") {
+  verify_axpby<double>();
+  verify_axpby<float>();
+  verify_axpby<long double>();
+  verify_axpby<int>();
+  verify_axpby<unsigned>();
+  verify_axpby<long>();
+  verify_axpby<unsigned long>();
+  verify_axpby<short>();
+  verify_axpby<unsigned short>();
+  verify_axpby<char>();
+  verify_axpby<unsigned char>();
+  verify_axpby<complex<double>>();
+  verify_axpby<complex<float>>();
+  verify_axpby<complex<long double>>();
+}
+
+
+/// Verify that equal() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_equal() {
+  static_vector const x({E(1), E(2), E(3)});
+  static_vector const y({E(2), E(3), E(1)});
+  static_vector const z({E(2), E(3), E(1)});
   REQUIRE(!equal(x, y));
   REQUIRE(x != y);
   REQUIRE(equal(y, z));
@@ -937,20 +1005,62 @@ TEST_CASE("equal() compares correctly.", "[vec]") {
 }
 
 
-TEST_CASE("memcpy() works.", "[vec]") {
-  static_vector<3> y({2.0, 3.0, 1.0});
-  static_vector<3> const z({1.0, 2.0, 3.0});
+/// Verify that equal() works for any kind of v_iface.
+TEST_CASE("v_iface::equal() works.", "[v-iface]") {
+  verify_equal<double>();
+  verify_equal<float>();
+  verify_equal<long double>();
+  verify_equal<int>();
+  verify_equal<unsigned>();
+  verify_equal<long>();
+  verify_equal<unsigned long>();
+  verify_equal<short>();
+  verify_equal<unsigned short>();
+  verify_equal<char>();
+  verify_equal<unsigned char>();
+  verify_equal<complex<double>>();
+  verify_equal<complex<float>>();
+  verify_equal<complex<long double>>();
+}
+
+
+/// Verify that memcpy() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_memcpy() {
+  static_vector y({E(2), E(3), E(1)});
+  static_vector const z({E(1), E(2), E(3)});
   REQUIRE(!equal(y, z));
   memcpy(y, z);
   REQUIRE(equal(y, z));
 }
 
 
-TEST_CASE("swap() works.", "[vec]") {
-  static_vector<3> const a({2.0, 3.0, 1.0});
-  static_vector<3> const b({1.0, 2.0, 3.0});
-  static_vector<3> c= a;
-  static_vector<3> d= b;
+/// Verify that memcpy() works for any v_iface.
+TEST_CASE("v_iface::memcpy() works.", "[v-iface]") {
+  verify_memcpy<double>();
+  verify_memcpy<float>();
+  verify_memcpy<long double>();
+  verify_memcpy<int>();
+  verify_memcpy<unsigned>();
+  verify_memcpy<long>();
+  verify_memcpy<unsigned long>();
+  verify_memcpy<short>();
+  verify_memcpy<unsigned short>();
+  verify_memcpy<char>();
+  verify_memcpy<unsigned char>();
+  verify_memcpy<complex<double>>();
+  verify_memcpy<complex<float>>();
+  verify_memcpy<complex<long double>>();
+}
+
+
+/// Verify that swap() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_swap() {
+  static_vector const a({E(2), E(3), E(1)});
+  static_vector const b({E(1), E(2), E(3)});
+  auto c= a;
+  auto d= b;
   REQUIRE(a == c);
   REQUIRE(b == d);
   swap(c, d);
@@ -959,16 +1069,38 @@ TEST_CASE("swap() works.", "[vec]") {
 }
 
 
-TEST_CASE("Stream-operator works.", "[vec]") {
-  static_vector<3> const a({2.0, 3.0, 1.0});
+/// Verify that swap() works for any kind of v_iface.
+TEST_CASE("v_iface::swap() works.", "[v-iface]") {
+  verify_swap<double>();
+  verify_swap<float>();
+  verify_swap<long double>();
+  verify_swap<int>();
+  verify_swap<unsigned>();
+  verify_swap<long>();
+  verify_swap<unsigned long>();
+  verify_swap<short>();
+  verify_swap<unsigned short>();
+  verify_swap<char>();
+  verify_swap<unsigned char>();
+  verify_swap<complex<double>>();
+  verify_swap<complex<float>>();
+  verify_swap<complex<long double>>();
+}
+
+
+/// Verify that stream-operator works.
+TEST_CASE("Stream-operator works.", "[v-iface]") {
+  static_vector const a({2.0, 3.0, 1.0});
   ostringstream oss;
   oss << a;
   REQUIRE(oss.str() == "[2,3,1]");
 }
 
 
-TEST_CASE("v_iface::view() works.", "[v-iface]") {
-  static_vector<3> const a({2.0, 3.0, 1.0});
+/// Verify that view() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_view() {
+  static_vector const a({E(2), E(3), E(1)});
   auto const b= a.view();
   REQUIRE(a == b);
   REQUIRE(&a[0] == &b[0]);
@@ -977,17 +1109,23 @@ TEST_CASE("v_iface::view() works.", "[v-iface]") {
 }
 
 
-TEST_CASE("v_iface::sum() works.", "[v-iface]") {
-  static_vector<3> const a({2.0, 3.0, 1.0});
-  REQUIRE(a.sum() == 6.0);
+/// Verify that view() works for any kind of v_iface.
+TEST_CASE("v_iface::view() works.", "[v-iface]") {
+  verify_view<double>();
+  verify_view<float>();
+  verify_view<long double>();
+  verify_view<int>();
+  verify_view<unsigned>();
+  verify_view<long>();
+  verify_view<unsigned long>();
+  verify_view<short>();
+  verify_view<unsigned short>();
+  verify_view<char>();
+  verify_view<unsigned char>();
+  verify_view<complex<double>>();
+  verify_view<complex<float>>();
+  verify_view<complex<long double>>();
 }
 
-
-TEST_CASE("v_iface::isneg() works.", "[v-iface]") {
-  static_vector<3> const a({-2.0, -3.0, 1.0});
-  static_vector<3> const b({-2.0, -3.0, -1.0});
-  REQUIRE(a.isneg() == false);
-  REQUIRE(b.isneg() == true);
-}
 
 // EOF
