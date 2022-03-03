@@ -33,10 +33,7 @@ using std::remove_reference_t;
 /// Specialization defines type of each element in complex gsl_vector.
 /// \sa elem<gsl_vector_complex>
 /// \sa elem<gsl_vector_complex_float>
-/// \sa elem<gsl_vector_comples_long_double>
-/// \sa elem<gsl_vector_complex const>
-/// \sa elem<gsl_vector_complex_float const>
-/// \sa elem<gsl_vector_comples_long_double const>
+/// \sa elem<gsl_vector_complex_long_double>
 /// @tparam V  Type of gsl_vector (for example, gsl_vector_float).
 template<typename V> struct elem {
   /// Type of each element in non-complex gsl_vector of type V.
