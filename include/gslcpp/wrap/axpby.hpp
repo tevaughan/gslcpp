@@ -281,7 +281,7 @@ inline int w_axpby(
 /// @return  GSL's documentation does not specify, but this implementation
 ///          returns zero.
 template<typename V>
-int w_axpby(data_t<V> const &a, V const *x, data_t<V> const &b, V *y) {
+int w_axpby(elem_t<V> const &a, V const *x, elem_t<V> const &b, V *y) {
   return axpby_for_gsl_lt_2p7(a, *x, b, *y);
 }
 

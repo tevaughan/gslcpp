@@ -679,19 +679,42 @@ TEST_CASE("v_iface::div() works.", "[v-iface]") {
 }
 
 
-TEST_CASE("v_iface's scaling works.", "[v-iface]") {
-  v3 b= a;
-  b.scale(2.0);
-  REQUIRE(b[0] == 2.0);
-  REQUIRE(b[1] == 4.0);
-  REQUIRE(b[2] == 6.0);
-  b*= 2.0;
-  REQUIRE(b[0] == 4.0);
-  REQUIRE(b[1] == 8.0);
-  REQUIRE(b[2] == 12.0);
+/// Verify that scale() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_scale() {
+  auto b= g<E>::a;
+  b.scale(E(2));
+  REQUIRE(b[0] == E(2));
+  REQUIRE(b[1] == E(4));
+  REQUIRE(b[2] == E(6));
+  b*= E(2);
+  REQUIRE(b[0] == E(4));
+  REQUIRE(b[1] == E(8));
+  REQUIRE(b[2] == E(12));
 }
 
 
+/// Verify that scale works for any kind of v_iface.
+TEST_CASE("v_iface::scale() works.", "[v-iface]") {
+  verify_scale<double>();
+  verify_scale<float>();
+  verify_scale<long double>();
+  verify_scale<int>();
+  verify_scale<short>();
+  verify_scale<long>();
+  verify_scale<unsigned>();
+  verify_scale<unsigned short>();
+  verify_scale<unsigned long>();
+  verify_scale<char>();
+  verify_scale<unsigned char>();
+  verify_scale<complex<double>>();
+  verify_scale<complex<float>>();
+  verify_scale<complex<long double>>();
+}
+
+
+/// Verify that add_constant() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
 template<typename E> void verify_add_constant() {
   auto &a= g<E>::a;
   auto b= a;
@@ -706,7 +729,8 @@ template<typename E> void verify_add_constant() {
 }
 
 
-TEST_CASE("v_iface's adding constant works.", "[v-iface]") {
+/// Verify that add_constant() works for any kind of v_iface.
+TEST_CASE("v_iface::add_constant() works.", "[v-iface]") {
   verify_add_constant<double>();
   verify_add_constant<float>();
   verify_add_constant<long double>();
@@ -724,25 +748,60 @@ TEST_CASE("v_iface's adding constant works.", "[v-iface]") {
 }
 
 
+/// Verify that statistical functions work for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_stats() {
+  auto const &a= g<E>::a; // (1, 2, 3)
+  auto b= a.subvector(2, 0, 2); // (1, 3)
+  REQUIRE(a.sum() == E(6)); // 1 + 2 + 3
+  REQUIRE(b.sum() == E(4)); // 1 + 3
+
+  // Complex numbers are not ordered, and so no order-related statistics.
+  using std::is_same_v;
+  constexpr bool cd= is_same_v<E, complex<double>>;
+  constexpr bool cf= is_same_v<E, complex<float>>;
+  constexpr bool cld= is_same_v<E, complex<long double>>;
+
+  if constexpr(cd || cf || cld) {
+    return;
+  } else {
+    REQUIRE(g<E>::a.max() == E(3));
+    REQUIRE(g<E>::a.min() == E(1));
+
+    E min, max;
+    g<E>::a.minmax(min, max);
+    REQUIRE(min == E(1));
+    REQUIRE(max == E(3));
+
+    auto b= g<E>::a;
+    b.reverse();
+    REQUIRE(b.max_index() == 0);
+    REQUIRE(b.min_index() == 2);
+
+    size_t imin, imax;
+    b.minmax_index(imin, imax);
+    REQUIRE(imax == 0);
+    REQUIRE(imin == 2);
+  }
+}
+
+
+/// Verify that statistical functions work for any kind of v_iface.
 TEST_CASE("v_iface's statistical functions work.", "[v-iface]") {
-  REQUIRE(a.sum() == 6.0);
-  REQUIRE(a.max() == 3.0);
-  REQUIRE(a.min() == 1.0);
-
-  double min, max;
-  a.minmax(min, max);
-  REQUIRE(min == 1.0);
-  REQUIRE(max == 3.0);
-
-  v3 b= a;
-  b.reverse();
-  REQUIRE(b.max_index() == 0);
-  REQUIRE(b.min_index() == 2);
-
-  size_t imin, imax;
-  b.minmax_index(imin, imax);
-  REQUIRE(imax == 0);
-  REQUIRE(imin == 2);
+  verify_stats<double>();
+  verify_stats<float>();
+  verify_stats<long double>();
+  verify_stats<int>();
+  verify_stats<unsigned>();
+  verify_stats<long>();
+  verify_stats<unsigned long>();
+  verify_stats<short>();
+  verify_stats<unsigned short>();
+  verify_stats<char>();
+  verify_stats<unsigned char>();
+  verify_stats<complex<double>>();
+  verify_stats<complex<float>>();
+  verify_stats<complex<long double>>();
 }
 
 
