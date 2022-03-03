@@ -5,6 +5,7 @@
 #include "gslcpp/static-vector.hpp"
 #include "gslcpp/vector-view.hpp"
 #include <catch.hpp>
+#include <cinttypes> // PRId8, etc.
 #include <sstream> // ostringstream
 
 
@@ -347,7 +348,7 @@ template<typename E> void verify_fwrite_fread() {
 }
 
 
-/// Verify that fwrite and fread() work for each kind of v_iface.
+/// Verify that fwrite() and fread() work for each kind of v_iface.
 TEST_CASE("vec_iface::fwrite() and vec_iface::fread() work.", "[v-iface]") {
   verify_fwrite_fread<double>();
   verify_fwrite_fread<float>();
@@ -366,19 +367,52 @@ TEST_CASE("vec_iface::fwrite() and vec_iface::fread() work.", "[v-iface]") {
 }
 
 
-TEST_CASE("vec_iface::fprintf() and vec_iface::fscanf() work.", "[v-iface]") {
+template<typename E> constexpr auto fmt() {
+  if constexpr(std::is_same_v<E, complex<double>>) return "%g";
+  if constexpr(std::is_same_v<E, complex<float>>) return "%g";
+  if constexpr(std::is_same_v<E, complex<long double>>) return "%Lg";
+  if constexpr(std::is_integral_v<E>) {
+    if constexpr(sizeof(E) == 1) return "%" PRId8;
+    if constexpr(sizeof(E) == 2) return "%" PRId16;
+    if constexpr(sizeof(E) == 4) return "%" PRId32;
+    return "%" PRId64;
+  }
+  if constexpr(sizeof(E) == 4 || sizeof(E) == 8) return "%g";
+  return "%Lg";
+}
+
+
+/// Verify that fprintf() and fscanf() work for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_fprintf_fscanf() {
   FILE *f= fopen("output-test.txt", "w");
-  a.fprintf(f, "%g");
+  g<E>::a.fprintf(f, fmt<E>());
   fclose(f);
-
-  v3 b;
+  static_vector<3, E> b;
   b.set_zero();
-
   f= fopen("output-test.txt", "r");
   b.fscanf(f);
   fclose(f);
+  REQUIRE(g<E>::a == b);
+}
 
-  REQUIRE(a == b);
+
+/// Verify that fprintf() and fscanf() work for each kind of v_iface.
+TEST_CASE("vec_iface::fprintf() and vec_iface::fscanf() work.", "[v-iface]") {
+  verify_fprintf_fscanf<double>();
+  verify_fprintf_fscanf<float>();
+  verify_fprintf_fscanf<long double>();
+  verify_fprintf_fscanf<int>();
+  verify_fprintf_fscanf<short>();
+  verify_fprintf_fscanf<long>();
+  verify_fprintf_fscanf<unsigned>();
+  verify_fprintf_fscanf<unsigned short>();
+  verify_fprintf_fscanf<unsigned long>();
+  verify_fprintf_fscanf<char>();
+  verify_fprintf_fscanf<unsigned char>();
+  verify_fprintf_fscanf<complex<double>>();
+  verify_fprintf_fscanf<complex<float>>();
+  verify_fprintf_fscanf<complex<long double>>();
 }
 
 
