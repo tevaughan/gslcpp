@@ -14,6 +14,7 @@ using gsl::complex;
 using gsl::static_vector;
 using gsl::v_iface;
 using gsl::vector_view;
+using std::is_same_v;
 using std::ostringstream;
 
 
@@ -371,9 +372,9 @@ TEST_CASE("v_iface::fwrite() and v_iface::fread() work.", "[v-iface]") {
 /// \tparam E  Type of each element in vector.
 /// \return  Format-string for fprintf().
 template<typename E> constexpr auto fmt() {
-  if constexpr(std::is_same_v<E, complex<double>>) return "%g";
-  if constexpr(std::is_same_v<E, complex<float>>) return "%g";
-  if constexpr(std::is_same_v<E, complex<long double>>) return "%Lg";
+  if constexpr(is_same_v<E, complex<double>>) return "%g";
+  if constexpr(is_same_v<E, complex<float>>) return "%g";
+  if constexpr(is_same_v<E, complex<long double>>) return "%Lg";
   if constexpr(std::is_integral_v<E>) {
     if constexpr(sizeof(E) == 1) return "%" PRId8;
     if constexpr(sizeof(E) == 2) return "%" PRId16;
@@ -748,6 +749,17 @@ TEST_CASE("v_iface::add_constant() works.", "[v-iface]") {
 }
 
 
+/// True if type E be complex.
+/// \tparam E  Type of each element in vector.
+/// \return  True if E be complex.
+template<typename E> constexpr bool is_complex() {
+  constexpr bool cd= is_same_v<E, complex<double>>;
+  constexpr bool cf= is_same_v<E, complex<float>>;
+  constexpr bool cld= is_same_v<E, complex<long double>>;
+  return cd || cf || cld;
+}
+
+
 /// Verify that statistical functions work for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_stats() {
@@ -757,12 +769,7 @@ template<typename E> void verify_stats() {
   REQUIRE(b.sum() == E(4)); // 1 + 3
 
   // Complex numbers are not ordered, and so no order-related statistics.
-  using std::is_same_v;
-  constexpr bool cd= is_same_v<E, complex<double>>;
-  constexpr bool cf= is_same_v<E, complex<float>>;
-  constexpr bool cld= is_same_v<E, complex<long double>>;
-
-  if constexpr(cd || cf || cld) {
+  if constexpr(is_complex<E>()) {
     return;
   } else {
     REQUIRE(g<E>::a.max() == E(3));
@@ -805,33 +812,106 @@ TEST_CASE("v_iface's statistical functions work.", "[v-iface]") {
 }
 
 
-TEST_CASE("v_iface::isnull() works.", "[v-iface]") {
-  v3 b= a;
+/// Verify that isnull() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_isnull() {
+  auto b= g<E>::a;
   REQUIRE(b.isnull() == false);
-
   b.set_zero();
   REQUIRE(b.isnull() == true);
 }
 
 
-TEST_CASE("v_iface::ispos() works.", "[v-iface]") {
-  v3 b= a;
-  REQUIRE(b.ispos() == true);
+/// Verify that isnull works for any kind of v_iface.
+TEST_CASE("v_iface::isnull() works.", "[v-iface]") {
+  verify_isnull<double>();
+  verify_isnull<float>();
+  verify_isnull<long double>();
+  verify_isnull<int>();
+  verify_isnull<unsigned>();
+  verify_isnull<long>();
+  verify_isnull<unsigned long>();
+  verify_isnull<short>();
+  verify_isnull<unsigned short>();
+  verify_isnull<char>();
+  verify_isnull<unsigned char>();
+  verify_isnull<complex<double>>();
+  verify_isnull<complex<float>>();
+  verify_isnull<complex<long double>>();
+}
 
-  b.add_constant(-1.0);
+
+/// Verify that ispos() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_ispos() {
+  auto b= g<E>::a;
+  if constexpr(is_complex<E>()) {
+    REQUIRE(b.ispos() == false);
+    static_vector const c({E(1,1), E(2,1), E(3,1)});
+    REQUIRE(c.ispos() == true);
+  } else {
+    REQUIRE(b.ispos() == true);
+  }
+  b.set_zero();
   REQUIRE(b.ispos() == false);
 }
 
 
+/// Verify that ispos() works for any kind of v_iface.
+TEST_CASE("v_iface::ispos() works.", "[v-iface]") {
+  verify_ispos<double>();
+  verify_ispos<float>();
+  verify_ispos<long double>();
+  verify_ispos<int>();
+  verify_ispos<unsigned>();
+  verify_ispos<long>();
+  verify_ispos<unsigned long>();
+  verify_ispos<short>();
+  verify_ispos<unsigned short>();
+  verify_ispos<char>();
+  verify_ispos<unsigned char>();
+  verify_ispos<complex<double>>();
+  verify_ispos<complex<float>>();
+  verify_ispos<complex<long double>>();
+}
+
+
+/// Verify that isnonneg() works for v_iface<E>.
+/// \tparam E  Type of each element in vector.
+template<typename E> void verify_isnonneg() {
+  auto b= g<E>::a;
+  REQUIRE(b.isnonneg() == true);
+  b.add_constant(E(-1));
+  REQUIRE(b.isnonneg() == true);
+  b.add_constant(E(-1));
+  constexpr bool uc= is_same_v<E, unsigned char>;
+  constexpr bool us= is_same_v<E, unsigned short>;
+  constexpr bool ui= is_same_v<E, unsigned int>;
+  constexpr bool ul= is_same_v<E, unsigned long>;
+  if constexpr(uc || us || ui || ul) {
+    REQUIRE(b.isnonneg() == true);
+  } else {
+    REQUIRE(b.isnonneg() == false);
+  }
+}
+
+
+/// Verify that isnonneg() works for any kind of v_iface.
 TEST_CASE("v_iface::isnonneg() works.", "[v-iface]") {
-  v3 b= a;
-  REQUIRE(b.isnonneg() == true);
-
-  b.add_constant(-1.0);
-  REQUIRE(b.isnonneg() == true);
-
-  b.add_constant(-0.001);
-  REQUIRE(b.isnonneg() == false);
+  verify_isnonneg<double>();
+  verify_isnonneg<float>();
+  verify_isnonneg<long double>();
+  verify_isnonneg<int>();
+  verify_isnonneg<unsigned>();
+  verify_isnonneg<long>();
+  verify_isnonneg<unsigned long>();
+  verify_isnonneg<short>();
+  verify_isnonneg<unsigned short>();
+  verify_isnonneg<char>();
+  verify_isnonneg<unsigned char>();
+  verify_isnonneg<complex<double>>();
+  verify_isnonneg<complex<float>>();
+  verify_isnonneg<complex<long double>>();
 }
 
 
