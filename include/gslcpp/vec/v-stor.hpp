@@ -20,9 +20,9 @@ namespace gsl {
 /// %v_stor implements concept gsl::v_stor and can serve as template-type
 /// parameter for (and thus base of) gsl::v_iface.
 ///
-/// @tparam S  Positive size.
 /// @tparam T  Type of each element in vector.
-template<unsigned S, typename T> class v_stor {
+/// @tparam S  Compile-time size of vector (0 for size specified at run-time).
+template<typename T, unsigned S= 0> class v_stor {
   static_assert(S > 0);
 
 public:
@@ -56,7 +56,7 @@ public:
 /// parameter for (and thus base of) gsl::v_iface.
 ///
 /// @tparam T  Type of each element in vector.
-template<typename T> class v_stor<0, T> {
+template<typename T> class v_stor<T> {
 public:
   /// Identifier for each of two possible allocation-methods.
   enum class alloc_type {

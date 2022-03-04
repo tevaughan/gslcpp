@@ -18,10 +18,6 @@ using std::is_same_v;
 using std::ostringstream;
 
 
-using v3= static_vector<3>;
-v3 const a({1.0, 2.0, 3.0});
-
-
 /// Globals for tests.
 /// \tparam E  Type of each element in vector.
 template<typename E> struct g {
@@ -269,7 +265,7 @@ TEST_CASE("v_iface::ptr() retrieves pointer of element.", "[v-iface]") {
 /// Verify that set_all() and set_zero() work for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_set_all_zero() {
-  static_vector<3, E> b;
+  static_vector<E, 3> b;
   b.set_all(E(3));
   REQUIRE(b[0] == E(3));
   REQUIRE(b[1] == E(3));
@@ -301,7 +297,7 @@ TEST_CASE("v_iface::set_all() and v_iface::set_zero() work.", "[v-iface]") {
 /// Verify that set_basis() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_set_basis() {
-  static_vector<3, E> b;
+  static_vector<E, 3> b;
   for(unsigned i= 0; i < b.size(); ++i) {
     b.set_basis(i);
     for(unsigned j= 0; j < b.size(); ++j) {
@@ -340,7 +336,7 @@ template<typename E> void verify_fwrite_fread() {
   FILE *f= fopen("io-test.dat", "wb");
   g<E>::a.fwrite(f);
   fclose(f);
-  static_vector<3, E> b;
+  static_vector<E, 3> b;
   b.set_zero();
   f= fopen("io-test.dat", "rb");
   b.fread(f);
@@ -392,7 +388,7 @@ template<typename E> void verify_fprintf_fscanf() {
   FILE *f= fopen("output-test.txt", "w");
   g<E>::a.fprintf(f, fmt<E>());
   fclose(f);
-  static_vector<3, E> b;
+  static_vector<E, 3> b;
   b.set_zero();
   f= fopen("output-test.txt", "r");
   b.fscanf(f);
@@ -530,7 +526,7 @@ TEST_CASE("v_iface::reverse() works.", "[v-iface]") {
 /// Verify that add() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_add() {
-  static_vector<3, E> b;
+  static_vector<E, 3> b;
 
   b.set_all(E(1));
   b.add(g<E>::a);
@@ -568,7 +564,7 @@ TEST_CASE("v_iface::add() works.", "[v-iface]") {
 /// Verify that sub() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_sub() {
-  static_vector<3, E> b;
+  static_vector<E, 3> b;
 
   b.set_all(E(3));
   b.sub(g<E>::a);
@@ -606,7 +602,7 @@ TEST_CASE("v_iface::sub() works.", "[v-iface]") {
 /// Verify that mul() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_mul() {
-  static_vector<3, E> b;
+  static_vector<E, 3> b;
 
   b.set_all(E(1));
   b.mul(g<E>::a);
@@ -644,8 +640,8 @@ TEST_CASE("v_iface::mul() works.", "[v-iface]") {
 /// Verify that div() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_div() {
-  static_vector<3, E> const a({2, 4, 8});
-  static_vector<3, E> b;
+  static_vector<E, 3> const a({2, 4, 8});
+  static_vector<E, 3> b;
 
   b.set_all(E(16));
   b.div(a);
@@ -859,7 +855,7 @@ template<typename E> void verify_ispos() {
   auto b= g<E>::a;
   if constexpr(is_complex<E>()) {
     REQUIRE(b.ispos() == false);
-    static_vector const c({E(1,1), E(2,1), E(3,1)});
+    static_vector const c({E(1, 1), E(2, 1), E(3, 1)});
     REQUIRE(c.ispos() == true);
   } else {
     REQUIRE(b.ispos() == true);

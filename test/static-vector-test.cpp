@@ -12,7 +12,7 @@ using gsl::vector_view;
 
 
 TEST_CASE("Static vector's default constructor works.", "[static-vector]") {
-  static_vector<3> v;
+  static_vector<double, 3> v;
   REQUIRE(v.size() == 3);
 }
 
@@ -28,16 +28,9 @@ TEST_CASE("Static vector's constructor from array works.", "[static-vector]") {
   REQUIRE(v[2] == 6.0);
   REQUIRE(v[3] == 8.0);
 
-  static_vector<2> w(d, 1, 2);
-  REQUIRE(w[0] == 4.0);
-  REQUIRE(w[1] == 8.0);
-
-  REQUIRE_THROWS(static_vector<3>(d, 0, 2));
-  REQUIRE_THROWS(static_vector<2>(d, 2, 2));
-
-  static_vector<2> x(2, e);
-  REQUIRE(x[0]==2.0);
-  REQUIRE(x[1]==6.0);
+  static_vector<double, 2> x(2, e);
+  REQUIRE(x[0] == 2.0);
+  REQUIRE(x[1] == 6.0);
   REQUIRE(x.size() == 2);
 }
 
@@ -71,15 +64,14 @@ TEST_CASE("Static vector's copy-constructor works.", "[static-vector]") {
   REQUIRE(v == w);
 
   vector_view view= v.view();
-  static_vector<3> x= view; // Copy from other kind of vector.
+  static_vector<double, 3> x= view; // Copy from other kind of vector.
   REQUIRE(x == v);
 }
 
 
-TEST_CASE(
-      "Static vector's copy-assignment operator works.", "[static-vector]") {
+TEST_CASE("Static vector's copy-assignment works.", "[static-vector]") {
   static_vector v({1.0, 2.0, 3.0});
-  static_vector<3> w;
+  static_vector<double, 3> w;
   w= v; // Assign.
 }
 

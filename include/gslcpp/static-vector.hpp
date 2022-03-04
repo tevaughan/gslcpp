@@ -29,11 +29,11 @@ using std::enable_if_t;
 ///
 /// %static_vector inherits these and provides template-constructors.
 ///
-/// @tparam S  Number of elements in vector.
 /// @tparam T  Type of each element in vector.
-template<unsigned S, typename T= double>
-struct static_vector: public v_iface<v_stor<S, T>> {
-  using P= v_iface<v_stor<S, T>>; ///< Type of ancestor.
+/// @tparam S  Number of elements in vector.
+template<typename T, unsigned S= 0>
+struct static_vector: public v_iface<v_stor<T, S>> {
+  using P= v_iface<v_stor<T, S>>; ///< Type of ancestor.
   using P::P;
 
   /// Construct by copying from view of same size.
@@ -57,32 +57,12 @@ struct static_vector: public v_iface<v_stor<S, T>> {
     memcpy(*this, v_iface<v_view<T const>>(cview));
   }
 
-  /// Initialize GSL's view, and initialize vector by copying from array.
-  /// Mismatch in size produces run-time abort.  For example:
-  /// ~~~{cpp}
-  ///   double d[]= {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
-  ///   vector<3> v(d, 1, 2); // Start at offset 1 (not 0) and use stride 2.
-  ///   // So v == [2.0, 4.0, 6.0].
-  /// ~~~
-  /// @tparam N  Number of elements in non-decayed C-style array.
-  /// @param d  Non-decayed C-style array.
-  /// @param i  Offset of initial element to be copied.
-  /// @param s  Stride of elements to be copied.
-  template<unsigned N, typename= enable_if_t<N != S>>
-  static_vector(T const (&d)[N], size_t i= 0, size_t s= 1) {
-    if(i + s * (S - 1) > N - 1) {
-      throw std::runtime_error("source-array not big enough");
-    }
-    auto const cview= w_vector_view_array(d + i, s, S);
-    memcpy(*this, v_iface<v_view<T const>>(cview));
-  }
-
   /// Initialize GSL's view, and initialize elements by copying from array.
   /// Stride is required as first argument in order to disambiguate this
   /// constructor from the one that takes a non-decayed array.
   /// @param s  Stride.
   /// @param d  Decayed C-style array.
-  static_vector(size_t s, T const *d): static_vector() {
+  static_vector(size_t s, T const *d) {
     auto const cview= w_vector_view_array(d, s, S);
     memcpy(*this, v_iface<v_view<T const>>(cview));
   }

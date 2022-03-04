@@ -10,7 +10,7 @@ using gsl::static_vector;
 using gsl::v_iterator;
 
 
-using v3= static_vector<3>;
+using v3= static_vector<double, 3>;
 
 
 v3 const a({1.0, 2.0, 3.0});
@@ -136,8 +136,7 @@ TEST_CASE("Comparison of iterators for less-than works.", "[v-iterator]") {
 }
 
 
-TEST_CASE(
-      "Comparison of iterators for greater-than works.", "[v-iterator]") {
+TEST_CASE("Comparison of iterators for greater-than works.", "[v-iterator]") {
   auto i= a.begin() + 1;
   auto j= a.begin();
   REQUIRE(i > j);
