@@ -9,6 +9,7 @@
 /// Namespace for C++-interface to GSL.
 namespace gsl {
 
+// TODO: Figure out how to do vector-view with compile-time size (not 0).
 
 /// Vector with storage not owned by instance of vector.
 ///
@@ -18,8 +19,9 @@ namespace gsl {
 /// %vector_view inherits these and provides template-constructors.
 ///
 /// @tparam T  Type of each element in vector.
-template<typename T> struct vector_view: public v_iface<v_view<T>> {
-  using P= v_iface<v_view<T>>; ///< Type of ancestor.
+template<typename T, unsigned N= 0>
+struct vector_view: public v_iface<T, N, v_view> {
+  using P= v_iface<T, N, v_view>; ///< Type of ancestor.
   using P::P;
 
   /// Initialize view of standard (decayed) C-array.  Arguments are reordered
@@ -41,13 +43,13 @@ template<typename T> struct vector_view: public v_iface<v_view<T>> {
   /// @param n  Number of elements in view.
   /// @param i  Offset in array of first element in view.
   /// @param s  Stride of view relative to array.
-  template<int N>
-  vector_view(T (&b)[N], size_t n= N, size_t i= 0, size_t s= 1):
+  template<int S>
+  vector_view(T (&b)[S], size_t n= S, size_t i= 0, size_t s= 1):
       P(w_vector_view_array(b + i, s, n)) {}
 
   /// Initialize view of other view.
   /// @param v  Other view.
-  vector_view(v_iface<v_view<T>> v): P(v.cview()) {}
+  vector_view(v_iface<T, N, v_view> v): P(v.cview()) {}
 };
 
 

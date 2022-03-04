@@ -32,17 +32,17 @@ using std::enable_if_t;
 /// @tparam T  Type of each element in vector.
 /// @tparam S  Number of elements in vector.
 template<typename T, unsigned S= 0>
-struct static_vector: public v_iface<v_stor<T, S>> {
-  using P= v_iface<v_stor<T, S>>; ///< Type of ancestor.
+struct static_vector: public v_iface<T, S, v_stor> {
+  using P= v_iface<T, S, v_stor>; ///< Type of ancestor.
   using P::P;
 
   /// Construct by copying from view of same size.
   /// - Mismatch in size produces run-time abort.
   /// @tparam OT  Type of other elements.
   /// @param ov  Reference to source-vector.
-  template<typename OT> static_vector(v_iface<v_view<OT>> const &ov) {
-    memcpy(*this, ov);
-  }
+  static_vector(v_iface<T, S, v_view> const &ov) { memcpy(*this, ov); }
+
+  static_vector(v_iface<T, 0, v_view> const &ov) { memcpy(*this, ov); }
 
   /// Initialize GSL's view, and initialize elements by copying from array.
   /// Size-parameter `S` can be *deduced* from the argument!  So, for example,
@@ -54,7 +54,7 @@ struct static_vector: public v_iface<v_stor<T, S>> {
   /// @param d  Data to copy for initialization.
   static_vector(T const (&d)[S]) {
     auto const cview= w_vector_view_array(d, 1, S);
-    memcpy(*this, v_iface<v_view<T const>>(cview));
+    memcpy(*this, v_iface<T const, 0, v_view>(cview));
   }
 
   /// Initialize GSL's view, and initialize elements by copying from array.
@@ -64,7 +64,7 @@ struct static_vector: public v_iface<v_stor<T, S>> {
   /// @param d  Decayed C-style array.
   static_vector(size_t s, T const *d) {
     auto const cview= w_vector_view_array(d, s, S);
-    memcpy(*this, v_iface<v_view<T const>>(cview));
+    memcpy(*this, v_iface<T const, 0, v_view>(cview));
   }
 
   /// Initialize GSL's view, and initialize vector by deep copy.
@@ -84,7 +84,7 @@ struct static_vector: public v_iface<v_stor<T, S>> {
   /// @return  Reference to modified vector.
   static_vector &operator=(T const (&d)[S]) {
     auto const cview= w_vector_view_array(d, 1, S);
-    memcpy(*this, v_iface<v_view<T const>>(cview));
+    memcpy(*this, v_iface<T const, 0, v_view>(cview));
     return *this;
   }
 };

@@ -14,8 +14,8 @@ using gsl::vector_view;
 /// @param a  C-array.
 /// @param b  Reference to instance of v_iface<T>.
 /// @param s  Stride.
-template<typename T>
-void check(double const *a, v_iface<T> const &b, size_t s= 1) {
+template<typename T, unsigned N, template<typename, unsigned> class V>
+void check(double const *a, v_iface<T, N, V> const &b, size_t s= 1) {
   for(size_t j= 0, i= 0; j < b.size(); ++j) {
     REQUIRE(a[i] == b[j]);
     i+= s; // Explicitly step with stride through memory.

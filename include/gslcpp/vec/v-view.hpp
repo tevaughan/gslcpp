@@ -14,7 +14,7 @@ namespace gsl {
 /// parameter for (and thus base of) vec::iface.
 ///
 /// @tparam T  Type of each element in vector.
-template<typename T> class v_view {
+template<typename T, unsigned N= 0> class v_view {
 public:
   using E= T; ///< Type of each element.
 

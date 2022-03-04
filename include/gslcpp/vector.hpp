@@ -1,3 +1,6 @@
+/// \dir        include/gslcpp
+/// \brief      Top-level directory for gslcpp's header-only library.
+
 /// \file       include/gslcpp/vector.hpp
 /// \copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// \brief      Definition for gsl::vector.
@@ -5,44 +8,39 @@
 #pragma once
 
 #include "vec/v-iface.hpp" // v_iface
-#include "vec/v-stat.hpp" // v_stat
+#include "vec/v-stor.hpp" // v_stor
 
 namespace gsl {
 
 
-/// Real or complex vector whose storage has two key properties: (1) that
-/// storage-size is determined dynamically, at run-time, and (2) that storage
-/// is owned by vector.
-///
-/// Storage is provided by \ref gsl::v_dyna, and most of interface is
-/// provided by \ref gsl::v_iface.
-///
-/// %vector inherits these and provides template-constructors.
-///
-/// \sa \ref gsl::v_dyna
-/// \sa \ref gsl::v_iface
+/// Vector whose storage has two key properties: (1) that storage-size is
+/// determined dynamically, at run-time, and (2) that storage is owned by
+/// vector.
 ///
 /// @tparam T  Type of each element in vector.
-template<typename T> struct vector: public v_iface<v_stat<0, T>> {
-  using P= v_iface<v_stat<0, T>>; ///< Type of ancestor.
+template<typename T, unsigned S= 0>
+struct vector: public v_iface<v_stor<T, S>> {
+  using P= v_iface<v_stor<T, S>>; ///< Type of ancestor.
   using P::P;
-  using typename v_stat<0, T>::alloc_type;
+
+  /// Type used to specify kind of dynamic allocation.
+  using alloc_type= typename v_stor<T>::alloc_type;
 
   /// Allocate vector and its descriptor, and perform deep copy on
   /// construction.
-  /// @tparam S  Type of source.
+  /// @tparam U  Type of source.
   /// @param src  Vector to copy.
-  template<typename S>
-  vector(v_iface<S> const &src): P(src.v().size, alloc_type::ALLOC) {
+  template<typename U>
+  vector(v_iface<U> const &src): P(src.v().size, alloc_type::ALLOC) {
     memcpy(*this, src);
   }
 
   /// Deallocate existing vector and its descriptor; allocate new vector and
   /// its descriptor; and perform deep copy on assignment.
-  /// @tparam S  Type of source.
+  /// @tparam U  Type of source.
   /// @param src  Vector to copy.
   /// @return  Reference to instance after modification.
-  template<typename S> vector &operator=(v_iface<S> const &src) {
+  template<typename U> vector &operator=(v_iface<U> const &src) {
     using P::alloc_type_;
     using P::v_;
     alloc_type_= alloc_type::ALLOC;
