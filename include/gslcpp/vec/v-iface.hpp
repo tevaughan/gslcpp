@@ -42,7 +42,6 @@
 #include "../wrap/swap-elements.hpp" // swap_elements
 #include "../wrap/swap.hpp" // swap
 #include "v-iterator.hpp" // iterator
-#include "v-stor.hpp" // stor
 #include "v-view.hpp" // view
 #include <iostream> // ostream
 
@@ -52,13 +51,9 @@ namespace gsl {
 using std::is_const_v;
 
 
-// Forward declaration.
-template<typename T> class vector_v;
-
-
 /// Interface for every kind of vector.
 /// @tparam S  Type referring to storage of elements.
-template<v_stor S> struct v_iface: public S {
+template<typename S> struct v_iface: public S {
   /// Inherit constructors.
   using S::S;
 

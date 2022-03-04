@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "vec/v-dyna.hpp" // v_dyna
 #include "vec/v-iface.hpp" // v_iface
+#include "vec/v-stat.hpp" // v_stat
 
 namespace gsl {
 
@@ -23,10 +23,10 @@ namespace gsl {
 /// \sa \ref gsl::v_iface
 ///
 /// @tparam T  Type of each element in vector.
-template<typename T> struct vector: public v_iface<v_dyna<T>> {
-  using P= v_iface<v_dyna<T>>; ///< Type of ancestor.
+template<typename T> struct vector: public v_iface<v_stat<0, T>> {
+  using P= v_iface<v_stat<0, T>>; ///< Type of ancestor.
   using P::P;
-  using typename v_dyna<T>::alloc_type;
+  using typename v_stat<0, T>::alloc_type;
 
   /// Allocate vector and its descriptor, and perform deep copy on
   /// construction.

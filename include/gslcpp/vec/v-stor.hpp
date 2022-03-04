@@ -3,25 +3,141 @@
 /// \brief      Definition for gsl::v_stor.
 
 #pragma once
-#include "../wrap/container.hpp" // w_vector
-#include <concepts> // same_as
+#include "../wrap/free.hpp" // w_free
+#include "../wrap/vector-alloc.hpp" // w_vector_alloc
+#include "../wrap/vector-calloc.hpp" // w_vector_calloc
+#include "../wrap/vector-view-array.hpp" // vector_view_array
 
 namespace gsl {
 
 
-using std::same_as;
+/// Generic %v_stor is interface to storage with two key properties: (1) that
+/// size of storage is known statically, at compile-time, and (2) that it is
+/// owned by instance of %v_stor.
+///
+/// Specialization is for storage-size determined at run-time.
+///
+/// %v_stor implements concept gsl::v_stor and can serve as template-type
+/// parameter for (and thus base of) gsl::v_iface.
+///
+/// @tparam S  Positive size.
+/// @tparam T  Type of each element in vector.
+template<unsigned S, typename T> class v_stor {
+  static_assert(S > 0);
+
+public:
+  using E= T; ///< Type of each element in vector.
+
+private:
+  E d_[S]; ///< Storage for data.
+  w_vector_view<E> view_; ///< GSL's view of data.
+
+public:
+  /// Initialize GSL's view of static storage, but do not initialize elements.
+  v_stor(): view_(w_vector_view_array(d_, 1, S)) {}
+
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to vector.
+  auto &v() { return view_.vector; }
+
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to immutable vector.
+  auto &v() const { return view_.vector; }
+};
 
 
-/// Interface storage for vector.
+/// Specialization, which is interface to storage with two key properties: (1)
+/// that size of storage is determined dynamically, at run-time, and (2) that
+/// it is owned by instance of interface.
 ///
-/// %v_stor defines what is necessary for template-type parameter for (and thus
-/// base of) gsl::v_iface.
+/// Generic %v_stor is for storage-size determined at compile-time.
 ///
-/// @tparam T  Candidate type granting access to storage for vector.
-template<typename T> concept v_stor= requires(T &x, T const &y) {
-  typename T::E;
-  { x.v() } -> same_as<w_vector<typename T::E> &>;
-  { y.v() } -> same_as<w_vector<typename T::E> const &>;
+/// %v_dyna implements concept gsl::v_stor and can serve as template-type
+/// parameter for (and thus base of) gsl::v_iface.
+///
+/// @tparam T  Type of each element in vector.
+template<typename T> class v_stor<0, T> {
+public:
+  /// Identifier for each of two possible allocation-methods.
+  enum class alloc_type {
+    ALLOC, ///< Just allocate without initialization.
+    CALLOC ///< Initialize each element to zero after allocation.
+  };
+
+  using E= T; ///< Type of each element.
+
+protected:
+  /// Identifier for one of two possible allocation-methods.
+  /// - By default, allocate without initialization.
+  alloc_type alloc_type_= alloc_type::ALLOC;
+
+  /// Pointer to allocated descriptor for vector.
+  w_vector<E> *v_= nullptr;
+
+  /// Deallocate vector and its descriptor.
+  void free() {
+    if(v_) w_free(v_);
+    v_= nullptr;
+  }
+
+  /// Allocate vector and its descriptor.
+  /// @param n  Number of elements in vector.
+  /// @return  Pointer to vector's descriptor.
+  w_vector<E> *allocate(size_t n) {
+    free();
+    if(alloc_type_ == alloc_type::ALLOC) return w_vector_alloc<E>(n);
+    return w_vector_calloc<E>(n);
+  }
+
+  /// Swap values held by two variables.
+  /// @tparam U  Common type of items.
+  /// @param a  Reference to first item.
+  /// @param b  Reference to second item.
+  template<typename U> static void swap_(U &a, U &b) {
+    U const tmp= a;
+    a= b;
+    b= tmp;
+  }
+
+public:
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to vector.
+  auto &v() { return *v_; }
+
+  /// Reference to GSL's interface to vector.
+  /// @return  Reference to GSL's interface to immutable vector.
+  auto &v() const { return *v_; }
+
+  /// Allocate vector and its descriptor.
+  /// @param n  Number of elements in vector.
+  /// @param a  Method to use for allocation.
+  v_stor(size_t n, alloc_type a= alloc_type::ALLOC): alloc_type_(a) {
+    v_= allocate(n);
+  }
+
+  /// Move on construction.
+  /// - Note that this is not a templated constructor because moving works only
+  ///   from other vector<DCON>.
+  /// @param src  Vector to move.
+  v_stor(v_stor &&src): alloc_type_(src.alloc_type_), v_(src.v_) {
+    src.alloc_type_= alloc_type::ALLOC;
+    src.v_= nullptr;
+  }
+
+  /// Move on assignment.  This instance's original descriptor and data should
+  /// be deallocated after move, when src's destructor is called.  Note that
+  /// this is not a templated function because moving works only from other
+  /// vector<DCON>.
+  /// @param src  Vector to exchange state with.
+  /// @return  Reference to instance after modification.
+  v_stor &operator=(v_stor &&src) {
+    swap_(alloc_type_, src.alloc_type_);
+    swap_(v_, src.v_);
+    return *this;
+  }
+
+  /// Deallocate vector and its descriptor.
+  virtual ~v_stor() { free(); }
 };
 
 

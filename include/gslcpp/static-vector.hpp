@@ -11,7 +11,7 @@
 #pragma once
 
 #include "vec/v-iface.hpp" // v_iface, v_stor
-#include "vec/v-stat.hpp" // v_stat
+#include "vec/v-stor.hpp" // v_stor
 #include <type_traits> // enable_if_t
 
 /// Namespace for C++-interface to GSL.
@@ -24,7 +24,7 @@ using std::enable_if_t;
 /// Vector whose storage has two key properties: (1) that its size is known
 /// statically, at compile-time, and (2) that it is owned by vector.
 ///
-/// %static_vector has storage by way of \ref gsl::v_stat, and most of the
+/// %static_vector has storage by way of \ref gsl::v_stor, and most of the
 /// interface is given by \ref gsl::v_iface.
 ///
 /// %static_vector inherits these and provides template-constructors.
@@ -32,8 +32,8 @@ using std::enable_if_t;
 /// @tparam S  Number of elements in vector.
 /// @tparam T  Type of each element in vector.
 template<unsigned S, typename T= double>
-struct static_vector: public v_iface<v_stat<S, T>> {
-  using P= v_iface<v_stat<S, T>>; ///< Type of ancestor.
+struct static_vector: public v_iface<v_stor<S, T>> {
+  using P= v_iface<v_stor<S, T>>; ///< Type of ancestor.
   using P::P;
 
   /// Construct by copying from view of same size.
