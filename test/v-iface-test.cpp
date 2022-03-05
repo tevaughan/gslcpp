@@ -2,8 +2,8 @@
 /// @copyright  2022 Thomas E. Vaughan, all rights reserved.
 /// @brief      Tests for gsl::v_iface.
 
-#include "gslcpp/static-vector.hpp"
 #include "gslcpp/vector-view.hpp"
+#include "gslcpp/vector.hpp"
 #include <catch.hpp>
 #include <cinttypes> // PRId8, etc.
 #include <sstream> // ostringstream
@@ -11,8 +11,8 @@
 
 using gsl::axpby;
 using gsl::complex;
-using gsl::static_vector;
 using gsl::v_iface;
+using gsl::vector;
 using gsl::vector_view;
 using std::is_same_v;
 using std::ostringstream;
@@ -23,10 +23,6 @@ using std::ostringstream;
 template<typename E> struct g {
   /// Global C-array with three elements.
   constexpr static E ca[]= {1, 2, 3};
-
-  /// Global test-vector constructed from `ca`.
-  /// 'inline' keyword required to initialize static member in-line.
-  static inline static_vector const a= ca;
 };
 
 
@@ -34,7 +30,7 @@ template<typename E> struct g {
 /// For non-const type E, this exercises both const and non-const begin().
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_begin() {
-  auto &a= g<E>::a;
+  vector const a= g<E>::ca;
   auto b= a;
   auto ia= a.begin();
   REQUIRE(*ia == E(1));
@@ -71,7 +67,7 @@ TEST_CASE("v_iface::begin() works.", "[v-iface]") {
 /// For non-const type E, this exercises both const and non-const end().
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_end() {
-  auto &a= g<E>::a;
+  vector const a= g<E>::ca;
   auto b= a;
   auto ia= a.end() - 1;
   REQUIRE(*ia == E(3));
@@ -105,7 +101,10 @@ TEST_CASE("v_iface::end() works.", "[v-iface]") {
 
 /// Verify that size() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
-template<typename E> void verify_size() { REQUIRE(g<E>::a.size() == 3); }
+template<typename E> void verify_size() {
+  vector const a= g<E>::ca;
+  REQUIRE(a.size() == 3);
+}
 
 
 /// Verify that size() works for each kind of v_iface.
@@ -130,7 +129,8 @@ TEST_CASE("v_iface::size() works.", "[v-iface]") {
 /// Verify that data() points to right place for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_data() {
-  REQUIRE(g<E>::a.data() == &g<E>::a[0]);
+  vector const a= g<E>::ca;
+  REQUIRE(a.data() == &a[0]);
   E b[]= {1, 2, 3, 4, 5, 6};
   vector_view c(b, 3, 1, 2);
   REQUIRE(c.data() == b + 1);
@@ -174,8 +174,9 @@ TEST_CASE("v_iface::data() works.", "[v-iface]") {
 /// Verify that get() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_get() {
-  REQUIRE(g<E>::a.get(1) == E(2));
-  REQUIRE(g<E>::a[0] == E(1));
+  vector const a= g<E>::ca;
+  REQUIRE(a.get(1) == E(2));
+  REQUIRE(a[0] == E(1));
 }
 
 
@@ -201,7 +202,7 @@ TEST_CASE("v_iface's getters work.", "[v-iface]") {
 /// Verify that set() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_set() {
-  auto b= g<E>::a;
+  vector b= g<E>::ca;
   b[0]= E(10);
   b.set(1, E(20));
   REQUIRE(b[0] == E(10));
@@ -231,8 +232,8 @@ TEST_CASE("v_iface's setters work.", "[v-iface]") {
 /// Verify that ptr() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_ptr() {
-  static_vector const b({E(1), E(2), E(3), E(4), E(5), E(6)});
-  static_vector c= b;
+  vector const b({E(1), E(2), E(3), E(4), E(5), E(6)});
+  vector c= b;
   vector_view d= b.subvector(3, 1, 2);
   vector_view e= c.subvector(3, 1, 2);
   REQUIRE(d.ptr(1) == b.ptr(3));
@@ -265,7 +266,7 @@ TEST_CASE("v_iface::ptr() retrieves pointer of element.", "[v-iface]") {
 /// Verify that set_all() and set_zero() work for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_set_all_zero() {
-  static_vector<E, 3> b;
+  vector<E, 3> b;
   b.set_all(E(3));
   REQUIRE(b[0] == E(3));
   REQUIRE(b[1] == E(3));
@@ -297,7 +298,7 @@ TEST_CASE("v_iface::set_all() and v_iface::set_zero() work.", "[v-iface]") {
 /// Verify that set_basis() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_set_basis() {
-  static_vector<E, 3> b;
+  vector<E, 3> b;
   for(unsigned i= 0; i < b.size(); ++i) {
     b.set_basis(i);
     for(unsigned j= 0; j < b.size(); ++j) {
@@ -334,14 +335,15 @@ TEST_CASE("v_iface::set_basis() works.", "[v-iface]") {
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_fwrite_fread() {
   FILE *f= fopen("io-test.dat", "wb");
-  g<E>::a.fwrite(f);
+  vector const a= g<E>::ca;
+  a.fwrite(f);
   fclose(f);
-  static_vector<E, 3> b;
+  vector<E, 3> b;
   b.set_zero();
   f= fopen("io-test.dat", "rb");
   b.fread(f);
   fclose(f);
-  REQUIRE(g<E>::a == b);
+  REQUIRE(a == b);
 }
 
 
@@ -386,14 +388,15 @@ template<typename E> constexpr auto fmt() {
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_fprintf_fscanf() {
   FILE *f= fopen("output-test.txt", "w");
-  g<E>::a.fprintf(f, fmt<E>());
+  vector const a= g<E>::ca;
+  a.fprintf(f, fmt<E>());
   fclose(f);
-  static_vector<E, 3> b;
+  vector<E, 3> b;
   b.set_zero();
   f= fopen("output-test.txt", "r");
   b.fscanf(f);
   fclose(f);
-  REQUIRE(g<E>::a == b);
+  REQUIRE(a == b);
 }
 
 
@@ -420,8 +423,8 @@ TEST_CASE("v_iface::fprintf() and v_iface::fscanf() work.", "[v-iface]") {
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_subvector() {
   E const cb[]= {1, 2, 3, 4, 5, 6};
-  static_vector const b= cb;
-  static_vector c= b;
+  vector const b= cb;
+  vector c= b;
   auto vb= b.subvector(3, 1, 2);
   auto vc= c.subvector(3, 1, 2);
   REQUIRE(vb[0] == E(2));
@@ -466,11 +469,12 @@ TEST_CASE("v_iface::subvector() works.", "[v-iface]") {
 /// Verify that swap_elements() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_swap_elements() {
-  auto b= g<E>::a;
+  vector const a= g<E>::ca;
+  vector b= a;
   b.swap_elements(0, 1);
-  REQUIRE(g<E>::a[0] == b[1]);
-  REQUIRE(g<E>::a[1] == b[0]);
-  REQUIRE(g<E>::a[2] == b[2]);
+  REQUIRE(a[0] == b[1]);
+  REQUIRE(a[1] == b[0]);
+  REQUIRE(a[2] == b[2]);
 }
 
 
@@ -496,11 +500,12 @@ TEST_CASE("v_iface::swap_elements() works.", "[v-iface]") {
 /// Verify that reverse() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_reverse() {
-  auto b= g<E>::a;
+  vector const a= g<E>::ca;
+  auto b= a;
   b.reverse();
-  REQUIRE(b[0] == g<E>::a[2]);
-  REQUIRE(b[1] == g<E>::a[1]);
-  REQUIRE(b[2] == g<E>::a[0]);
+  REQUIRE(b[0] == a[2]);
+  REQUIRE(b[1] == a[1]);
+  REQUIRE(b[2] == a[0]);
 }
 
 
@@ -526,16 +531,17 @@ TEST_CASE("v_iface::reverse() works.", "[v-iface]") {
 /// Verify that add() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_add() {
-  static_vector<E, 3> b;
+  vector const a= g<E>::ca;
+  vector<E, 3> b;
 
   b.set_all(E(1));
-  b.add(g<E>::a);
+  b.add(a);
   REQUIRE(b[0] == E(2));
   REQUIRE(b[1] == E(3));
   REQUIRE(b[2] == E(4));
 
   b.set_all(E(1));
-  b+= g<E>::a;
+  b+= a;
   REQUIRE(b[0] == E(2));
   REQUIRE(b[1] == E(3));
   REQUIRE(b[2] == E(4));
@@ -564,16 +570,17 @@ TEST_CASE("v_iface::add() works.", "[v-iface]") {
 /// Verify that sub() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_sub() {
-  static_vector<E, 3> b;
+  vector const a= g<E>::ca;
+  vector<E, 3> b;
 
   b.set_all(E(3));
-  b.sub(g<E>::a);
+  b.sub(a);
   REQUIRE(b[0] == E(2));
   REQUIRE(b[1] == E(1));
   REQUIRE(b[2] == E(0));
 
   b.set_all(E(3));
-  b-= g<E>::a;
+  b-= a;
   REQUIRE(b[0] == E(2));
   REQUIRE(b[1] == E(1));
   REQUIRE(b[2] == E(0));
@@ -602,16 +609,17 @@ TEST_CASE("v_iface::sub() works.", "[v-iface]") {
 /// Verify that mul() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_mul() {
-  static_vector<E, 3> b;
+  vector const a= g<E>::ca;
+  vector<E, 3> b;
 
   b.set_all(E(1));
-  b.mul(g<E>::a);
+  b.mul(a);
   REQUIRE(b[0] == E(1));
   REQUIRE(b[1] == E(2));
   REQUIRE(b[2] == E(3));
 
   b.set_all(E(1));
-  b*= g<E>::a;
+  b*= a;
   REQUIRE(b[0] == E(1));
   REQUIRE(b[1] == E(2));
   REQUIRE(b[2] == E(3));
@@ -640,8 +648,8 @@ TEST_CASE("v_iface::mul() works.", "[v-iface]") {
 /// Verify that div() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_div() {
-  static_vector<E, 3> const a({2, 4, 8});
-  static_vector<E, 3> b;
+  vector<E, 3> const a({2, 4, 8});
+  vector<E, 3> b;
 
   b.set_all(E(16));
   b.div(a);
@@ -679,7 +687,7 @@ TEST_CASE("v_iface::div() works.", "[v-iface]") {
 /// Verify that scale() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_scale() {
-  auto b= g<E>::a;
+  vector b= g<E>::ca;
   b.scale(E(2));
   REQUIRE(b[0] == E(2));
   REQUIRE(b[1] == E(4));
@@ -713,7 +721,7 @@ TEST_CASE("v_iface::scale() works.", "[v-iface]") {
 /// Verify that add_constant() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_add_constant() {
-  auto &a= g<E>::a;
+  vector const a= g<E>::ca;
   auto b= a;
   b.add_constant(1);
   REQUIRE(b[0] == E(2));
@@ -771,7 +779,7 @@ template<typename E> constexpr bool is_unsigned() {
 /// Verify that statistical functions work for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_stats() {
-  auto const &a= g<E>::a; // (1, 2, 3)
+  vector const a= g<E>::ca; // (1, 2, 3)
   auto b= a.subvector(2, 0, 2); // (1, 3)
   REQUIRE(a.sum() == E(6)); // 1 + 2 + 3
   REQUIRE(b.sum() == E(4)); // 1 + 3
@@ -780,15 +788,15 @@ template<typename E> void verify_stats() {
   if constexpr(is_complex<E>()) {
     return;
   } else {
-    REQUIRE(g<E>::a.max() == E(3));
-    REQUIRE(g<E>::a.min() == E(1));
+    REQUIRE(a.max() == E(3));
+    REQUIRE(a.min() == E(1));
 
     E min, max;
-    g<E>::a.minmax(min, max);
+    a.minmax(min, max);
     REQUIRE(min == E(1));
     REQUIRE(max == E(3));
 
-    auto b= g<E>::a;
+    auto b= a;
     b.reverse();
     REQUIRE(b.max_index() == 0);
     REQUIRE(b.min_index() == 2);
@@ -823,7 +831,7 @@ TEST_CASE("v_iface's statistical functions work.", "[v-iface]") {
 /// Verify that isnull() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_isnull() {
-  auto b= g<E>::a;
+  vector b= g<E>::ca;
   REQUIRE(b.isnull() == false);
   b.set_zero();
   REQUIRE(b.isnull() == true);
@@ -852,10 +860,10 @@ TEST_CASE("v_iface::isnull() works.", "[v-iface]") {
 /// Verify that ispos() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_ispos() {
-  auto b= g<E>::a;
+  vector b= g<E>::ca;
   if constexpr(is_complex<E>()) {
     REQUIRE(b.ispos() == false);
-    static_vector const c({E(1, 1), E(2, 1), E(3, 1)});
+    vector const c({E(1, 1), E(2, 1), E(3, 1)});
     REQUIRE(c.ispos() == true);
   } else {
     REQUIRE(b.ispos() == true);
@@ -887,7 +895,7 @@ TEST_CASE("v_iface::ispos() works.", "[v-iface]") {
 /// Verify that isnonneg() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_isnonneg() {
-  auto b= g<E>::a;
+  vector b= g<E>::ca;
   REQUIRE(b.isnonneg() == true);
   b.add_constant(E(-1));
   REQUIRE(b.isnonneg() == true);
@@ -922,7 +930,7 @@ TEST_CASE("v_iface::isnonneg() works.", "[v-iface]") {
 /// Verify that isneg() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_isneg() {
-  auto b= g<E>::a;
+  vector b= g<E>::ca;
   REQUIRE(b.isneg() == false);
   if constexpr(is_complex<E>()) {
     b.add_constant(E(-4, -1));
@@ -959,12 +967,12 @@ TEST_CASE("v_iface::isneg() works.", "[v-iface]") {
 /// Verify that axpby() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_axpby() {
-  static_vector const x({E(1), E(2), E(3)});
-  static_vector y({E(2), E(3), E(1)});
+  vector const x({E(1), E(2), E(3)});
+  vector y({E(2), E(3), E(1)});
   E const a= 1;
   E const b= 2;
   axpby(a, x, b, y);
-  static_vector const r({E(5), E(8), E(5)});
+  vector const r({E(5), E(8), E(5)});
   REQUIRE(y == r);
 }
 
@@ -991,9 +999,9 @@ TEST_CASE("v_iface::axpby() works.", "[v-iface]") {
 /// Verify that equal() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_equal() {
-  static_vector const x({E(1), E(2), E(3)});
-  static_vector const y({E(2), E(3), E(1)});
-  static_vector const z({E(2), E(3), E(1)});
+  vector const x({E(1), E(2), E(3)});
+  vector const y({E(2), E(3), E(1)});
+  vector const z({E(2), E(3), E(1)});
   REQUIRE(!equal(x, y));
   REQUIRE(x != y);
   REQUIRE(equal(y, z));
@@ -1023,8 +1031,8 @@ TEST_CASE("v_iface::equal() works.", "[v-iface]") {
 /// Verify that memcpy() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_memcpy() {
-  static_vector y({E(2), E(3), E(1)});
-  static_vector const z({E(1), E(2), E(3)});
+  vector y({E(2), E(3), E(1)});
+  vector const z({E(1), E(2), E(3)});
   REQUIRE(!equal(y, z));
   memcpy(y, z);
   REQUIRE(equal(y, z));
@@ -1053,13 +1061,13 @@ TEST_CASE("v_iface::memcpy() works.", "[v-iface]") {
 /// Verify that swap() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_swap() {
-  static_vector const a({E(2), E(3), E(1)});
-  static_vector const b({E(1), E(2), E(3)});
+  vector const a({E(2), E(3), E(1)});
+  vector const b({E(1), E(2), E(3)});
   auto c= a;
   auto d= b;
   REQUIRE(a == c);
   REQUIRE(b == d);
-  swap(c, d);
+  gsl::swap(c, d); // WEIRD: was calling std::swap without ns-prefix!
   REQUIRE(a == d);
   REQUIRE(b == c);
 }
@@ -1086,7 +1094,7 @@ TEST_CASE("v_iface::swap() works.", "[v-iface]") {
 
 /// Verify that stream-operator works.
 TEST_CASE("Stream-operator works.", "[v-iface]") {
-  static_vector const a({2.0, 3.0, 1.0});
+  vector const a({2.0, 3.0, 1.0});
   ostringstream oss;
   oss << a;
   REQUIRE(oss.str() == "[2,3,1]");
@@ -1096,7 +1104,7 @@ TEST_CASE("Stream-operator works.", "[v-iface]") {
 /// Verify that view() works for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_view() {
-  static_vector const a({E(2), E(3), E(1)});
+  vector const a({E(2), E(3), E(1)});
   auto const b= a.view();
   REQUIRE(a == b);
   REQUIRE(&a[0] == &b[0]);

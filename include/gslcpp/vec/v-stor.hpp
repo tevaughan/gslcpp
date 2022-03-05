@@ -7,6 +7,7 @@
 #include "../wrap/vector-alloc.hpp" // w_vector_alloc
 #include "../wrap/vector-calloc.hpp" // w_vector_calloc
 #include "../wrap/vector-view-array.hpp" // vector_view_array
+#include <array> // array
 
 namespace gsl {
 
@@ -29,12 +30,24 @@ public:
   using E= T; ///< Type of each element in vector.
 
 private:
-  E d_[S]; ///< Storage for data.
+  std::array<E, S> d_; ///< Storage for data.
   w_vector_view<E> view_; ///< GSL's view of data.
 
 public:
   /// Initialize GSL's view of static storage, but do not initialize elements.
-  v_stor(): view_(w_vector_view_array(d_, 1, S)) {}
+  v_stor(): view_(w_vector_view_array(d_.data(), 1, S)) {}
+
+  /// Initialize GSL's view of static storage, and copy-initialize elements.
+  v_stor(v_stor const &s):
+      d_(s.d_), view_(w_vector_view_array(d_.data(), 1, S)) {}
+
+  /// On assignment, do *not* copy other view.
+  /// \param s  Other vector.
+  /// \return  Reference to this instance.
+  v_stor &operator=(v_stor const &s) {
+    d_= s.d_;
+    return *this;
+  }
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.
@@ -67,10 +80,6 @@ public:
   using E= T; ///< Type of each element.
 
 protected:
-  /// Identifier for one of two possible allocation-methods.
-  /// - By default, allocate without initialization.
-  alloc_type alloc_type_= alloc_type::ALLOC;
-
   /// Pointer to allocated descriptor for vector.
   w_vector<E> *v_= nullptr;
 
@@ -83,9 +92,9 @@ protected:
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
   /// @return  Pointer to vector's descriptor.
-  w_vector<E> *allocate(size_t n) {
+  w_vector<E> *allocate(size_t n, alloc_type a) {
     free();
-    if(alloc_type_ == alloc_type::ALLOC) return w_vector_alloc<E>(n);
+    if(a == alloc_type::ALLOC) return w_vector_alloc<E>(n);
     return w_vector_calloc<E>(n);
   }
 
@@ -108,21 +117,18 @@ public:
   /// @return  Reference to GSL's interface to immutable vector.
   auto &v() const { return *v_; }
 
+  // TODO: Provide non-default copy-construction and copy-assignment.
+
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
   /// @param a  Method to use for allocation.
-  v_stor(size_t n, alloc_type a= alloc_type::ALLOC): alloc_type_(a) {
-    v_= allocate(n);
-  }
+  v_stor(size_t n, alloc_type a= alloc_type::ALLOC) { v_= allocate(n, a); }
 
   /// Move on construction.
   /// - Note that this is not a templated constructor because moving works only
   ///   from other vector<DCON>.
   /// @param src  Vector to move.
-  v_stor(v_stor &&src): alloc_type_(src.alloc_type_), v_(src.v_) {
-    src.alloc_type_= alloc_type::ALLOC;
-    src.v_= nullptr;
-  }
+  v_stor(v_stor &&src): v_(src.v_) { src.v_= nullptr; }
 
   /// Move on assignment.  This instance's original descriptor and data should
   /// be deallocated after move, when src's destructor is called.  Note that
@@ -131,7 +137,6 @@ public:
   /// @param src  Vector to exchange state with.
   /// @return  Reference to instance after modification.
   v_stor &operator=(v_stor &&src) {
-    swap_(alloc_type_, src.alloc_type_);
     swap_(v_, src.v_);
     return *this;
   }
