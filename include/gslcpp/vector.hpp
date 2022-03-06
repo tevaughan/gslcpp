@@ -10,15 +10,11 @@
 #include "vec/v-iface.hpp" // v_iface
 #include "vec/v-stor.hpp" // v_stor
 
-using std::enable_if_t;
-using std::is_same_v;
-
 namespace gsl {
 
 
 /// @tparam T  Type of each element in vector.
-template<typename T, size_t S= 0>
-struct vector: public v_iface<T, S, v_stor> {
+template<typename T, size_t S= 0> struct vector: public v_iface<T, S, v_stor> {
   using P= v_iface<T, S, v_stor>; ///< Type of ancestor.
   using P::P;
 
@@ -34,14 +30,14 @@ struct vector: public v_iface<T, S, v_stor> {
     memcpy(*this, src);
   }
 
+  vector(T const *d, size_t len, size_t s= 1): P(len) {
+    auto const cview= w_vector_view_array(d, s, len);
+    memcpy(*this, v_iface<T const, 0, v_view>(cview));
+  }
+
   vector(T const (&d)[S]): P(S) {
     auto const cview= w_vector_view_array(d, 1, S);
     memcpy(*this, v_iface<T const, S, v_view>(cview));
-  }
-
-  vector(T const *d, size_t len): P(len) {
-    auto const cview= w_vector_view_array(d, 1, len);
-    memcpy(*this, v_iface<T const, 0, v_view>(cview));
   }
 };
 

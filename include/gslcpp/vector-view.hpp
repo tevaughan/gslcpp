@@ -29,7 +29,8 @@ struct vector_view: public v_iface<T, N, v_view> {
   /// default value of 1.
   /// @param b  Pointer to first element of array and of view.
   /// @param n  Number of elements in view.
-  vector_view(T *b, size_t n): P(w_vector_view_array(b, 1, n)) {}
+  /// @param s  Stride of elements relative to array.
+  vector_view(T *b, size_t n, size_t s= 1): P(w_vector_view_array(b, s, n)) {}
 
   /// Initialize view of non-decayed C-array.  Arguments are reordered from
   /// those given to gsl_vector_subvector_with_stride().  Putting initial

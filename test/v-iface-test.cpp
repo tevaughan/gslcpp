@@ -18,7 +18,7 @@ using std::is_same_v;
 using std::ostringstream;
 
 
-/// Globals for tests.
+/// Global array for tests.
 /// \tparam E  Type of each element in vector.
 template<typename E> struct g {
   /// Global C-array with three elements.

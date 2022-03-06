@@ -76,7 +76,7 @@ TEST_CASE("Static vector's copy-constructor works.", "[vector]") {
   REQUIRE(v == w);
 
   vector_view view= v.view();
-  vector<double, 3> x= view; // Copy from other kind of vector.
+  vector x= view; // Copy from other kind of vector.
   REQUIRE(x == v);
 }
 
