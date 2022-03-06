@@ -42,33 +42,47 @@ struct vector: public v_iface<T, S, v_stor> {
   using P= v_iface<T, S, v_stor>; ///< Type of ancestor.
   using P::P;
 
-  template<typename V> void copy(V const &src) {
+  void allocate_if_necessary(size_t s) {
     if constexpr(S == 0) {
+      using P::allocate;
       using P::v_;
-      v_= allocate(src.v().size);
+      v_= allocate(s);
+    } else {
+      if(s != S) throw "mismatch in size";
     }
+  }
+
+  vector(vector const &src) {
+    allocate_if_necessary(src.v().size);
     memcpy(*this, src);
   }
 
   template<template<typename, unsigned> class V>
   vector(v_iface<T const, S, V> const &src) {
-    copy(src);
+    allocate_if_necessary(src.v().size);
+    memcpy(*this, src);
   }
 
   template<template<typename, unsigned> class V>
   vector(v_iface<T, S, V> const &src) {
-    copy(src);
+    allocate_if_necessary(src.v().size);
+    memcpy(*this, src);
   }
 
   template<template<typename, unsigned> class V>
   vector &operator=(v_iface<T const, S, V> const &src) {
-    copy(src);
+    memcpy(*this, src);
+    return *this;
+  }
+
+  vector &operator=(vector const &src) {
+    memcpy(*this, src);
     return *this;
   }
 
   template<template<typename, unsigned> class V>
   vector &operator=(v_iface<T, S, V> const &src) {
-    copy(src);
+    memcpy(*this, src);
     return *this;
   }
 
@@ -84,6 +98,7 @@ struct vector: public v_iface<T, S, v_stor> {
   }
 
   vector(ref<T const, S> const &r) {
+    allocate_if_necessary(r.size);
     auto const cview= w_vector_view_array(r.ptr, r.stride, r.size);
     memcpy(*this, v_iface<T const, 0, v_view>(cview));
   }

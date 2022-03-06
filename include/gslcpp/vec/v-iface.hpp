@@ -58,9 +58,6 @@ struct v_iface: public S<T, N> {
   /// Inherit constructors.
   using S<T, N>::S;
 
-  /// Inherit assigment.
-  using S<T, N>::operator=;
-
   /// Reference to instance of w_vector<S::E>, which is either gsl_vector,
   /// gsl_vector_float, etc.
   using S<T, N>::v;

@@ -15,11 +15,7 @@ namespace gsl {
 ///
 /// @tparam T  Type of each element in vector.
 template<typename T, unsigned N= 0> class v_view {
-public:
-  using E= T; ///< Type of each element.
-
-private:
-  w_vector_view<E> view_; ///< GSL's view of data outside instance.
+  w_vector_view<T> view_; ///< GSL's view of data outside instance.
 
 public:
   /// Reference to GSL's interface to vector.
@@ -32,7 +28,7 @@ public:
 
   /// Constructor called by TBS.
   /// @param v  View to copy.
-  v_view(w_vector_view<E> const &v): view_(v) {}
+  v_view(w_vector_view<T> const &v): view_(v) {}
 
   /// GSL's native, C-language interface to vector-view.
   /// @return  GSL's native, C-language interface to vector-view.

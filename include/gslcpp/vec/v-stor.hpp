@@ -26,28 +26,15 @@ namespace gsl {
 template<typename T, unsigned S= 0> class v_stor {
   static_assert(S > 0);
 
-public:
-  using E= T; ///< Type of each element in vector.
+  std::array<T, S> d_; ///< Storage for data.
+  w_vector_view<T> view_; ///< GSL's view of data.
 
-private:
-  std::array<E, S> d_; ///< Storage for data.
-  w_vector_view<E> view_; ///< GSL's view of data.
+  v_stor(v_stor const &)= delete; ///< Disable copy-construction.
+  v_stor &operator=(v_stor const &) = delete; ///< Disable copy-assignment.
 
 public:
   /// Initialize GSL's view of static storage, but do not initialize elements.
   v_stor(): view_(w_vector_view_array(d_.data(), 1, S)) {}
-
-  /// Initialize GSL's view of static storage, and copy-initialize elements.
-  v_stor(v_stor const &s):
-      d_(s.d_), view_(w_vector_view_array(d_.data(), 1, S)) {}
-
-  /// On assignment, do *not* copy other view.
-  /// \param s  Other vector.
-  /// \return  Reference to this instance.
-  v_stor &operator=(v_stor const &s) {
-    d_= s.d_;
-    return *this;
-  }
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.
@@ -70,6 +57,9 @@ public:
 ///
 /// @tparam T  Type of each element in vector.
 template<typename T> class v_stor<T> {
+  v_stor(v_stor const &)= delete; ///< Disable copy-construction.
+  v_stor &operator=(v_stor const &) = delete; ///< Disable copy-assignment.
+
 public:
   /// Identifier for each of two possible allocation-methods.
   enum class alloc_type {
@@ -77,11 +67,9 @@ public:
     CALLOC ///< Initialize each element to zero after allocation.
   };
 
-  using E= T; ///< Type of each element.
-
 protected:
   /// Pointer to allocated descriptor for vector.
-  w_vector<E> *v_= nullptr;
+  w_vector<T> *v_= nullptr;
 
   /// Deallocate vector and its descriptor.
   void free() {
@@ -92,10 +80,10 @@ protected:
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
   /// @return  Pointer to vector's descriptor.
-  w_vector<E> *allocate(size_t n, alloc_type a) {
+  w_vector<T> *allocate(size_t n, alloc_type a) {
     free();
-    if(a == alloc_type::ALLOC) return w_vector_alloc<E>(n);
-    return w_vector_calloc<E>(n);
+    if(a == alloc_type::ALLOC) return w_vector_alloc<T>(n);
+    return w_vector_calloc<T>(n);
   }
 
   /// Swap values held by two variables.
@@ -116,8 +104,6 @@ public:
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to immutable vector.
   auto &v() const { return *v_; }
-
-  // TODO: Provide non-default copy-construction and copy-assignment.
 
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
