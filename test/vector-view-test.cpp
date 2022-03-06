@@ -14,7 +14,7 @@ using gsl::vector_view;
 /// @param a  C-array.
 /// @param b  Reference to instance of v_iface<T>.
 /// @param s  Stride.
-template<typename T, unsigned N, template<typename, unsigned> class V>
+template<typename T, size_t N, template<typename, size_t> class V>
 void check(double const *a, v_iface<T, N, V> const &b, size_t s= 1) {
   for(size_t j= 0, i= 0; j < b.size(); ++j) {
     REQUIRE(a[i] == b[j]);
@@ -27,12 +27,13 @@ TEST_CASE("vector_view provides right view of array.", "[vector-view]") {
   double a[]= {1.0, 1.0, 2.0, 3.0, 5.0, 8.0}; // Mutable, non-decayed C-array.
   double const *b= a; // Decayed, immutable C-array.
 
-  auto mv= vector_view<double>(a, 3, 0, 2); // Mutable view of a[].
+  vector_view vv1(a);
+  auto mv= vv1.subvector(3, 0, 2); // Mutable view of a[].
   REQUIRE(mv.size() == 3);
   check(a, mv, 2);
 
   // Immutable view, ultimately of a[].
-  auto iv= vector_view<double const>(4, b);
+  vector_view iv(b, 4);
   REQUIRE(iv.size() == 4);
   check(a, iv);
 
@@ -57,12 +58,13 @@ TEST_CASE(
   double const(&b)[6]= a; // Immutable, non-decayed C-array.
 
   // Mutable view of a[], starting at Offset 1 and with Stride 2.
-  auto mv= vector_view<double>(a, 3, 1, 2);
+  vector_view vv1(a);
+  auto mv= vv1.subvector(3, 1, 2);
   REQUIRE(mv.size() == 3);
   check(a + 1, mv, 2);
 
   // Immutable view of a[], starting at Offset 0 and with Stride 1.
-  auto iv= vector_view<double const>(b);
+  auto iv= vector_view(b);
   REQUIRE(iv.size() == 6);
   check(b, iv);
 

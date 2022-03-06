@@ -53,7 +53,7 @@ using std::is_const_v;
 
 /// Interface for every kind of vector.
 /// @tparam S  Type referring to storage of elements.
-template<typename T, unsigned N, template<typename, unsigned> class S>
+template<typename T, size_t N, template<typename, size_t> class S>
 struct v_iface: public S<T, N> {
   /// Inherit constructors.
   using S<T, N>::S;
@@ -219,7 +219,7 @@ struct v_iface: public S<T, N> {
   /// @tparam T  Type of vector to be added into this.
   /// @param b  Vector whose contents should be added into this.
   /// @return  TBD: GSL's documentation does not specify.
-  template<unsigned ON, template<typename, unsigned> class OV>
+  template<size_t ON, template<typename, size_t> class OV>
   int add(v_iface<E, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     return w_add(&v(), &b.v());
@@ -229,7 +229,7 @@ struct v_iface: public S<T, N> {
   /// @tparam T  Type of vector to be subtracted from this.
   /// @param b  Vector whose contents should be subtracted from this.
   /// @return  TBD: GSL's documentation does not specify.
-  template<unsigned ON, template<typename, unsigned> class OV>
+  template<size_t ON, template<typename, size_t> class OV>
   int sub(v_iface<E, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     return w_sub(&v(), &b.v());
@@ -239,7 +239,7 @@ struct v_iface: public S<T, N> {
   /// @tparam T  Type of vector to be multiplied into this.
   /// @param b  Vector whose contents should be multiplied into this.
   /// @return  TBD: GSL's documentation does not specify.
-  template<unsigned ON, template<typename, unsigned> class OV>
+  template<size_t ON, template<typename, size_t> class OV>
   int mul(v_iface<E, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     return w_mul(&v(), &b.v());
@@ -249,7 +249,7 @@ struct v_iface: public S<T, N> {
   /// @tparam T  Type of vector to be divided into this.
   /// @param b  Vector whose contents should be divided into this.
   /// @return  TBD: GSL's documentation does not specify.
-  template<unsigned ON, template<typename, unsigned> class OV>
+  template<size_t ON, template<typename, size_t> class OV>
   int div(v_iface<E, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     return w_div(&v(), &b.v());
@@ -259,7 +259,7 @@ struct v_iface: public S<T, N> {
   /// @tparam T  Type of vector to be added into this.
   /// @param b  Vector whose contents should be added into this.
   /// @return  Reference to this vector after modification.
-  template<unsigned ON, template<typename, unsigned> class OV>
+  template<size_t ON, template<typename, size_t> class OV>
   v_iface &operator+=(v_iface<E, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     add(b);
@@ -270,7 +270,7 @@ struct v_iface: public S<T, N> {
   /// @tparam T  Type of vector to be subtracted from this.
   /// @param b  Vector whose contents should be subtracted from this.
   /// @return  Reference to this vector after modification.
-  template<unsigned ON, template<typename, unsigned> class OV>
+  template<size_t ON, template<typename, size_t> class OV>
   v_iface &operator-=(v_iface<E, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     sub(b);
@@ -281,7 +281,7 @@ struct v_iface: public S<T, N> {
   /// @tparam T  Type of vector to be multiplied into this.
   /// @param b  Vector whose contents should be multiplied into this.
   /// @return  Reference to this vector after modification.
-  template<unsigned ON, template<typename, unsigned> class OV>
+  template<size_t ON, template<typename, size_t> class OV>
   v_iface &operator*=(v_iface<E, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     mul(b);
@@ -292,12 +292,29 @@ struct v_iface: public S<T, N> {
   /// @tparam T  Type of vector to be divided into this.
   /// @param b  Vector whose contents should be divided into this.
   /// @return  Reference to this vector after modification.
-  template<unsigned ON, template<typename, unsigned> class OV>
+  template<size_t ON, template<typename, size_t> class OV>
   v_iface &operator/=(v_iface<E, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     div(b);
     return *this;
   }
+
+  /// Copy contents of `b` into this vector.
+  template<size_t ON, template<typename, size_t> class OV>
+  v_iface &operator=(v_iface<E, ON, OV> const &b) {
+    memcpy(*this, b);
+    return *this;
+  }
+
+  /// Copy contents of `b` into this vector.
+  v_iface &operator=(v_iface const &b) {
+    memcpy(*this, b);
+    return *this;
+  }
+
+  v_iface(v_iface &&src)= default;
+
+  v_iface &operator=(v_iface &&src)= default;
 
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
@@ -372,6 +389,7 @@ struct v_iface: public S<T, N> {
   /// True only if every element be non-negative.
   /// @return  True only if every element be non-negative.
   bool isnonneg() const { return w_isnonneg(&v()); }
+
 };
 
 
@@ -384,11 +402,11 @@ struct v_iface: public S<T, N> {
 template<
       typename T1,
       typename T2,
-      unsigned N1,
-      unsigned N2,
-      template<typename, unsigned>
+      size_t N1,
+      size_t N2,
+      template<typename, size_t>
       class V1,
-      template<typename, unsigned>
+      template<typename, size_t>
       class V2>
 bool operator==(v_iface<T1, N1, V1> const &u, v_iface<T2, N2, V2> const &v) {
   static_assert(N1 == N2 || N1 == 0 || N2 == 0);
@@ -404,11 +422,11 @@ bool operator==(v_iface<T1, N1, V1> const &u, v_iface<T2, N2, V2> const &v) {
 /// @return  True only if vectors be unequal.
 template<
       typename T,
-      unsigned N1,
-      unsigned N2,
-      template<typename, unsigned>
+      size_t N1,
+      size_t N2,
+      template<typename, size_t>
       class V1,
-      template<typename, unsigned>
+      template<typename, size_t>
       class V2>
 bool operator!=(v_iface<T, N1, V1> const &u, v_iface<T, N2, V2> const &v) {
   static_assert(N1 == N2 || N1 == 0 || N2 == 0);
@@ -421,7 +439,7 @@ bool operator!=(v_iface<T, N1, V1> const &u, v_iface<T, N2, V2> const &v) {
 /// @param os  Reference to output-stream.
 /// @param u  Reference to vector.
 /// @return  Reference to modified output-stream.
-template<typename T, unsigned N, template<typename, unsigned> class V>
+template<typename T, size_t N, template<typename, size_t> class V>
 std::ostream &operator<<(std::ostream &os, v_iface<T, N, V> const &u) {
   os << "[";
   int const last= int(u.size()) - 1;
@@ -442,11 +460,11 @@ std::ostream &operator<<(std::ostream &os, v_iface<T, N, V> const &u) {
 /// @return  TBD: GSL's documentation does not specify.
 template<
       typename T,
-      unsigned N1,
-      unsigned N2,
-      template<typename, unsigned>
+      size_t N1,
+      size_t N2,
+      template<typename, size_t>
       class V1,
-      template<typename, unsigned>
+      template<typename, size_t>
       class V2>
 int axpby(
       T const &alpha,
@@ -467,11 +485,11 @@ int axpby(
 template<
       typename T1,
       typename T2,
-      unsigned N1,
-      unsigned N2,
-      template<typename, unsigned>
+      size_t N1,
+      size_t N2,
+      template<typename, size_t>
       class V1,
-      template<typename, unsigned>
+      template<typename, size_t>
       class V2>
 bool equal(v_iface<T1, N1, V1> const &v1, v_iface<T2, N2, V2> const &v2) {
   static_assert(N1 == N2 || N1 == 0 || N2 == 0);
@@ -488,11 +506,11 @@ bool equal(v_iface<T1, N1, V1> const &v1, v_iface<T2, N2, V2> const &v2) {
 template<
       typename T1,
       typename T2,
-      unsigned N1,
-      unsigned N2,
-      template<typename, unsigned>
+      size_t N1,
+      size_t N2,
+      template<typename, size_t>
       class V1,
-      template<typename, unsigned>
+      template<typename, size_t>
       class V2>
 int memcpy(v_iface<T1, N1, V1> &dst, v_iface<T2, N2, V2> const &src) {
   static_assert(N1 == N2 || N1 == 0 || N2 == 0);
@@ -508,11 +526,11 @@ int memcpy(v_iface<T1, N1, V1> &dst, v_iface<T2, N2, V2> const &src) {
 /// @return  TBD: GSL's documentation does not specify.
 template<
       typename T,
-      unsigned N1,
-      unsigned N2,
-      template<typename, unsigned>
+      size_t N1,
+      size_t N2,
+      template<typename, size_t>
       class V1,
-      template<typename, unsigned>
+      template<typename, size_t>
       class V2>
 int swap(v_iface<T, N1, V1> &v1, v_iface<T, N2, V2> &v2) {
   return w_swap(&v1.v(), &v2.v());

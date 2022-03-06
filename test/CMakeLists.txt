@@ -2,7 +2,7 @@
 add_executable(tests test-main.cpp
   v-iface-test.cpp
   v-iterator-test.cpp
-  static-vector-test.cpp
+  vector-test.cpp
   vector-view-test.cpp
   )
 

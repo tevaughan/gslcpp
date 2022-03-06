@@ -9,8 +9,6 @@
 /// Namespace for C++-interface to GSL.
 namespace gsl {
 
-// TODO: Figure out how to do vector-view with compile-time size (not 0).
-
 /// Vector with storage not owned by instance of vector.
 ///
 /// %vector_view has its interface to storage given by \ref gsl::v_view, and
@@ -19,7 +17,7 @@ namespace gsl {
 /// %vector_view inherits these and provides template-constructors.
 ///
 /// @tparam T  Type of each element in vector.
-template<typename T, unsigned N= 0>
+template<typename T, size_t N= 0>
 struct vector_view: public v_iface<T, N, v_view> {
   using P= v_iface<T, N, v_view>; ///< Type of ancestor.
   using P::P;
@@ -31,8 +29,7 @@ struct vector_view: public v_iface<T, N, v_view> {
   /// default value of 1.
   /// @param b  Pointer to first element of array and of view.
   /// @param n  Number of elements in view.
-  /// @param s  Stride of view relative to array.
-  vector_view(size_t n, T *b, size_t s= 1): P(w_vector_view_array(b, s, n)) {}
+  vector_view(T *b, size_t n): P(w_vector_view_array(b, 1, n)) {}
 
   /// Initialize view of non-decayed C-array.  Arguments are reordered from
   /// those given to gsl_vector_subvector_with_stride().  Putting initial
@@ -40,12 +37,7 @@ struct vector_view: public v_iface<T, N, v_view> {
   /// for number of elements in view, 0 for initial offset, and 1 for stride).
   /// @tparam N  Number of elements in array.
   /// @param b  Reference to non-decayed C-array.
-  /// @param n  Number of elements in view.
-  /// @param i  Offset in array of first element in view.
-  /// @param s  Stride of view relative to array.
-  template<int S>
-  vector_view(T (&b)[S], size_t n= S, size_t i= 0, size_t s= 1):
-      P(w_vector_view_array(b + i, s, n)) {}
+  vector_view(T (&b)[N]): P(w_vector_view_array(b, 1, N)) {}
 
   /// Initialize view of other view.
   /// @param v  Other view.

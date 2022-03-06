@@ -132,7 +132,8 @@ template<typename E> void verify_data() {
   vector const a= g<E>::ca;
   REQUIRE(a.data() == &a[0]);
   E b[]= {1, 2, 3, 4, 5, 6};
-  vector_view c(b, 3, 1, 2);
+  vector_view d= b;
+  auto c= d.subvector(3, 1, 2);
   REQUIRE(c.data() == b + 1);
 }
 

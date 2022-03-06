@@ -7,7 +7,6 @@
 #include "../wrap/vector-alloc.hpp" // w_vector_alloc
 #include "../wrap/vector-calloc.hpp" // w_vector_calloc
 #include "../wrap/vector-view-array.hpp" // vector_view_array
-#include <array> // array
 
 namespace gsl {
 
@@ -23,26 +22,28 @@ namespace gsl {
 ///
 /// @tparam T  Type of each element in vector.
 /// @tparam S  Compile-time size of vector (0 for size specified at run-time).
-template<typename T, unsigned S= 0> class v_stor {
+template<typename T, size_t S= 0> class v_stor {
   static_assert(S > 0);
 
-  std::array<T, S> d_; ///< Storage for data.
-  w_vector_view<T> view_; ///< GSL's view of data.
+  T d_[S]; ///< Storage for data.
+  w_vector_view<T> cview_; ///< GSL's view of data.
 
   v_stor(v_stor const &)= delete; ///< Disable copy-construction.
-  v_stor &operator=(v_stor const &) = delete; ///< Disable copy-assignment.
+  v_stor &operator=(v_stor const &)= delete; ///< Disable copy-assignment.
 
 public:
   /// Initialize GSL's view of static storage, but do not initialize elements.
-  v_stor(): view_(w_vector_view_array(d_.data(), 1, S)) {}
+  v_stor(size_t n= S): cview_(w_vector_view_array(d_, 1, S)) {
+    if(n != S) throw "mismatch in size";
+  }
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.
-  auto &v() { return view_.vector; }
+  auto &v() { return cview_.vector; }
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to immutable vector.
-  auto &v() const { return view_.vector; }
+  auto &v() const { return cview_.vector; }
 };
 
 
@@ -58,7 +59,7 @@ public:
 /// @tparam T  Type of each element in vector.
 template<typename T> class v_stor<T> {
   v_stor(v_stor const &)= delete; ///< Disable copy-construction.
-  v_stor &operator=(v_stor const &) = delete; ///< Disable copy-assignment.
+  v_stor &operator=(v_stor const &)= delete; ///< Disable copy-assignment.
 
 public:
   /// Identifier for each of two possible allocation-methods.
@@ -97,6 +98,11 @@ protected:
   }
 
 public:
+  /// Allocate vector and its descriptor.
+  /// @param n  Number of elements in vector.
+  /// @param a  Method to use for allocation.
+  v_stor(size_t n, alloc_type a= alloc_type::ALLOC) { v_= allocate(n, a); }
+
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.
   auto &v() { return *v_; }
@@ -104,11 +110,6 @@ public:
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to immutable vector.
   auto &v() const { return *v_; }
-
-  /// Allocate vector and its descriptor.
-  /// @param n  Number of elements in vector.
-  /// @param a  Method to use for allocation.
-  v_stor(size_t n, alloc_type a= alloc_type::ALLOC) { v_= allocate(n, a); }
 
   /// Move on construction.
   /// - Note that this is not a templated constructor because moving works only
