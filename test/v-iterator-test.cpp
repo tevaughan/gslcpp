@@ -173,41 +173,131 @@ TEST_CASE("Post-decrement works.", "[v-iterator]") {
 }
 
 
+template<typename E> void verify_fast_forward_in_place() {
+  auto i= a<E>.begin();
+  REQUIRE(*(i+= 2) == E(3));
+  REQUIRE(*i == E(3));
+}
+
+
 TEST_CASE("Fast foward in place works.", "[v-iterator]") {
-  auto i= a<double>.begin();
-  REQUIRE(*(i+= 2) == 3.0);
-  REQUIRE(*i == 3.0);
+  verify_fast_forward_in_place<double>();
+  verify_fast_forward_in_place<float>();
+  verify_fast_forward_in_place<long double>();
+  verify_fast_forward_in_place<int>();
+  verify_fast_forward_in_place<unsigned>();
+  verify_fast_forward_in_place<long>();
+  verify_fast_forward_in_place<unsigned long>();
+  verify_fast_forward_in_place<short>();
+  verify_fast_forward_in_place<unsigned short>();
+  verify_fast_forward_in_place<char>();
+  verify_fast_forward_in_place<unsigned char>();
+  verify_fast_forward_in_place<complex<double>>();
+  verify_fast_forward_in_place<complex<float>>();
+  verify_fast_forward_in_place<complex<long double>>();
+}
+
+
+template<typename E> void verify_fast_reverse_in_place() {
+  auto i= a<E>.end() - 1;
+  REQUIRE(*(i-= 2) == E(1));
+  REQUIRE(*i == E(1));
 }
 
 
 TEST_CASE("Fast reverse in place works.", "[v-iterator]") {
-  auto i= a<double>.end() - 1;
-  REQUIRE(*(i-= 2) == 1.0);
-  REQUIRE(*i == 1.0);
+  verify_fast_reverse_in_place<double>();
+  verify_fast_reverse_in_place<float>();
+  verify_fast_reverse_in_place<long double>();
+  verify_fast_reverse_in_place<int>();
+  verify_fast_reverse_in_place<unsigned>();
+  verify_fast_reverse_in_place<long>();
+  verify_fast_reverse_in_place<unsigned long>();
+  verify_fast_reverse_in_place<short>();
+  verify_fast_reverse_in_place<unsigned short>();
+  verify_fast_reverse_in_place<char>();
+  verify_fast_reverse_in_place<unsigned char>();
+  verify_fast_reverse_in_place<complex<double>>();
+  verify_fast_reverse_in_place<complex<float>>();
+  verify_fast_reverse_in_place<complex<long double>>();
+}
+
+
+template<typename E> void verify_fast_forward() {
+  auto i= a<E>.begin() + 2;
+  auto j= 2 + a<E>.begin();
+  REQUIRE(*i == E(3));
+  REQUIRE(*j == E(3));
 }
 
 
 TEST_CASE("Fast foward works.", "[v-iterator]") {
-  auto i= a<double>.begin() + 2;
-  auto j= 2 + a<double>.begin();
-  REQUIRE(*i == 3.0);
-  REQUIRE(*j == 3.0);
+  verify_fast_forward<double>();
+  verify_fast_forward<float>();
+  verify_fast_forward<long double>();
+  verify_fast_forward<int>();
+  verify_fast_forward<unsigned>();
+  verify_fast_forward<long>();
+  verify_fast_forward<unsigned long>();
+  verify_fast_forward<short>();
+  verify_fast_forward<unsigned short>();
+  verify_fast_forward<char>();
+  verify_fast_forward<unsigned char>();
+  verify_fast_forward<complex<double>>();
+  verify_fast_forward<complex<float>>();
+  verify_fast_forward<complex<long double>>();
+}
+
+
+template<typename E> void verify_fast_reverse() {
+  auto i= a<E>.end() - 2;
+  REQUIRE(*i == E(2));
 }
 
 
 TEST_CASE("Fast reverse works.", "[v-iterator]") {
-  auto i= a<double>.end() - 2;
-  REQUIRE(*i == 2.0);
+  verify_fast_reverse<double>();
+  verify_fast_reverse<float>();
+  verify_fast_reverse<long double>();
+  verify_fast_reverse<int>();
+  verify_fast_reverse<unsigned>();
+  verify_fast_reverse<long>();
+  verify_fast_reverse<unsigned long>();
+  verify_fast_reverse<short>();
+  verify_fast_reverse<unsigned short>();
+  verify_fast_reverse<char>();
+  verify_fast_reverse<unsigned char>();
+  verify_fast_reverse<complex<double>>();
+  verify_fast_reverse<complex<float>>();
+  verify_fast_reverse<complex<long double>>();
+}
+
+
+template<typename E> void verify_difference_of_iterators() {
+  b<E> = a<E>;
+  auto ia= a<E>.begin();
+  auto ib= b<E>.begin();
+  REQUIRE_THROWS(ia - ib);
+  auto iae= a<E>.end();
+  REQUIRE(iae - ia == a<E>.size());
 }
 
 
 TEST_CASE("Difference between iterators works.", "[v-iterator]") {
-  b<double> = a<double>;
-  auto ia= a<double>.begin();
-  auto ib= b<double>.begin();
-  REQUIRE_THROWS(ia - ib);
-  auto iae= a<double>.end();
-  REQUIRE(iae - ia == a<double>.size());
+  verify_difference_of_iterators<double>();
+  verify_difference_of_iterators<float>();
+  verify_difference_of_iterators<long double>();
+  verify_difference_of_iterators<int>();
+  verify_difference_of_iterators<unsigned>();
+  verify_difference_of_iterators<long>();
+  verify_difference_of_iterators<unsigned long>();
+  verify_difference_of_iterators<short>();
+  verify_difference_of_iterators<unsigned short>();
+  verify_difference_of_iterators<char>();
+  verify_difference_of_iterators<unsigned char>();
+  verify_difference_of_iterators<complex<double>>();
+  verify_difference_of_iterators<complex<float>>();
+  verify_difference_of_iterators<complex<long double>>();
 }
 
 
