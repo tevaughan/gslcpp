@@ -19,6 +19,9 @@ template<typename T, size_t S= 0> struct vector: public v_iface<T, S, v_stor> {
   using P::P;
 
   vector(vector const &src): P(src.v().size) { memcpy(*this, src); }
+  vector(vector &&)= default;
+  vector &operator=(vector const &)= default;
+  vector &operator=(vector &&)= default;
 
   template<template<typename, size_t> class V>
   vector(v_iface<T const, S, V> const &src): P(src.v().size) {

@@ -63,7 +63,7 @@ template<typename T> class v_stor<T> {
 
 public:
   /// Identifier for each of two possible allocation-methods.
-  enum class alloc_type {
+  enum alloc_type {
     ALLOC, ///< Just allocate without initialization.
     CALLOC ///< Initialize each element to zero after allocation.
   };
@@ -83,7 +83,7 @@ protected:
   /// @return  Pointer to vector's descriptor.
   w_vector<T> *allocate(size_t n, alloc_type a) {
     free();
-    if(a == alloc_type::ALLOC) return w_vector_alloc<T>(n);
+    if(a == ALLOC) return w_vector_alloc<T>(n);
     return w_vector_calloc<T>(n);
   }
 
@@ -101,7 +101,10 @@ public:
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
   /// @param a  Method to use for allocation.
-  v_stor(size_t n, alloc_type a= alloc_type::ALLOC) { v_= allocate(n, a); }
+  v_stor(size_t n, alloc_type a= ALLOC) { v_= allocate(n, a); }
+
+  /// Return true if object's data have been validly allocated.
+  bool valid() const { return v_!= nullptr; }
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.

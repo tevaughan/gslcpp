@@ -105,11 +105,25 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
             -sparse
             -o ${Coverage_NAME}.profdata
             default.profraw
-    # Without the '..' at the end of this command (just before the pipe-symbol
-    # indicating how to process the command's output), the following error
-    # shows up when '-show-functions' be included in the command:
+    # Without the '..' at the end of the next command (just before the
+    # pipe-symbol indicating how to process the command's output), the
+    # following error shows up when '-show-functions' be included in the
+    # command:
+    #
     # "error: source files must be specified when -show-functions=true is
     # specified"
+    #
+    # I found the solution, given by briansmith, here:
+    #
+    #   https://github.com/rust-lang/rust/issues/34701#issuecomment-740237332
+    #   https://github.com/rust-lang/rust/issues/34701#issuecomment-740238223
+    #
+    # briansmith recommended using '.' to solve frazerk's problem.
+    #
+    #   https://github.com/rust-lang/rust/issues/34701#issuecomment-739561826
+    #
+    # '.' did not work for me because '.' was not the right directory for
+    # resolving relative paths.  I tried '..', and it worked!
     COMMAND ${LLVM_COV_PATH}
             report
             -show-functions

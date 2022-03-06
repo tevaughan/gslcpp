@@ -473,6 +473,7 @@ TEST_CASE("Comp of iters for grtr-than-or-equal-to works.", "[v-iterator]") {
 
 template<typename E> void verify_eq_other_comparison() {
   REQUIRE_THROWS(a<E>.begin() == b<E>.begin());
+  REQUIRE_THROWS(b<E>.begin() == a<E>.begin());
 }
 
 
