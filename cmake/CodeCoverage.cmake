@@ -105,12 +105,19 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
             -sparse
             -o ${Coverage_NAME}.profdata
             default.profraw
+    # Without the '..' at the end of this command (just before the pipe-symbol
+    # indicating how to process the command's output), the following error
+    # shows up when '-show-functions' be included in the command:
+    # "error: source files must be specified when -show-functions=true is
+    # specified"
     COMMAND ${LLVM_COV_PATH}
             report
+            -show-functions
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-            > ${productsDir}/${Coverage_NAME}-summary.txt
+            ..
+            | c++filt > ${productsDir}/${Coverage_NAME}-summary.txt
     COMMAND ${LLVM_COV_PATH}
             show
             -instr-profile=${Coverage_NAME}.profdata
