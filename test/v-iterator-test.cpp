@@ -301,75 +301,196 @@ TEST_CASE("Difference between iterators works.", "[v-iterator]") {
 }
 
 
-TEST_CASE("Comparison of iterators for equality works.", "[v-iterator]") {
-  auto i= a<double>.begin();
-  auto j= a<double>.begin();
+template<typename E> void verify_equality_comparison() {
+  auto i= a<E>.begin();
+  auto j= a<E>.begin();
   REQUIRE(i == j);
-  for(++j; j != a<double>.end(); ++j) { REQUIRE(!(i == j)); }
-  auto k= b<double>.begin();
+  for(++j; j != a<E>.end(); ++j) { REQUIRE(!(i == j)); }
+  auto k= b<E>.begin();
   REQUIRE_THROWS(i == k);
 }
 
 
-TEST_CASE("Comparison of iterators for inequality works.", "[v-iterator]") {
-  auto i= a<double>.begin();
-  auto j= a<double>.begin();
+TEST_CASE("Comparison of iterators for equality works.", "[v-iterator]") {
+  verify_equality_comparison<double>();
+  verify_equality_comparison<float>();
+  verify_equality_comparison<long double>();
+  verify_equality_comparison<int>();
+  verify_equality_comparison<unsigned>();
+  verify_equality_comparison<long>();
+  verify_equality_comparison<unsigned long>();
+  verify_equality_comparison<short>();
+  verify_equality_comparison<unsigned short>();
+  verify_equality_comparison<char>();
+  verify_equality_comparison<unsigned char>();
+  verify_equality_comparison<complex<double>>();
+  verify_equality_comparison<complex<float>>();
+  verify_equality_comparison<complex<long double>>();
+}
+
+
+template<typename E> void verify_inequality_comparison() {
+  auto i= a<E>.begin();
+  auto j= a<E>.begin();
   REQUIRE(!(i != j));
-  for(++j; j != a<double>.end(); ++j) { REQUIRE(i != j); }
-  auto k= b<double>.begin();
+  for(++j; j != a<E>.end(); ++j) { REQUIRE(i != j); }
+  auto k= b<E>.begin();
   REQUIRE_THROWS(i != k);
 }
 
 
-TEST_CASE("Comparison of iterators for less-than works.", "[v-iterator]") {
-  auto i= a<double>.begin();
-  auto j= a<double>.begin() + 1;
+TEST_CASE("Comparison of iterators for inequality works.", "[v-iterator]") {
+  verify_inequality_comparison<double>();
+  verify_inequality_comparison<float>();
+  verify_inequality_comparison<long double>();
+  verify_inequality_comparison<int>();
+  verify_inequality_comparison<unsigned>();
+  verify_inequality_comparison<long>();
+  verify_inequality_comparison<unsigned long>();
+  verify_inequality_comparison<short>();
+  verify_inequality_comparison<unsigned short>();
+  verify_inequality_comparison<char>();
+  verify_inequality_comparison<unsigned char>();
+  verify_inequality_comparison<complex<double>>();
+  verify_inequality_comparison<complex<float>>();
+  verify_inequality_comparison<complex<long double>>();
+}
+
+
+template<typename E> void verify_less_than_comparison() {
+  auto i= a<E>.begin();
+  auto j= a<E>.begin() + 1;
   REQUIRE(i < j);
-  for(++i; i != a<double>.end(); ++i) { REQUIRE(!(i < j)); }
-  auto k= b<double>.begin();
+  for(++i; i != a<E>.end(); ++i) { REQUIRE(!(i < j)); }
+  auto k= b<E>.begin();
   REQUIRE_THROWS(i < k);
 }
 
 
-TEST_CASE("Comparison of iterators for greater-than works.", "[v-iterator]") {
-  auto i= a<double>.begin() + 1;
-  auto j= a<double>.begin();
+TEST_CASE("Comparison of iterators for less-than works.", "[v-iterator]") {
+  verify_less_than_comparison<double>();
+  verify_less_than_comparison<float>();
+  verify_less_than_comparison<long double>();
+  verify_less_than_comparison<int>();
+  verify_less_than_comparison<unsigned>();
+  verify_less_than_comparison<long>();
+  verify_less_than_comparison<unsigned long>();
+  verify_less_than_comparison<short>();
+  verify_less_than_comparison<unsigned short>();
+  verify_less_than_comparison<char>();
+  verify_less_than_comparison<unsigned char>();
+  verify_less_than_comparison<complex<double>>();
+  verify_less_than_comparison<complex<float>>();
+  verify_less_than_comparison<complex<long double>>();
+}
+
+
+template<typename E> void verify_greater_than_comparison() {
+  auto i= a<E>.begin() + 1;
+  auto j= a<E>.begin();
   REQUIRE(i > j);
-  for(++j; j != a<double>.end(); ++j) { REQUIRE(!(i > j)); }
-  auto k= b<double>.begin();
+  for(++j; j != a<E>.end(); ++j) { REQUIRE(!(i > j)); }
+  auto k= b<E>.begin();
   REQUIRE_THROWS(i > k);
 }
 
 
-TEST_CASE(
-      "Comparison of iterators for less-than-or-equal-to works.",
-      "[v-iterator]") {
-  auto i= a<double>.begin();
-  auto j= a<double>.begin() + 1;
+TEST_CASE("Comparison of iterators for greater-than works.", "[v-iterator]") {
+  verify_greater_than_comparison<double>();
+  verify_greater_than_comparison<float>();
+  verify_greater_than_comparison<long double>();
+  verify_greater_than_comparison<int>();
+  verify_greater_than_comparison<unsigned>();
+  verify_greater_than_comparison<long>();
+  verify_greater_than_comparison<unsigned long>();
+  verify_greater_than_comparison<short>();
+  verify_greater_than_comparison<unsigned short>();
+  verify_greater_than_comparison<char>();
+  verify_greater_than_comparison<unsigned char>();
+  verify_greater_than_comparison<complex<double>>();
+  verify_greater_than_comparison<complex<float>>();
+  verify_greater_than_comparison<complex<long double>>();
+}
+
+
+template<typename E> void verify_lthoet_comparison() {
+  auto i= a<E>.begin();
+  auto j= a<E>.begin() + 1;
   REQUIRE(i++ <= j);
   REQUIRE(i <= j);
-  for(++i; i != a<double>.end(); ++i) { REQUIRE(!(i <= j)); }
-  auto k= b<double>.begin();
+  for(++i; i != a<E>.end(); ++i) { REQUIRE(!(i <= j)); }
+  auto k= b<E>.begin();
   REQUIRE_THROWS(i <= k);
 }
 
 
-TEST_CASE(
-      "Comparison of iterators for greater-than-or-equal-to works.",
-      "[v-iterator]") {
-  auto i= a<double>.begin() + 1;
-  auto j= a<double>.begin();
+TEST_CASE("Comp of iters for less-than-or-equal-to works.", "[v-iterator]") {
+  verify_lthoet_comparison<double>();
+  verify_lthoet_comparison<float>();
+  verify_lthoet_comparison<long double>();
+  verify_lthoet_comparison<int>();
+  verify_lthoet_comparison<unsigned>();
+  verify_lthoet_comparison<long>();
+  verify_lthoet_comparison<unsigned long>();
+  verify_lthoet_comparison<short>();
+  verify_lthoet_comparison<unsigned short>();
+  verify_lthoet_comparison<char>();
+  verify_lthoet_comparison<unsigned char>();
+  verify_lthoet_comparison<complex<double>>();
+  verify_lthoet_comparison<complex<float>>();
+  verify_lthoet_comparison<complex<long double>>();
+}
+
+
+template<typename E> void verify_gthoet_comparison() {
+  auto i= a<E>.begin() + 1;
+  auto j= a<E>.begin();
   REQUIRE(i >= j++);
   REQUIRE(i >= j);
-  for(++j; j != a<double>.end(); ++j) { REQUIRE(!(i >= j)); }
-  auto k= b<double>.begin();
+  for(++j; j != a<E>.end(); ++j) { REQUIRE(!(i >= j)); }
+  auto k= b<E>.begin();
   REQUIRE_THROWS(i >= k);
 }
 
 
-TEST_CASE(
-      "Comparison to iterator of different vector throws.", "[v-iterator]") {
-  REQUIRE_THROWS(a<double>.begin() == b<double>.begin());
+TEST_CASE("Comp of iters for grtr-than-or-equal-to works.", "[v-iterator]") {
+  verify_gthoet_comparison<double>();
+  verify_gthoet_comparison<float>();
+  verify_gthoet_comparison<long double>();
+  verify_gthoet_comparison<int>();
+  verify_gthoet_comparison<unsigned>();
+  verify_gthoet_comparison<long>();
+  verify_gthoet_comparison<unsigned long>();
+  verify_gthoet_comparison<short>();
+  verify_gthoet_comparison<unsigned short>();
+  verify_gthoet_comparison<char>();
+  verify_gthoet_comparison<unsigned char>();
+  verify_gthoet_comparison<complex<double>>();
+  verify_gthoet_comparison<complex<float>>();
+  verify_gthoet_comparison<complex<long double>>();
+}
+
+
+template<typename E> void verify_eq_other_comparison() {
+  REQUIRE_THROWS(a<E>.begin() == b<E>.begin());
+}
+
+
+TEST_CASE("Comp to iterator of different vector throws.", "[v-iterator]") {
+  verify_eq_other_comparison<double>();
+  verify_eq_other_comparison<float>();
+  verify_eq_other_comparison<long double>();
+  verify_eq_other_comparison<int>();
+  verify_eq_other_comparison<unsigned>();
+  verify_eq_other_comparison<long>();
+  verify_eq_other_comparison<unsigned long>();
+  verify_eq_other_comparison<short>();
+  verify_eq_other_comparison<unsigned short>();
+  verify_eq_other_comparison<char>();
+  verify_eq_other_comparison<unsigned char>();
+  verify_eq_other_comparison<complex<double>>();
+  verify_eq_other_comparison<complex<float>>();
+  verify_eq_other_comparison<complex<long double>>();
 }
 
 
