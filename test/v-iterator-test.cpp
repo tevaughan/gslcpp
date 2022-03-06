@@ -98,24 +98,78 @@ TEST_CASE("Pre-increment works.", "[v-iterator]") {
 }
 
 
+template<typename E> void verify_post_increment() {
+  auto i= a<E>.begin();
+  REQUIRE(*i++ == E(1));
+  REQUIRE(*i == E(2));
+}
+
+
 TEST_CASE("Post-increment works.", "[v-iterator]") {
-  auto i= a<double>.begin();
-  REQUIRE(*i++ == 1.0);
-  REQUIRE(*i == 2.0);
+  verify_post_increment<double>();
+  verify_post_increment<float>();
+  verify_post_increment<long double>();
+  verify_post_increment<int>();
+  verify_post_increment<unsigned>();
+  verify_post_increment<long>();
+  verify_post_increment<unsigned long>();
+  verify_post_increment<short>();
+  verify_post_increment<unsigned short>();
+  verify_post_increment<char>();
+  verify_post_increment<unsigned char>();
+  verify_post_increment<complex<double>>();
+  verify_post_increment<complex<float>>();
+  verify_post_increment<complex<long double>>();
+}
+
+
+template<typename E> void verify_pre_decrement() {
+  auto i= a<E>.end();
+  REQUIRE(*--i == E(3));
+  REQUIRE(*i == E(3));
 }
 
 
 TEST_CASE("Pre-decrement works.", "[v-iterator]") {
-  auto i= a<double>.end();
-  REQUIRE(*--i == 3.0);
-  REQUIRE(*i == 3.0);
+  verify_pre_decrement<double>();
+  verify_pre_decrement<float>();
+  verify_pre_decrement<long double>();
+  verify_pre_decrement<int>();
+  verify_pre_decrement<unsigned>();
+  verify_pre_decrement<long>();
+  verify_pre_decrement<unsigned long>();
+  verify_pre_decrement<short>();
+  verify_pre_decrement<unsigned short>();
+  verify_pre_decrement<char>();
+  verify_pre_decrement<unsigned char>();
+  verify_pre_decrement<complex<double>>();
+  verify_pre_decrement<complex<float>>();
+  verify_pre_decrement<complex<long double>>();
+}
+
+
+template<typename E> void verify_post_decrement() {
+  auto i= a<E>.end() - 1;
+  REQUIRE(*i-- == E(3));
+  REQUIRE(*i == E(2));
 }
 
 
 TEST_CASE("Post-decrement works.", "[v-iterator]") {
-  auto i= a<double>.end() - 1;
-  REQUIRE(*i-- == 3.0);
-  REQUIRE(*i == 2.0);
+  verify_post_decrement<double>();
+  verify_post_decrement<float>();
+  verify_post_decrement<long double>();
+  verify_post_decrement<int>();
+  verify_post_decrement<unsigned>();
+  verify_post_decrement<long>();
+  verify_post_decrement<unsigned long>();
+  verify_post_decrement<short>();
+  verify_post_decrement<unsigned short>();
+  verify_post_decrement<char>();
+  verify_post_decrement<unsigned char>();
+  verify_post_decrement<complex<double>>();
+  verify_post_decrement<complex<float>>();
+  verify_post_decrement<complex<long double>>();
 }
 
 
