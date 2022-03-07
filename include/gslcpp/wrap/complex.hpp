@@ -21,7 +21,7 @@ template<typename A> struct complex;
 /// Specialization of \ref gsl::complex for double.
 template<> struct complex<double>: public std::complex<double> {
   using P= std::complex<double>; ///< Type of parent.
-  using P::P; ///< Inherit constructors.
+  using P::P; // Inherit constructors.
 
   /// Construct from gsl_complex.
   /// \param z  Reference to instance of gsl_complex.
@@ -44,7 +44,7 @@ template<> struct complex<double>: public std::complex<double> {
 /// Specialization of \ref gsl::complex for float.
 template<> struct complex<float>: public std::complex<float> {
   using P= std::complex<float>; ///< Type of parent.
-  using P::P; ///< Inherit constructors.
+  using P::P; // Inherit constructors.
 
   /// Construct from gsl_complex.
   /// \param z  Reference to instance of gsl_complex.
@@ -69,7 +69,7 @@ template<> struct complex<float>: public std::complex<float> {
 /// Specialization of \ref gsl::complex for long double.
 template<> struct complex<long double>: public std::complex<long double> {
   using P= std::complex<long double>; ///< Type of parent.
-  using P::P; ///< Inherit constructors.
+  using P::P; // Inherit constructors.
 
   /// Construct from gsl_complex.
   /// \param z  Reference to instance of gsl_complex.
