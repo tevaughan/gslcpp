@@ -47,7 +47,7 @@ The first release is almost done.
   - The compiler will even automatically determine from the initializer whether
     storage-size be known at compile-time and thereby pick template-parameters
     for [`gsl::vector`][vector] so that storage resides on the stack when
-    possible, though this can be override by explicit choice of
+    possible, though this can be overriden by explicit choice of
     template-parameters.
   - Unit-tests provide almost 100% code-coverage.
 
