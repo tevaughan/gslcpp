@@ -11,15 +11,15 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 include(CodeCoverage)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_CXX_STANDARD_DEBUG 20)
+set(CMAKE_CXX_STANDARD_DEBUG 17)
 set(CMAKE_CXX_STANDARD_REQUIRED_DEBUG ON)
 set(CMAKE_CXX_EXTENSIONS_DEBUG OFF)
 
-set(CMAKE_CXX_STANDARD_COVERAGE 20)
+set(CMAKE_CXX_STANDARD_COVERAGE 17)
 set(CMAKE_CXX_STANDARD_REQUIRED_COVERAGE ON)
 set(CMAKE_CXX_EXTENSIONS_COVERAGE OFF)
 
@@ -60,7 +60,7 @@ add_definitions(-Wno-deprecated-anon-enum-enum-conversion)
 
 # doxygen
 #
-# doxygen-1.9.2 is not require here, but version below 1.9.2 will not document
+# doxygen-1.9.2 is not required here, but version below 1.9.2 will not document
 # C++-20 concepts correctly.
 find_package(Doxygen REQUIRED dot dia OPTIONAL_COMPONENTS mscgen)
 #
