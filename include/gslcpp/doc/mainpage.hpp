@@ -25,6 +25,8 @@
 /// ~~~{.cpp}
 /// #include <gsl/vector.hpp>
 ///
+/// using gsl::vector;
+///
 /// vector<float,0> read_big_file_into_array();
 ///
 /// int main() {
