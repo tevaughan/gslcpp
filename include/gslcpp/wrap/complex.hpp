@@ -10,11 +10,15 @@ namespace gsl {
 
 
 /// Complex-number, each of whose components has type A.
+/// This is the generic declaration; see each specialization for details.
+/// \sa gsl::complex<double>
+/// \sa gsl::complex<float>
+/// \sa gsl::complex<long double>
 /// \tparam A  Type of each component.
 template<typename A> struct complex;
 
 
-/// Specialization for double.
+/// Specialization of \ref gsl::complex for double.
 template<> struct complex<double>: public std::complex<double> {
   using P= std::complex<double>; ///< Type of parent.
   using P::P; ///< Inherit constructors.
@@ -37,7 +41,7 @@ template<> struct complex<double>: public std::complex<double> {
 };
 
 
-/// Specialization for float.
+/// Specialization of \ref gsl::complex for float.
 template<> struct complex<float>: public std::complex<float> {
   using P= std::complex<float>; ///< Type of parent.
   using P::P; ///< Inherit constructors.
@@ -62,7 +66,7 @@ template<> struct complex<float>: public std::complex<float> {
 };
 
 
-/// Specialization for long double.
+/// Specialization of \ref gsl::complex for long double.
 template<> struct complex<long double>: public std::complex<long double> {
   using P= std::complex<long double>; ///< Type of parent.
   using P::P; ///< Inherit constructors.
