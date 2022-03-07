@@ -33,6 +33,8 @@ template<typename T, size_t S= 0> class v_stor {
 
 public:
   /// Initialize GSL's view of static storage, but do not initialize elements.
+  /// If number `n` of elements intended for vector be not `S`, then throw.
+  /// \param n  Number of elements intended for vector.
   v_stor(size_t n= S): cview_(w_vector_view_array(d_, 1, S)) {
     if(n != S) throw "mismatch in size";
   }
@@ -79,8 +81,9 @@ protected:
   }
 
   /// Allocate vector and its descriptor.
-  /// @param n  Number of elements in vector.
-  /// @return  Pointer to vector's descriptor.
+  /// \param n  Number of elements in vector.
+  /// \param a  Type of allocation (simple or initialized to zero).
+  /// \return  Pointer to vector's descriptor.
   w_vector<T> *allocate(size_t n, alloc_type a) {
     free();
     if(a == ALLOC) return w_vector_alloc<T>(n);
@@ -103,7 +106,8 @@ public:
   /// @param a  Method to use for allocation.
   v_stor(size_t n, alloc_type a= ALLOC) { v_= allocate(n, a); }
 
-  /// Return true if object's data have been validly allocated.
+  /// True if object's data have been validly allocated.
+  /// \return  True if object's data have been validly allocated.
   bool valid() const { return v_!= nullptr; }
 
   /// Reference to GSL's interface to vector.

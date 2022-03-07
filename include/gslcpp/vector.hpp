@@ -72,9 +72,11 @@ template<typename T, size_t S= 0> struct vector: public v_iface<T, S, v_stor> {
   vector(vector &&)= default;
 
   /// Enable explicitly defined copy-constructor in gsl::v_iface.
+  /// \return  Reference to this instance after assignment.
   vector &operator=(vector const &)= default;
 
   /// Enable move-assignment operator in gsl::v_stor to work.
+  /// \return  Reference to this instance after assignment.
   vector &operator=(vector &&)= default;
 
   /// Struct defining whether size of other vector allow copying its data.
@@ -121,8 +123,8 @@ template<typename T, size_t S= 0> struct vector: public v_iface<T, S, v_stor> {
   /// \param d  Pointer to first element of array and of vector.
   /// \param n  Number of elements in vector.
   /// \param s  Stride of elements relative to array.
-  vector(T const *d, size_t len, size_t s= 1): P(len) {
-    auto const cview= w_vector_view_array(d, s, len);
+  vector(T const *d, size_t n, size_t s= 1): P(n) {
+    auto const cview= w_vector_view_array(d, s, n);
     memcpy(*this, v_iface<T const, 0, v_view>(cview));
   }
 

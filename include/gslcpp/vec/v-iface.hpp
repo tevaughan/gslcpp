@@ -52,20 +52,22 @@ using std::is_const_v;
 
 
 /// Interface for every kind of vector.
-/// @tparam S  Type referring to storage of elements.
+/// \tparam T  Type of each element in vector.
+/// \tparam N  Compile-time number of elements (0 means set at run-time).
+/// \tparam S  Type specifying interface to storage of elements.
 template<typename T, size_t N, template<typename, size_t> class S>
 struct v_iface: public S<T, N> {
   /// Inherit constructors.
   using S<T, N>::S;
 
-  /// Reference to instance of w_vector<S::E>, which is either gsl_vector,
-  /// gsl_vector_float, etc.
+  /// Reference to instance of w_vector<T>, which is gsl_vector,
+  /// gsl_vector_float, or the like.
   using S<T, N>::v;
 
-  /// Type of each element.
-  using E= T;
-
   enum { SIZE= N /**< Size at compile-time. */ };
+
+  /// Element-type needed by gsl::v_iterator<v_iface>.
+  using E= T;
 
   /// Type of iterator that points to mutable element.
   using iterator= v_iterator<v_iface>;
@@ -96,48 +98,48 @@ struct v_iface: public S<T, N> {
   /// Pointer to first element in vector.
   /// - Be careful to check `v().stride` in case data be not contiguous.
   /// @return  Pointer to first element.
-  E *data() { return (E *)v().data; /* Cast for complex. */ }
+  T *data() { return (T *)v().data; /* Cast for complex. */ }
 
   /// Pointer to first element in immutable vector.
   /// - Be careful to check `v().stride` in case data be not contiguous.
   /// @return  Pointer to first immutable element.
-  E const *data() const { return (E const *)v().data; /* Cast for complex. */ }
+  T const *data() const { return (T const *)v().data; /* Cast for complex. */ }
 
   /// Read element with bounds-checking.
   /// @param i  Offset of element.
   /// @return  Value of element.
-  E get(size_t i) const { return w_get(&v(), i); }
+  T get(size_t i) const { return w_get(&v(), i); }
 
   /// Write element with bounds-checking.
   /// @param i  Offset of element.
   /// @param x  New value for element.
-  void set(size_t i, E const &x) { w_set(&v(), i, x); }
+  void set(size_t i, T const &x) { w_set(&v(), i, x); }
 
   /// Read element without bounds-checking.
   /// @param i  Offset of element.
   /// @return  Reference to immutable element.
-  E const &operator[](size_t i) const { return data()[i * v().stride]; }
+  T const &operator[](size_t i) const { return data()[i * v().stride]; }
 
   /// Write element without bounds-checking.
   /// @param i  Offset of element.
   /// @return  Reference to mutable element.
-  E &operator[](size_t i) { return data()[i * v().stride]; }
+  T &operator[](size_t i) { return data()[i * v().stride]; }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to mutable element.
-  E *ptr(size_t i) { return w_ptr(&v(), i); }
+  T *ptr(size_t i) { return w_ptr(&v(), i); }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to immutable element.
-  E const *ptr(size_t i) const { return w_ptr(&v(), i); }
+  T const *ptr(size_t i) const { return w_ptr(&v(), i); }
 
   /// Set every element.
   /// @param x  Value to which each element should be set.
-  void set_all(E const &x) { w_set_all(&v(), x); }
+  void set_all(T const &x) { w_set_all(&v(), x); }
 
   /// Set every element to zero.
   void set_zero() { w_set_zero(&v()); }
@@ -178,7 +180,7 @@ struct v_iface: public S<T, N> {
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
-  v_iface<E, N, v_view> subvector(size_t n, size_t i= 0, size_t s= 1) {
+  v_iface<T, N, v_view> subvector(size_t n, size_t i= 0, size_t s= 1) {
     return w_subvector(&v(), i, s, n);
   }
 
@@ -190,18 +192,18 @@ struct v_iface: public S<T, N> {
   /// @param i  Offset in vector of first element in view.
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
-  v_iface<E const, N, v_view>
+  v_iface<T const, N, v_view>
   subvector(size_t n, size_t i= 0, size_t s= 1) const {
     return w_subvector(&v(), i, s, n);
   }
 
   /// View of vector.
   /// @return  View of vector.
-  v_iface<E, N, v_view> view() { return w_subvector(&v(), 0, 1, size()); }
+  v_iface<T, N, v_view> view() { return w_subvector(&v(), 0, 1, size()); }
 
   /// View of vector.
   /// @return  View of vector.
-  v_iface<E const, N, v_view> view() const {
+  v_iface<T const, N, v_view> view() const {
     return w_subvector(&v(), 0, 1, size());
   }
 
@@ -216,115 +218,133 @@ struct v_iface: public S<T, N> {
   int reverse() { return w_reverse(&v()); }
 
   /// Add contents of `b` into this vector in place.
-  /// @tparam T  Type of vector to be added into this.
-  /// @param b  Vector whose contents should be added into this.
-  /// @return  TBD: GSL's documentation does not specify.
+  /// \tparam ON  Compile-time number of elements in `b`.
+  /// \tparam OV  Type of interface to storage for `b`.
+  /// \param b  Vector whose contents should be added into this.
+  /// \return  TBD: GSL's documentation does not specify.
   template<size_t ON, template<typename, size_t> class OV>
-  int add(v_iface<E, ON, OV> const &b) {
+  int add(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     return w_add(&v(), &b.v());
   }
 
   /// Subtract contents of `b` from this vector in place.
-  /// @tparam T  Type of vector to be subtracted from this.
-  /// @param b  Vector whose contents should be subtracted from this.
-  /// @return  TBD: GSL's documentation does not specify.
+  /// \tparam ON  Compile-time number of elements in `b`.
+  /// \tparam OV  Type of interface to storage for `b`.
+  /// \param b  Vector whose contents should be subtracted from this.
+  /// \return  TBD: GSL's documentation does not specify.
   template<size_t ON, template<typename, size_t> class OV>
-  int sub(v_iface<E, ON, OV> const &b) {
+  int sub(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     return w_sub(&v(), &b.v());
   }
 
   /// Multiply contents of `b` into this vector in place.
-  /// @tparam T  Type of vector to be multiplied into this.
-  /// @param b  Vector whose contents should be multiplied into this.
-  /// @return  TBD: GSL's documentation does not specify.
+  /// \tparam ON  Compile-time number of elements in `b`.
+  /// \tparam OV  Type of interface to storage for `b`.
+  /// \param b  Vector whose contents should be multiplied into this.
+  /// \return  TBD: GSL's documentation does not specify.
   template<size_t ON, template<typename, size_t> class OV>
-  int mul(v_iface<E, ON, OV> const &b) {
+  int mul(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     return w_mul(&v(), &b.v());
   }
 
   /// Divide contents of `b` into this vector in place.
-  /// @tparam T  Type of vector to be divided into this.
-  /// @param b  Vector whose contents should be divided into this.
-  /// @return  TBD: GSL's documentation does not specify.
+  /// \tparam ON  Compile-time number of elements in `b`.
+  /// \tparam OV  Type of interface to storage for `b`.
+  /// \param b  Vector whose contents should be divided into this.
+  /// \return  TBD: GSL's documentation does not specify.
   template<size_t ON, template<typename, size_t> class OV>
-  int div(v_iface<E, ON, OV> const &b) {
+  int div(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     return w_div(&v(), &b.v());
   }
 
   /// Add contents of `b` into this vector in place.
-  /// @tparam T  Type of vector to be added into this.
-  /// @param b  Vector whose contents should be added into this.
-  /// @return  Reference to this vector after modification.
+  /// \tparam ON  Compile-time number of elements in `b`.
+  /// \tparam OV  Type of interface to storage for `b`.
+  /// \param b  Vector whose contents should be added into this.
+  /// \return  Reference to this vector after modification.
   template<size_t ON, template<typename, size_t> class OV>
-  v_iface &operator+=(v_iface<E, ON, OV> const &b) {
+  v_iface &operator+=(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     add(b);
     return *this;
   }
 
   /// Subtract contents of `b` from this vector in place.
-  /// @tparam T  Type of vector to be subtracted from this.
-  /// @param b  Vector whose contents should be subtracted from this.
-  /// @return  Reference to this vector after modification.
+  /// \tparam ON  Compile-time number of elements in `b`.
+  /// \tparam OV  Type of interface to storage for `b`.
+  /// \param b  Vector whose contents should be subtracted from this.
+  /// \return  Reference to this vector after modification.
   template<size_t ON, template<typename, size_t> class OV>
-  v_iface &operator-=(v_iface<E, ON, OV> const &b) {
+  v_iface &operator-=(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     sub(b);
     return *this;
   }
 
   /// Multiply contents of `b` into this vector in place.
-  /// @tparam T  Type of vector to be multiplied into this.
-  /// @param b  Vector whose contents should be multiplied into this.
-  /// @return  Reference to this vector after modification.
+  /// \tparam ON  Compile-time number of elements in `b`.
+  /// \tparam OV  Type of interface to storage for `b`.
+  /// \param b  Vector whose contents should be multiplied into this.
+  /// \return  Reference to this vector after modification.
   template<size_t ON, template<typename, size_t> class OV>
-  v_iface &operator*=(v_iface<E, ON, OV> const &b) {
+  v_iface &operator*=(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     mul(b);
     return *this;
   }
 
   /// Divide contents of `b` into this vector in place.
-  /// @tparam T  Type of vector to be divided into this.
-  /// @param b  Vector whose contents should be divided into this.
+  /// \tparam ON  Compile-time number of elements in `b`.
+  /// \tparam OV  Type of interface to storage for `b`.
+  /// \param b  Vector whose contents should be divided into this.
   /// @return  Reference to this vector after modification.
   template<size_t ON, template<typename, size_t> class OV>
-  v_iface &operator/=(v_iface<E, ON, OV> const &b) {
+  v_iface &operator/=(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
     div(b);
     return *this;
   }
 
   /// Copy contents of `b` into this vector.
+  /// \tparam ON  Compile-time number of elements in `b`.
+  /// \tparam OV  Type of interface to storage for `b`.
+  /// \param b  Reference to vector whose data will be copied.
+  /// \return  Reference to this instance after assignment.
   template<size_t ON, template<typename, size_t> class OV>
-  v_iface &operator=(v_iface<E, ON, OV> const &b) {
+  v_iface &operator=(v_iface<T, ON, OV> const &b) {
+    static_assert(N == ON || N == 0 || ON == 0);
     memcpy(*this, b);
     return *this;
   }
 
   /// Copy contents of `b` into this vector.
+  /// \param b  Reference to vector whose data will be copied.
+  /// \return  Reference to this instance after assignment.
   v_iface &operator=(v_iface const &b) {
     memcpy(*this, b);
     return *this;
   }
 
-  v_iface(v_iface &&src)= default;
+  /// Enable move-constructor in gsl::v_stor to work.
+  v_iface(v_iface &&)= default;
 
-  v_iface &operator=(v_iface &&src)= default;
+  /// Enable move-assignment operator in gsl::v_stor to work.
+  /// \return  Reference to this instance after assignment.
+  v_iface &operator=(v_iface &&)= default;
 
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
   /// @return  TBD: GSL's documentation does not specify.
-  int scale(E const &x) { return w_scale(&v(), x); }
+  int scale(T const &x) { return w_scale(&v(), x); }
 
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
   /// @return  Reference to this vector after modification.
-  v_iface &operator*=(E const &x) {
+  v_iface &operator*=(T const &x) {
     scale(x);
     return *this;
   }
@@ -332,32 +352,32 @@ struct v_iface: public S<T, N> {
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
   /// @return  TBD: GSL's documentation does not specify.
-  int add_constant(E const &x) { return w_add_constant(&v(), x); }
+  int add_constant(T const &x) { return w_add_constant(&v(), x); }
 
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
   /// @return  Reference to this vector after modification.
-  v_iface &operator+=(E const &x) {
+  v_iface &operator+=(T const &x) {
     add_constant(x);
     return *this;
   }
 
   /// Sum of elements.
   /// @return  Sum of elements.
-  E sum() const { return w_sum(&v()); }
+  T sum() const { return w_sum(&v()); }
 
   /// Greatest value of any element.
   /// @return  Greatest value of any element.
-  E max() const { return w_max(&v()); }
+  T max() const { return w_max(&v()); }
 
   /// Least value of any element.
   /// @return  Least value of any element.
-  E min() const { return w_min(&v()); }
+  T min() const { return w_min(&v()); }
 
   /// Greatest value and least value of any element.
   /// @param min  On return, least value.
   /// @param max  On return, greatest value.
-  void minmax(E &min, E &max) const { w_minmax(&v(), &min, &max); }
+  void minmax(T &min, T &max) const { w_minmax(&v(), &min, &max); }
 
   /// Offset of greatest value.
   /// @return  Offset of greatest value.
