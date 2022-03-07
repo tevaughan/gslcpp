@@ -235,8 +235,8 @@ TEST_CASE("v_iface's setters work.", "[v-iface]") {
 template<typename E> void verify_ptr() {
   vector const b({E(1), E(2), E(3), E(4), E(5), E(6)});
   vector c= b;
-  vector_view d= b.subvector(3, 1, 2);
-  vector_view e= c.subvector(3, 1, 2);
+  auto d= b.subvector(3, 1, 2);
+  auto e= c.subvector(3, 1, 2);
   REQUIRE(d.ptr(1) == b.ptr(3));
   REQUIRE(e.ptr(1) == c.ptr(3));
   REQUIRE(d.ptr(1) == b.data() + 3);
