@@ -1,53 +1,60 @@
 # gslcpp
 
-`gslcpp` is a C++-library wrapping a subset of GSL and providing
-interoperability with Eigen.
+`gslcpp` is a header-only, modern C++-library intended to wrap all of GSL.
+  - The first release covers functions and types related to `gsl_vector`.
+  - The second release will cover multidimensional minimization.
+  - The third release will cover `gsl_matrix` and expand the capabilities of
+    vectors by way of integration with [Eigen](https://eigen.tuxfamily.org).
+  - I have not yet planned further ahead.
 
-- [Repository at GitHub][repo]
 - [Documentation via Doxygen][doxy]
 
 - Code-Coverage after Running Unit-Tests
   - [Summary][summary]
   - [Details][details]
 
-[repo]: https://github.com/tevaughan/gslcpp
 [doxy]: https://tevaughan.github.io/gslcpp/html/index.html
 [summary]: https://tevaughan.github.io/gslcpp/tests_cov-summary.txt
 [details]: https://tevaughan.github.io/gslcpp/tests_cov.html
 
 ## Status
 
-I am working toward the initial release.
+The first release is almost done.
+  - All element-types (`double`, `float`, `int`, `complex_float`, etc.) are
+    suported.
+  - Move-construction is enabled and tested for dynamic vectors.
+  - Move-assignment is intentionally disabled.
+    - Every vector that owns the storage for its elements (whether having
+      elements stored on stack or having them in malloc-derived memory) is
+      uniquely associated with the memory for its elements until it is
+      destroyed.
+    - A vector-view inherits the same interface as a vector does but does not
+      own the storage for the elements that it refers to.
+  - All members of GSL's function-class are exposed as members of
+    `gsl::v_iface` and tested.
+  - There are also some global functions and, via operator-overloading, a bit
+    of syntactic sugar, but the initial release will not go beyond the basic
+    semantics of GSL's native vector-operations.
+  - Each of the templated constructor-classes, `gsl::vector` and
+    `gsl::vector_view`, descends from `gsl::v_iface` and often has deduced
+    template-parameters on construction, so that the user need not specify
+    them.
+  - The compiler will even automatically determine from the initializer whether
+    storage-size be known at compile-time and thereby pick template-parameters
+    for `gsl::vector` so that storage resides on the stack when possible,
+    though this can be override by explicit choice of template-parameters.
+  - Unit-tests provide almost 100% code-coverage.
 
-For the initial release, `gslcpp` will wrap GSL's vector.
-  - All types (`gsl_vector_float`, `gsl_vector_int`,
-    `gsl_vector_complex_float`, etc.) are supported.
-  - Interoperability with Eigen is provided.
-
-At present:
-  - The GSL-vector interface (all of the `gsl_vector_*`-functions and for *all*
-    types of vector, whether double, float, complex, etc.) is fully
-    implemented.
-  - The unit-tests are almost done.
-    - There is now complete coverage of the GSL-vector interface (for all
-      functions and types of vector).
-    - Constructor-types are not yet fully tested.
-      - Class `static_vector` for stack-allocation is fully tested.
-      - Class `vector_view` for vector-views is fully tested.
-      - Class `vector` for dynamic allocation is not yet tested.
-  - Only a few interfaces with Eigen are so far implemented.
-
-Upcoming releases after initial release:
-  - Add support for multidimensional minimization.
-  - Add support for GSL-matrices.
+What remains for the first release is to write narrative documentation for
+Doxygen's main page.
 
 ## How to Build
 
-A compiler for C++-20 is required to use `gslcpp`.
+A compiler for C++-17 or later is required to use `gslcpp`.
   - `gslcpp` is a header-only library.
   - The only dependencies are Eigen and GSL.
-  - Because Eigen is also a header-only library, the only requirements for
-    linking are the same as those for GSL.
+  - Because Eigen is also a header-only library, the requirements for linking
+    are the same as those for GSL.
 
 By default, `gslcpp` assumes that the installed version of GSL is at least 2.5
 and that the installed version of Eigen is at least 3.3.  But each of these can
@@ -60,6 +67,10 @@ be set by way of
 See [CMakeLists.txt][CMakeLists.txt] at the top level of `gslcpp`'s tree for
 examples of how to detect and to set these version-numbers on the basis of what
 is installed on the system.
+
+`gslcpp` provides an interface with all of the features of GSL-2.7 (for
+functionality that is covered). If GSL-2.5 be installed, the extra functions
+for vectors are emulated by way of Eigen.
 
 [CMakeLists.txt]: https://github.com/tevaughan/gslcpp/blob/main/CMakeLists.txt
 
@@ -100,9 +111,9 @@ After that, products of the coverage-analysis end up in
 
 ### Generating Documentation
 
-In order to build the documentation, one needs `Doxygen`. Any version below
-1.9.2 will not document C++-20 concepts correctly, but one can still use an
-older version of Doxygen if that be all that one's operating system provides.
+In order to build the documentation, one needs `Doxygen`.  Either install the
+package from the operating system, or build it from source in case one want a
+version newer than that provided by the operating system.
 
 #### Building Doxygen from Source
 
@@ -126,6 +137,10 @@ After `Doxygen` has been installed, one can then, from the top-level of
 `gslcpp`'s tree, do
 ```
 make doc
+```
+or just
+```
+doxygen
 ```
 
 After that, products of the `Doxygen`-build end up in the local copy under

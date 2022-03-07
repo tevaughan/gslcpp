@@ -126,25 +126,28 @@ function(SETUP_TARGET_FOR_COVERAGE_LLVM_COV)
     # resolving relative paths.  I tried '..', and it worked!
     COMMAND ${LLVM_COV_PATH}
             report
+            -Xdemangler=c++filt
             -show-functions
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
             ..
-            | c++filt > ${productsDir}/${Coverage_NAME}-summary.txt
+            > ${productsDir}/${Coverage_NAME}-summary.txt
     COMMAND ${LLVM_COV_PATH}
             show
+            -Xdemangler=c++filt
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-            | c++filt > ${productsDir}/${Coverage_NAME}.txt
+            > ${productsDir}/${Coverage_NAME}.txt
     COMMAND ${LLVM_COV_PATH}
             show
+            -Xdemangler=c++filt
             --format=html
             -instr-profile=${Coverage_NAME}.profdata
             -ignore-filename-regex='.*test/.*'
             ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_EXECUTABLE}
-            | c++filt > ${productsDir}/${Coverage_NAME}.html
+            > ${productsDir}/${Coverage_NAME}.html
     # Clean up
     COMMAND ${CMAKE_COMMAND} -E remove
     ${Coverage_NAME}.profdata default.profraw
