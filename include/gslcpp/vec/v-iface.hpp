@@ -332,10 +332,6 @@ struct v_iface: public S<T, N> {
   /// Enable move-constructor in gsl::v_stor to work.
   v_iface(v_iface &&)= default;
 
-  /// Enable move-assignment operator in gsl::v_stor to work.
-  /// \return  Reference to this instance after assignment.
-  v_iface &operator=(v_iface &&)= default;
-
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
   /// @return  TBD: GSL's documentation does not specify.

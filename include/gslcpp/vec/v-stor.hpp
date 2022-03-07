@@ -11,14 +11,11 @@
 namespace gsl {
 
 
-/// Generic %v_stor is interface to storage with two key properties: (1) that
-/// size of storage is known statically, at compile-time, and (2) that it is
-/// owned by instance of %v_stor.
+/// Generic %v_stor is interface to storage with two key properties:
+/// (1) that size of storage is known statically, at compile-time, and
+/// (2) that it is owned by instance of %v_stor.
 ///
-/// Specialization is for storage-size determined at run-time.
-///
-/// %v_stor implements concept gsl::v_stor and can serve as template-type
-/// parameter for (and thus base of) gsl::v_iface.
+/// Specialization gsl::v_stor<T,0> is for storage-size determined at run-time.
 ///
 /// @tparam T  Type of each element in vector.
 /// @tparam S  Compile-time size of vector (0 for size specified at run-time).
@@ -49,14 +46,16 @@ public:
 };
 
 
-/// Specialization, which is interface to storage with two key properties: (1)
-/// that size of storage is determined dynamically, at run-time, and (2) that
-/// it is owned by instance of interface.
+/// Specialization, which is interface to storage with two key properties:
+/// (1) that size of storage is determined dynamically, at run-time, and
+/// (2) that it is owned by instance of interface.
 ///
-/// Generic %v_stor is for storage-size determined at compile-time.
+/// Generic gsl::v_stor<T,S> is for storage-size `S` determined at
+/// compile-time.
 ///
-/// %v_dyna implements concept gsl::v_stor and can serve as template-type
-/// parameter for (and thus base of) gsl::v_iface.
+/// Move-construction is provided, but move-assignment is not.  Once memory is
+/// allocated for a vector, that memory and only that memory belongs to the
+/// vector until it is destroyed.
 ///
 /// @tparam T  Type of each element in vector.
 template<typename T> class v_stor<T> {
@@ -90,16 +89,6 @@ protected:
     return w_vector_calloc<T>(n);
   }
 
-  /// Swap values held by two variables.
-  /// @tparam U  Common type of items.
-  /// @param a  Reference to first item.
-  /// @param b  Reference to second item.
-  template<typename U> static void swap_(U &a, U &b) {
-    U const tmp= a;
-    a= b;
-    b= tmp;
-  }
-
 public:
   /// Allocate vector and its descriptor.
   /// @param n  Number of elements in vector.
@@ -119,21 +108,9 @@ public:
   auto &v() const { return *v_; }
 
   /// Move on construction.
-  /// - Note that this is not a templated constructor because moving works only
-  ///   from other vector<DCON>.
-  /// @param src  Vector to move.
+  /// Constructor is not template because moving works only from other %v_stor.
+  /// \param src  Vector to move.
   v_stor(v_stor &&src): v_(src.v_) { src.v_= nullptr; }
-
-  /// Move on assignment.  This instance's original descriptor and data should
-  /// be deallocated after move, when src's destructor is called.  Note that
-  /// this is not a templated function because moving works only from other
-  /// vector<DCON>.
-  /// @param src  Vector to exchange state with.
-  /// @return  Reference to instance after modification.
-  v_stor &operator=(v_stor &&src) {
-    swap_(v_, src.v_);
-    return *this;
-  }
 
   /// Deallocate vector and its descriptor.
   virtual ~v_stor() { free(); }

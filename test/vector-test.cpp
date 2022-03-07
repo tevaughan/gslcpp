@@ -65,18 +65,11 @@ TEST_CASE("Dynamic vector's base-constructor works.", "[vector]") {
 
 
 template<typename E> void verify_dynamic_movement() {
-  vector<E> q(15, vector<E>::CALLOC);
   vector<E> r(15);
-  for(int i=0; i < 15; ++i) r[i]= E(15 - i);
-  vector<E> s= std::move(r); // Move-construction.
-  REQUIRE(r.valid()==false); // Because s was invalid.
-  for(int i=0; i< 15; ++i) REQUIRE(s[i] == E(15 - i));
-  q= std::move(s); // Move-assignment.
-  REQUIRE(s.valid()==true); // Because q was valid.
-  for(int i= 0; i < 15; ++i) {
-    REQUIRE(q[i] == E(15 - i));
-    REQUIRE(s[i] == E(0));
-  }
+  for(int i= 0; i < 15; ++i) r[i]= E(15 - i);
+  vector s= std::move(r); // Move-construction.
+  REQUIRE(r.valid() == false); // Because s was invalid before move.
+  for(int i= 0; i < 15; ++i) REQUIRE(s[i] == E(15 - i));
 }
 
 

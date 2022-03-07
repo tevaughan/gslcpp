@@ -25,13 +25,17 @@ using std::is_const_v;
 /// %vector inherits these and provides template-constructors for an instance
 /// of type gsl::v_iface<T, S, v_stor>.
 ///
-/// Each constructor copies data from the source identified as an argument or
-/// (in the case of the move-constructor when both the instance and the source
-/// have size determined at run-time) *moves* the data into the instance.
+/// Each constructor copies data from the source or (in the case of the
+/// move-constructor, when both the source is an r-value with `S = 0`, and the
+/// destination has `S = 0`) *moves* the data into the instance.
 ///
 /// Template-value-parameter `S` indicates the number of elements in the vector
 /// at compile-time.  If `S` be zero, then the number of elements in the vector
 /// is determined at run-time.
+///
+/// Although move-construction is provided, move-assignment is *not* provided.
+/// Once a chunk of memory is allocated to a vector, that same chunk, and only
+/// ever that chunk, is associated with the vector until it is destroyed.
 ///
 /// When using %vector, one typically does not need to specify
 /// template-parameters:
@@ -74,10 +78,6 @@ template<typename T, size_t S= 0> struct vector: public v_iface<T, S, v_stor> {
   /// Enable explicitly defined copy-constructor in gsl::v_iface.
   /// \return  Reference to this instance after assignment.
   vector &operator=(vector const &)= default;
-
-  /// Enable move-assignment operator in gsl::v_stor to work.
-  /// \return  Reference to this instance after assignment.
-  vector &operator=(vector &&)= default;
 
   /// Struct defining whether size of other vector allow copying its data.
   /// \tparam N  Number of elements in other vector.
