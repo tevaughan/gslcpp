@@ -1,7 +1,10 @@
 # gslcpp: A Header-Only, Modern C++-Library Wrapping the GNU Scientific Library
 
 `gslcpp` is a header-only, modern C++-library intended to wrap all of GSL.
-  - The first release covers functions and types related to `gsl_vector`.
+  - The first release covers functions and types related to `gsl_vector`.  See
+    especially
+    - [`gsl::vector`][vector] and
+    - [`gsl::vector_view`][vector_view].
   - The second release will cover multidimensional minimization.
   - The third release will cover `gsl_matrix` and expand the capabilities of
     vectors by way of integration with [Eigen](https://eigen.tuxfamily.org).
@@ -16,37 +19,43 @@
 [doxy]: https://tevaughan.github.io/gslcpp/html/index.html
 [summary]: https://tevaughan.github.io/gslcpp/tests_cov-summary.txt
 [details]: https://tevaughan.github.io/gslcpp/tests_cov.html
+[vector]: https://tevaughan.github.io/gslcpp/html/structgsl_1_1vector.html#details
+[vector_view]: https://tevaughan.github.io/gslcpp/html/structgsl_1_1vector__view.html#details
 
 ## Status
 
 The first release is almost done.
   - All element-types (`double`, `float`, `int`, `complex_float`, etc.) are
     suported.
-  - Move-construction is enabled and tested for dynamic vectors.
+  - [Move-construction][move] is enabled and tested for dynamic vectors.
   - Move-assignment is intentionally disabled.
-    - Every vector that owns the storage for its elements (whether having
-      elements stored on stack or having them in malloc-derived memory) is
-      uniquely associated with the memory for its elements until it is
+    - Every [vector][vector] that owns the storage for its elements (whether
+      having elements stored on stack or having them in malloc-derived memory)
+      is uniquely associated with the memory for its elements until it is
       destroyed.
-    - A vector-view inherits the same interface as a vector does but does not
-      own the storage for the elements that it refers to.
+    - A [vector-view][vector_view] inherits the same interface as a vector does
+      but does not own the storage for the elements that it refers to.
   - All members of GSL's function-class are exposed as members of
-    `gsl::v_iface` and tested.
+    [`gsl::v_iface`][v_iface] and tested.
   - There are also some global functions and, via operator-overloading, a bit
     of syntactic sugar, but the initial release will not go beyond the basic
     semantics of GSL's native vector-operations.
-  - Each of the templated constructor-classes, `gsl::vector` and
-    `gsl::vector_view`, descends from `gsl::v_iface` and often has deduced
-    template-parameters on construction, so that the user need not specify
-    them.
+  - Each of the templated constructor-classes, [`gsl::vector`][vector] and
+    [`gsl::vector_view`][vector_view], descends from `gsl::v_iface` and often
+    has deduced template-parameters on construction, so that the user need not
+    specify them.
   - The compiler will even automatically determine from the initializer whether
     storage-size be known at compile-time and thereby pick template-parameters
-    for `gsl::vector` so that storage resides on the stack when possible,
-    though this can be override by explicit choice of template-parameters.
+    for [`gsl::vector`][vector] so that storage resides on the stack when
+    possible, though this can be override by explicit choice of
+    template-parameters.
   - Unit-tests provide almost 100% code-coverage.
 
 What remains for the first release is to write narrative documentation for
 Doxygen's main page.
+
+[v_iface]: https://tevaughan.github.io/gslcpp/html/structgsl_1_1v__iface.html#details
+[move]: https://tevaughan.github.io/gslcpp/html/classgsl_1_1v__stor_3_01T_01_4.html#a6c8081bc309f81866cd4ef89d0054fe2
 
 ## How to Build
 
