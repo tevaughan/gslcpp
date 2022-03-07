@@ -41,9 +41,9 @@ The first release is almost done.
     of syntactic sugar, but the initial release will not go beyond the basic
     semantics of GSL's native vector-operations.
   - Each of the templated constructor-classes, [`gsl::vector`][vector] and
-    [`gsl::vector_view`][vector_view], descends from `gsl::v_iface` and often
-    has deduced template-parameters on construction, so that the user need not
-    specify them.
+    [`gsl::vector_view`][vector_view], descends from [`gsl::v_iface`][v_iface]
+    and often has deduced template-parameters on construction, so that the user
+    need not specify them.
   - The compiler will even automatically determine from the initializer whether
     storage-size be known at compile-time and thereby pick template-parameters
     for [`gsl::vector`][vector] so that storage resides on the stack when
