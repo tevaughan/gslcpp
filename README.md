@@ -10,6 +10,11 @@
     vectors by way of integration with [Eigen](https://eigen.tuxfamily.org).
   - I have not yet planned further ahead.
 
+[vector]: https://tevaughan.github.io/gslcpp/html/structgsl_1_1vector.html#details
+[vector_view]: https://tevaughan.github.io/gslcpp/html/structgsl_1_1vector__view.html#details
+
+## Products of Github Action
+
 - [Documentation via Doxygen][doxy]
 
 - Code-Coverage after Running Unit-Tests
@@ -19,8 +24,13 @@
 [doxy]: https://tevaughan.github.io/gslcpp/html/index.html
 [summary]: https://tevaughan.github.io/gslcpp/tests_cov-summary.txt
 [details]: https://tevaughan.github.io/gslcpp/tests_cov.html
-[vector]: https://tevaughan.github.io/gslcpp/html/structgsl_1_1vector.html#details
-[vector_view]: https://tevaughan.github.io/gslcpp/html/structgsl_1_1vector__view.html#details
+
+Every push to the repository causes a [github-action][3] to regenerate the
+[github-pages site][pages].  The rule for this action is [here][4].
+
+[pages]: https://tevaughan.github.io/gslcpp/index.html
+[3]: https://github.com/features/actions
+[4]: https://github.com/tevaughan/gslcpp/blob/main/.github/workflows/doxygen-gh-pages.yml
 
 ## Status
 
@@ -154,13 +164,4 @@ doxygen
 
 After that, products of the `Doxygen`-build end up in the local copy under
 `docs/html`.
-
-## Products of Github Action
-
-Every push to the repository causes a [github-action][3] to regenerate the
-[github-pages site][pages].  The rule for this action is [here][4].
-
-[pages]: https://tevaughan.github.io/gslcpp/index.html
-[3]: https://github.com/features/actions
-[4]: https://github.com/tevaughan/gslcpp/blob/main/.github/workflows/doxygen-gh-pages.yml
 
