@@ -6,6 +6,7 @@
 #include "gslcpp/vector.hpp"
 #include <catch.hpp>
 
+using gsl::CALLOC;
 using gsl::complex;
 using gsl::v_iface;
 using gsl::vector;
@@ -40,7 +41,7 @@ template<typename E> void verify_dynamic_base_constructor() {
   vector<E> v(15);
   REQUIRE(v.size() == 15);
 
-  vector<E> w(15, vector<E>::CALLOC);
+  vector<E> w(15, CALLOC);
   v.set_zero();
   REQUIRE(v == w);
 }

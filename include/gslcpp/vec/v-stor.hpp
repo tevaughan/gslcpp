@@ -46,6 +46,13 @@ public:
 };
 
 
+/// Identifier for each of two possible allocation-methods.
+enum alloc_type {
+  ALLOC, ///< Just allocate without initialization.
+  CALLOC ///< Initialize each element to zero after allocation.
+};
+
+
 /// Specialization, which is interface to storage with two key properties:
 /// (1) that size of storage is determined dynamically, at run-time, and
 /// (2) that it is owned by instance of interface.
@@ -61,13 +68,6 @@ public:
 template<typename T> class v_stor<T> {
   v_stor(v_stor const &)= delete; ///< Disable copy-construction.
   v_stor &operator=(v_stor const &)= delete; ///< Disable copy-assignment.
-
-public:
-  /// Identifier for each of two possible allocation-methods.
-  enum alloc_type {
-    ALLOC, ///< Just allocate without initialization.
-    CALLOC ///< Initialize each element to zero after allocation.
-  };
 
 protected:
   /// Pointer to allocated descriptor for vector.

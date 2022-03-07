@@ -20,6 +20,7 @@ tests_cov: build_prep
 	@cd build && make tests_cov
 
 doc: build_prep
+	@cd build && make vector-example.out
 	@cd build && make doc
 
 build_prep:
@@ -32,7 +33,7 @@ format:
 
 clean :
 	@rm -frv build
-	@rm -frv docs/html docs/tests_cov*
+	@rm -frv docs/html docs/tests_cov* docs/examples
 	@rm -fv default.profraw
 	@rm -fv io-test.dat
 	@rm -fv output-test.txt

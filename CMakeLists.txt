@@ -100,5 +100,6 @@ message("--   Using ${GSL_MINOR} as minor version-number")
 add_definitions(-DGSL_MAJOR=${GSL_MAJOR})
 add_definitions(-DGSL_MINOR=${GSL_MINOR})
 
+add_subdirectory(examples)
 add_subdirectory(test)
 

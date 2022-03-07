@@ -12,5 +12,8 @@
 /// algebra.
 ///
 /// See also the [repository at GitHub](https://github.com/tevaughan/gslcpp).
+///
+/// \include vector-example.cpp
+/// \include vector-example.out
 
 // EOF
