@@ -13,35 +13,7 @@
 ///
 /// See the [repository at GitHub](https://github.com/tevaughan/gslcpp).
 ///
-/// Here is an example-program:
-/// \include vector-example.cpp
-///
-/// And here is its output:
-/// \include vector-example.out
-///
-/// The move-constructor is also defined for gsl::vector<T,0>, and so one could
-/// also do something like this:
-///
-/// ~~~{.cpp}
-/// #include <gsl/vector.hpp>
-///
-/// using gsl::vector;
-///
-/// vector<float,0> read_big_file_into_array();
-///
-/// int main() {
-///   vector v= read_big_file_into_array();
-///   return 0;
-/// }
-/// ~~~
-///
-/// In compiling the code above, the compiler might elide copying of the
-/// return-value from `read_big_file_into_array()` but is not *required* to
-/// elide copying (according to C++-17), depending on how the vector inside the
-/// function is obtained.
-///
-/// However, even if there were no copy-elision, the big array would still not
-/// be copied into `v` because there is a move-constructor that would be
-/// called.
+/// - \ref d_vector "About gsl::vector"
+/// - \ref d_vector_view "About gsl::vector_view"
 
 // EOF

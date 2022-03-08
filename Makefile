@@ -20,7 +20,7 @@ tests_cov: build_prep
 	@cd build && make tests_cov
 
 doc: build_prep
-	@cd build && make vector-example.out
+	@cd build && make vector-example.out && make vector-view-example.out
 	@cd build && make doc
 
 build_prep:

@@ -14,7 +14,7 @@ int main() {
   vector v1= a1;
   cout << "\n"
        << "v1 has, on stack, elements and internal vector-view.\n"
-       << "Instance of gsl_vector_view consumes 40 bytes.\n"
+       << "Instance of gsl_vector_view consumes 40 bytes on 64-bit hardware.\n"
        << "sizeof(v1)=" << sizeof(v1) << " v1=" << v1 << "\n"
        << "v1.sum()=" << v1.sum() << endl;
 
