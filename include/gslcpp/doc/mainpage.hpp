@@ -15,5 +15,6 @@
 ///
 /// - \ref d_vector "About gsl::vector"
 /// - \ref d_vector_view "About gsl::vector_view"
+/// - \ref d_v_iface "About gsl::v_iface"
 
 // EOF
