@@ -2,13 +2,17 @@
 
 `gslcpp` is a header-only, modern C++-library intended to wrap all of the
 [GNU Scientific Library][gsl].
-  - The first release covers functions and types related to `gsl_vector`.
-  - The second release will cover multidimensional minimization.
-  - The third release will cover `gsl_matrix` and expand the capabilities of
-    vectors by way of integration with [Eigen](https://eigen.tuxfamily.org).
-  - I have not yet planned further ahead.
 
 [gsl]: https://www.gnu.org/software/gsl/
+
+## Version-History
+  - v1.0 covers functions and types related to GSL's vector.
+
+## Roadmap
+  - v1.1 will cover multidimensional minimization.
+  - v1.2 will cover matrices and expand the capabilities of
+    vectors by way of integration with [Eigen](https://eigen.tuxfamily.org).
+  - v1.3 will cover quadrature (numerical integration).
 
 ## Products of Github Action
 
