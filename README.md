@@ -1,11 +1,14 @@
-# Header-Only C++-Library Wrapping GNU Scientific Library
+# Header-Only C++-Library Wrapping GSL
 
-`gslcpp` is a header-only, modern C++-library intended to wrap all of GSL.
+`gslcpp` is a header-only, modern C++-library intended to wrap all of the
+[GNU Scientific Library][gsl].
   - The first release covers functions and types related to `gsl_vector`.
   - The second release will cover multidimensional minimization.
   - The third release will cover `gsl_matrix` and expand the capabilities of
     vectors by way of integration with [Eigen](https://eigen.tuxfamily.org).
   - I have not yet planned further ahead.
+
+[gsl]: https://www.gnu.org/software/gsl/
 
 ## Products of Github Action
 
