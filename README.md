@@ -122,10 +122,6 @@ After `Doxygen` has been installed, one can then, from the top-level of
 ```
 make doc
 ```
-or just
-```
-doxygen
-```
 
 After that, products of the `Doxygen`-build end up in the local copy under
 `docs/html`.
