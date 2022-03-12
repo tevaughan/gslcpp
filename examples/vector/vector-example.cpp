@@ -16,7 +16,7 @@ int main() {
        << "v1 has, on stack, elements and internal vector-view.\n"
        << "Instance of gsl_vector_view consumes 40 bytes on 64-bit hardware.\n"
        << "sizeof(v1)=" << sizeof(v1) << " v1=" << v1 << "\n"
-       << "v1.sum()=" << v1.sum() << endl;
+       << "v1.get(1)=" << v1.get(1) << endl;
 
   // Deduce vector<double,5>, and copy from initializer-list.
   vector v2({1.0, 3.0, 5.0, 7.0, 9.0});

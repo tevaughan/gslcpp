@@ -3,12 +3,9 @@
 /// \brief      Definition of gsl::w_sum().
 
 #pragma once
-#include "compat.hpp" // GSL_AT_LEAST(), sum_for_gsl_lt_2p7()
 #include "container.hpp" // w_vector // vector
 
 namespace gsl {
-
-#if GSL_AT_LEAST(2, 7)
 
 
 /// Sum of elements in vector `v`.
@@ -100,46 +97,6 @@ inline char w_sum(w_vector<char const> *v) { return gsl_vector_char_sum(v); }
 inline unsigned char w_sum(w_vector<unsigned char const> *v) {
   return gsl_vector_uchar_sum(v);
 }
-
-
-/// Sum of elements in vector `v`.
-/// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
-/// @param v  Pointer to vector.
-/// @return  Sum of elements in `v`.
-inline complex<double> w_sum(w_vector<complex<double> const> *v) {
-  return gsl_vector_complex_sum(v);
-}
-
-
-/// Sum of elements in vector `v`.
-/// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
-/// @param v  Pointer to vector.
-/// @return  Sum of elements in `v`.
-inline complex<float> w_sum(w_vector<complex<float> const> *v) {
-  return gsl_vector_complex_float_sum(v);
-}
-
-
-/// Sum of elements in vector `v`.
-/// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
-/// @param v  Pointer to vector.
-/// @return  Sum of elements in `v`.
-inline complex<long double> w_sum(w_vector<complex<long double> const> *v) {
-  return gsl_vector_complex_long_double_sum(v);
-}
-
-
-#else
-
-
-/// Sum of elements in vector `v`.
-/// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
-/// @param v  Pointer to vector.
-/// @return  Sum of elements in `v`.
-template<typename V> auto w_sum(V *v) { return sum_for_gsl_lt_2p7(*v); }
-
-
-#endif
 
 
 } // namespace gsl

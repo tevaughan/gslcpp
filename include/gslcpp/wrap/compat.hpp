@@ -9,14 +9,17 @@
 ///             gsl::elem_t,
 ///             gsl::sum_for_gsl_lt_2p7(),
 ///             gsl::axpby_for_gsl_lt_2p7().
+///
+/// 'compat.hpp' was originally intended to support gsl-2.7's interface even
+/// when gsl-2.5 was installed.  I have moved away from supporting more than
+/// one version of gsl at any given release of gslcpp.  But I leave
+/// 'compat.hpp' here because it provides a good example of using Eigen with
+/// GSL.
 
 #pragma once
 
-#include "../version.hpp" // GSL_AT_LEAST()
 #include "container.hpp" // gsl_vector_complex
-
-#if !GSL_AT_LEAST(2, 7)
-#  include <Eigen/Core> // Map, Matrix
+#include <Eigen/Core> // Map, Matrix
 
 namespace gsl {
 
@@ -104,7 +107,7 @@ int axpby_for_gsl_lt_2p7(
   using S= Stride<Dynamic, Dynamic>;
   using xmap= Map<Matrix<E, Dynamic, 1> const, 0, S>;
   using ymap= Map<Matrix<E, Dynamic, 1>, 0, S>;
-  xmap ex((E const*)x.data, x.size, S(x.size * x.stride, x.stride));
+  xmap ex((E const *)x.data, x.size, S(x.size * x.stride, x.stride));
   ymap ey((E *)y.data, y.size, S(x.size * x.stride, y.stride));
   ey*= b;
   ey+= a * ex;
@@ -114,4 +117,3 @@ int axpby_for_gsl_lt_2p7(
 
 } // namespace gsl
 
-#endif // !GSL_AT_LEAST(2, 7)

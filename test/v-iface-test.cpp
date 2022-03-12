@@ -780,15 +780,17 @@ template<typename E> constexpr bool is_unsigned() {
 /// Verify that statistical functions work for v_iface<E>.
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_stats() {
-  vector const a= g<E>::ca; // (1, 2, 3)
-  auto b= a.subvector(2, 0, 2); // (1, 3)
-  REQUIRE(a.sum() == E(6)); // 1 + 2 + 3
-  REQUIRE(b.sum() == E(4)); // 1 + 3
-
   // Complex numbers are not ordered, and so no order-related statistics.
+  // Also, gsl-2.7 does not implement the sum-function for complex.
   if constexpr(is_complex<E>()) {
     return;
   } else {
+    vector const a= g<E>::ca; // (1, 2, 3)
+    auto b= a.subvector(2, 0, 2); // (1, 3)
+
+    REQUIRE(a.sum() == E(6)); // 1 + 2 + 3
+    REQUIRE(b.sum() == E(4)); // 1 + 3
+
     REQUIRE(a.max() == E(3));
     REQUIRE(a.min() == E(1));
 
@@ -797,13 +799,13 @@ template<typename E> void verify_stats() {
     REQUIRE(min == E(1));
     REQUIRE(max == E(3));
 
-    auto b= a;
-    b.reverse();
-    REQUIRE(b.max_index() == 0);
-    REQUIRE(b.min_index() == 2);
+    auto c= a;
+    c.reverse();
+    REQUIRE(c.max_index() == 0);
+    REQUIRE(c.min_index() == 2);
 
     size_t imin, imax;
-    b.minmax_index(imin, imax);
+    c.minmax_index(imin, imax);
     REQUIRE(imax == 0);
     REQUIRE(imin == 2);
   }

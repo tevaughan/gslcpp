@@ -1,13 +1,13 @@
 
 # If necessary, supply version number as in
 #
-# CC:=clang-11
-# CXX:=clang++-11
+# CC:=clang-13
+# CXX:=clang++-13
 #
 # Use whatever version you like, but probably need at least clang++-10.
 
-CC:=clang-12
-CXX:=clang++-12
+CC:=clang
+CXX:=clang++
 
 VER:=$(patsubst clang++-%,%,$(CXX))
 CLANG_FORMAT:=$(if $(VER),clang-format-$(VER),clang-format)

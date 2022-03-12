@@ -47,23 +47,7 @@ A compiler for C++-17 or later is required to use `gslcpp`.
   - Because Eigen is also a header-only library, the requirements for linking
     are the same as those for GSL.
 
-By default, `gslcpp` assumes that the installed version of GSL is at least 2.5
-and that the installed version of Eigen is at least 3.3.  But each of these can
-be set by way of
-  - `-DGSL_MAJOR=<integer>`
-  - `-DGSL_MINOR=<integer>`
-  - `-DEIGEN_MAJOR=<integer>`
-  - `-DEIGEN_MAJOR=<integer>`
-
-See [CMakeLists.txt][CMakeLists.txt] at the top level of `gslcpp`'s tree for
-examples of how to detect and to set these version-numbers on the basis of what
-is installed on the system.
-
-`gslcpp` provides an interface with all of the features of GSL-2.7 (for
-functionality that is covered). If GSL-2.5 be installed, the extra functions
-for vectors are emulated by way of Eigen.
-
-[CMakeLists.txt]: https://github.com/tevaughan/gslcpp/blob/main/CMakeLists.txt
+For v1.0, `gslcpp` assumes that the installed version of GSL is at least 2.7.
 
 ### Unit-Tests
 

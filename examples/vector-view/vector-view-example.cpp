@@ -14,7 +14,7 @@ int main() {
   cout << "\n"
        << "Instance of gsl_vector_view consumes 40 bytes on 64-bit hardware.\n"
        << "sizeof(v1)=" << sizeof(v1) << " v1=" << v1 << "\n"
-       << "v1.sum()=" << v1.sum() << endl;
+       << "v1.get(1)=" << v1.get(1) << endl;
 
   float a4[]= {1, 2, 3, 4, 5, 6};
   // Deduce vector_view<float,0>, and set size to four. The output contains

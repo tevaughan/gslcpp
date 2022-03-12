@@ -3,12 +3,9 @@
 /// @brief      Definition of gsl::w_axpby().
 
 #pragma once
-#include "compat.hpp"
 #include "container.hpp" // w_vector
 
 namespace gsl {
-
-#if GSL_AT_LEAST(2, 7)
 
 
 /// Perform the logical equivalent of `y = a*x + b*y`.
@@ -259,34 +256,6 @@ inline int w_axpby(
   return gsl_vector_complex_long_double_axpby(a, x, b, y);
 }
 
-
-#else
-
-
-/// Perform the logical equivalent of `y = a*x + b*y`.
-///
-/// Provide the functionality of GSL's `gsl_vector_axpby` even when installed
-/// version of GSL be less than 2.7, at which revision `gsl_vector_axpby` was
-/// added to GSL.
-///
-/// `axpby` uses Eigen to perform the computation.
-///
-/// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_axpby
-///
-/// @param a  Coefficient of vector `x`.
-/// @param x  Pointer to vector that is multiplied by `a`.
-/// @param b  Coefficient of vector `y`.
-/// @param y  Pointer to vector that is multiplied by `b` and then updated as
-///           `a*x + b*y`.
-/// @return  GSL's documentation does not specify, but this implementation
-///          returns zero.
-template<typename V>
-int w_axpby(elem_t<V> const &a, V const *x, elem_t<V> const &b, V *y) {
-  return axpby_for_gsl_lt_2p7(a, *x, b, *y);
-}
-
-
-#endif // if GSL_AT_LEAST(2, 7)
 
 } // namespace gsl
 

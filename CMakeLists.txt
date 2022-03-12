@@ -46,13 +46,6 @@ endif()
 #
 find_package(Eigen3 REQUIRED)
 message("-- Found Eigen-${Eigen3_VERSION}")
-string(REGEX REPLACE "^([0-9]+)\..*" "\\1" EIGEN_MAJOR ${Eigen3_VERSION})
-string(REGEX REPLACE
-  "^[0-9]+\.([0-9]+)(\..*)?" "\\1" EIGEN_MINOR ${Eigen3_VERSION})
-message("--   Using ${EIGEN_MAJOR} as major version-number")
-message("--   Using ${EIGEN_MINOR} as minor version-number")
-add_definitions(-DEIGEN_MAJOR=${EIGEN_MAJOR})
-add_definitions(-DEIGEN_MINOR=${EIGEN_MINOR})
 # TODO: Add this flag to the right declaration (not add_definitions!).
 # This is needed in case the installed version of Eigen causes this warning to
 # be emitted.
@@ -62,7 +55,7 @@ add_definitions(-Wno-deprecated-anon-enum-enum-conversion)
 #
 # doxygen-1.9.2 is not required here, but version below 1.9.2 will not document
 # C++-20 concepts correctly.
-find_package(Doxygen REQUIRED dot dia OPTIONAL_COMPONENTS mscgen)
+find_package(Doxygen REQUIRED dot OPTIONAL_COMPONENTS dia mscgen)
 #
 # The function that is supposed to add a target for generating docs via
 # `doxygen` has failed for me when I use Doxygen-1.9.3.  It stubbornly makes
@@ -92,13 +85,7 @@ endif()
 
 # gsl
 #
-find_package(GSL REQUIRED)
-string(REGEX REPLACE "^([0-9]+)\..*" "\\1" GSL_MAJOR ${GSL_VERSION})
-string(REGEX REPLACE "^[0-9]+\.([0-9]+)(\..*)?" "\\1" GSL_MINOR ${GSL_VERSION})
-message("--   Using ${GSL_MAJOR} as major version-number")
-message("--   Using ${GSL_MINOR} as minor version-number")
-add_definitions(-DGSL_MAJOR=${GSL_MAJOR})
-add_definitions(-DGSL_MINOR=${GSL_MINOR})
+find_package(GSL 2.7 REQUIRED)
 
 add_subdirectory(examples)
 add_subdirectory(test)

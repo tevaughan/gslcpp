@@ -405,98 +405,18 @@ struct v_iface: public S<T, N> {
   /// True only if every element be non-negative.
   /// @return  True only if every element be non-negative.
   bool isnonneg() const { return w_isnonneg(&v()); }
-
 };
 
 
 /// Test equality of two vectors.
-/// @tparam U  Type of one descendant of v_iface.
-/// @tparam V  Type of other descendant of v_iface.
-/// @param u  Reference to one vector.
-/// @param v  Reference to other vector.
-/// @return  True only if vectors be equal.
-template<
-      typename T1,
-      typename T2,
-      size_t N1,
-      size_t N2,
-      template<typename, size_t>
-      class V1,
-      template<typename, size_t>
-      class V2>
-bool operator==(v_iface<T1, N1, V1> const &u, v_iface<T2, N2, V2> const &v) {
-  static_assert(N1 == N2 || N1 == 0 || N2 == 0);
-  return equal(u, v);
-}
-
-
-/// Test inequality of two vectors.
-/// @tparam U  Type of one descendant of v_iface.
-/// @tparam V  Type of other descendant of v_iface.
-/// @param u  Reference to one vector.
-/// @param v  Reference to other vector.
-/// @return  True only if vectors be unequal.
-template<
-      typename T,
-      size_t N1,
-      size_t N2,
-      template<typename, size_t>
-      class V1,
-      template<typename, size_t>
-      class V2>
-bool operator!=(v_iface<T, N1, V1> const &u, v_iface<T, N2, V2> const &v) {
-  static_assert(N1 == N2 || N1 == 0 || N2 == 0);
-  return !equal(u, v);
-}
-
-
-/// Print vector to output-stream.
-/// @tparam U  Type of descendant of v_iface.
-/// @param os  Reference to output-stream.
-/// @param u  Reference to vector.
-/// @return  Reference to modified output-stream.
-template<typename T, size_t N, template<typename, size_t> class V>
-std::ostream &operator<<(std::ostream &os, v_iface<T, N, V> const &u) {
-  os << "[";
-  int const last= int(u.size()) - 1;
-  for(int i= 0; i < last; ++i) os << u[i] << ",";
-  if(last >= 0) os << u[last];
-  os << "]";
-  return os;
-}
-
-
-/// Linearly combine vector `x` into vector `y` in place.
-/// @tparam T  Type of storage for first vector.
-/// @tparam U  Type of storage for second vector.
-/// @param alpha  Coeffient of `x`.
-/// @param x  First vector (source).
-/// @param beta  Coefficient of `y`.
-/// @param y  Second vector and (source and destination).
-/// @return  TBD: GSL's documentation does not specify.
-template<
-      typename T,
-      size_t N1,
-      size_t N2,
-      template<typename, size_t>
-      class V1,
-      template<typename, size_t>
-      class V2>
-int axpby(
-      T const &alpha,
-      v_iface<T, N1, V1> const &x,
-      T const &beta,
-      v_iface<T, N2, V2> &y) {
-  static_assert(N1 == N2 || N1 == 0 || N2 == 0);
-  return w_axpby(alpha, &x.v(), beta, &y.v());
-}
-
-
-/// Test equality of two vectors.
-/// @tparam S1  Type of storage for one vector.
-/// @tparam S2  Type of storage for other vector.
-/// @param v1  Reference to one vector.
-/// @param v2  Reference to other vector.
+/// @tparam T1  Type of element in first vector.
+/// @tparam T2  Type of element in second vector.
+/// @tparam N1  Compile-time number of elements in first vector.
+/// @tparam N2  Compile-time number of elements in second vector.
+/// @tparam V1  Type of storage for first vector.
+/// @tparam V2  Type of storage for second vector.
+/// @param v1  Reference to first vector.
+/// @param v2  Reference to second vector.
 /// @return  True only if vectors be equal.
 template<
       typename T1,
@@ -513,9 +433,113 @@ bool equal(v_iface<T1, N1, V1> const &v1, v_iface<T2, N2, V2> const &v2) {
 }
 
 
-/// Copy data from source, whose length must be same as that of destination.
-/// @tparam T  Type of descendant of v_iface for destination.
-/// @tparam U  Type of descendant of v_iface for source.
+/// Test equality of two vectors.
+/// @tparam T1  Type of element in first vector.
+/// @tparam T2  Type of element in second vector.
+/// @tparam N1  Compile-time number of elements in first vector.
+/// @tparam N2  Compile-time number of elements in second vector.
+/// @tparam V1  Type of storage for first vector.
+/// @tparam V2  Type of storage for second vector.
+/// @param u  Reference to first vector.
+/// @param v  Reference to second vector.
+/// @return  True only if vectors be equal.
+template<
+      typename T1,
+      typename T2,
+      size_t N1,
+      size_t N2,
+      template<typename, size_t>
+      class V1,
+      template<typename, size_t>
+      class V2>
+bool operator==(v_iface<T1, N1, V1> const &u, v_iface<T2, N2, V2> const &v) {
+  static_assert(
+        N1 == N2 || N1 == 0 || N2 == 0, "incompatible size at compile-time");
+  return equal(u, v);
+}
+
+
+/// Test inequality of two vectors.
+/// @tparam T1  Type of element in first vector.
+/// @tparam T2  Type of element in second vector.
+/// @tparam N1  Compile-time number of elements in first vector.
+/// @tparam N2  Compile-time number of elements in second vector.
+/// @tparam V1  Type of storage for first vector.
+/// @tparam V2  Type of storage for second vector.
+/// @param u  Reference to first vector.
+/// @param v  Reference to second vector.
+/// @return  True only if vectors be unequal.
+template<
+      typename T1,
+      typename T2,
+      size_t N1,
+      size_t N2,
+      template<typename, size_t>
+      class V1,
+      template<typename, size_t>
+      class V2>
+bool operator!=(v_iface<T1, N1, V1> const &u, v_iface<T2, N2, V2> const &v) {
+  static_assert(N1 == N2 || N1 == 0 || N2 == 0);
+  return !equal(u, v);
+}
+
+
+/// Print vector to output-stream.
+/// @tparam T  Type of element in vector.
+/// @tparam N  Number of elements in vector.
+/// @tparam V  Type of storage for vector.
+/// @param os  Reference to output-stream.
+/// @param u  Reference to vector.
+/// @return  Reference to modified output-stream.
+template<typename T, size_t N, template<typename, size_t> class V>
+std::ostream &operator<<(std::ostream &os, v_iface<T, N, V> const &u) {
+  os << "[";
+  int const last= int(u.size()) - 1;
+  for(int i= 0; i < last; ++i) os << u[i] << ",";
+  if(last >= 0) os << u[last];
+  os << "]";
+  return os;
+}
+
+
+/// Linearly combine vector `x` into vector `y` in place.
+/// @tparam T1  Type of element in `x`.
+/// @tparam T2  Type of element in `y`.
+/// @tparam N1  Compile-time number of elements in `x`.
+/// @tparam N2  Compile-time number of elements in `y`.
+/// @tparam V1  Type of storage for `x`.
+/// @tparam V2  Type of storage for `y`.
+/// @param alpha  Coeffient of `x`.
+/// @param x  First vector (source).
+/// @param beta  Coefficient of `y`.
+/// @param y  Second vector and (source and destination).
+/// @return  TBD: GSL's documentation does not specify.
+template<
+      typename T1,
+      typename T2,
+      size_t N1,
+      size_t N2,
+      template<typename, size_t>
+      class V1,
+      template<typename, size_t>
+      class V2>
+int axpby(
+      T1 const &alpha,
+      v_iface<T1, N1, V1> const &x,
+      T2 const &beta,
+      v_iface<T2, N2, V2> &y) {
+  static_assert(N1 == N2 || N1 == 0 || N2 == 0);
+  return w_axpby(alpha, &x.v(), beta, &y.v());
+}
+
+
+/// Copy data from `src`, whose length must be same as that of `dst`.
+/// @tparam T1  Type of element in `dst`.
+/// @tparam T2  Type of element in `src`.
+/// @tparam N1  Compile-time number of elements in `dst`.
+/// @tparam N2  Compile-time number of elements in `src`.
+/// @tparam V1  Type of storage for `dst`.
+/// @tparam V2  Type of storage for `src`.
 /// @param dst  Destination.
 /// @param src  Source.
 /// @return  TBD: GSL's documentation does not specify.
@@ -535,20 +559,25 @@ int memcpy(v_iface<T1, N1, V1> &dst, v_iface<T2, N2, V2> const &src) {
 
 
 /// Swap contents of one and other vector, each with same length.
-/// @tparam S1  Type of storage for one vector.
-/// @tparam S2  Type of storage for other vector.
-/// @param v1  One vector.
-/// @param v2  Other vector.
+/// @tparam T1  Type of element in first vector.
+/// @tparam T2  Type of element in second vector.
+/// @tparam N1  Compile-time number of elements in first vector.
+/// @tparam N2  Compile-time number of elements in second vector.
+/// @tparam V1  Type of storage for first vector.
+/// @tparam V2  Type of storage for second vector.
+/// @param v1  Reference to first vector.
+/// @param v2  Reference to second vector.
 /// @return  TBD: GSL's documentation does not specify.
 template<
-      typename T,
+      typename T1,
+      typename T2,
       size_t N1,
       size_t N2,
       template<typename, size_t>
       class V1,
       template<typename, size_t>
       class V2>
-int swap(v_iface<T, N1, V1> &v1, v_iface<T, N2, V2> &v2) {
+int swap(v_iface<T1, N1, V1> &v1, v_iface<T2, N2, V2> &v2) {
   return w_swap(&v1.v(), &v2.v());
 }
 
