@@ -32,9 +32,7 @@ jobs:
         make
         wget
 
-    - run: wget https://mirror.us-midwest-1.nexcess.net/gnu/gsl/gsl-2.7.1.tar.gz
-    - run: tar fvx gsl-2.7.1.tar.gz
-    - run: cd gsl-2.7.1; ./configure; make; make install
+    - run: ./build-gsl
     - run: make
     - run: make doc
 
