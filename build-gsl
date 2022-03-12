@@ -1,11 +1,11 @@
 #!/bin/sh
 
-# This script is intended to be run as root by gh-action.
+# This script is intended to be run by gh-action.
 
 GSL=gsl-2.7.1
 
 GSL_TGZ=${GSL}.tar.gz
 wget https://mirror.us-midwest-1.nexcess.net/gnu/gsl/${GSL_TGZ}
 tar fvx ${GSL_TGZ}
-cd gsl-2.7.1; ./configure; make; make install
+cd gsl-2.7.1; ./configure; make; sudo make install
 
