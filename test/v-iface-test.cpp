@@ -4,6 +4,7 @@
 
 #include "gslcpp/vector-view.hpp"
 #include "gslcpp/vector.hpp"
+#include "gslcpp/wrap/is-complex.hpp"
 #include <catch.hpp>
 #include <cinttypes> // PRId8, etc.
 #include <sstream> // ostringstream
@@ -11,6 +12,7 @@
 
 using gsl::axpby;
 using gsl::complex;
+using gsl::is_complex_v;
 using gsl::v_iface;
 using gsl::vector;
 using gsl::vector_view;
@@ -754,17 +756,6 @@ TEST_CASE("v_iface::add_constant() works.", "[v-iface]") {
 }
 
 
-/// True if type E be complex.
-/// \tparam E  Type of each element in vector.
-/// \return  True if E be complex.
-template<typename E> constexpr bool is_complex() {
-  constexpr bool cd= is_same_v<E, complex<double>>;
-  constexpr bool cf= is_same_v<E, complex<float>>;
-  constexpr bool cld= is_same_v<E, complex<long double>>;
-  return cd || cf || cld;
-}
-
-
 /// True if type E be unsigned.
 /// \tparam E  Type of each element in vector.
 /// \return  True if E be unsigned.
@@ -782,7 +773,7 @@ template<typename E> constexpr bool is_unsigned() {
 template<typename E> void verify_stats() {
   // Complex numbers are not ordered, and so no order-related statistics.
   // Also, gsl-2.7 does not implement the sum-function for complex.
-  if constexpr(is_complex<E>()) {
+  if constexpr(is_complex_v<E>) {
     return;
   } else {
     vector const a= g<E>::ca; // (1, 2, 3)
@@ -864,7 +855,7 @@ TEST_CASE("v_iface::isnull() works.", "[v-iface]") {
 /// \tparam E  Type of each element in vector.
 template<typename E> void verify_ispos() {
   vector b= g<E>::ca;
-  if constexpr(is_complex<E>()) {
+  if constexpr(is_complex_v<E>) {
     REQUIRE(b.ispos() == false);
     vector const c({E(1, 1), E(2, 1), E(3, 1)});
     REQUIRE(c.ispos() == true);
@@ -935,7 +926,7 @@ TEST_CASE("v_iface::isnonneg() works.", "[v-iface]") {
 template<typename E> void verify_isneg() {
   vector b= g<E>::ca;
   REQUIRE(b.isneg() == false);
-  if constexpr(is_complex<E>()) {
+  if constexpr(is_complex_v<E>) {
     b.add_constant(E(-4, -1));
   } else {
     b.add_constant(E(-4));
@@ -1135,29 +1126,85 @@ TEST_CASE("v_iface::view() works.", "[v-iface]") {
 }
 
 
-/// Verify that real() and imag() work for v_iface<C>.
-/// \tparam C  Complex type of each element in vector.
-template<typename C> void verify_real_imag() {
-  vector const a({C(1,2), C(3,4), C(5,6)});
+/// Verify that real() works for v_iface<T>.
+/// \tparam T  Type of each element in vector.
+template<typename T> void verify_real() {
+  vector<T, 3> a;
+  if constexpr(is_complex_v<T>) {
+    a= {T(1, 2), T(3, 4), T(5, 6)};
+  } else {
+    a= {T(1), T(3), T(5)};
+  }
 
   auto const b= a.real();
-  auto const c= a.imag();
+  auto c= a.real();
 
-  REQUIRE(b[0]==1);
-  REQUIRE(b[1]==3);
-  REQUIRE(b[2]==5);
+  REQUIRE(b[0] == 1);
+  REQUIRE(b[1] == 3);
+  REQUIRE(b[2] == 5);
 
-  REQUIRE(c[0]==2);
-  REQUIRE(c[1]==4);
-  REQUIRE(c[2]==6);
+  c[0]= 7;
+  c[1]= 9;
+  c[2]= 11;
+
+  if constexpr(is_complex_v<T>) {
+    REQUIRE(a[0].real() == 7);
+    REQUIRE(a[1].real() == 9);
+    REQUIRE(a[2].real() == 11);
+  } else {
+    REQUIRE(a[0] == 7);
+    REQUIRE(a[1] == 9);
+    REQUIRE(a[2] == 11);
+  }
 }
 
 
-/// Verify that real() and imag() work for any kind of complex v_iface.
-TEST_CASE("v_iface::real() and v_iface::imag() work.", "[v-iface]") {
-  verify_real_imag<complex<double>>();
-  verify_real_imag<complex<float>>();
-  verify_real_imag<complex<long double>>();
+/// Verify that real() works for any kind of complex v_iface.
+TEST_CASE("v_iface::real() works.", "[v-iface]") {
+  verify_real<double>();
+  verify_real<float>();
+  verify_real<long double>();
+  verify_real<int>();
+  verify_real<unsigned>();
+  verify_real<long>();
+  verify_real<unsigned long>();
+  verify_real<short>();
+  verify_real<unsigned short>();
+  verify_real<char>();
+  verify_real<unsigned char>();
+  verify_real<complex<double>>();
+  verify_real<complex<float>>();
+  verify_real<complex<long double>>();
+}
+
+
+/// Verify that imag() works for v_iface<C>.
+/// \tparam C  Complex type of each element in vector.
+template<typename C> void verify_imag() {
+  vector a({C(1, 2), C(3, 4), C(5, 6)});
+
+  auto const b= a.imag();
+  auto c= a.imag();
+
+  REQUIRE(b[0] == 2);
+  REQUIRE(b[1] == 4);
+  REQUIRE(b[2] == 6);
+
+  c[0]= -2;
+  c[1]= -4;
+  c[2]= -6;
+
+  REQUIRE(a[0].imag() == -2);
+  REQUIRE(a[1].imag() == -4);
+  REQUIRE(a[2].imag() == -6);
+}
+
+
+/// Verify that imag() works for any kind of complex v_iface.
+TEST_CASE("v_iface::imag() works.", "[v-iface]") {
+  verify_imag<complex<double>>();
+  verify_imag<complex<float>>();
+  verify_imag<complex<long double>>();
 }
 
 

@@ -11,7 +11,8 @@ namespace gsl {
 /// Imaginary-part of complex vector.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_complex_imag
 /// @param u  Pointer to vector.
-inline gsl_vector_view w_imag(w_vector<complex<double>> *u) {
+/// @return  View of imaginary part of complex vector.
+inline auto w_imag(w_vector<complex<double>> *u) {
   return gsl_vector_complex_imag(u);
 }
 
@@ -19,7 +20,8 @@ inline gsl_vector_view w_imag(w_vector<complex<double>> *u) {
 /// Imaginary-part of complex vector.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_complex_imag
 /// @param u  Pointer to vector.
-inline gsl_vector_float_view w_imag(w_vector<complex<float>> *u) {
+/// @return  View of imaginary part of complex vector.
+inline auto w_imag(w_vector<complex<float>> *u) {
   return gsl_vector_complex_float_imag(u);
 }
 
@@ -27,7 +29,8 @@ inline gsl_vector_float_view w_imag(w_vector<complex<float>> *u) {
 /// Imaginary-part of complex vector.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_complex_imag
 /// @param u  Pointer to vector.
-inline gsl_vector_long_double_view w_imag(w_vector<complex<long double>> *u) {
+/// @return  View of imaginary part of complex vector.
+inline auto w_imag(w_vector<complex<long double>> *u) {
   return gsl_vector_complex_long_double_imag(u);
 }
 
@@ -35,7 +38,8 @@ inline gsl_vector_long_double_view w_imag(w_vector<complex<long double>> *u) {
 /// Imaginary-part of complex vector.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_complex_imag
 /// @param u  Pointer to vector.
-inline gsl_vector_const_view w_imag(w_vector<complex<double>> const *u) {
+/// @return  View of imaginary part of complex vector.
+inline auto w_imag(w_vector<complex<double>> const *u) {
   return gsl_vector_complex_const_imag(u);
 }
 
@@ -43,7 +47,8 @@ inline gsl_vector_const_view w_imag(w_vector<complex<double>> const *u) {
 /// Imaginary-part of complex vector.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_complex_imag
 /// @param u  Pointer to vector.
-inline gsl_vector_float_const_view w_imag(w_vector<complex<float>> const *u) {
+/// @return  View of imaginary part of complex vector.
+inline auto w_imag(w_vector<complex<float>> const *u) {
   return gsl_vector_complex_float_const_imag(u);
 }
 
@@ -51,8 +56,8 @@ inline gsl_vector_float_const_view w_imag(w_vector<complex<float>> const *u) {
 /// Imaginary-part of complex vector.
 /// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_complex_imag
 /// @param u  Pointer to vector.
-inline gsl_vector_long_double_const_view
-w_imag(w_vector<complex<long double>> const *u) {
+/// @return  View of imaginary part of complex vector.
+inline auto w_imag(w_vector<complex<long double>> const *u) {
   return gsl_vector_complex_long_double_const_imag(u);
 }
 

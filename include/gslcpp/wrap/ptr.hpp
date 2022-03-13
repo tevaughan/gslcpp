@@ -13,7 +13,7 @@ namespace gsl {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline double *w_ptr(w_vector<double> *v, size_t i) {
+inline auto *w_ptr(w_vector<double> *v, size_t i) {
   return gsl_vector_ptr(v, i);
 }
 
@@ -23,7 +23,7 @@ inline double *w_ptr(w_vector<double> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline double const *w_ptr(w_vector<double const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<double const> *v, size_t i) {
   return gsl_vector_const_ptr(v, i);
 }
 
@@ -33,7 +33,7 @@ inline double const *w_ptr(w_vector<double const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline float *w_ptr(w_vector<float> *v, size_t i) {
+inline auto *w_ptr(w_vector<float> *v, size_t i) {
   return gsl_vector_float_ptr(v, i);
 }
 
@@ -43,7 +43,7 @@ inline float *w_ptr(w_vector<float> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline float const *w_ptr(w_vector<float const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<float const> *v, size_t i) {
   return gsl_vector_float_const_ptr(v, i);
 }
 
@@ -53,7 +53,7 @@ inline float const *w_ptr(w_vector<float const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline long double *w_ptr(w_vector<long double> *v, size_t i) {
+inline auto *w_ptr(w_vector<long double> *v, size_t i) {
   return gsl_vector_long_double_ptr(v, i);
 }
 
@@ -63,7 +63,7 @@ inline long double *w_ptr(w_vector<long double> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline long double const *w_ptr(w_vector<long double const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<long double const> *v, size_t i) {
   return gsl_vector_long_double_const_ptr(v, i);
 }
 
@@ -73,7 +73,7 @@ inline long double const *w_ptr(w_vector<long double const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline int *w_ptr(w_vector<int> *v, size_t i) {
+inline auto *w_ptr(w_vector<int> *v, size_t i) {
   return gsl_vector_int_ptr(v, i);
 }
 
@@ -83,7 +83,7 @@ inline int *w_ptr(w_vector<int> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline int const *w_ptr(w_vector<int const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<int const> *v, size_t i) {
   return gsl_vector_int_const_ptr(v, i);
 }
 
@@ -93,7 +93,7 @@ inline int const *w_ptr(w_vector<int const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline unsigned *w_ptr(w_vector<unsigned> *v, size_t i) {
+inline auto *w_ptr(w_vector<unsigned> *v, size_t i) {
   return gsl_vector_uint_ptr(v, i);
 }
 
@@ -103,7 +103,7 @@ inline unsigned *w_ptr(w_vector<unsigned> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline unsigned const *w_ptr(w_vector<unsigned const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<unsigned const> *v, size_t i) {
   return gsl_vector_uint_const_ptr(v, i);
 }
 
@@ -113,7 +113,7 @@ inline unsigned const *w_ptr(w_vector<unsigned const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline long *w_ptr(w_vector<long> *v, size_t i) {
+inline auto *w_ptr(w_vector<long> *v, size_t i) {
   return gsl_vector_long_ptr(v, i);
 }
 
@@ -123,7 +123,7 @@ inline long *w_ptr(w_vector<long> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline long const *w_ptr(w_vector<long const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<long const> *v, size_t i) {
   return gsl_vector_long_const_ptr(v, i);
 }
 
@@ -133,7 +133,7 @@ inline long const *w_ptr(w_vector<long const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline unsigned long *w_ptr(w_vector<unsigned long> *v, size_t i) {
+inline auto *w_ptr(w_vector<unsigned long> *v, size_t i) {
   return gsl_vector_ulong_ptr(v, i);
 }
 
@@ -143,7 +143,7 @@ inline unsigned long *w_ptr(w_vector<unsigned long> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline unsigned long const *w_ptr(w_vector<unsigned long const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<unsigned long const> *v, size_t i) {
   return gsl_vector_ulong_const_ptr(v, i);
 }
 
@@ -153,7 +153,7 @@ inline unsigned long const *w_ptr(w_vector<unsigned long const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline short *w_ptr(w_vector<short> *v, size_t i) {
+inline auto *w_ptr(w_vector<short> *v, size_t i) {
   return gsl_vector_short_ptr(v, i);
 }
 
@@ -163,7 +163,7 @@ inline short *w_ptr(w_vector<short> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline short const *w_ptr(w_vector<short const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<short const> *v, size_t i) {
   return gsl_vector_short_const_ptr(v, i);
 }
 
@@ -173,7 +173,7 @@ inline short const *w_ptr(w_vector<short const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline unsigned short *w_ptr(w_vector<unsigned short> *v, size_t i) {
+inline auto *w_ptr(w_vector<unsigned short> *v, size_t i) {
   return gsl_vector_ushort_ptr(v, i);
 }
 
@@ -194,7 +194,7 @@ w_ptr(w_vector<unsigned short const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline char *w_ptr(w_vector<char> *v, size_t i) {
+inline auto *w_ptr(w_vector<char> *v, size_t i) {
   return gsl_vector_char_ptr(v, i);
 }
 
@@ -204,7 +204,7 @@ inline char *w_ptr(w_vector<char> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline char const *w_ptr(w_vector<char const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<char const> *v, size_t i) {
   return gsl_vector_char_const_ptr(v, i);
 }
 
@@ -214,7 +214,7 @@ inline char const *w_ptr(w_vector<char const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline unsigned char *w_ptr(w_vector<unsigned char> *v, size_t i) {
+inline auto *w_ptr(w_vector<unsigned char> *v, size_t i) {
   return gsl_vector_uchar_ptr(v, i);
 }
 
@@ -224,7 +224,7 @@ inline unsigned char *w_ptr(w_vector<unsigned char> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline unsigned char const *w_ptr(w_vector<unsigned char const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<unsigned char const> *v, size_t i) {
   return gsl_vector_uchar_const_ptr(v, i);
 }
 
@@ -234,7 +234,7 @@ inline unsigned char const *w_ptr(w_vector<unsigned char const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline complex<double> *w_ptr(w_vector<complex<double>> *v, size_t i) {
+inline auto *w_ptr(w_vector<complex<double>> *v, size_t i) {
   return (complex<double> *)gsl_vector_complex_ptr(v, i);
 }
 
@@ -244,8 +244,7 @@ inline complex<double> *w_ptr(w_vector<complex<double>> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline complex<double> const *
-w_ptr(w_vector<complex<double> const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<complex<double> const> *v, size_t i) {
   return (complex<double> const *)gsl_vector_complex_const_ptr(v, i);
 }
 
@@ -255,7 +254,7 @@ w_ptr(w_vector<complex<double> const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline complex<float> *w_ptr(w_vector<complex<float>> *v, size_t i) {
+inline auto *w_ptr(w_vector<complex<float>> *v, size_t i) {
   return (complex<float> *)gsl_vector_complex_float_ptr(v, i);
 }
 
@@ -265,8 +264,7 @@ inline complex<float> *w_ptr(w_vector<complex<float>> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline complex<float> const *
-w_ptr(w_vector<complex<float> const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<complex<float> const> *v, size_t i) {
   return (complex<float> const *)gsl_vector_complex_float_const_ptr(v, i);
 }
 
@@ -276,8 +274,7 @@ w_ptr(w_vector<complex<float> const> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline complex<long double> *
-w_ptr(w_vector<complex<long double>> *v, size_t i) {
+inline auto *w_ptr(w_vector<complex<long double>> *v, size_t i) {
   return (complex<long double> *)gsl_vector_complex_long_double_ptr(v, i);
 }
 
@@ -287,8 +284,7 @@ w_ptr(w_vector<complex<long double>> *v, size_t i) {
 /// @param v  Pointer to vector.
 /// @param i  Offset of element in vector.
 /// @return  Pointer to element at offset `i` in `v`.
-inline complex<long double> const *
-w_ptr(w_vector<complex<long double> const> *v, size_t i) {
+inline auto const *w_ptr(w_vector<complex<long double> const> *v, size_t i) {
   return (complex<long double> const *)
         gsl_vector_complex_long_double_const_ptr(v, i);
 }

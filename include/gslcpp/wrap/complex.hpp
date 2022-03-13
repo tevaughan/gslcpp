@@ -1,6 +1,6 @@
 /// \file       include/gslcpp/wrap/complex.hpp
 /// \copyright  2022 Thomas E. Vaughan, all rights reserved.
-/// \brief      Definition of gsl::complex<A>.
+/// \brief      Definition of gsl::complex.
 
 #pragma once
 #include <complex> // std::complex

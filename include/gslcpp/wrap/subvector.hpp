@@ -15,8 +15,7 @@ namespace gsl {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<double>
-w_subvector(w_vector<double> *v, size_t i, size_t s, size_t n) {
+inline auto w_subvector(w_vector<double> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_subvector_with_stride(v, i, s, n);
 }
 
@@ -28,7 +27,7 @@ w_subvector(w_vector<double> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<double const>
+inline auto
 w_subvector(w_vector<double const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_const_subvector_with_stride(v, i, s, n);
 }
@@ -41,8 +40,7 @@ w_subvector(w_vector<double const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<float>
-w_subvector(w_vector<float> *v, size_t i, size_t s, size_t n) {
+inline auto w_subvector(w_vector<float> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_float_subvector_with_stride(v, i, s, n);
 }
 
@@ -54,7 +52,7 @@ w_subvector(w_vector<float> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<float const>
+inline auto
 w_subvector(w_vector<float const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_float_const_subvector_with_stride(v, i, s, n);
 }
@@ -67,7 +65,7 @@ w_subvector(w_vector<float const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<long double>
+inline auto
 w_subvector(w_vector<long double> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_long_double_subvector_with_stride(v, i, s, n);
 }
@@ -80,7 +78,7 @@ w_subvector(w_vector<long double> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<long double const>
+inline auto
 w_subvector(w_vector<long double const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_long_double_const_subvector_with_stride(v, i, s, n);
 }
@@ -93,8 +91,7 @@ w_subvector(w_vector<long double const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<int>
-w_subvector(w_vector<int> *v, size_t i, size_t s, size_t n) {
+inline auto w_subvector(w_vector<int> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_int_subvector_with_stride(v, i, s, n);
 }
 
@@ -106,8 +103,7 @@ w_subvector(w_vector<int> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<int const>
-w_subvector(w_vector<int const> *v, size_t i, size_t s, size_t n) {
+inline auto w_subvector(w_vector<int const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_int_const_subvector_with_stride(v, i, s, n);
 }
 
@@ -119,8 +115,7 @@ w_subvector(w_vector<int const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<unsigned>
-w_subvector(w_vector<unsigned> *v, size_t i, size_t s, size_t n) {
+inline auto w_subvector(w_vector<unsigned> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_uint_subvector_with_stride(v, i, s, n);
 }
 
@@ -132,7 +127,7 @@ w_subvector(w_vector<unsigned> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<unsigned const>
+inline auto
 w_subvector(w_vector<unsigned const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_uint_const_subvector_with_stride(v, i, s, n);
 }
@@ -145,8 +140,7 @@ w_subvector(w_vector<unsigned const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<long>
-w_subvector(w_vector<long> *v, size_t i, size_t s, size_t n) {
+inline auto w_subvector(w_vector<long> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_long_subvector_with_stride(v, i, s, n);
 }
 
@@ -158,7 +152,7 @@ w_subvector(w_vector<long> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<long const>
+inline auto
 w_subvector(w_vector<long const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_long_const_subvector_with_stride(v, i, s, n);
 }
@@ -171,7 +165,7 @@ w_subvector(w_vector<long const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<unsigned long>
+inline auto
 w_subvector(w_vector<unsigned long> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_ulong_subvector_with_stride(v, i, s, n);
 }
@@ -184,7 +178,7 @@ w_subvector(w_vector<unsigned long> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<unsigned long const>
+inline auto
 w_subvector(w_vector<unsigned long const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_ulong_const_subvector_with_stride(v, i, s, n);
 }
@@ -197,8 +191,7 @@ w_subvector(w_vector<unsigned long const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<short>
-w_subvector(w_vector<short> *v, size_t i, size_t s, size_t n) {
+inline auto w_subvector(w_vector<short> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_short_subvector_with_stride(v, i, s, n);
 }
 
@@ -210,7 +203,7 @@ w_subvector(w_vector<short> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<short const>
+inline auto
 w_subvector(w_vector<short const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_short_const_subvector_with_stride(v, i, s, n);
 }
@@ -223,7 +216,7 @@ w_subvector(w_vector<short const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<unsigned short>
+inline auto
 w_subvector(w_vector<unsigned short> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_ushort_subvector_with_stride(v, i, s, n);
 }
@@ -236,7 +229,7 @@ w_subvector(w_vector<unsigned short> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<unsigned short const>
+inline auto
 w_subvector(w_vector<unsigned short const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_ushort_const_subvector_with_stride(v, i, s, n);
 }
@@ -249,8 +242,7 @@ w_subvector(w_vector<unsigned short const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<char>
-w_subvector(w_vector<char> *v, size_t i, size_t s, size_t n) {
+inline auto w_subvector(w_vector<char> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_char_subvector_with_stride(v, i, s, n);
 }
 
@@ -262,7 +254,7 @@ w_subvector(w_vector<char> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<char const>
+inline auto
 w_subvector(w_vector<char const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_char_const_subvector_with_stride(v, i, s, n);
 }
@@ -275,7 +267,7 @@ w_subvector(w_vector<char const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<unsigned char>
+inline auto
 w_subvector(w_vector<unsigned char> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_uchar_subvector_with_stride(v, i, s, n);
 }
@@ -288,7 +280,7 @@ w_subvector(w_vector<unsigned char> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<unsigned char const>
+inline auto
 w_subvector(w_vector<unsigned char const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_uchar_const_subvector_with_stride(v, i, s, n);
 }
@@ -301,7 +293,7 @@ w_subvector(w_vector<unsigned char const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<complex<double>>
+inline auto
 w_subvector(w_vector<complex<double>> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_subvector_with_stride(v, i, s, n);
 }
@@ -314,7 +306,7 @@ w_subvector(w_vector<complex<double>> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<complex<double> const>
+inline auto
 w_subvector(w_vector<complex<double> const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_const_subvector_with_stride(v, i, s, n);
 }
@@ -327,7 +319,7 @@ w_subvector(w_vector<complex<double> const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<complex<float>>
+inline auto
 w_subvector(w_vector<complex<float>> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_float_subvector_with_stride(v, i, s, n);
 }
@@ -340,7 +332,7 @@ w_subvector(w_vector<complex<float>> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<complex<float> const>
+inline auto
 w_subvector(w_vector<complex<float> const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_float_const_subvector_with_stride(v, i, s, n);
 }
@@ -353,7 +345,7 @@ w_subvector(w_vector<complex<float> const> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<complex<long double>>
+inline auto
 w_subvector(w_vector<complex<long double>> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_long_double_subvector_with_stride(v, i, s, n);
 }
@@ -366,7 +358,7 @@ w_subvector(w_vector<complex<long double>> *v, size_t i, size_t s, size_t n) {
 /// @param s  Stride of successive elements in view relative to offsets in `v`.
 /// @param n  Number of elements in view.
 /// @return  View of subvector.
-inline w_vector_view<complex<long double> const> w_subvector(
+inline auto w_subvector(
       w_vector<complex<long double> const> *v, size_t i, size_t s, size_t n) {
   return gsl_vector_complex_long_double_const_subvector_with_stride(
         v, i, s, n);

@@ -70,7 +70,7 @@ template<typename T, size_t S= 0> struct vector: public v_iface<T, S, v_stor> {
 
   /// Copy data from other vector of same type.
   /// \param src  Reference to other vector.
-  vector(vector const &src): P(src.v().size) { memcpy(*this, src); }
+  vector(vector const &src): P(src.v()->size) { memcpy(*this, src); }
 
   /// Enable move-constructor in gsl::v_stor to work.
   vector(vector &&)= default;
@@ -96,7 +96,7 @@ template<typename T, size_t S= 0> struct vector: public v_iface<T, S, v_stor> {
         template<typename, size_t>
         class V,
         typename= enable_if_t<sz_ok<N>::V && !is_const_v<T>>>
-  vector(v_iface<T const, N, V> const &src): P(src.v().size) {
+  vector(v_iface<T const, N, V> const &src): P(src.v()->size) {
     memcpy(*this, src);
   }
 
@@ -110,7 +110,7 @@ template<typename T, size_t S= 0> struct vector: public v_iface<T, S, v_stor> {
         template<typename, size_t>
         class V,
         typename= enable_if_t<sz_ok<N>::V>>
-  vector(v_iface<T, N, V> const &src): P(src.v().size) {
+  vector(v_iface<T, N, V> const &src): P(src.v()->size) {
     memcpy(*this, src);
   }
 
@@ -133,6 +133,13 @@ template<typename T, size_t S= 0> struct vector: public v_iface<T, S, v_stor> {
   vector(T const (&d)[S]): P(S) {
     auto const cview= w_vector_view_array(d, 1, S);
     memcpy(*this, v_iface<T const, S, v_view>(cview));
+  }
+
+  /// Copy from initializer-list.
+  /// \param i  List of initializers.
+  vector(std::initializer_list<T> i): P(i.size()) {
+    auto const cview= w_vector_view_array(i.begin(), 1, i.size());
+    memcpy(*this, v_iface<T const, 0, v_view>(cview));
   }
 };
 

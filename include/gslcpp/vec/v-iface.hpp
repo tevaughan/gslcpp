@@ -11,6 +11,7 @@
 #include "../wrap/add.hpp" // add
 #include "../wrap/axpby.hpp" // axpby
 #include "../wrap/div.hpp" // div
+#include "../wrap/element.hpp" // element_t
 #include "../wrap/equal.hpp" // equal
 #include "../wrap/fprintf.hpp" // fprintf
 #include "../wrap/fread.hpp" // fread
@@ -95,160 +96,102 @@ struct v_iface: public S<T, N> {
 
   /// Size of vector.
   /// @return  Size of vector.
-  size_t size() const { return v().size; }
+  size_t size() const { return v()->size; }
 
   /// Pointer to first element in vector.
-  /// - Be careful to check `v().stride` in case data be not contiguous.
+  /// - Be careful to check `v()->stride` in case data be not contiguous.
   /// @return  Pointer to first element.
-  T *data() { return (T *)v().data; /* Cast for complex. */ }
+  T *data() { return (T *)v()->data; /* Cast for complex. */ }
 
   /// Pointer to first element in immutable vector.
-  /// - Be careful to check `v().stride` in case data be not contiguous.
+  /// - Be careful to check `v()->stride` in case data be not contiguous.
   /// @return  Pointer to first immutable element.
-  T const *data() const { return (T const *)v().data; /* Cast for complex. */ }
+  T const *data() const {
+    return (T const *)v()->data; /* Cast for complex. */
+  }
 
   /// Read element with bounds-checking.
   /// @param i  Offset of element.
   /// @return  Value of element.
-  T get(size_t i) const { return w_get(&v(), i); }
+  T get(size_t i) const { return w_get(v(), i); }
 
   /// Write element with bounds-checking.
   /// @param i  Offset of element.
   /// @param x  New value for element.
-  void set(size_t i, T const &x) { w_set(&v(), i, x); }
+  void set(size_t i, T const &x) { w_set(v(), i, x); }
 
   /// Read element without bounds-checking.
   /// @param i  Offset of element.
   /// @return  Reference to immutable element.
-  T const &operator[](size_t i) const { return data()[i * v().stride]; }
+  T const &operator[](size_t i) const { return data()[i * v()->stride]; }
 
   /// Write element without bounds-checking.
   /// @param i  Offset of element.
   /// @return  Reference to mutable element.
-  T &operator[](size_t i) { return data()[i * v().stride]; }
+  T &operator[](size_t i) { return data()[i * v()->stride]; }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to mutable element.
-  T *ptr(size_t i) { return w_ptr(&v(), i); }
+  T *ptr(size_t i) { return w_ptr(v(), i); }
 
   /// Retrieve pointer to `i`th element with bounds-checking.
   /// This could be useful if stride unknown.
   /// @param i  Offset of element.
   /// @return  Pointer to immutable element.
-  T const *ptr(size_t i) const { return w_ptr(&v(), i); }
+  T const *ptr(size_t i) const { return w_ptr(v(), i); }
 
   /// Set every element.
   /// @param x  Value to which each element should be set.
-  void set_all(T const &x) { w_set_all(&v(), x); }
+  void set_all(T const &x) { w_set_all(v(), x); }
 
   /// Set every element to zero.
-  void set_zero() { w_set_zero(&v()); }
+  void set_zero() { w_set_zero(v()); }
 
   /// Set element at offset `i` to unity and every other element to zero.
   /// @param i  Offset of element set to unity.
   /// @return  TBD: GSL's documentation does not specify.
-  int set_basis(size_t i) { return w_set_basis(&v(), i); }
+  int set_basis(size_t i) { return w_set_basis(v(), i); }
 
   /// Write non-portable binary-image of vector to file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fwrite(FILE *f) const { return w_fwrite(f, &v()); }
+  int fwrite(FILE *f) const { return w_fwrite(f, v()); }
 
   /// Read non-portable binary-image of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fread(FILE *f) { return w_fread(f, &v()); };
+  int fread(FILE *f) { return w_fread(f, v()); };
 
   /// Write ASCII-formatted representation of vector to file.
   /// @param flp  Pointer to structure for buffered interface.
   /// @param fmt  printf()-style format-string.
   /// @return  Zero only on success.
   int fprintf(FILE *flp, char const *fmt) const {
-    return w_fprintf(flp, &v(), fmt);
+    return w_fprintf(flp, v(), fmt);
   }
 
   /// Read ASCII-formatted representation of vector from file.
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
-  int fscanf(FILE *f) { return w_fscanf(f, &v()); }
-
-  /// Via specialization, define element for complex type `C`.
-  ///
-  /// If `C` be not complex, then define element-type as `C`, so that each of
-  /// real() and imag() has a well defined return-type, but any attempt in
-  /// client-code to call real() or complex() on a vector that does not have
-  /// complex element-type will result in a compile-time error.
-  ///
-  /// \tparam C  Complex type, such as gsl::complex<float>.
-  template<typename C> struct element {
-    /// Allow each of v_iface::real() and v_iface::imag() to compile without
-    /// error so long as it is not called by client-code.
-    using type= C;
-  };
-
-  /// Specialization of \ref element for gsl::complex<double>.
-  template<> struct element<gsl::complex<double>> {
-    /// Type of element in view returned by v_iface::real() or v_iface::imag().
-    using type= double;
-  };
-
-  /// Specialization of \ref element for gsl::complex<float>.
-  template<> struct element<gsl::complex<float>> {
-    /// Type of element in view returned by v_iface::real() or v_iface::imag().
-    using type= float;
-  };
-
-  /// Specialization of \ref element for gsl::complex<long double>.
-  template<> struct element<gsl::complex<long double>> {
-    /// Type of element in view returned by v_iface::real() or v_iface::imag().
-    using type= long double;
-  };
-
-  /// Specialization of \ref element for `gsl::complex<double> const`
-  template<> struct element<gsl::complex<double> const> {
-    /// Type of element in view returned by v_iface::real() or v_iface::imag().
-    using type= double const;
-  };
-
-  /// Specialization of \ref element for `gsl::complex<float> const`.
-  template<> struct element<gsl::complex<float> const> {
-    /// Type of element in view returned by v_iface::real() or v_iface::imag().
-    using type= float const;
-  };
-
-  /// Specialization of \ref element for `gsl::complex<long double> const`.
-  template<> struct element<gsl::complex<long double> const> {
-    /// Type of element in view returned by v_iface::real() or v_iface::imag().
-    using type= long double const;
-  };
-
-  /// Via specialization, define element for complex type `C`.
-  ///
-  /// If `C` be not complex, then define element-type as `C`, so that each of
-  /// real() and imag() has a well defined return-type, but any attempt in
-  /// client-code to call real() or complex() on a vector that does not have
-  /// complex element-type will result in a compile-time error.
-  ///
-  /// \tparam C  Complex type, such as gsl::complex<float>.
-  template<typename C> using elem= typename element<C>::type;
+  int fscanf(FILE *f) { return w_fscanf(f, v()); }
 
   /// View of real-part of complex vector.
   /// \return  View of real-part of complex vector.
-  v_iface<elem<T>, N, v_view> real() { return w_real(&v()); }
+  v_iface<element_t<T>, N, v_view> real() { return w_real(v()); }
 
   /// View of real-part of complex vector.
   /// \return  View of real-part of complex vector.
-  v_iface<elem<T> const, N, v_view> real() const { return w_real(&v()); }
+  v_iface<element_t<T> const, N, v_view> real() const { return w_real(v()); }
 
   /// View of imaginary-part of complex vector.
   /// \return  View of imaginary-part of complex vector.
-  v_iface<elem<T>, N, v_view> imag() { return w_imag(&v()); }
+  v_iface<element_t<T>, N, v_view> imag() { return w_imag(v()); }
 
   /// View of imaginary-part of complex vector.
   /// \return  View of imaginary-part of complex vector.
-  v_iface<elem<T> const, N, v_view> imag() const { return w_imag(&v()); }
+  v_iface<element_t<T> const, N, v_view> imag() const { return w_imag(v()); }
 
   /// View of subvector of vector.  Arguments are reordered from those given to
   /// gsl_vector_subvector_with_stride().  Putting initial offset and stride at
@@ -259,7 +202,7 @@ struct v_iface: public S<T, N> {
   /// @param s  Stride of view relative to vector.
   /// @return  View of subvector.
   v_iface<T, N, v_view> subvector(size_t n, size_t i= 0, size_t s= 1) {
-    return w_subvector(&v(), i, s, n);
+    return w_subvector(v(), i, s, n);
   }
 
   /// View of subvector of vector.  Arguments are reordered from those given to
@@ -272,28 +215,28 @@ struct v_iface: public S<T, N> {
   /// @return  View of subvector.
   v_iface<T const, N, v_view>
   subvector(size_t n, size_t i= 0, size_t s= 1) const {
-    return w_subvector(&v(), i, s, n);
+    return w_subvector(v(), i, s, n);
   }
 
   /// View of vector.
   /// @return  View of vector.
-  v_iface<T, N, v_view> view() { return w_subvector(&v(), 0, 1, size()); }
+  v_iface<T, N, v_view> view() { return w_subvector(v(), 0, 1, size()); }
 
   /// View of vector.
   /// @return  View of vector.
   v_iface<T const, N, v_view> view() const {
-    return w_subvector(&v(), 0, 1, size());
+    return w_subvector(v(), 0, 1, size());
   }
 
   /// Swap elements within this vector.
   /// @param i  Offset of one element.
   /// @param j  Offset of other element.
   /// @return  TBD: GSL's documentation does not specify.
-  int swap_elements(size_t i, size_t j) { return w_swap_elements(&v(), i, j); }
+  int swap_elements(size_t i, size_t j) { return w_swap_elements(v(), i, j); }
 
   /// Reverse order of elements.
   /// @return  TBD: GSL's documentation does not specify.
-  int reverse() { return w_reverse(&v()); }
+  int reverse() { return w_reverse(v()); }
 
   /// Add contents of `b` into this vector in place.
   /// \tparam ON  Compile-time number of elements in `b`.
@@ -303,7 +246,7 @@ struct v_iface: public S<T, N> {
   template<size_t ON, template<typename, size_t> class OV>
   int add(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
-    return w_add(&v(), &b.v());
+    return w_add(v(), b.v());
   }
 
   /// Subtract contents of `b` from this vector in place.
@@ -314,7 +257,7 @@ struct v_iface: public S<T, N> {
   template<size_t ON, template<typename, size_t> class OV>
   int sub(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
-    return w_sub(&v(), &b.v());
+    return w_sub(v(), b.v());
   }
 
   /// Multiply contents of `b` into this vector in place.
@@ -325,7 +268,7 @@ struct v_iface: public S<T, N> {
   template<size_t ON, template<typename, size_t> class OV>
   int mul(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
-    return w_mul(&v(), &b.v());
+    return w_mul(v(), b.v());
   }
 
   /// Divide contents of `b` into this vector in place.
@@ -336,7 +279,7 @@ struct v_iface: public S<T, N> {
   template<size_t ON, template<typename, size_t> class OV>
   int div(v_iface<T, ON, OV> const &b) {
     static_assert(N == ON || N == 0 || ON == 0);
-    return w_div(&v(), &b.v());
+    return w_div(v(), b.v());
   }
 
   /// Add contents of `b` into this vector in place.
@@ -413,7 +356,7 @@ struct v_iface: public S<T, N> {
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
   /// @return  TBD: GSL's documentation does not specify.
-  int scale(T const &x) { return w_scale(&v(), x); }
+  int scale(T const &x) { return w_scale(v(), x); }
 
   /// Multiply scalar into this vector in place.
   /// @param x  Scalar to multiply into this.
@@ -426,7 +369,7 @@ struct v_iface: public S<T, N> {
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
   /// @return  TBD: GSL's documentation does not specify.
-  int add_constant(T const &x) { return w_add_constant(&v(), x); }
+  int add_constant(T const &x) { return w_add_constant(v(), x); }
 
   /// Add constant into each element of this vector in place.
   /// @param x  Constant to add into this vector.
@@ -438,51 +381,51 @@ struct v_iface: public S<T, N> {
 
   /// Sum of elements.
   /// @return  Sum of elements.
-  T sum() const { return w_sum(&v()); }
+  T sum() const { return w_sum(v()); }
 
   /// Greatest value of any element.
   /// @return  Greatest value of any element.
-  T max() const { return w_max(&v()); }
+  T max() const { return w_max(v()); }
 
   /// Least value of any element.
   /// @return  Least value of any element.
-  T min() const { return w_min(&v()); }
+  T min() const { return w_min(v()); }
 
   /// Greatest value and least value of any element.
   /// @param min  On return, least value.
   /// @param max  On return, greatest value.
-  void minmax(T &min, T &max) const { w_minmax(&v(), &min, &max); }
+  void minmax(T &min, T &max) const { w_minmax(v(), &min, &max); }
 
   /// Offset of greatest value.
   /// @return  Offset of greatest value.
-  size_t max_index() const { return w_max_index(&v()); }
+  size_t max_index() const { return w_max_index(v()); }
 
   /// Offset of least value.
   /// @return  Offset of least value.
-  size_t min_index() const { return w_min_index(&v()); }
+  size_t min_index() const { return w_min_index(v()); }
 
   /// Offset of least value and offset of greatest value.
   /// @param imin  On return, offset of least value.
   /// @param imax  On return, offset of greatest value.
   void minmax_index(size_t &imin, size_t &imax) const {
-    w_minmax_index(&v(), &imin, &imax);
+    w_minmax_index(v(), &imin, &imax);
   }
 
   /// True only if every element have zero value.
   /// @return  True only if every element be zero.
-  bool isnull() const { return w_isnull(&v()); }
+  bool isnull() const { return w_isnull(v()); }
 
   /// True only if every element be positive.
   /// @return  True only if every element be positive.
-  bool ispos() const { return w_ispos(&v()); }
+  bool ispos() const { return w_ispos(v()); }
 
   /// True only if every element be negative.
   /// @return  True only if every element be negative.
-  bool isneg() const { return w_isneg(&v()); }
+  bool isneg() const { return w_isneg(v()); }
 
   /// True only if every element be non-negative.
   /// @return  True only if every element be non-negative.
-  bool isnonneg() const { return w_isnonneg(&v()); }
+  bool isnonneg() const { return w_isnonneg(v()); }
 };
 
 
@@ -507,7 +450,7 @@ template<
       class V2>
 bool equal(v_iface<T1, N1, V1> const &v1, v_iface<T2, N2, V2> const &v2) {
   static_assert(N1 == N2 || N1 == 0 || N2 == 0);
-  return w_equal(&v1.v(), &v2.v());
+  return w_equal(v1.v(), v2.v());
 }
 
 
@@ -607,7 +550,7 @@ int axpby(
       T2 const &beta,
       v_iface<T2, N2, V2> &y) {
   static_assert(N1 == N2 || N1 == 0 || N2 == 0);
-  return w_axpby(alpha, &x.v(), beta, &y.v());
+  return w_axpby(alpha, x.v(), beta, y.v());
 }
 
 
@@ -632,7 +575,7 @@ template<
       class V2>
 int memcpy(v_iface<T1, N1, V1> &dst, v_iface<T2, N2, V2> const &src) {
   static_assert(N1 == N2 || N1 == 0 || N2 == 0);
-  return w_memcpy(&dst.v(), &src.v());
+  return w_memcpy(dst.v(), src.v());
 }
 
 
@@ -656,7 +599,7 @@ template<
       template<typename, size_t>
       class V2>
 int swap(v_iface<T1, N1, V1> &v1, v_iface<T2, N2, V2> &v2) {
-  return w_swap(&v1.v(), &v2.v());
+  return w_swap(v1.v(), v2.v());
 }
 
 

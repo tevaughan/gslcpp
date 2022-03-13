@@ -20,11 +20,11 @@ template<typename T, size_t N= 0> class v_view {
 public:
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.
-  auto &v() { return cview_.vector; }
+  auto *v() { return &cview_.vector; }
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to immutable vector.
-  auto &v() const { return cview_.vector; }
+  auto const *v() const { return &cview_.vector; }
 
   /// Constructor called by TBS.
   /// @param v  View to copy.

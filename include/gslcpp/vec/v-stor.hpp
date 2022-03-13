@@ -36,13 +36,13 @@ public:
     if(n != S) throw "mismatch in size";
   }
 
-  /// Reference to GSL's interface to vector.
-  /// @return  Reference to GSL's interface to vector.
-  auto &v() { return cview_.vector; }
+  /// Pointer to GSL's interface to vector.
+  /// @return  Pointer to GSL's interface to vector.
+  auto *v() { return &cview_.vector; }
 
-  /// Reference to GSL's interface to vector.
-  /// @return  Reference to GSL's interface to immutable vector.
-  auto &v() const { return cview_.vector; }
+  /// Pointer to GSL's interface to vector.
+  /// @return  Pointer to GSL's interface to immutable vector.
+  auto const *v() const { return &cview_.vector; }
 };
 
 
@@ -101,11 +101,11 @@ public:
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to vector.
-  auto &v() { return *v_; }
+  auto *v() { return v_; }
 
   /// Reference to GSL's interface to vector.
   /// @return  Reference to GSL's interface to immutable vector.
-  auto &v() const { return *v_; }
+  auto const *v() const { return v_; }
 
   /// Move on construction.
   /// Constructor is not template because moving works only from other %v_stor.
