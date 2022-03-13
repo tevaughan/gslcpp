@@ -1135,4 +1135,30 @@ TEST_CASE("v_iface::view() works.", "[v-iface]") {
 }
 
 
+/// Verify that real() and imag() work for v_iface<C>.
+/// \tparam C  Complex type of each element in vector.
+template<typename C> void verify_real_imag() {
+  vector const a({C(1,2), C(3,4), C(5,6)});
+
+  auto const b= a.real();
+  auto const c= a.imag();
+
+  REQUIRE(b[0]==1);
+  REQUIRE(b[1]==3);
+  REQUIRE(b[2]==5);
+
+  REQUIRE(c[0]==2);
+  REQUIRE(c[1]==4);
+  REQUIRE(c[2]==6);
+}
+
+
+/// Verify that real() and imag() work for any kind of complex v_iface.
+TEST_CASE("v_iface::real() and v_iface::imag() work.", "[v-iface]") {
+  verify_real_imag<complex<double>>();
+  verify_real_imag<complex<float>>();
+  verify_real_imag<complex<long double>>();
+}
+
+
 // EOF

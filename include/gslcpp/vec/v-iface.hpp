@@ -17,6 +17,7 @@
 #include "../wrap/fscanf.hpp" // fscanf
 #include "../wrap/fwrite.hpp" // fwrite
 #include "../wrap/get.hpp" // get
+#include "../wrap/imag.hpp" // imag
 #include "../wrap/isneg.hpp" // isneg
 #include "../wrap/isnonneg.hpp" // isnonneg
 #include "../wrap/isnull.hpp" // isnull
@@ -30,6 +31,7 @@
 #include "../wrap/minmax.hpp" // minmax
 #include "../wrap/mul.hpp" // mul
 #include "../wrap/ptr.hpp" // ptr
+#include "../wrap/real.hpp" // real
 #include "../wrap/reverse.hpp" // reverse
 #include "../wrap/scale.hpp" // scale
 #include "../wrap/set-all.hpp" // set_all
@@ -171,6 +173,82 @@ struct v_iface: public S<T, N> {
   /// @param f  Pointer to structure for buffered interface.
   /// @return  Zero only on success.
   int fscanf(FILE *f) { return w_fscanf(f, &v()); }
+
+  /// Via specialization, define element for complex type `C`.
+  ///
+  /// If `C` be not complex, then define element-type as `C`, so that each of
+  /// real() and imag() has a well defined return-type, but any attempt in
+  /// client-code to call real() or complex() on a vector that does not have
+  /// complex element-type will result in a compile-time error.
+  ///
+  /// \tparam C  Complex type, such as gsl::complex<float>.
+  template<typename C> struct element {
+    /// Allow each of v_iface::real() and v_iface::imag() to compile without
+    /// error so long as it is not called by client-code.
+    using type= C;
+  };
+
+  /// Specialization of \ref element for gsl::complex<double>.
+  template<> struct element<gsl::complex<double>> {
+    /// Type of element in view returned by v_iface::real() or v_iface::imag().
+    using type= double;
+  };
+
+  /// Specialization of \ref element for gsl::complex<float>.
+  template<> struct element<gsl::complex<float>> {
+    /// Type of element in view returned by v_iface::real() or v_iface::imag().
+    using type= float;
+  };
+
+  /// Specialization of \ref element for gsl::complex<long double>.
+  template<> struct element<gsl::complex<long double>> {
+    /// Type of element in view returned by v_iface::real() or v_iface::imag().
+    using type= long double;
+  };
+
+  /// Specialization of \ref element for `gsl::complex<double> const`
+  template<> struct element<gsl::complex<double> const> {
+    /// Type of element in view returned by v_iface::real() or v_iface::imag().
+    using type= double const;
+  };
+
+  /// Specialization of \ref element for `gsl::complex<float> const`.
+  template<> struct element<gsl::complex<float> const> {
+    /// Type of element in view returned by v_iface::real() or v_iface::imag().
+    using type= float const;
+  };
+
+  /// Specialization of \ref element for `gsl::complex<long double> const`.
+  template<> struct element<gsl::complex<long double> const> {
+    /// Type of element in view returned by v_iface::real() or v_iface::imag().
+    using type= long double const;
+  };
+
+  /// Via specialization, define element for complex type `C`.
+  ///
+  /// If `C` be not complex, then define element-type as `C`, so that each of
+  /// real() and imag() has a well defined return-type, but any attempt in
+  /// client-code to call real() or complex() on a vector that does not have
+  /// complex element-type will result in a compile-time error.
+  ///
+  /// \tparam C  Complex type, such as gsl::complex<float>.
+  template<typename C> using elem= typename element<C>::type;
+
+  /// View of real-part of complex vector.
+  /// \return  View of real-part of complex vector.
+  v_iface<elem<T>, N, v_view> real() { return w_real(&v()); }
+
+  /// View of real-part of complex vector.
+  /// \return  View of real-part of complex vector.
+  v_iface<elem<T> const, N, v_view> real() const { return w_real(&v()); }
+
+  /// View of imaginary-part of complex vector.
+  /// \return  View of imaginary-part of complex vector.
+  v_iface<elem<T>, N, v_view> imag() { return w_imag(&v()); }
+
+  /// View of imaginary-part of complex vector.
+  /// \return  View of imaginary-part of complex vector.
+  v_iface<elem<T> const, N, v_view> imag() const { return w_imag(&v()); }
 
   /// View of subvector of vector.  Arguments are reordered from those given to
   /// gsl_vector_subvector_with_stride().  Putting initial offset and stride at
