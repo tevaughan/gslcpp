@@ -3,7 +3,9 @@
 /// \brief      Definition of gsl::w_sum().
 
 #pragma once
-#include "container.hpp" // w_vector // vector
+#include "container.hpp" // w_vector
+#include "element.hpp" // element_t
+#include <Eigen/Core> // Dynamic, Map, Matrix, Stride
 
 namespace gsl {
 
@@ -92,6 +94,51 @@ inline auto w_sum(w_vector<char const> *v) { return gsl_vector_char_sum(v); }
 /// @return  Sum of elements in `v`.
 inline auto w_sum(w_vector<unsigned char const> *v) {
   return gsl_vector_uchar_sum(v);
+}
+
+
+/// Sum of elements in complex vector, not covered by GSL's sum.
+/// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
+/// This implementation uses Eigen to compute the sum.
+/// @tparam C  Complex type of vector's element.
+/// @param v  Reference to vector.
+/// @return  Sum of elements.
+template<typename C> C complex_sum(w_vector<C const> *v) {
+  using Eigen::Dynamic;
+  using Eigen::Map;
+  using Eigen::Matrix;
+  using Eigen::Stride;
+  using S= Stride<Dynamic, Dynamic>;
+  using map= Map<Matrix<C, Dynamic, 1> const, 0, S>;
+  S const s(v->size * v->stride, v->stride);
+  return map((C const *)v->data, v->size, s).sum();
+}
+
+
+/// Sum of elements in vector `v`.
+/// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
+/// @param v  Pointer to vector.
+/// @return  Sum of elements in `v`.
+inline auto w_sum(w_vector<gsl::complex<double> const> *v) {
+  return complex_sum<gsl::complex<double>>(v);
+}
+
+
+/// Sum of elements in vector `v`.
+/// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
+/// @param v  Pointer to vector.
+/// @return  Sum of elements in `v`.
+inline auto w_sum(w_vector<gsl::complex<float> const> *v) {
+  return complex_sum<gsl::complex<float>>(v);
+}
+
+
+/// Sum of elements in vector `v`.
+/// https://www.gnu.org/software/gsl/doc/html/vectors.html#c.gsl_vector_sum
+/// @param v  Pointer to vector.
+/// @return  Sum of elements in `v`.
+inline auto w_sum(w_vector<gsl::complex<long double> const> *v) {
+  return complex_sum<gsl::complex<long double>>(v);
 }
 
 
