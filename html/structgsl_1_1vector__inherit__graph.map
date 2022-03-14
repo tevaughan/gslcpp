@@ -1,0 +1,8 @@
+<map id="gsl::vector&lt; T, S &gt;" name="gsl::vector&lt; T, S &gt;">
+<area shape="rect" id="node1" title="Constructor&#45;type for vector whose storage is owned by instance of vector." alt="" coords="768,32,912,59"/>
+<area shape="rect" id="node2" href="$structgsl_1_1v__iface.html" title=" " alt="" coords="580,25,719,66"/>
+<area shape="rect" id="node3" href="$classgsl_1_1v__stor.html" title=" " alt="" coords="269,7,414,33"/>
+<area shape="rect" id="node4" href="$classgsl_1_1v__stor.html" title="Generic v_stor is interface to storage with two key properties: (1) that size of storage is known sta..." alt="" coords="5,7,148,33"/>
+<area shape="rect" id="node5" href="$structgsl_1_1v__iface.html" title="Interface for every kind of vector." alt="" coords="257,57,425,84"/>
+<area shape="rect" id="node6" title=" " alt="" coords="33,57,120,84"/>
+</map>

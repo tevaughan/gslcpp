@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" title="STL class." alt="" coords="5,56,112,83"/>
+<area shape="rect" id="node2" href="$structgsl_1_1complex_3_01double_01_4.html" title="Specialization of gsl::complex for double." alt="" coords="160,5,339,32"/>
+<area shape="rect" id="node3" href="$structgsl_1_1complex_3_01float_01_4.html" title="Specialization of gsl::complex for float." alt="" coords="167,56,331,83"/>
+<area shape="rect" id="node4" href="$structgsl_1_1complex_3_01long_01double_01_4.html" title="Specialization of gsl::complex for long double." alt="" coords="175,107,323,149"/>
+</map>

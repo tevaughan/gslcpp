@@ -1,0 +1,7 @@
+<map id="gsl::vector_view&lt; T, S &gt;" name="gsl::vector_view&lt; T, S &gt;">
+<area shape="rect" id="node1" title="Constructor&#45;type for vector&#45;by&#45;reference whose storage is not owned by instance of view." alt="" coords="659,31,841,57"/>
+<area shape="rect" id="node2" href="$structgsl_1_1v__iface.html" title=" " alt="" coords="471,23,609,65"/>
+<area shape="rect" id="node3" href="$classgsl_1_1v__view.html" title="Interface to vector&#45;storage not owned by interface." alt="" coords="150,5,301,32"/>
+<area shape="rect" id="node4" href="$structgsl_1_1v__iface.html" title="Interface for every kind of vector." alt="" coords="141,56,309,83"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,56,92,83"/>
+</map>
